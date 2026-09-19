@@ -8,7 +8,7 @@ import json
 import os
 import sys
 
-VAULT_FILE = "vault.json"
+VAULT_FILE = "Vault.json"
 
 
 def generate_key(master_password, salt="CyberSecurity2026"):
