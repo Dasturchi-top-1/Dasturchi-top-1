@@ -1,95 +1,180 @@
 # ==========================================
-# LOYIHA: Global Translator App Inspector v4.0
-# PLATFORMA: Python (Pydroid 3)
+# LOYIHA: Global Translator App Inspector v5.2
+# PLATFORMA: Python (Pydroid 3 / Termux)
 # ==========================================
 
 import json
+import os
+import re
 import urllib.parse
 import urllib.request
 
 
 def translate_text(text, target_lang='uz'):
-  """Google Translate orqali matnni avtomatik o'zbek tiliga tarjima qiladi"""
+  """Google Translate API orqali matnni o'zbek tiliga o'giradi"""
+  if not text or text == "Ma'lumot topilmadi.":
+    return text
+
   try:
     encoded_text = urllib.parse.quote(text)
     url = f'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl={target_lang}&dt=t&q={encoded_text}'
     req = urllib.request.Request(
         url, headers={'User-Agent': 'Mozilla/5.0 Translator'}
     )
-    with urllib.request.urlopen(req, timeout=5) as response:
+    with urllib.request.urlopen(req, timeout=6) as response:
       res_data = json.loads(response.read().decode('utf-8'))
-      # Tarjima qilingan qismlarni birlashtiramiz
-      translated_sentence = ''.join(
-          [item[0] for item in res_data[0] if item[0]]
-      )
-      return translated_sentence
+      return ''.join([item[0] for item in res_data[0] if item[0]])
   except:
-    return text  # Tarjimada xato bo'lsa asl matnni qaytaradi
+    return text
 
 
-def search_global_internet(app_name):
-  print(f'\n🌍 Global internetdan qidirilmoqda: \'{app_name}\'...')
-  print('-' * 50)
-
-  # Inglizcha Wikipedia API (eng boy baza)
-  encoded_query = urllib.parse.quote(app_name)
-  url = f'https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch={encoded_query}&format=json'
+def fetch_wiki_data(query, lang):
+  """Ko'rsatilgan tildagi Wikipedia API'dan ma'lumot izlaydi"""
+  encoded_query = urllib.parse.quote(query)
+  search_url = f'https://{lang}.wikipedia.org/w/api.php?action=query&list=search&srsearch={encoded_query}&format=json'
 
   try:
     req = urllib.request.Request(
-        url, headers={'User-Agent': 'Mozilla/5.0 GlobalInspector'}
+        search_url, headers={'User-Agent': 'Mozilla/5.0 GlobalInspector'}
     )
-    with urllib.request.urlopen(req, timeout=8) as response:
+    with urllib.request.urlopen(req, timeout=5) as response:
       data = json.loads(response.read().decode('utf-8'))
-      search_results = data.get('query', {}).get('search', [])
+      results = data.get('query', {}).get('search', [])
 
-      if not search_results:
-        print(f'❌ Kechirasiz, \'{app_name}\' bo\'yicha hech qanday ma\'lumot topilmadi.')
-        return
+      if not results:
+        return None
 
-      top_result = search_results[0]
-      title = top_result['title']
+      top_result = results[0]
       pageid = top_result['pageid']
+      title = top_result['title']
 
-      # Sahifaning inglizcha matnini tortib olamiz
-      summary_url = f'https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&pageids={pageid}&format=json'
+      # Matn xulosasini tortish
+      summary_url = f'https://{lang}.wikipedia.org/w/api.php?action=query&prop=extracts&exintro&explaintext&pageids={pageid}&format=json'
       req_summary = urllib.request.Request(
           summary_url, headers={'User-Agent': 'Mozilla/5.0 GlobalInspector'}
       )
 
-      with urllib.request.urlopen(req_summary, timeout=8) as sum_response:
+      with urllib.request.urlopen(req_summary, timeout=5) as sum_response:
         sum_data = json.loads(sum_response.read().decode('utf-8'))
         pages = sum_data.get('query', {}).get('pages', {})
-        page_content = pages.get(str(pageid), {}).get(
-            'extract', 'Ma\'lumot topilmadi.'
+        content = pages.get(str(pageid), {}).get(
+            'extract', "Ma'lumot topilmadi."
         )
 
-        print(f'🎯 TOPILGAN MANBA: {title}')
-        print('⏳ Ma\'lumot o\'zbek tiliga tarjima qilinmoqda...')
-        print('=' * 50)
+        return {'title': title, 'content': content, 'lang': lang}
+  except:
+    return None
 
-        # Matnni o'zbek tiliga tarjima qilamiz
-        translated_title = translate_text(title, 'uz')
-        translated_content = translate_text(page_content, 'uz')
 
-        print(f'🇺🇿 Sarlavha: {translated_title}')
-        print(f'📜 Ma\'lumot:\n{translated_content}\n')
-        print('=' * 50)
-        print('✅ Ma\'lumot ingliz tilidan o\'zbek tiliga tarjima qilib olib kelindi!')
+def save_to_file(app_name, title, content, source_lang):
+  """Natijalarni Download papkasiga .txt fayl qilib saqlash funksiyasi"""
+  clean_filename = re.sub(r'[\\/*?:"<>|]', '', app_name).strip()
+  filename = f'{clean_filename}.txt'
 
-  except Exception as e:
+  # Ichki xotiradagi Download papkasi yo'li
+  download_path = '/storage/emulated/0/Download'
+
+  if os.path.exists(download_path):
+    filepath = os.path.join(download_path, filename)
+  else:
+    filepath = filename
+
+  file_text = (
+      '==================================================\n'
+      '🛡️ GLOBAL TRANSLATOR APP INSPECTOR REPORT 🛡️\n'
+      '==================================================\n'
+      f'🎯 Qidirilgan nom: {app_name}\n'
+      f'📌 Manba sarlavhasi: {title} ({source_lang}-Wikipedia)\n'
+      '--------------------------------------------------\n'
+      "🇺🇿 MA'LUMOT (O'ZBEK TILIDA):\n\n"
+      f'{content}\n'
+      '==================================================\n'
+  )
+
+  try:
+    with open(filepath, 'w', encoding='utf-8') as file:
+      file.write(file_text)
+    print('\n💾 Natija muvaffaqiyatli saqlandi!')
+    print(f'📍 Fayl manzili: {filepath}')
+  except PermissionError:
     print(
-        f'❌ Internetga ulanishda xatolik yuz berdi: {e}\n(Tarmoq ulanishini'
-        ' tekshiring)'
+        "\n❌ Xatolik: Pydroid 3 ilovasiga xotiradan (Storage) foydalanishga"
+        ' ruxsat berilmagan!'
+    )
+  except Exception as e:
+    print(f'\n❌ Faylga saqlashda xatolik yuz berdi: {e}')
+
+
+def search_global_internet(app_name):
+  print(f"\n🌍 Qidirilmoqda: '{app_name}'...")
+  print('-' * 50)
+
+  clean_name = re.sub(
+      r'\.(tj|uz|com|ru|org|net|io|app|dev)$', '', app_name, flags=re.IGNORECASE
+  ).strip()
+
+  languages = ['uz', 'tg', 'ru', 'en']
+  result = None
+
+  for lang in languages:
+    result = fetch_wiki_data(app_name, lang=lang)
+    if result:
+      break
+
+  if not result and clean_name != app_name:
+    for lang in languages:
+      result = fetch_wiki_data(clean_name, lang=lang)
+      if result:
+        break
+
+  if result:
+    source_lang = result['lang'].upper()
+    title = result['title']
+    content = result['content']
+
+    print(f'🎯 TOPILGAN MANBA: {title} ({source_lang}-Wikipedia)')
+
+    if app_name.lower() not in title.lower():
+      print(
+          f"💡 Eslatma: '{app_name}' uchun alohida sahifa bo'lmagani sababli,"
+          f" unga bog'liq eng yaqin manba ({title}) ko'rsatilmoqda."
+      )
+
+    print("⏳ Ma'lumot o'zbek tiliga tayyorlanmoqda...")
+    print('=' * 50)
+
+    # Tarjima qilish
+    if result['lang'] != 'uz':
+      translated_title = translate_text(title, 'uz')
+      translated_content = translate_text(content, 'uz')
+      final_title = translated_title
+      final_content = translated_content
+      print(f'🇺🇿 Sarlavha: {final_title}')
+      print(f'📜 Ma\'lumot:\n{final_content}\n')
+      print('=' * 50)
+      print(f"✅ Ma'lumot {source_lang} tilidan o'zbek tiliga tarjima qilindi!")
+    else:
+      final_title = title
+      final_content = content
+      print(f'🇺🇿 Sarlavha: {final_title}')
+      print(f'📜 Ma\'lumot:\n{final_content}\n')
+      print('=' * 50)
+      print("✅ Ma'lumot o'zbekcha manbadan to'g'ridan-to'g'ri olindi!")
+
+    # TXT FAYLGA SAQLASH
+    save_to_file(app_name, final_title, final_content, source_lang)
+
+  else:
+    print(
+        f"❌ Kechirasiz, '{app_name}' bo'yicha hech qaysi tilda ma'lumot"
+        ' topilmadi.'
     )
 
 
 # --- DASTUR MENYUSI ---
-print('🛡️ GLOBAL TRANSLATOR APP INSPECTOR 🛡️')
+print('🛡️ GLOBAL TRANSLATOR APP INSPECTOR v5.2 🛡️')
 print('-' * 50)
-target = input(
-    'Ilova, o\'yin yoki kompaniya nomini kiriting (masalan: Microsoft, Claude, Roblox): '
-).strip()
+target = input("Ilova, o'yin yoki kompaniya nomini kiriting: ").strip()
 
 if target:
   search_global_internet(target)
