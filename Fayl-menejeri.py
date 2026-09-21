@@ -8,7 +8,7 @@ import requests
 import json
 
 # API sozlamalari
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"  # Bu yerga OpenRouter kalitingizni qo'ying
+OPENROUTER_API_KEY = "YOUR_API_KEY"  # Bu yerga OpenRouter kalitingizni qo'ying
 MODEL_NAME = "deepseek/deepseek-chat"
 
 # Kuzatiladigan papka (Pydroid 3 loyihalari papkasi yoki joriy papka)
