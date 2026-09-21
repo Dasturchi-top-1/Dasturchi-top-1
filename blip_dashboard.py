@@ -24,7 +24,7 @@ DASHBOARD_PAROL = "921324"          # Brauzer rejimi uchun oddiy parol
 PROPOSALS_FOLDER = "AI/proposals"
 os.makedirs(PROPOSALS_FOLDER, exist_ok=True)
 
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"
+OPENROUTER_API_KEY = "YOUR_API_KEY"
 AI_MODEL = "deepseek/deepseek-v4-flash"
 
 
