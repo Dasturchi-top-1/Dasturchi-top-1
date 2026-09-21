@@ -15,7 +15,7 @@ DB = "/storage/emulated/0/Ai/lesson_pro.db"
 PORT = 8080
 
 ADMIN_USER = "BLIP_KIBER_XAFSIZLIK"
-ADMIN_PASS = "blip921324"
+ADMIN_PASS = "YOUR_PASS"
 ADMIN_NAME = "ADMIN BLIP"
 
 AI_URL = "https://openrouter.ai/api/v1/chat/completions"
