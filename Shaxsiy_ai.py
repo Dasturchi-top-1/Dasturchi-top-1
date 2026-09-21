@@ -9,7 +9,7 @@
 #   pip install requests flask
 #
 # API KALIT (muhit o'zgaruvchisi orqali, kodda emas):
-#   export OPENROUTER_API_KEY="sizning_kalitingiz"
+#   export OPENROUTER_API_KEY="YOUR_API_KEY"
 #
 # ==========================================================
 
@@ -18,9 +18,9 @@ import re
 import subprocess
 import requests
 
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"  # bu yerga openrouter.ai'dan olgan kalitingizni qo'ying
+OPENROUTER_API_KEY = "YOUR_API_KEY"  # bu yerga openrouter.ai'dan olgan kalitingizni qo'ying
 AI_MODEL = "deepseek/deepseek-v4-flash"
-BROWSER_PASSWORD = "921324"
+BROWSER_PASSWORD = "YOUR_PASSWORD"
 
 # ==========================================================
 # XAVFLI BUYRUQLAR FILTRI
