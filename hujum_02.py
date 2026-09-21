@@ -179,7 +179,7 @@ def browser_mode():
         return
     app = Flask(__name__)
     app.secret_key = 'YOUR_SECRET_KEY'
-    PASSWORD = '921324'
+    PASSWORD = 'YOUR_PASSWORD'
 
     HTML_LOGIN = '''
     <h2>Blip Param Miner Login</h2>
