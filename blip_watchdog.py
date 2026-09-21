@@ -325,7 +325,7 @@ def browser_mode():
 
     app = Flask(__name__)
     app.secret_key = "YOUR_SECRET_KEY"
-    PASSWORD = "921324"
+    PASSWORD = "YOUR_PASSWORD"
 
     STYLE = """
     <style>
