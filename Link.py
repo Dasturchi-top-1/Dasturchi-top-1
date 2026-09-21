@@ -29,7 +29,7 @@ import qrcode
 # ==========================================================
 # SOZLAMALAR
 # ==========================================================
-APP_PASSWORD = "921324"
+APP_PASSWORD = "YOUR_PASSWORD"
 DB_FOLDER = "/storage/emulated/0/AI"
 DB_PATH = os.path.join(DB_FOLDER, "blip_links.db")
 PORT = 8080
