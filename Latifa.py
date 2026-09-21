@@ -11,7 +11,7 @@ BOT_TOKEN = "YOUR_TOKEN"
 OPENROUTER_KEY = "YOUR_OPENROUTER_KEY"
 AI_URL = "https://openrouter.ai/api/v1/chat/completions"
 PORT = 8000
-LATIFA_FAYL = "/storage/emulated/0/Ai/latifa.txt"
+LATIFA_FAYL = "/storage/emulated/0/Ai/Latifa/latifa.txt"
 
 # Fallback modellar (o'zbek tilida yaxshi ishlaydiganlar)
 MODELLAR = [
