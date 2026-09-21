@@ -20,7 +20,7 @@ except ImportError:
     FLASK_AVAILABLE = False
 
 DB = 'remote_toolkit.db'
-PASSWORD = '921324'
+PASSWORD = 'YOUR_PASSWORD'
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
