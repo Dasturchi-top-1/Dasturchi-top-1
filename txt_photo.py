@@ -15,7 +15,7 @@ import requests
 # ==========================================================
 # SOZLAMALAR - BU YERGA O'Z API KALITINGIZNI QO'YING
 # ==========================================================
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"
+OPENROUTER_API_KEY = "YOUR_API_KEY"
 AI_MODEL = "deepseek/deepseek-v4-flash"
 
 SAVE_FOLDER = "AI/outputs/ascii_art"
