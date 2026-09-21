@@ -11,7 +11,7 @@ import requests
 # ==========================================================
 # SOZLAMALAR
 # ==========================================================
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"
+OPENROUTER_API_KEY = "YOUR_API_KEY"
 AI_MODEL = "deepseek/deepseek-v4-flash"
 
 # Ilova nomi (o'zbekcha, siz aytadigan) -> Android paket nomi
