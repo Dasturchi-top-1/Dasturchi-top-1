@@ -17,7 +17,7 @@ import requests
 # ==========================================================
 # SOZLAMALAR - BU YERGA O'Z API KALITINGIZNI QO'YING
 # ==========================================================
-OPENROUTER_API_KEY = "YOUR_OPENROUTER_KEY"  # openrouter.ai'dan oling
+OPENROUTER_API_KEY = "YOUR_API_KEY"  # openrouter.ai'dan oling
 AI_MODEL = "deepseek/deepseek-v4-flash"
 SAVE_FOLDER = "AI/generated_code"  # kod shu papkaga saqlanadi
 
