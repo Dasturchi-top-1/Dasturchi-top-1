@@ -3,7 +3,7 @@ import threading
 import requests
 import speech_recognition as sr  # Mikrofon uchun
 
-API_KEY = "SENING_KALITINGNI_SHU_YERGA_QO'Y"
+API_KEY = "YOUR_API_KEY'Y"
 URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={API_KEY}"
 
 def ovozli_yozish():
