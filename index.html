@@ -1,1 +1,345 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blip — 13 yoshli Python dasturchi. Telegram botlar, AI agentlar.">
+    <meta name="keywords" content="Blip, Python, dasturchi, Tojikiston, AI">
+    <meta name="author" content="Salohiddin (Blip)">
+    <title>🚀 Blip — Python Dasturchi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0e27;
+            --card: #1a1f3a;
+            --card2: #151a35;
+            --accent: #00BCD4;
+            --accent2: #4DD0E1;
+            --text: #eee;
+            --muted: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        header {
+            position: fixed; top: 0; left: 0; width: 100%;
+            background: rgba(10,14,39,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000; padding: 15px 20px;
+            border-bottom: 1px solid rgba(0,188,212,0.2);
+        }
+        nav {
+            max-width: 1100px; margin: auto;
+            display: flex; justify-content: space-between;
+            align-items: center; flex-wrap: wrap;
+        }
+        .logo {
+            font-size: 22px; font-weight: bold;
+            color: var(--accent); text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 20px; list-style: none; }
+        .nav-links a {
+            color: var(--text); text-decoration: none;
+            font-size: 15px; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .hero {
+            min-height: 100vh; display: flex;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 100px 20px 60px;
+            background: radial-gradient(circle at 50% 30%, rgba(0,188,212,0.15), transparent 60%);
+        }
+        .hero-content { max-width: 800px; animation: fadeUp 1s; }
+        .hero-emoji {
+            font-size: 80px; display: block;
+            margin-bottom: 20px; animation: float 3s infinite;
+        }
+        .hero h1 {
+            font-size: 52px; margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 20px; color: var(--muted);
+            margin-bottom: 30px;
+        }
+        .hero-badges {
+            display: flex; gap: 10px;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .badge {
+            background: var(--card); padding: 6px 14px;
+            border-radius: 20px; font-size: 14px;
+            border: 1px solid rgba(0,188,212,0.3);
+        }
+        .btn {
+            display: inline-block; background: var(--accent);
+            color: #000; padding: 14px 30px;
+            border-radius: 10px; text-decoration: none;
+            font-weight: bold; font-size: 16px;
+            transition: 0.3s; margin: 5px; border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: var(--accent2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,188,212,0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        .btn-outline:hover { background: var(--accent); color: #000; }
+        section { padding: 80px 20px; max-width: 1100px; margin: auto; }
+        .section-title {
+            text-align: center; font-size: 36px;
+            margin-bottom: 50px; color: var(--accent);
+        }
+        .section-title::after {
+            content: ""; display: block;
+            width: 60px; height: 3px;
+            background: var(--accent); margin: 15px auto 0;
+            border-radius: 3px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--card); padding: 28px;
+            border-radius: 14px;
+            border-left: 4px solid var(--accent);
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,188,212,0.15);
+        }
+        .card h3 {
+            color: var(--accent); margin-bottom: 12px;
+            font-size: 20px;
+        }
+        .card p { color: var(--muted); font-size: 15px; }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .skill {
+            background: var(--card2); padding: 18px 22px;
+            border-radius: 10px; display: flex;
+            align-items: center; gap: 12px;
+            transition: 0.3s;
+        }
+        .skill:hover {
+            background: var(--card);
+            transform: translateX(5px);
+        }
+        .skill-emoji { font-size: 28px; }
+        .project {
+            background: var(--card); padding: 25px;
+            border-radius: 14px;
+            border-left: 4px solid var(--accent);
+            transition: 0.3s;
+        }
+        .project:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,188,212,0.15);
+        }
+        .project h3 {
+            color: var(--accent); margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .project .desc {
+            color: var(--muted); font-size: 15px;
+            margin-bottom: 15px; min-height: 45px;
+        }
+        .project .tech {
+            display: flex; gap: 8px; flex-wrap: wrap;
+        }
+        .tech-tag {
+            background: rgba(0,188,212,0.15);
+            color: var(--accent2); padding: 4px 10px;
+            border-radius: 6px; font-size: 12px;
+            border: 1px solid rgba(0,188,212,0.3);
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+        .contact-link {
+            background: var(--card); padding: 22px;
+            border-radius: 12px; text-decoration: none;
+            color: var(--text); display: flex;
+            align-items: center; gap: 15px;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        .contact-link:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        .contact-link .ico { font-size: 32px; }
+        .contact-link .txt strong {
+            display: block; color: var(--accent);
+            font-size: 15px;
+        }
+        .contact-link .txt span {
+            color: var(--muted); font-size: 13px;
+        }
+        footer {
+            text-align: center; padding: 40px 20px;
+            color: var(--muted);
+            border-top: 1px solid rgba(0,188,212,0.15);
+            font-size: 14px;
+        }
+        footer .heart { color: #f44336; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        html { scroll-behavior: smooth; }
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 36px; }
+            .hero p { font-size: 17px; }
+            .hero-emoji { font-size: 60px; }
+            .section-title { font-size: 28px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .logo { font-size: 18px; }
+            section { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body>
 
+    <header>
+        <nav>
+            <a href="#" class="logo">🚀 Blip</a>
+            <ul class="nav-links">
+                <li><a href="#about">Men</a></li>
+                <li><a href="#skills">Ko'nikma</a></li>
+                <li><a href="#projects">Loyihalar</a></li>
+                <li><a href="#contact">Aloqa</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <span class="hero-emoji">🚀</span>
+            <h1>Salom! Men Blip</h1>
+            <p>13 yoshli Python dasturchi. Tojikistondan. Telegram botlar, AI agentlar va avtomatlashtirish bilan shug'ullanaman.</p>
+            <div class="hero-badges">
+                <span class="badge">🐍 Python</span>
+                <span class="badge">🤖 AI</span>
+                <span class="badge">📱 Telegram Bot</span>
+                <span class="badge">🏋️ Kiber-atlet</span>
+            </div>
+            <div>
+                <a href="#projects" class="btn">💻 Loyihalarim</a>
+                <a href="#contact" class="btn btn-outline">📧 Aloqa</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <h2 class="section-title">👤 Men haqimda</h2>
+        <div class="card" style="max-width: 700px; margin: auto;">
+            <p>Men <strong>Salohiddin (Blip)</strong> — 13 yoshli dasturchiman. Har kuni Python o'rganaman, loyihalar yarataman va yangi texnologiyalarni sinab ko'raman.</p>
+            <p style="margin-top: 12px;">🏋️ <strong>Kiber-atlet</strong>: turnikda 32 marta tortilish — shaxsiy rekordim.</p>
+            <p style="margin-top: 12px;">🎯 Maqsadim: 16 yoshda professional dasturchi bo'lish va foydali loyihalar yaratish.</p>
+        </div>
+    </section>
+
+    <section id="skills">
+        <h2 class="section-title">🛠 Ko'nikmalarim</h2>
+        <div class="skills-grid">
+            <div class="skill"><span class="skill-emoji">🐍</span><span>Python 3.10+</span></div>
+            <div class="skill"><span class="skill-emoji">🤖</span><span>AI / OpenRouter</span></div>
+            <div class="skill"><span class="skill-emoji">📱</span><span>Telegram Bot API</span></div>
+            <div class="skill"><span class="skill-emoji">💾</span><span>SQLite, JSON</span></div>
+            <div class="skill"><span class="skill-emoji">🌐</span><span>HTML, CSS</span></div>
+            <div class="skill"><span class="skill-emoji">📝</span><span>Markdown</span></div>
+            <div class="skill"><span class="skill-emoji">🐙</span><span>Git, GitHub</span></div>
+            <div class="skill"><span class="skill-emoji">🖼</span><span>Pillow</span></div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <h2 class="section-title">🚀 Loyihalarim</h2>
+        <div class="grid">
+            <div class="project">
+                <h3>📸 RasmAI</h3>
+                <p class="desc">Rasm tahlil qiluvchi Telegram bot. AI orqali odamlar, narsalar, joy va vaqtni aniqlaydi.</p>
+                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span><span class="tech-tag">Pillow</span></div>
+            </div>
+            <div class="project">
+                <h3>🎓 LessonPro</h3>
+                <p class="desc">Onlayn dars platformasi. Ustoz dars yaratadi, o'quvchi test ishlaydi.</p>
+                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">SQLite</span><span class="tech-tag">Telegram</span></div>
+            </div>
+            <div class="project">
+                <h3>📧 MailBot</h3>
+                <p class="desc">Gmail kuzatuvchi bot. Rus/ingliz tilidagi emaillarni o'zbekchaga tarjima qiladi.</p>
+                <div class="tech"><span class="tech-tag">IMAP</span><span class="tech-tag">AI</span><span class="tech-tag">Telegram</span></div>
+            </div>
+            <div class="project">
+                <h3>🎬 YouTubeAgent</h3>
+                <p class="desc">Kanal boshlash yordamchisi. Sarlavha, tavsif, skript, muqova g'oyalarini yaratadi.</p>
+                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span></div>
+            </div>
+            <div class="project">
+                <h3>🛡 GoogleGuard</h3>
+                <p class="desc">Google akkaunt xavfsizligini tekshiruvchi AI agent. Maslahat va hisobot beradi.</p>
+                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span></div>
+            </div>
+            <div class="project">
+                <h3>🐙 GitHubAgent</h3>
+                <p class="desc">GitHub kuzatuvchi bot. Yangi star, fork, follow uchun xabar yuboradi.</p>
+                <div class="tech"><span class="tech-tag">GitHub API</span><span class="tech-tag">Telegram</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">📧 Aloqa</h2>
+        <div class="contact-grid">
+            <a href="https://github.com/Dasturchi-top-1" class="contact-link" target="_blank">
+                <span class="ico">🐙</span>
+                <div class="txt"><strong>GitHub</strong><span>Dasturchi-top-1</span></div>
+            </a>
+            <a href="https://t.me/blip" class="contact-link" target="_blank">
+                <span class="ico">💬</span>
+                <div class="txt"><strong>Telegram</strong><span>@blip</span></div>
+            </a>
+            <a href="https://youtube.com/@blip" class="contact-link" target="_blank">
+                <span class="ico">📺</span>
+                <div class="txt"><strong>YouTube</strong><span>@blip</span></div>
+            </a>
+            <a href="mailto:blip@example.com" class="contact-link" target="_blank">
+                <span class="ico">📧</span>
+                <div class="txt"><strong>Email</strong><span>blip@example.com</span></div>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>⭐ Made with <span class="heart">❤️</span> by Blip</p>
+        <p style="margin-top: 8px;">© 2026 — Salohiddin (Blip) • Tojikiston</p>
+    </footer>
+
+</body>
+  </html>
