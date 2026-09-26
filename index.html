@@ -1,346 +1,204 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Blip — 13 yoshli Python dasturchi. Telegram botlar, AI agentlar.">
-    <meta name="keywords" content="Blip, Python, dasturchi, Tojikiston, AI, Telegram Bot">
-    <meta name="author" content="Salohiddin (Blip)">
-    <title>🚀 Blip — Python Dasturchi</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg: #0a0e27;
-            --card: #1a1f3a;
-            --card2: #151a35;
-            --accent: #00BCD4;
-            --accent2: #4DD0E1;
-            --text: #eee;
-            --muted: #888;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.7;
-        }
-        header {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: rgba(10,14,39,0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000; padding: 15px 20px;
-            border-bottom: 1px solid rgba(0,188,212,0.2);
-        }
-        nav {
-            max-width: 1100px; margin: auto;
-            display: flex; justify-content: space-between;
-            align-items: center; flex-wrap: wrap;
-        }
-        .logo {
-            font-size: 22px; font-weight: bold;
-            color: var(--accent); text-decoration: none;
-        }
-        .nav-links { display: flex; gap: 20px; list-style: none; }
-        .nav-links a {
-            color: var(--text); text-decoration: none;
-            font-size: 15px; transition: 0.3s;
-        }
-        .nav-links a:hover { color: var(--accent); }
-        .hero {
-            min-height: 100vh; display: flex;
-            align-items: center; justify-content: center;
-            text-align: center; padding: 100px 20px 60px;
-            background: radial-gradient(circle at 50% 30%, rgba(0,188,212,0.15), transparent 60%);
-        }
-        .hero-content { max-width: 800px; animation: fadeUp 1s; }
-        .hero-emoji {
-            font-size: 80px; display: block;
-            margin-bottom: 20px; animation: float 3s infinite;
-        }
-        .hero h1 {
-            font-size: 52px; margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero p {
-            font-size: 20px; color: var(--muted);
-            margin-bottom: 30px;
-        }
-        .hero-badges {
-            display: flex; gap: 10px;
-            justify-content: center; flex-wrap: wrap;
-            margin-bottom: 30px;
-        }
-        .badge {
-            background: var(--card); padding: 6px 14px;
-            border-radius: 20px; font-size: 14px;
-            border: 1px solid rgba(0,188,212,0.3);
-        }
-        .btn {
-            display: inline-block; background: var(--accent);
-            color: #000; padding: 14px 30px;
-            border-radius: 10px; text-decoration: none;
-            font-weight: bold; font-size: 16px;
-            transition: 0.3s; margin: 5px; border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: var(--accent2);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,188,212,0.4);
-        }
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--accent);
-            color: var(--accent);
-        }
-        .btn-outline:hover { background: var(--accent); color: #000; }
-        section { padding: 80px 20px; max-width: 1100px; margin: auto; }
-        .section-title {
-            text-align: center; font-size: 36px;
-            margin-bottom: 50px; color: var(--accent);
-        }
-        .section-title::after {
-            content: ""; display: block;
-            width: 60px; height: 3px;
-            background: var(--accent); margin: 15px auto 0;
-            border-radius: 3px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background: var(--card); padding: 28px;
-            border-radius: 14px;
-            border-left: 4px solid var(--accent);
-            transition: 0.3s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,188,212,0.15);
-        }
-        .card h3 {
-            color: var(--accent); margin-bottom: 12px;
-            font-size: 20px;
-        }
-        .card p { color: var(--muted); font-size: 15px; }
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        .skill {
-            background: var(--card2); padding: 18px 22px;
-            border-radius: 10px; display: flex;
-            align-items: center; gap: 12px;
-            transition: 0.3s;
-        }
-        .skill:hover {
-            background: var(--card);
-            transform: translateX(5px);
-        }
-        .skill-emoji { font-size: 28px; }
-        .project {
-            background: var(--card); padding: 25px;
-            border-radius: 14px;
-            border-left: 4px solid var(--accent);
-            transition: 0.3s;
-        }
-        .project:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,188,212,0.15);
-        }
-        .project h3 {
-            color: var(--accent); margin-bottom: 10px;
-            font-size: 20px;
-        }
-        .project .desc {
-            color: var(--muted); font-size: 15px;
-            margin-bottom: 15px; min-height: 45px;
-        }
-        .project .tech {
-            display: flex; gap: 8px; flex-wrap: wrap;
-        }
-        .tech-tag {
-            background: rgba(0,188,212,0.15);
-            color: var(--accent2); padding: 4px 10px;
-            border-radius: 6px; font-size: 12px;
-            border: 1px solid rgba(0,188,212,0.3);
-        }
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-        }
-        .contact-link {
-            background: var(--card); padding: 22px;
-            border-radius: 12px; text-decoration: none;
-            color: var(--text); display: flex;
-            align-items: center; gap: 15px;
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
-        .contact-link:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-        }
-        .contact-link .ico { font-size: 32px; }
-        .contact-link .txt strong {
-            display: block; color: var(--accent);
-            font-size: 15px;
-        }
-        .contact-link .txt span {
-            color: var(--muted); font-size: 13px;
-            word-break: break-all;
-        }
-        footer {
-            text-align: center; padding: 40px 20px;
-            color: var(--muted);
-            border-top: 1px solid rgba(0,188,212,0.15);
-            font-size: 14px;
-        }
-        footer .heart { color: #f44336; }
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        html { scroll-behavior: smooth; }
-        @media (max-width: 700px) {
-            .hero h1 { font-size: 36px; }
-            .hero p { font-size: 17px; }
-            .hero-emoji { font-size: 60px; }
-            .section-title { font-size: 28px; }
-            .nav-links { gap: 12px; font-size: 13px; }
-            .logo { font-size: 18px; }
-            section { padding: 60px 20px; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blip AI — Salohiddin</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#1a1d29; --text:#e6e6e6; --muted:#9ca3af;
+    --accent:#6366f1; --accent2:#a855f7; --border:#2a2f3d;
+  }
+  [data-theme="light"]{
+    --bg:#f5f7fb; --card:#ffffff; --text:#111827; --muted:#6b7280;
+    --accent:#4f46e5; --accent2:#9333ea; --border:#e5e7eb;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s}
+  body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+  nav{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--border);
+      padding:14px 20px;display:flex;justify-content:space-between;align-items:center;z-index:10}
+  .logo{font-weight:800;font-size:20px;background:linear-gradient(90deg,var(--accent),var(--accent2));
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .nav-links{display:flex;gap:18px;align-items:center}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500}
+  .nav-links a:hover{color:var(--accent)}
+  #themeBtn{background:var(--card);border:1px solid var(--border);color:var(--text);
+            padding:6px 12px;border-radius:8px;cursor:pointer;font-size:16px}
+
+  header{padding:80px 20px 60px;text-align:center}
+  .hero-logo{font-size:64px;font-weight:900;
+    background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent));
+    background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;animation:grad 4s ease infinite}
+  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .hero-sub{color:var(--muted);margin-top:12px;font-size:17px}
+  .badge{display:inline-block;margin-top:20px;padding:8px 18px;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;font-size:14px;font-weight:600}
+
+  section{max-width:900px;margin:0 auto;padding:60px 20px}
+  h2{font-size:28px;margin-bottom:24px;text-align:center}
+  h2 span{background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+  .chat-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+  #msgs{height:340px;overflow-y:auto;padding:8px;font-size:14px}
+  #msgs p{margin:8px 0;padding:8px 12px;border-radius:10px;max-width:85%;word-wrap:break-word}
+  .me{background:var(--accent);color:#fff;margin-left:auto !important}
+  .ai{background:var(--bg);border:1px solid var(--border)}
+  .row{display:flex;gap:8px;margin-top:12px}
+  #inp{flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);
+       background:var(--bg);color:var(--text);font-size:14px;outline:none}
+  #inp:focus{border-color:var(--accent)}
+  #send{padding:12px 22px;border:none;border-radius:10px;cursor:pointer;font-weight:600;
+        background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;
+        padding:20px;text-decoration:none;color:var(--text);transition:transform .2s,border-color .2s}
+  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .card .ico{font-size:28px;margin-bottom:10px}
+  .card h3{font-size:17px;margin-bottom:6px}
+  .card p{font-size:13px;color:var(--muted)}
+
+  .about{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
+  .about-row{display:flex;gap:8px;margin:8px 0;font-size:15px;flex-wrap:wrap}
+  .about-row b{color:var(--accent);min-width:90px}
+  .about-row a{color:var(--accent);text-decoration:none;font-weight:600}
+  .about-row a:hover{text-decoration:underline}
+
+  footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:13px;
+         border-top:1px solid var(--border);margin-top:40px}
+  @media(max-width:600px){
+    .hero-logo{font-size:42px}
+    .nav-links a:not(.keep){display:none}
+    h2{font-size:22px}
+  }
+</style>
 </head>
 <body>
 
-    <header>
-        <nav>
-            <a href="#" class="logo">🚀 Blip</a>
-            <ul class="nav-links">
-                <li><a href="#about">Men</a></li>
-                <li><a href="#skills">Ko'nikma</a></li>
-                <li><a href="#projects">Loyihalar</a></li>
-                <li><a href="#contact">Aloqa</a></li>
-            </ul>
-        </nav>
-    </header>
+<nav>
+  <div class="logo">⚡ Blip AI</div>
+  <div class="nav-links">
+    <a href="#chat">Chat</a>
+    <a href="#loyiha">Loyihalar</a>
+    <a href="#men">Men</a>
+    <button id="themeBtn" onclick="toggleTheme()">🌙</button>
+  </div>
+</nav>
 
-    <div class="hero">
-        <div class="hero-content">
-            <span class="hero-emoji">🚀</span>
-            <h1>Salom! Men Blip</h1>
-            <p>13 yoshli Python dasturchi. Tojikistondan. Telegram botlar, AI agentlar va avtomatlashtirish bilan shug'ullanaman.</p>
-            <div class="hero-badges">
-                <span class="badge">🐍 Python</span>
-                <span class="badge">🤖 AI</span>
-                <span class="badge">📱 Telegram Bot</span>
-                <span class="badge">🏋️ Kiber-atlet</span>
-            </div>
-            <div>
-                <a href="#projects" class="btn">💻 Loyihalarim</a>
-                <a href="#contact" class="btn btn-outline">📧 Aloqa</a>
-            </div>
-        </div>
+<header>
+  <div class="hero-logo">Blip AI</div>
+  <p class="hero-sub">Sun'iy intellekt bilan ishlovchi yosh dasturchi</p>
+  <div class="badge">🇹🇯 Tojikiston · Dushanbe</div>
+</header>
+
+<section id="chat">
+  <h2>🤖 <span>Blip Agent</span> bilan suhbat</h2>
+  <div class="chat-box">
+    <div id="msgs">
+      <p class="ai"><b>AI:</b> Salom Blip! 👋 Savol ber, men javob beraman.</p>
     </div>
+    <div class="row">
+      <input id="inp" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')send()">
+      <button id="send" onclick="send()">Yubor</button>
+    </div>
+  </div>
+</section>
 
-    <section id="about">
-        <h2 class="section-title">👤 Men haqimda</h2>
-        <div class="card" style="max-width: 700px; margin: auto;">
-            <p>Men <strong>Salohiddin (Blip)</strong> — 13 yoshli dasturchiman. Har kuni Python o'rganaman, loyihalar yarataman va yangi texnologiyalarni sinab ko'raman.</p>
-            <p style="margin-top: 12px;">🏋️ <strong>Kiber-atlet</strong>: turnikda 32 marta tortilish — shaxsiy rekordim.</p>
-            <p style="margin-top: 12px;">🎯 Maqsadim: 16 yoshda professional dasturchi bo'lish va foydali loyihalar yaratish.</p>
-        </div>
-    </section>
+<section id="loyiha">
+  <h2>📁 <span>Loyihalar</span></h2>
+  <div class="grid">
+    <a class="card" href="https://t.me/blip_agent_bot" target="_blank">
+      <div class="ico">🤖</div><h3>Blip Agent</h3>
+      <p>Telegram AI bot — OpenRouter bilan</p>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="ico">📦</div><h3>Blip Order Bot</h3>
+      <p>Buyurtma qabul qiluvchi bot</p>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="ico">🧠</div><h3>DeepSeek Agent</h3>
+      <p>DeepSeek modelida ishlovchi agent</p>
+    </a>
+    <a class="card" href="#" target="_blank">
+      <div class="ico">🌐</div><h3>CyberHub</h3>
+      <p>Kibersavfsizlik loyihasi</p>
+    </a>
+  </div>
+</section>
 
-    <section id="skills">
-        <h2 class="section-title">🛠 Ko'nikmalarim</h2>
-        <div class="skills-grid">
-            <div class="skill"><span class="skill-emoji">🐍</span><span>Python 3.10+</span></div>
-            <div class="skill"><span class="skill-emoji">🤖</span><span>AI / OpenRouter</span></div>
-            <div class="skill"><span class="skill-emoji">📱</span><span>Telegram Bot API</span></div>
-            <div class="skill"><span class="skill-emoji">💾</span><span>SQLite, JSON</span></div>
-            <div class="skill"><span class="skill-emoji">🌐</span><span>HTML, CSS</span></div>
-            <div class="skill"><span class="skill-emoji">📝</span><span>Markdown</span></div>
-            <div class="skill"><span class="skill-emoji">🐙</span><span>Git, GitHub</span></div>
-            <div class="skill"><span class="skill-emoji">🖼</span><span>Pillow</span></div>
-        </div>
-    </section>
+<section id="men">
+  <h2>👤 <span>Men haqimda</span></h2>
+  <div class="about">
+    <div class="about-row"><b>Ism:</b> Blip (Salohiddin)</div>
+    <div class="about-row"><b>Yosh:</b> 13</div>
+    <div class="about-row"><b>Joy:</b> Dushanbe, Tojikiston</div>
+    <div class="about-row"><b>Tillar:</b> O'zbek, Tojik, Rus, Ingliz</div>
+    <div class="about-row"><b>Ko'nikmalar:</b> Python, JavaScript, Cloudflare, Termux</div>
+    <div class="about-row"><b>Loyihalar:</b> Blip Agent, Order Bot, DeepSeek, CyberHub</div>
+    <div class="about-row"><b>Telegram:</b>
+      <a href="https://t.me/BLIP_KIBER_XAFSIZLIK" target="_blank">@BLIP_KIBER_XAFSIZLIK</a>
+    </div>
+    <div class="about-row"><b>Gmail:</b>
+      <a href="mailto:sulhiyahasanova1@gmail.com">sulhiyahasanova1@gmail.com</a>
+    </div>
+    <div class="about-row"><b>GitHub:</b>
+      <a href="https://github.com/dasturchi-top-1" target="_blank">dasturchi-top-1</a>
+    </div>
+  </div>
+</section>
 
-    <section id="projects">
-        <h2 class="section-title">🚀 Loyihalarim</h2>
-        <div class="grid">
-            <div class="project">
-                <h3>📸 RasmAI</h3>
-                <p class="desc">Rasm tahlil qiluvchi Telegram bot. AI orqali odamlar, narsalar, joy va vaqtni aniqlaydi.</p>
-                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span><span class="tech-tag">Pillow</span></div>
-            </div>
-            <div class="project">
-                <h3>🎓 LessonPro</h3>
-                <p class="desc">Onlayn dars platformasi. Ustoz dars yaratadi, o'quvchi test ishlaydi, AI hisobot beradi.</p>
-                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">SQLite</span><span class="tech-tag">Telegram</span></div>
-            </div>
-            <div class="project">
-                <h3>📧 MailBot</h3>
-                <p class="desc">Gmail kuzatuvchi bot. Rus/ingliz tilidagi emaillarni o'zbekchaga tarjima qiladi.</p>
-                <div class="tech"><span class="tech-tag">IMAP</span><span class="tech-tag">AI</span><span class="tech-tag">Telegram</span></div>
-            </div>
-            <div class="project">
-                <h3>🎬 YouTubeAgent</h3>
-                <p class="desc">Kanal boshlash yordamchisi. Sarlavha, tavsif, skript, muqova g'oyalarini yaratadi.</p>
-                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span></div>
-            </div>
-            <div class="project">
-                <h3>🛡 GoogleGuard</h3>
-                <p class="desc">Google akkaunt xavfsizligini tekshiruvchi AI agent. Maslahat va hisobot beradi.</p>
-                <div class="tech"><span class="tech-tag">Python</span><span class="tech-tag">AI</span></div>
-            </div>
-            <div class="project">
-                <h3>🐙 GitHubAgent</h3>
-                <p class="desc">GitHub kuzatuvchi bot. Yangi star, fork, follow uchun xabar yuboradi.</p>
-                <div class="tech"><span class="tech-tag">GitHub API</span><span class="tech-tag">Telegram</span></div>
-            </div>
-        </div>
-    </section>
+<footer>
+  © 2026 Blip AI · Salohiddin · Dushanbe 🇹🇯
+</footer>
 
-    <section id="contact">
-        <h2 class="section-title">📧 Aloqa</h2>
-        <div class="contact-grid">
-            <a href="https://github.com/Dasturchi-top-1" class="contact-link" target="_blank">
-                <span class="ico">🐙</span>
-                <div class="txt"><strong>GitHub</strong><span>Dasturchi-top-1</span></div>
-            </a>
-            <a href="https://t.me/BLIP_KIBER_XAFSIZLIK" class="contact-link" target="_blank">
-                <span class="ico">💬</span>
-                <div class="txt"><strong>Telegram</strong><span>@BLIP_KIBER_XAFSIZLIK</span></div>
-            </a>
-            <a href="mailto:sulhiyahasanova1@gmail.com" class="contact-link" target="_blank">
-                <span class="ico">📧</span>
-                <div class="txt"><strong>Email</strong><span>sulhiyahasanova1@gmail.com</span></div>
-            </a>
-            <a href="https://github.com/Dasturchi-top-1?tab=repositories" class="contact-link" target="_blank">
-                <span class="ico">💻</span>
-                <div class="txt"><strong>Loyihalar</strong><span>Barcha repolarim</span></div>
-            </a>
-        </div>
-    </section>
+<script>
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/api";
+const SID = localStorage.getItem("sid") || (Date.now() + "_" + Math.random().toString(36).slice(2));
+localStorage.setItem("sid", SID);
 
-    <footer>
-        <p>⭐ Made with <span class="heart">❤️</span> by Blip</p>
-        <p style="margin-top: 8px;">© 2026 — Salohiddin (Blip) • Tojikiston</p>
-    </footer>
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute("data-theme") || "dark";
+  const nxt = cur === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", nxt);
+  document.getElementById("themeBtn").textContent = nxt === "dark" ? "🌙" : "☀️";
+  localStorage.setItem("theme", nxt);
+}
+(function(){
+  const t = localStorage.getItem("theme") || "dark";
+  document.documentElement.setAttribute("data-theme", t);
+  document.getElementById("themeBtn").textContent = t === "dark" ? "🌙" : "☀️";
+})();
 
+async function send(){
+  const inp = document.getElementById("inp");
+  const msgs = document.getElementById("msgs");
+  const text = inp.value.trim();
+  if(!text) return;
+  msgs.innerHTML += `<p class="me"><b>Sen:</b> ${text}</p>`;
+  inp.value = "";
+  msgs.scrollTop = msgs.scrollHeight;
+
+  const wait = document.createElement("p");
+  wait.className = "ai";
+  wait.innerHTML = "⏳ o'ylayapti...";
+  msgs.appendChild(wait);
+  msgs.scrollTop = msgs.scrollHeight;
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: text, sid: SID })
+    });
+    const d = await r.json();
+    wait.innerHTML = `<b>AI:</b> ${d.reply || d.error || "Javob yo'q"}`;
+  }catch(e){
+    wait.innerHTML = `❌ Xato: ${e.message}`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
 </body>
-            </html>
+        </html>
