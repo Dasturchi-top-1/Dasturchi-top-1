@@ -55,10 +55,13 @@
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
   .card{background:var(--card);border:1px solid var(--border);border-radius:14px;
         padding:20px;text-decoration:none;color:var(--text);transition:transform .2s,border-color .2s}
-  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
+  a.card:hover{transform:translateY(-4px);border-color:var(--accent);cursor:pointer}
+  div.card{cursor:default;opacity:.85}
   .card .ico{font-size:28px;margin-bottom:10px}
   .card h3{font-size:17px;margin-bottom:6px}
   .card p{font-size:13px;color:var(--muted)}
+  .soon{display:inline-block;margin-top:8px;font-size:11px;color:var(--accent);
+        border:1px solid var(--accent);padding:2px 8px;border-radius:999px}
 
   .about{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px}
   .about-row{display:flex;gap:8px;margin:8px 0;font-size:15px;flex-wrap:wrap}
@@ -113,18 +116,21 @@
       <div class="ico">🤖</div><h3>Blip Agent</h3>
       <p>Telegram AI bot — OpenRouter bilan</p>
     </a>
-    <a class="card" href="#" target="_blank">
+    <div class="card">
       <div class="ico">📦</div><h3>Blip Order Bot</h3>
       <p>Buyurtma qabul qiluvchi bot</p>
-    </a>
-    <a class="card" href="#" target="_blank">
+      <span class="soon">Tez orada</span>
+    </div>
+    <div class="card">
       <div class="ico">🧠</div><h3>DeepSeek Agent</h3>
       <p>DeepSeek modelida ishlovchi agent</p>
-    </a>
-    <a class="card" href="#" target="_blank">
+      <span class="soon">Tez orada</span>
+    </div>
+    <div class="card">
       <div class="ico">🌐</div><h3>CyberHub</h3>
       <p>Kibersavfsizlik loyihasi</p>
-    </a>
+      <span class="soon">Tez orada</span>
+    </div>
   </div>
 </section>
 
@@ -144,7 +150,7 @@
       <a href="mailto:sulhiyahasanova1@gmail.com">sulhiyahasanova1@gmail.com</a>
     </div>
     <div class="about-row"><b>GitHub:</b>
-      <a href="https://github.com/dasturchi-top-1" target="_blank">dasturchi-top-1</a>
+      <a href="https://github.com/Dasturchi-top-1" target="_blank">Dasturchi-top-1</a>
     </div>
   </div>
 </section>
@@ -201,4 +207,4 @@ async function send(){
 }
 </script>
 </body>
-        </html>
+      </html>
