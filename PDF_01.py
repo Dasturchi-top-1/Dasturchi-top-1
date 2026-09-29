@@ -62,7 +62,7 @@ pdf_nomi = input("PDF nomini kiriting (masalan: hujjat.pdf): ").strip()
 if not pdf_nomi.endswith(".pdf"):
     pdf_nomi += ".pdf"
 
-downloads = "/storage/emulated/0/Download"
+downloads = "/storage/emulated/0/Ai/PDF"
 os.makedirs(downloads, exist_ok=True)
 pdf_yoli = os.path.join(downloads, pdf_nomi)
 
