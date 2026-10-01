@@ -1,3 +1,7 @@
 name = "dasturchi-ai-proxy"
 main = "worker.js"
-compatibility_date = "2026-09-29"
+compatibility_date = "2025-01-01"
+
+[[kv_namespaces]]
+binding = "AGENT_KV"
+id = "b53c976e874b4c92ba63d2770bbb43a0"
