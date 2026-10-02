@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Council — Blip</title>
+<style>
+  :root{
+    --bg:#0a0a1a;--card:#141428;--text:#e6e6f0;--muted:#8888aa;
+    --accent:#6366f1;--accent2:#a855f7;--border:#2a2a44;
+    --gold:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:20px;
+    background-image:radial-gradient(circle at 20% 10%,rgba(99,102,241,.15),transparent 50%),
+                     radial-gradient(circle at 80% 90%,rgba(168,85,247,.15),transparent 50%);
+  }
+  .container{max-width:900px;margin:auto}
+  header{text-align:center;padding:40px 0 30px}
+  h1{
+    font-size:42px;font-weight:900;
+    background:linear-gradient(90deg,#6366f1,#a855f7,#6366f1);
+    background-size:200% 200%;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;animation:grad 4s ease infinite;
+  }
+  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .sub{color:var(--muted);margin-top:8px;font-size:15px}
+  .badges{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+  .badge{font-size:12px;padding:4px 10px;border:1px solid var(--border);
+         border-radius:999px;color:var(--muted)}
+  .ask{background:var(--card);border:1px solid var(--border);border-radius:16px;
+       padding:16px;margin-bottom:24px}
+  textarea{
+    width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
+    resize:vertical;min-height:80px;outline:none
+  }
+  textarea:focus{border-color:var(--accent)}
+  .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .examples{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+  .ex{font-size:12px;padding:6px 12px;border-radius:999px;background:var(--bg);
+      border:1px solid var(--border);color:var(--muted);cursor:pointer}
+  .ex:hover{border-color:var(--accent);color:var(--accent)}
+  #askBtn{
+    padding:12px 28px;border:none;border-radius:10px;cursor:pointer;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#fff;font-weight:700;font-size:15px
+  }
+  #askBtn:disabled{opacity:.5;cursor:wait}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+        gap:12px;margin-bottom:24px}
+  .ai-card{
+    background:var(--card);border:1px solid var(--border);border-radius:14px;
+    padding:16px;animation:fade .4s ease
+  }
+  .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+  .ai-emoji{font-size:22px}
+  .ai-name{font-weight:700;font-size:14px}
+  .ai-text{font-size:13px;line-height:1.6;color:#c8c8dc;white-space:pre-wrap}
+  .council{
+    background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(168,85,247,.1));
+    border:2px solid var(--gold);border-radius:16px;padding:24px;
+    animation:fade .6s ease
+  }
+  .council-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .council-title{font-size:18px;font-weight:800;color:var(--gold)}
+  .council-text{font-size:15px;line-height:1.7;white-space:pre-wrap}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .loading{text-align:center;padding:40px;color:var(--muted)}
+  .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
+  @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+  footer{text-align:center;padding:30px;color:var(--muted);font-size:12px;margin-top:20px}
+  footer a{color:var(--accent);text-decoration:none}
+  @media(max-width:600px){h1{font-size:30px}header{padding:20px 0}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🏛 AI KENGASH</h1>
+  <p class="sub">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
+  <div class="badges">
+    <span class="badge">🤖 GPT-4o</span>
+    <span class="badge">🧠 Gemini</span>
+    <span class="badge">🎭 Claude</span>
+    <span class="badge">⚡ DeepSeek</span>
+    <span class="badge">🦙 Llama</span>
+  </div>
+</header>
+
+<div class="ask">
+  <textarea id="q" placeholder="Savolingizni yozing... Masalan: 'Kelajakda AI qanday bo'ladi?'"></textarea>
+  <div class="row">
+    <div class="examples">
+      <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">Hayot ma'nosi</span>
+      <span class="ex" onclick="fill('Eng yaxshi dasturlash tili?')">Dasturlash tili</span>
+      <span class="ex" onclick="fill('Kelajakda AI qanday bo\'ladi?')">AI kelajagi</span>
+      <span class="ex" onclick="fill('13 yoshda qanday dasturchi bo\'lish mumkin?')">Dasturchi bo'lish</span>
+    </div>
+    <button id="askBtn" onclick="ask()">Kengashni chaqirish</button>
+  </div>
+</div>
+
+<div id="out"></div>
+
+<footer>
+  ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> tomonidan yaratildi · 2026
+</footer>
+
+</div>
+
+<script>
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
+
+function fill(t){ document.getElementById('q').value = t; }
+
+async function ask(){
+  const q = document.getElementById('q').value.trim();
+  if(!q) return;
+  const btn = document.getElementById('askBtn');
+  const out = document.getElementById('out');
+  btn.disabled = true;
+  btn.textContent = '⏳ Kengash yig\'ilmoqda...';
+  out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti<span class="dots"></span></div>';
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ question: q })
+    });
+    const d = await r.json();
+    if(d.error){ out.innerHTML = '<div class="loading">❌ ' + d.error + '</div>'; return; }
+
+    let html = '<div class="grid">';
+    d.answers.forEach(a => {
+      html += `<div class="ai-card">
+        <div class="ai-head">
+          <span class="ai-emoji">${a.emoji}</span>
+          <span class="ai-name">${a.name}</span>
+        </div>
+        <div class="ai-text">${esc(a.answer)}</div>
+      </div>`;
+    });
+    html += '</div>';
+
+    html += `<div class="council">
+      <div class="council-head">
+        <span style="font-size:28px">🏛</span>
+        <span class="council-title">KENGASH XULOSASI</span>
+      </div>
+      <div class="council-text">${esc(d.conclusion)}</div>
+    </div>`;
+
+    out.innerHTML = html;
+  } catch(e){
+    out.innerHTML = '<div class="loading">❌ Xato: ' + e.message + '</div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Kengashni chaqirish';
+  }
+}
+
+function esc(s){
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+</script>
+</body>
+  </html>
