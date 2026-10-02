@@ -8,7 +8,7 @@
   :root{
     --bg:#0a0a1a;--card:#141428;--text:#e6e6f0;--muted:#8888aa;
     --accent:#6366f1;--accent2:#a855f7;--border:#2a2a44;
-    --gold:#fbbf24;
+    --gold:#fbbf24;--red:#ef4444;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
@@ -32,6 +32,11 @@
          border-radius:999px;color:var(--muted)}
   .ask{background:var(--card);border:1px solid var(--border);border-radius:16px;
        padding:16px;margin-bottom:24px}
+  input[type="password"]{
+    width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text);font-size:15px;margin-bottom:10px;outline:none
+  }
+  input[type="password"]:focus{border-color:var(--accent)}
   textarea{
     width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
     background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
@@ -69,6 +74,7 @@
   .council-text{font-size:15px;line-height:1.7;white-space:pre-wrap}
   @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   .loading{text-align:center;padding:40px;color:var(--muted)}
+  .error{text-align:center;padding:20px;color:var(--red)}
   .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
   @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
   footer{text-align:center;padding:30px;color:var(--muted);font-size:12px;margin-top:20px}
@@ -83,16 +89,17 @@
   <h1>🏛 AI KENGASH</h1>
   <p class="sub">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
   <div class="badges">
-    <span class="badge">🤖 GPT-4o</span>
-    <span class="badge">🧠 Gemini</span>
-    <span class="badge">🎭 Claude</span>
-    <span class="badge">⚡ DeepSeek</span>
-    <span class="badge">🦙 Llama</span>
+    <span class="badge">🌟 Qwen3.6</span>
+    <span class="badge">🧠 Nemotron</span>
+    <span class="badge">⚡ StepFun</span>
+    <span class="badge">🌪 LFM</span>
+    <span class="badge">🦙 Llama 3.3</span>
   </div>
 </header>
 
 <div class="ask">
-  <textarea id="q" placeholder="Savolingizni yozing... Masalan: 'Kelajakda AI qanday bo'ladi?'"></textarea>
+  <input type="password" id="parol" placeholder="🔐 Parol..." autocomplete="off">
+  <textarea id="q" placeholder="Savolingizni yozing..."></textarea>
   <div class="row">
     <div class="examples">
       <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">Hayot ma'nosi</span>
@@ -110,18 +117,38 @@
   ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> tomonidan yaratildi · 2026
 </footer>
 
-</div>
-
-<script>
+        </div>
+        <script>
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
+
+// Parolni eslab qolish
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('council_parol');
+  if (saved) document.getElementById('parol').value = saved;
+  document.getElementById('parol').addEventListener('change', (e) => {
+    localStorage.setItem('council_parol', e.target.value);
+  });
+});
 
 function fill(t){ document.getElementById('q').value = t; }
 
 async function ask(){
   const q = document.getElementById('q').value.trim();
-  if(!q) return;
+  const parol = document.getElementById('parol').value.trim();
   const btn = document.getElementById('askBtn');
   const out = document.getElementById('out');
+
+  if(!parol){
+    out.innerHTML = '<div class="error">🔐 Parolni kiriting!</div>';
+    return;
+  }
+  if(!q){
+    out.innerHTML = '<div class="error">❓ Savolni yozing!</div>';
+    return;
+  }
+
+  localStorage.setItem('council_parol', parol);
+
   btn.disabled = true;
   btn.textContent = '⏳ Kengash yig\'ilmoqda...';
   out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti<span class="dots"></span></div>';
@@ -130,10 +157,14 @@ async function ask(){
     const r = await fetch(API, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ question: q })
+      body: JSON.stringify({ question: q, parol: parol })
     });
     const d = await r.json();
-    if(d.error){ out.innerHTML = '<div class="loading">❌ ' + d.error + '</div>'; return; }
+
+    if(!r.ok || d.error){
+      out.innerHTML = '<div class="error">' + (d.error || 'Xato') + '</div>';
+      return;
+    }
 
     let html = '<div class="grid">';
     d.answers.forEach(a => {
@@ -157,7 +188,7 @@ async function ask(){
 
     out.innerHTML = html;
   } catch(e){
-    out.innerHTML = '<div class="loading">❌ Xato: ' + e.message + '</div>';
+    out.innerHTML = '<div class="error">❌ Xato: ' + e.message + '</div>';
   } finally {
     btn.disabled = false;
     btn.textContent = 'Kengashni chaqirish';
@@ -171,4 +202,4 @@ function esc(s){
 }
 </script>
 </body>
-  </html>
+</html>
