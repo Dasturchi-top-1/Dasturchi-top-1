@@ -1,9 +1,9 @@
 # ============================================================
-# 📧 BLIP MAIL BOT v7.0 — Flask + Webhook (Render uchun)
+# 📧 BLIP MAIL BOT v7.1 — Flask + Webhook (Render uchun)
 # ============================================================
-import os, sys, json, time, sqlite3, re, datetime
-import urllib.request, urllib.parse, urllib.error
-import imaplib, email, threading
+import os, json, time, sqlite3, re, datetime
+import urllib.request, urllib.parse
+import imaplib, email
 from email.header import decode_header
 from flask import Flask, request
 
@@ -20,9 +20,11 @@ MAX_URINISH = 3
 SESSIYA_VAQTI = 30 * 24 * 3600
 IMAP_SERVER = "imap.gmail.com"
 AI_URL = "https://openrouter.ai/api/v1/chat/completions"
+
 AI_MODELS = [
     "google/gemini-2.5-flash-lite",
     "openai/gpt-4o-mini",
+    "anthropic/claude-3-haiku",
 ]
 
 LOYIHA_PAPKA = "."
@@ -32,6 +34,40 @@ LOG_FILE = os.path.join(LOYIHA_PAPKA, "mail_bot.log")
 
 app = Flask(__name__)
 ADMIN_ID = [0]
+
+# ============================================================
+# 📝 AI PROMPTLAR
+# ============================================================
+INTENT_P = """Sen intent parser. Foydalanuvchi xabaridan niyatni JSON da aniqlaysan.
+
+MUMKIN NIYATLAR:
+check, list, read, stat, auto_on, auto_off, help, chat
+
+QOIDALAR:
+- "tekshir","yangi","email bormi" → check
+- "royxat","list","ko'rsat" → list
+- "o'qi","read","N-email" → read (id bilan)
+- "stat","statistika" → stat
+- "avtomatik yoq" → auto_on
+- "avtomatik ochir" → auto_off
+- "yordam","help" → help
+- Boshqa → chat
+
+FAQAT JSON qaytar. Internet haqida gapirma.
+
+MISOLLAR:
+"Yangi email bormi?" → {"intent":"check"}
+"Emaillarni ko'rsat" → {"intent":"list"}
+"5-emailni o'qi" → {"intent":"read","id":5}
+"Salom" → {"intent":"chat","javob":"Salom! Men Blip Mail Bot."}
+"""
+
+SYSTEM_PROMPT = (
+    "Sen BLIP MAIL BOT yordamchisisan. "
+    "Har doim O'ZBEK TILIDA (lotin) javob ber. Qisqa yoz. "
+    "Faqat foydalanuvchi so'ragan narsani bajar. "
+    "Internetga ulanishing haqida gapirma."
+)
 
 # ============================================================
 # 🛡 MAXFIY HIMOYA
@@ -136,7 +172,7 @@ def typing(cid):
 # 🗄 BAZA
 # ============================================================
 def db_init():
-    c = sqlite3.connect(DB_FILE).cursor()
+    conn = sqlite3.connect(DB_FILE); c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS emails (
         id INTEGER PRIMARY KEY AUTOINCREMENT, msg_id TEXT UNIQUE,
         kimdan TEXT, mavzu TEXT, matn TEXT, sana TEXT,
@@ -144,7 +180,7 @@ def db_init():
     c.execute("""CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY, auto_check INTEGER DEFAULT 1)""")
     c.execute("INSERT OR IGNORE INTO settings (id) VALUES (1)")
-    c.connection.commit(); c.connection.close()
+    conn.commit(); conn.close()
 
 def em_saqlash(em, t="", h=""):
     conn = sqlite3.connect(DB_FILE); c = conn.cursor()
@@ -209,13 +245,6 @@ def ai_ask(sys_p, user):
         if n: return n
         time.sleep(0.3)
     return None
-
-SYSTEM_PROMPT = (
-    "Sen BLIP MAIL BOT yordamchisisan. "
-    "Har doim O'ZBEK TILIDA (lotin) javob ber. "
-    "Faqat foydalanuvchi so'ragan narsani bajar. "
-    "Internetga ulanishing haqida gapirma."
-)
 
 def intent(text):
     j = ai_ask(INTENT_P, text)
@@ -328,7 +357,7 @@ def yangi_tekshir(admin):
 # 💬 BUYRUQLAR
 # ============================================================
 def cmd_start(cid):
-    send(cid, "📧 BLIP MAIL BOT v7.0\n\n/check /list /read /stat\n/auto /help /logout\n\n"
+    send(cid, "📧 BLIP MAIL BOT v7.1\n\n/check /list /read /stat\n/auto /help /logout\n\n"
         "💡 Yoki yozing:\n• \"yangi email bormi?\"\n• \"emaillarni ko'rsat\"")
 
 def cmd_help(cid):
@@ -387,7 +416,7 @@ def xabar(cid, text):
     typing(cid)
     it = intent(text)
     if not it:
-        j = ai_ask("Sen BLIP MAIL BOT. O'zbek tilida qisqa.", text)
+        j = ai_ask(SYSTEM_PROMPT, text)
         send(cid, j or "Tushunmadim. /help"); return
     t = it.get("intent", "chat")
     if t == "check": cmd_check(cid)
@@ -398,7 +427,7 @@ def xabar(cid, text):
     elif t == "auto_off": cmd_auto(cid, ["off"])
     elif t == "help": cmd_help(cid)
     else:
-        j = it.get("javob", "") or ai_ask("Sen BLIP MAIL BOT. O'zbek tilida.", text)
+        j = it.get("javob", "") or ai_ask(SYSTEM_PROMPT, text)
         send(cid, j or "Tushunmadim")
 
 def parol_ol(cid, matn):
@@ -418,7 +447,7 @@ def parol_ol(cid, matn):
 # ============================================================
 @app.route("/")
 def index():
-    return "Blip Mail Bot v7.0 ishlayapti ✅"
+    return "Blip Mail Bot v7.1 ishlayapti ✅"
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -431,7 +460,7 @@ def webhook():
 
         if text == "/start":
             sess_ochir(cid)
-            send(cid, f"🔐 BLIP MAIL BOT v7.0\n\nSalom, {ism}!\nParolni yuboring:\n❌ 3 urinish")
+            send(cid, f"🔐 BLIP MAIL BOT v7.1\n\nSalom, {ism}!\nParolni yuboring:\n❌ 3 urinish")
             return "ok"
         if text == "/logout":
             sess_ochir(cid); send(cid, "👋 Chiqdingiz"); return "ok"
@@ -463,6 +492,6 @@ def auto_check():
 # 🏁
 # ============================================================
 if __name__ == "__main__":
-    log("🚀 Blip Mail Bot v7.0 (Webhook)")
+    log("🚀 Blip Mail Bot v7.1 (Webhook)")
     db_init()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
