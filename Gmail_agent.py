@@ -1,5 +1,5 @@
 # ============================================================
-# 📧 BLIP MAIL BOT v7.1 — Flask + Webhook (Render uchun)
+# 📧 BLIP MAIL BOT v7.2 — Flask + Webhook (Render uchun)
 # ============================================================
 import os, json, time, sqlite3, re, datetime
 import urllib.request, urllib.parse
@@ -181,6 +181,10 @@ def db_init():
         id INTEGER PRIMARY KEY, auto_check INTEGER DEFAULT 1)""")
     c.execute("INSERT OR IGNORE INTO settings (id) VALUES (1)")
     conn.commit(); conn.close()
+    print("✅ Baza tayyor")
+
+# ⚠️ MUHIM: modul yuklanganda chaqiriladi (gunicorn uchun)
+db_init()
 
 def em_saqlash(em, t="", h=""):
     conn = sqlite3.connect(DB_FILE); c = conn.cursor()
@@ -357,7 +361,7 @@ def yangi_tekshir(admin):
 # 💬 BUYRUQLAR
 # ============================================================
 def cmd_start(cid):
-    send(cid, "📧 BLIP MAIL BOT v7.1\n\n/check /list /read /stat\n/auto /help /logout\n\n"
+    send(cid, "📧 BLIP MAIL BOT v7.2\n\n/check /list /read /stat\n/auto /help /logout\n\n"
         "💡 Yoki yozing:\n• \"yangi email bormi?\"\n• \"emaillarni ko'rsat\"")
 
 def cmd_help(cid):
@@ -447,7 +451,7 @@ def parol_ol(cid, matn):
 # ============================================================
 @app.route("/")
 def index():
-    return "Blip Mail Bot v7.1 ishlayapti ✅"
+    return "Blip Mail Bot v7.2 ishlayapti ✅"
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
@@ -460,7 +464,7 @@ def webhook():
 
         if text == "/start":
             sess_ochir(cid)
-            send(cid, f"🔐 BLIP MAIL BOT v7.1\n\nSalom, {ism}!\nParolni yuboring:\n❌ 3 urinish")
+            send(cid, f"🔐 BLIP MAIL BOT v7.2\n\nSalom, {ism}!\nParolni yuboring:\n❌ 3 urinish")
             return "ok"
         if text == "/logout":
             sess_ochir(cid); send(cid, "👋 Chiqdingiz"); return "ok"
@@ -492,6 +496,5 @@ def auto_check():
 # 🏁
 # ============================================================
 if __name__ == "__main__":
-    log("🚀 Blip Mail Bot v7.1 (Webhook)")
-    db_init()
+    log("🚀 Blip Mail Bot v7.2 (Webhook)")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=False)
