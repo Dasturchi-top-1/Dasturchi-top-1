@@ -1,3 +1,7 @@
+// ============================================================
+// ⚡ BLIP AI WORKER v3.0 — Telegram + Sayt + AI Council
+// ============================================================
+
 const SYSTEM = `Sen Blip Agent — Telegram bot orqali ishlovchi AI yordamchisan.
 
 FOYDALANUVCHI HAQIDA:
@@ -9,7 +13,6 @@ FOYDALANUVCHI HAQIDA:
 - Loyihalar: Blip Order Bot, DeepSeek Agent, CyberHub, Blip AI
 - Telegram: @BLIP_KIBER_XAFSIZLIK
 - GitHub: Dasturchi-top-1
-- Gmail: sulhiyahasanova1@gmail.com
 
 VAZIFA:
 O'zbek tilida (lotin) qisqa va aniq javob ber.
@@ -18,6 +21,14 @@ Kerak bo'lsa tool ishlat (vaqt, hisoblash, eslatma).
 
 XARAKTER:
 Do'stona, samimiy, yoshga mos. Blip deb chaqir.`;
+
+const COUNCIL_SYSTEM = `Sen aqlli va dono yordamchisan.
+O'zbek tilida (lotin) qisqa va aniq javob ber (3-5 gap).
+Faqat savolga javob ber, ortiqcha gapirma.`;
+
+const JUDGE_SYSTEM = `Sen AI Kengashning dono raisisisan.
+5 ta AI javobini tahlil qilib, O'ZBEK TILIDA qisqa umumiy xulosa yoz (5-7 gap).
+Eng yaxshi fikrlarni birlashtir, qarama-qarshiliklarni ajrat.`;
 
 const TOOLS = [
   { type: "function", function: {
@@ -37,6 +48,17 @@ const TOOLS = [
     parameters: { type: "object", properties: { num: { type: "number" } }, required: ["num"] } } }
 ];
 
+const COUNCIL_MODELS = [
+  { id: "openai/gpt-4o-mini", name: "GPT-4o Mini", emoji: "🤖" },
+  { id: "google/gemini-2.5-flash-lite", name: "Gemini Flash", emoji: "🧠" },
+  { id: "anthropic/claude-3-haiku", name: "Claude Haiku", emoji: "🎭" },
+  { id: "deepseek/deepseek-chat", name: "DeepSeek", emoji: "⚡" },
+  { id: "meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3", emoji: "🦙" }
+];
+
+// ============================================================
+// 🛠 TOOL'LAR
+// ============================================================
 async function runTool(name, args, env, chatId) {
   try {
     if (name === "get_time")
@@ -69,19 +91,25 @@ async function runTool(name, args, env, chatId) {
   } catch (e) { return "Xato: " + e.message; }
 }
 
-async function callAI(messages, env) {
+// ============================================================
+// 🤖 AI
+// ============================================================
+async function callAI(messages, env, useTools = true) {
+  const payload = {
+    model: "openai/gpt-4o-mini",
+    messages: messages
+  };
+  if (useTools) {
+    payload.tools = TOOLS;
+    payload.tool_choice = "auto";
+  }
   const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
     headers: {
       "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      model: "openai/gpt-4o-mini",
-      messages: messages,
-      tools: TOOLS,
-      tool_choice: "auto"
-    })
+    body: JSON.stringify(payload)
   });
   return await r.json();
 }
@@ -95,7 +123,7 @@ async function agentLoop(userMsg, chatId, env) {
   let reply = "", steps = 0;
   while (steps < 5) {
     steps++;
-    const data = await callAI(history, env);
+    const data = await callAI(history, env, true);
     const msg = data.choices?.[0]?.message;
     if (!msg) { reply = "AI javob bermadi."; break; }
 
@@ -125,6 +153,9 @@ async function agentLoop(userMsg, chatId, env) {
   return reply || "Javob bo'sh.";
 }
 
+// ============================================================
+// 📤 TELEGRAM
+// ============================================================
 async function sendTg(chatId, text, env) {
   for (let i = 0; i < text.length; i += 4000) {
     await fetch("https://api.telegram.org/bot" + env.TELEGRAM_TOKEN + "/sendMessage", {
@@ -145,29 +176,134 @@ async function sendTyping(chatId, env) {
   } catch {}
 }
 
+// ============================================================
+// 🌐 CORS
+// ============================================================
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type"
+};
+
+function json(obj, status = 200) {
+  return new Response(JSON.stringify(obj), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json" }
+  });
+}
+
+// ============================================================
+// 🚀 MAIN
+// ============================================================
 export default {
   async fetch(request, env) {
-    const cors = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type"
-    };
-    if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+    if (request.method === "OPTIONS") {
+      return new Response(null, { headers: CORS });
+    }
 
     const url = new URL(request.url);
+    const path = url.pathname;
 
-    if (url.pathname === "/api" && request.method === "POST") {
+    // ============================================================
+    // 🏛 AI COUNCIL — 5 ta AI birga javob beradi
+    // ============================================================
+    if (path === "/council" && request.method === "POST") {
       try {
         const body = await request.json();
-        if (!body.message) return json({ error: "message yo'q" }, 400, cors);
-        const reply = await agentLoop(body.message, body.sid || "web", env);
-        return json({ reply }, 200, cors);
+        const question = (body.question || "").trim();
+        if (!question) return json({ error: "Savol yo'q" }, 400);
+        if (question.length > 2000) return json({ error: "Savol juda uzun" }, 400);
+
+        // 5 ta AI parallel javob beradi
+        const promises = COUNCIL_MODELS.map(m =>
+          fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: m.id,
+              messages: [
+                { role: "system", content: COUNCIL_SYSTEM },
+                { role: "user", content: question }
+              ],
+              max_tokens: 500,
+              temperature: 0.7
+            })
+          })
+          .then(r => r.json())
+          .then(d => ({
+            emoji: m.emoji,
+            name: m.name,
+            answer: d.choices?.[0]?.message?.content || "Javob olinmadi"
+          }))
+          .catch(e => ({
+            emoji: m.emoji,
+            name: m.name,
+            answer: "❌ Xato: " + e.message
+          }))
+        );
+
+        const answers = await Promise.all(promises);
+
+        // Rais — umumiy xulosa
+        const judgePrompt = `Savol: "${question}"
+
+5 ta AI quyidagicha javob berdi:
+
+${answers.map((a, i) => `${i+1}. ${a.name} ${a.emoji}:\n${a.answer}`).join("\n\n")}
+
+Sen AI Kengash raisisan. Yuqoridagi javoblarni tahlil qilib:
+- Umumiy fikrlarni ajrat
+- Muhim nuqtalarni ko'rsat
+- Yakuniy xulosa yoz (5-7 gap)
+
+Faqat xulosani yoz.`;
+
+        const judgeRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "openai/gpt-4o-mini",
+            messages: [
+              { role: "system", content: JUDGE_SYSTEM },
+              { role: "user", content: judgePrompt }
+            ],
+            max_tokens: 700,
+            temperature: 0.7
+          })
+        });
+        const jd = await judgeRes.json();
+        const conclusion = jd.choices?.[0]?.message?.content || "Xulosa olinmadi";
+
+        return json({ answers, conclusion });
       } catch (e) {
-        return json({ error: e.message }, 500, cors);
+        return json({ error: e.message }, 500);
       }
     }
 
-    if (url.pathname === "/webhook" && request.method === "POST") {
+    // ============================================================
+    // 💬 SAYT UCHUN API (chat)
+    // ============================================================
+    if (path === "/api" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        if (!body.message) return json({ error: "message yo'q" }, 400);
+        const reply = await agentLoop(body.message, body.sid || "web", env);
+        return json({ reply });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // 🤖 TELEGRAM WEBHOOK
+    // ============================================================
+    if (path === "/webhook" && request.method === "POST") {
       let update;
       try { update = await request.json(); } catch { return new Response("ok"); }
 
@@ -222,13 +358,11 @@ export default {
       return new Response("ok");
     }
 
-    return new Response("Blip AI ishlayapti ✅");
+    // ============================================================
+    // 🏠 HEALTH CHECK
+    // ============================================================
+    return new Response("Blip AI v3.0 ishlayapti ✅\n\nEndpoints:\n/api — Sayt chat\n/council — AI Kengash\n/webhook — Telegram", {
+      headers: { "Content-Type": "text/plain; charset=utf-8" }
+    });
   }
 };
-
-function json(obj, status, cors) {
-  return new Response(JSON.stringify(obj), {
-    status,
-    headers: { ...cors, "Content-Type": "application/json" }
-  });
-      }
