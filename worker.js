@@ -49,11 +49,11 @@ const TOOLS = [
 ];
 
 const COUNCIL_MODELS = [
-  { id: "openai/gpt-4o-mini", name: "GPT-4o Mini", emoji: "🤖" },
-  { id: "google/gemini-2.5-flash-lite", name: "Gemini Flash", emoji: "🧠" },
-  { id: "anthropic/claude-3-haiku", name: "Claude Haiku", emoji: "🎭" },
-  { id: "deepseek/deepseek-chat", name: "DeepSeek", emoji: "⚡" },
-  { id: "meta-llama/llama-3.3-70b-instruct", name: "Llama 3.3", emoji: "🦙" }
+  { id: "deepseek/deepseek-chat-v3.1:free", name: "DeepSeek V3", emoji: "⚡" },
+  { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3", emoji: "🦙" },
+  { id: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0", emoji: "🧠" },
+  { id: "qwen/qwen-2.5-72b-instruct:free", name: "Qwen 2.5", emoji: "🌟" },
+  { id: "mistralai/mistral-small-3.2-24b-instruct:free", name: "Mistral", emoji: "🌪" }
 ];
 
 // ============================================================
