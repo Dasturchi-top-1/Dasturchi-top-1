@@ -21,9 +21,8 @@ SESSIYA_VAQTI = 30 * 24 * 3600
 IMAP_SERVER = "imap.gmail.com"
 AI_URL = "https://openrouter.ai/api/v1/chat/completions"
 AI_MODELS = [
-    "nex-agi/nex-n2.5-pro:free",
-    "nex-agi/nex-n2.5-mini:free",
-    "qwen/qwen3.8-27b:free",
+    "google/gemini-2.5-flash-lite",
+    "openai/gpt-4o-mini",
 ]
 
 LOYIHA_PAPKA = "."
@@ -211,23 +210,12 @@ def ai_ask(sys_p, user):
         time.sleep(0.3)
     return None
 
-INTENT_P = """Sen intent parser. Foydalanuvchi xabaridan niyatni JSON da aniqlaysan.
-MUMKIN: check, list, read, stat, auto_on, auto_off, help, chat
-QOIDALAR:
-- "tekshir","yangi" → check
-- "royxat","list" → list
-- "o'qi" → read (id bilan)
-- "stat" → stat
-- "avtomatik yoq" → auto_on
-- "avtomatik ochir" → auto_off
-- "yordam" → help
-- Boshqa → chat
-FAQAT JSON.
-MISOLLAR:
-"Yangi email bormi?" → {"intent":"check"}
-"5-emailni o'qi" → {"intent":"read","id":5}
-"Salom" → {"intent":"chat","javob":"Salom! Men Blip Mail Bot."}
-"""
+SYSTEM_PROMPT = (
+    "Sen BLIP MAIL BOT yordamchisisan. "
+    "Har doim O'ZBEK TILIDA (lotin) javob ber. "
+    "Faqat foydalanuvchi so'ragan narsani bajar. "
+    "Internetga ulanishing haqida gapirma."
+)
 
 def intent(text):
     j = ai_ask(INTENT_P, text)
