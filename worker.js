@@ -1,3 +1,93 @@
+    // ============================================================
+    // 🎭 REVERSE TURING TEST
+    // ============================================================
+    if (path === "/turing" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const parol = (body.parol || "").trim();
+        if (parol !== COUNCIL_PAROL) {
+          return json({ error: "🔐 Parol xato!" }, 403);
+        }
+
+        // Yangi mavzu
+        if (body.action === "topic") {
+          const topic = TURING_TOPICS[Math.floor(Math.random() * TURING_TOPICS.length)];
+          return json({ topic });
+        }
+
+        // Hakam qarori
+        if (body.action === "judge") {
+          const topic = (body.topic || "").trim();
+          const userAnswer = (body.userAnswer || "").trim();
+          if (!topic || !userAnswer) return json({ error: "Mavzu yoki javob yo'q" }, 400);
+
+          // 1. AI odam bo'lib yozadi
+          const aiHumanPrompt = `Sen oddiy 14 yoshli o'smir odamsan. Quyidagi savolga ODDIY, SODDA, his-tuyg'uli javob yoz. Xuddi odam kabi — xato bilan, norasmiy, qisqa (2-4 gap). FAQAT javob yoz.
+
+Savol: ${topic}`;
+
+          const aiResult = await geminiCall("gemini-3.8-flash",
+            "Sen oddiy o'smir odamsan. Odam kabi yoz.",
+            aiHumanPrompt, env, 400);
+          const aiAnswer = aiResult.error ? "Javob yo'q" : aiResult.text;
+
+          // 2. Tasodifiy tartib
+          const userFirst = Math.random() < 0.5;
+          const answer1 = userFirst ? userAnswer : aiAnswer;
+          const answer2 = userFirst ? aiAnswer : userAnswer;
+
+          // 3. Hakam qaror qabul qiladi
+          const judgePrompt = `Sen Turing Test hakamisan. Ikki javobni o'qi.
+Biri ODAM tomonidan yozilgan, biri AI tomonidan.
+Qaysi biri ODAM ekanini aniqlashing kerak.
+
+SAVOL: ${topic}
+
+JAVOB 1:
+${answer1}
+
+JAVOB 2:
+${answer2}
+
+Qaysi biri odam? Faqat JSON qaytar:
+{"human": 1 yoki 2, "reason": "qisqa sabab"}`;
+
+          const judgeResult = await geminiCall("gemini-3.8-flash",
+            "Sen Turing Test hakamisan. Faqat JSON qaytar.",
+            judgePrompt, env, 300);
+
+          let judgeData = { human: 1, reason: "Aniqlanmadi" };
+          if(!judgeResult.error){
+            try {
+              const text = judgeResult.text;
+              const s = text.indexOf('{');
+              const e = text.lastIndexOf('}') + 1;
+              if(s >= 0 && e > s){
+                judgeData = JSON.parse(text.slice(s, e));
+              }
+            } catch(e){}
+          }
+
+          // Hakam to'g'ri topdimi?
+          const judgeSaysHuman = judgeData.human; // 1 yoki 2
+          const actualHuman = userFirst ? 1 : 2;
+          const judgeCorrect = (judgeSaysHuman === actualHuman);
+
+          return json({
+            answer1: answer1,
+            answer2: answer2,
+            judgeVerdict: `Hakam ${judgeSaysHuman}-javobni odam deb topdi`,
+            humanIsUser: userFirst ? true : false,
+            userWins: !judgeCorrect,
+            reasoning: judgeData.reason || ""
+          });
+        }
+
+        return json({ error: "Noma'lum action" }, 400);
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+            }
 // ============================================================
 // ⚡ BLIP AI WORKER v4.2 — Google Gemini 3 (yangi modellar)
 // ============================================================
@@ -20,6 +110,23 @@ const JUDGE_SYSTEM = {
 };
 
 const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
+const TURING_TOPICS = [
+  "Hayotning ma'nosi nima?",
+  "Eng yaxshi dasturlash tili qaysi?",
+  "Kelajakda AI odamlarni almashtiradimi?",
+  "Pul baxt keltiradimi?",
+  "Maktab kerakmi yoki o'z-o'zini o'qitish yaxshimi?",
+  "Ijtimoiy tarmoqlar foydalimi yoki zararlimi?",
+  "Eng katta ixtiro nima?",
+  "Kosmik sayohat muhimmi?",
+  "Ta'lim tizimi qanday bo'lishi kerak?",
+  "Sun'iy intellekt xavflimi?",
+  "Kitob o'qish yoki film ko'rish?",
+  "Yolg'izlik yaxshimi yoki yomonmi?",
+  "Sport sog'liq uchun foydalimi?",
+  "Musiqa kayfiyatga ta'sir qiladimi?",
+  "Do'stlik puldan qimmatmi?"
+];
 
 // ============================================================
 // 🌟 GEMINI 3 MODELLARI (YANGI)
