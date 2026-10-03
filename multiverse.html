@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blip Multiverse — 5 ta AI o'yin</title>
+<style>
+  :root{
+    --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
+    --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:20px;
+    background-image:
+      radial-gradient(circle at 15% 15%,rgba(99,102,241,.2),transparent 40%),
+      radial-gradient(circle at 85% 85%,rgba(168,85,247,.2),transparent 40%),
+      radial-gradient(circle at 50% 50%,rgba(236,72,153,.1),transparent 60%);
+  }
+  .container{max-width:1000px;margin:auto}
+  header{text-align:center;padding:50px 0 40px}
+  h1{
+    font-size:52px;font-weight:900;
+    background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
+    background-size:400% 400%;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;animation:grad 6s ease infinite;
+  }
+  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .sub{color:var(--muted);margin-top:12px;font-size:16px}
+  .stats{display:flex;gap:20px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+  .stat{font-size:13px;color:var(--muted)}
+  .stat b{color:var(--accent);font-size:18px;display:block}
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;margin-top:40px;
+  }
+  .game{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;
+    padding:24px;text-decoration:none;color:var(--text);
+    transition:all .3s;position:relative;overflow:hidden;
+  }
+  .game::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,transparent 40%,rgba(99,102,241,.1));
+    opacity:0;transition:opacity .3s;
+  }
+  .game:hover{transform:translateY(-6px);border-color:var(--accent);
+    box-shadow:0 20px 40px rgba(99,102,241,.3)}
+  .game:hover::before{opacity:1}
+  .game-ico{font-size:42px;margin-bottom:12px;display:block}
+  .game h3{font-size:19px;margin-bottom:8px;position:relative}
+  .game p{font-size:13px;color:var(--muted);line-height:1.6;position:relative}
+  .game .tag{
+    display:inline-block;margin-top:12px;font-size:11px;padding:3px 10px;
+    border-radius:999px;background:rgba(99,102,241,.2);color:var(--accent);
+    border:1px solid var(--accent);position:relative;
+  }
+  .game.new .tag{background:rgba(236,72,153,.2);color:#ec4899;border-color:#ec4899}
+  footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;margin-top:30px}
+  footer a{color:var(--accent);text-decoration:none}
+  @media(max-width:600px){
+    h1{font-size:34px}
+    header{padding:30px 0}
+    .grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🌌 BLIP MULTIVERSE</h1>
+  <p class="sub">5 ta AI o'yin — bitta joyda</p>
+  <div class="stats">
+    <div class="stat"><b>5</b>O'yin</div>
+    <div class="stat"><b>∞</b>Imkoniyat</div>
+    <div class="stat"><b>24/7</b>Bepul</div>
+  </div>
+</header>
+
+<div class="grid">
+
+  <a class="game new" href="turing.html">
+    <span class="game-ico">🎭</span>
+    <h3>Reverse Turing Test</h3>
+    <p>Sen AI bo'lib o'yna. AI odam bo'lib o'yna. Hakam qaysi biri odam ekanini topishi kerak!</p>
+    <span class="tag">YANGI</span>
+  </a>
+
+  <a class="game new" href="dream.html">
+    <span class="game-ico">🌙</span>
+    <h3>Dream Journal</h3>
+    <p>Tushingizni yozing. AI rasm chizadi, tahlil qiladi va ramzlarni tushuntiradi.</p>
+    <span class="tag">YANGI</span>
+  </a>
+
+  <a class="game new" href="time.html">
+    <span class="game-ico">⏰</span>
+    <h3>Time Machine</h3>
+    <p>Istalgan yilga sayohat qiling. AI o'sha davrdagi yangiliklar, rasm va suhbat beradi.</p>
+    <span class="tag">YANGI</span>
+  </a>
+
+  <a class="game new" href="world.html">
+    <span class="game-ico">🎲</span>
+    <h3>One-Button World</h3>
+    <p>Bitta tugma. Har bosganda yangi dunyo, hikoya, rasm va fakt yaratiladi.</p>
+    <span class="tag">YANGI</span>
+  </a>
+
+  <a class="game new" href="debate.html">
+    <span class="game-ico">⚔️</span>
+    <h3>AI Debate Arena</h3>
+    <p>Mavzu bering. AI ikki tomonga bo'linadi. Sen bir tomonga qo'shilasan. Hakam g'olibni aytadi.</p>
+    <span class="tag">YANGI</span>
+  </a>
+
+  <a class="game" href="council.html">
+    <span class="game-ico">🏛</span>
+    <h3>AI Kengash</h3>
+    <p>Bitta savol — 5 ta AI javob — 1 ta dono xulosa. (Eski o'yin)</p>
+    <span class="tag">MAVJUD</span>
+  </a>
+
+</div>
+
+<footer>
+  ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> · 2026 · Salohiddin
+</footer>
+
+</div>
+</body>
+  </html>
