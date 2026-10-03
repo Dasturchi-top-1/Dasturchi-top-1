@@ -1,5 +1,5 @@
 // ============================================================
-// ⚡ BLIP AI WORKER v4.1 — Google Gemini (tuzatilgan model ID)
+// ⚡ BLIP AI WORKER v4.2 — Google Gemini 3 (yangi modellar)
 // ============================================================
 
 const SYSTEM = `Sen Blip Agent — Telegram bot orqali ishlovchi AI yordamchisan.
@@ -22,18 +22,18 @@ const JUDGE_SYSTEM = {
 const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
 
 // ============================================================
-// 🌟 GEMINI MODELLARI (TUZATILGAN)
+// 🌟 GEMINI 3 MODELLARI (YANGI)
 // ============================================================
 const GEMINI_MODELS = [
-  { id: "gemini-2.0-flash", name: "Gemini 2.0", emoji: "🧠" },
-  { id: "gemini-2.0-flash-lite", name: "Gemini Lite", emoji: "⚡" },
-  { id: "gemini-2.5-flash", name: "Gemini 2.5", emoji: "🌟" },
-  { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", emoji: "💎" },
-  { id: "gemini-2.0-flash", name: "Gemini Flash", emoji: "🚀" }
+  { id: "gemini-3.8-flash", name: "Gemini 3.8", emoji: "🧠" },
+  { id: "gemini-3.5-flash", name: "Gemini 3.5", emoji: "⚡" },
+  { id: "gemini-3.5-flash-lite", name: "Gemini 3.5 Lite", emoji: "🌟" },
+  { id: "gemini-3.1-flash-lite", name: "Gemini 3.1 Lite", emoji: "💎" },
+  { id: "gemini-3.1-pro-preview", name: "Gemini 3.1 Pro", emoji: "🚀" }
 ];
 
 // ============================================================
-// 🌟 GEMINI API
+// 🌟 GEMINI API CHAQIRUV
 // ============================================================
 async function geminiCall(model, sysMsg, userMsg, env, maxTokens = 800) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
@@ -85,7 +85,7 @@ async function sendTyping(chatId, env) {
 }
 
 // ============================================================
-// 🤖 AGENT LOOP (Telegram)
+// 🤖 AGENT LOOP (Telegram uchun)
 // ============================================================
 async function agentLoop(userMsg, chatId, env) {
   const key = "hist:" + chatId;
@@ -96,7 +96,7 @@ async function agentLoop(userMsg, chatId, env) {
     (h.role === "user" ? "Foydalanuvchi: " : "AI: ") + h.content
   ).join("\n") + "\nFoydalanuvchi: " + userMsg;
 
-  const result = await geminiCall("gemini-2.0-flash", SYSTEM, context, env, 800);
+  const result = await geminiCall("gemini-3.8-flash", SYSTEM, context, env, 800);
   const reply = result.error ? ("❌ " + result.error) : result.text;
 
   history.push({ role: "user", content: userMsg });
@@ -154,6 +154,7 @@ export default {
         const sysMsg = COUNCIL_SYSTEM[lang] || COUNCIL_SYSTEM.uz;
         const judgeSys = JUDGE_SYSTEM[lang] || JUDGE_SYSTEM.uz;
 
+        // 5 ta Gemini parallel
         const promises = GEMINI_MODELS.map(m =>
           geminiCall(m.id, sysMsg, question, env, 500)
             .then(r => ({
@@ -165,6 +166,7 @@ export default {
 
         const answers = await Promise.all(promises);
 
+        // Rais xulosasi
         let judgePrompt;
         if (lang === "ru") {
           judgePrompt = `Вопрос: "${question}"\n\nОтветы:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nНапиши общий вывод на РУССКОМ (5-7 предложений).`;
@@ -174,7 +176,7 @@ export default {
           judgePrompt = `Savol: "${question}"\n\nJavoblar:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nUmumiy xulosa yoz O'ZBEK TILIDA (5-7 gap).`;
         }
 
-        const judgeResult = await geminiCall("gemini-2.0-flash", judgeSys, judgePrompt, env, 700);
+        const judgeResult = await geminiCall("gemini-3.8-flash", judgeSys, judgePrompt, env, 700);
         const conclusion = judgeResult.error ? ("❌ " + judgeResult.error) : judgeResult.text;
 
         return json({ answers, conclusion });
@@ -238,7 +240,7 @@ export default {
     // ============================================================
     // 🏠 HEALTH CHECK
     // ============================================================
-    return new Response("Blip AI v4.1 (Gemini) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
+    return new Response("Blip AI v4.2 (Gemini 3) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
   }
