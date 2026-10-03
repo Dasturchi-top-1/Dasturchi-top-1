@@ -3,133 +3,287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Blip Multiverse — 5 ta AI o'yin</title>
+<title>Blip Multiverse</title>
 <style>
-  :root{
-    --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
-    --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-    min-height:100vh;padding:20px;
-    background-image:
-      radial-gradient(circle at 15% 15%,rgba(99,102,241,.2),transparent 40%),
-      radial-gradient(circle at 85% 85%,rgba(168,85,247,.2),transparent 40%),
-      radial-gradient(circle at 50% 50%,rgba(236,72,153,.1),transparent 60%);
-  }
-  .container{max-width:1000px;margin:auto}
-  header{text-align:center;padding:50px 0 40px}
-  h1{
-    font-size:52px;font-weight:900;
-    background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
-    background-size:400% 400%;
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;animation:grad 6s ease infinite;
-  }
-  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-  .sub{color:var(--muted);margin-top:12px;font-size:16px}
-  .stats{display:flex;gap:20px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-  .stat{font-size:13px;color:var(--muted)}
-  .stat b{color:var(--accent);font-size:18px;display:block}
-  .grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:16px;margin-top:40px;
-  }
-  .game{
-    background:var(--card);border:1px solid var(--border);border-radius:20px;
-    padding:24px;text-decoration:none;color:var(--text);
-    transition:all .3s;position:relative;overflow:hidden;
-  }
-  .game::before{
-    content:'';position:absolute;inset:0;
-    background:linear-gradient(135deg,transparent 40%,rgba(99,102,241,.1));
-    opacity:0;transition:opacity .3s;
-  }
-  .game:hover{transform:translateY(-6px);border-color:var(--accent);
-    box-shadow:0 20px 40px rgba(99,102,241,.3)}
-  .game:hover::before{opacity:1}
-  .game-ico{font-size:42px;margin-bottom:12px;display:block}
-  .game h3{font-size:19px;margin-bottom:8px;position:relative}
-  .game p{font-size:13px;color:var(--muted);line-height:1.6;position:relative}
-  .game .tag{
-    display:inline-block;margin-top:12px;font-size:11px;padding:3px 10px;
-    border-radius:999px;background:rgba(99,102,241,.2);color:var(--accent);
-    border:1px solid var(--accent);position:relative;
-  }
-  .game.new .tag{background:rgba(236,72,153,.2);color:#ec4899;border-color:#ec4899}
-  footer{text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;margin-top:30px}
-  footer a{color:var(--accent);text-decoration:none}
-  @media(max-width:600px){
-    h1{font-size:34px}
-    header{padding:30px 0}
-    .grid{grid-template-columns:1fr}
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--grn:#10b981;--red:#ef4444;--pnk:#ec4899;--gld:#fbbf24}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px}
+.c{max-width:800px;margin:auto}
+h1{text-align:center;font-size:30px;font-weight:900;padding:20px 0 4px;
+  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
+  background-size:400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:g 6s infinite}
+@keyframes g{0%,100%{background-position:0%}50%{background-position:100%}}
+.sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:14px}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:8px 0;border-bottom:1px solid var(--brd);margin-bottom:14px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 12px;border-radius:999px;cursor:pointer;background:var(--card);border:1px solid var(--brd);color:var(--muted);font-size:11px;font-weight:600;white-space:nowrap}
+.tab.on{background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
+.tc{display:none;animation:f .3s}
+.tc.on{display:block}
+@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:14px;margin-bottom:12px}
+.gc{background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:.3s}
+.gc:hover{transform:translateY(-3px);border-color:var(--acc)}
+.gc .i{font-size:30px;display:block;margin-bottom:6px}
+.gc h3{font-size:15px;margin-bottom:4px}
+.gc p{font-size:12px;color:var(--muted);line-height:1.5}
+textarea,input{width:100%;padding:11px;border-radius:9px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;outline:none;margin-bottom:9px}
+textarea{resize:vertical;min-height:80px}
+textarea:focus,input:focus{border-color:var(--acc)}
+.btn{padding:11px 18px;border:none;border-radius:9px;cursor:pointer;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:13px}
+.btn:disabled{opacity:.5}
+.bf{width:100%}
+.bs{background:var(--card);border:1px solid var(--brd);color:var(--text)}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.row .btn{flex:1;min-width:110px}
+.mic{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:11px 14px;border-radius:9px;cursor:pointer;font-size:16px}
+.mic.rec{background:var(--pnk);color:#fff;animation:p 1s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.5}}
+.res{background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:14px;margin-bottom:12px;animation:f .5s}
+.res img{width:100%;border-radius:10px;margin-top:8px;border:1px solid var(--brd)}
+.rt{font-size:15px;font-weight:800;color:var(--acc);margin-bottom:8px}
+.rx{font-size:13px;line-height:1.6;white-space:pre-wrap}
+.sym{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.sym span{background:rgba(168,85,247,.2);border:1px solid var(--acc);padding:2px 9px;border-radius:999px;font-size:10px;color:var(--acc)}
+.ans{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0}
+.an{background:var(--bg);border:1px solid var(--brd);border-radius:10px;padding:10px}
+.an b{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:5px}
+.an p{font-size:12px;line-height:1.5;white-space:pre-wrap}
+.vd{text-align:center;padding:14px;border-radius:12px;margin-bottom:12px}
+.vd.w{background:rgba(16,185,129,.15);border:2px solid var(--grn)}
+.vd.l{background:rgba(239,68,68,.15);border:2px solid var(--red)}
+.vd h4{font-size:18px;margin-bottom:5px}
+.vd p{font-size:12px;line-height:1.5}
+.ld{text-align:center;padding:24px;color:var(--muted);font-size:13px}
+.ld::after{content:'...';animation:d 1.5s steps(4) infinite}
+@keyframes d{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+.nfo{background:rgba(99,102,241,.1);border:1px solid var(--acc);border-radius:10px;padding:10px;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.ft{text-align:center;padding:18px;color:var(--muted);font-size:11px}
+.ft a{color:var(--acc);text-decoration:none}
+@media(max-width:600px){h1{font-size:22px}.ans{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="c">
+<h1>🌌 BLIP MULTIVERSE</h1>
+<p class="sub">5 ta AI o'yin — bitta joyda</p>
 
-<header>
-  <h1>🌌 BLIP MULTIVERSE</h1>
-  <p class="sub">5 ta AI o'yin — bitta joyda</p>
-  <div class="stats">
-    <div class="stat"><b>5</b>O'yin</div>
-    <div class="stat"><b>∞</b>Imkoniyat</div>
-    <div class="stat"><b>24/7</b>Bepul</div>
-  </div>
-</header>
-
-<div class="grid">
-
-  <a class="game new" href="turing.html">
-    <span class="game-ico">🎭</span>
-    <h3>Reverse Turing Test</h3>
-    <p>Sen AI bo'lib o'yna. AI odam bo'lib o'yna. Hakam qaysi biri odam ekanini topishi kerak!</p>
-    <span class="tag">YANGI</span>
-  </a>
-
-  <a class="game new" href="dream.html">
-    <span class="game-ico">🌙</span>
-    <h3>Dream Journal</h3>
-    <p>Tushingizni yozing. AI rasm chizadi, tahlil qiladi va ramzlarni tushuntiradi.</p>
-    <span class="tag">YANGI</span>
-  </a>
-
-  <a class="game new" href="time.html">
-    <span class="game-ico">⏰</span>
-    <h3>Time Machine</h3>
-    <p>Istalgan yilga sayohat qiling. AI o'sha davrdagi yangiliklar, rasm va suhbat beradi.</p>
-    <span class="tag">YANGI</span>
-  </a>
-
-  <a class="game new" href="world.html">
-    <span class="game-ico">🎲</span>
-    <h3>One-Button World</h3>
-    <p>Bitta tugma. Har bosganda yangi dunyo, hikoya, rasm va fakt yaratiladi.</p>
-    <span class="tag">YANGI</span>
-  </a>
-
-  <a class="game new" href="debate.html">
-    <span class="game-ico">⚔️</span>
-    <h3>AI Debate Arena</h3>
-    <p>Mavzu bering. AI ikki tomonga bo'linadi. Sen bir tomonga qo'shilasan. Hakam g'olibni aytadi.</p>
-    <span class="tag">YANGI</span>
-  </a>
-
-  <a class="game" href="council.html">
-    <span class="game-ico">🏛</span>
-    <h3>AI Kengash</h3>
-    <p>Bitta savol — 5 ta AI javob — 1 ta dono xulosa. (Eski o'yin)</p>
-    <span class="tag">MAVJUD</span>
-  </a>
-
+<div class="tabs">
+<div class="tab on" onclick="sw('home',this)">🏠 Bosh</div>
+<div class="tab" onclick="sw('turing',this)">🎭 Turing</div>
+<div class="tab" onclick="sw('dream',this)">🌙 Dream</div>
+<div class="tab" onclick="sw('time',this)">⏰ Time</div>
+<div class="tab" onclick="sw('world',this)">🎲 World</div>
+<div class="tab" onclick="sw('debate',this)">⚔️ Debate</div>
 </div>
 
-<footer>
-  ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> · 2026 · Salohiddin
-</footer>
-
+<div class="tc on" id="t-home">
+<div class="gc" onclick="sw('turing')"><span class="i">🎭</span><h3>Reverse Turing Test</h3><p>Sen AI bo'lib o'yna, AI odam bo'lib. Hakam qaysi biri odam ekanini topadi.</p></div>
+<div class="gc" onclick="sw('dream')"><span class="i">🌙</span><h3>Dream Journal</h3><p>Tushingizni yozing. AI rasm chizadi va tahlil qiladi.</p></div>
+<div class="gc" onclick="sw('time')"><span class="i">⏰</span><h3>Time Machine</h3><p>Istalgan yilga sayohat. AI yangiliklar, fakt va rasm beradi.</p></div>
+<div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3>One-Button World</h3><p>Bitta tugma. Har bosganda yangi dunyo yaratiladi.</p></div>
+<div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3>AI Debate Arena</h3><p>Mavzu bering. AI bahslashadi. Hakam g'olibni aytadi.</p></div>
+<div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3>AI Kengash</h3><p>5 ta AI javob — 1 ta xulosa.</p></div>
 </div>
+
+<div class="tc" id="t-turing">
+<div class="nfo">💡 Hakam ikkita javobdan qaysi biri <b>odam</b> ekanini topadi.</div>
+<div class="card">
+<div class="nfo" style="margin-bottom:8px"><b>📌 Mavzu:</b> <span id="ttopic">Yuklanmoqda...</span></div>
+<textarea id="tans" placeholder="AI bo'lib javob yozing..."></textarea>
+<button class="btn bf" id="tbtn" onclick="tSub()">Yuborish</button>
+</div>
+<div id="tres"></div>
+</div>
+
+<div class="tc" id="t-dream">
+<div class="nfo">💡 Tushingizni yozing. AI tahlil + rasm.</div>
+<div class="card">
+<textarea id="din" placeholder="Tushingizni yozing..."></textarea>
+<div class="row">
+<button class="mic" id="dmic" onclick="mic('din','dmic')">🎤</button>
+<button class="btn" id="dbtn" onclick="dSub()">🌙 Tahlil</button>
+</div>
+</div>
+<div id="dres"></div>
+</div>
+
+<div class="tc" id="t-time">
+<div class="nfo">💡 Yil va joyni kiriting. AI sayohat qiladi.</div>
+<div class="card">
+<input type="number" id="tyr" placeholder="Yil (1900)">
+<input type="text" id="tpl" placeholder="Joy (Dushanbe)">
+<button class="btn bf" id="tmb" onclick="tmSub()">⏰ Sayohat</button>
+</div>
+<div id="tmres"></div>
+</div>
+
+<div class="tc" id="t-world">
+<div class="nfo">💡 Bitta tugma. Har bosganda yangi dunyo.</div>
+<div class="card" style="text-align:center">
+<button class="btn bf" id="wbtn" onclick="wSub()" style="font-size:16px;padding:22px">🎲 YANGI DUNYO</button>
+</div>
+<div id="wres"></div>
+</div>
+
+<div class="tc" id="t-debate">
+<div class="nfo">💡 Mavzu bering. AI bahslashadi.</div>
+<div class="card">
+<input type="text" id="dtp" placeholder="Mavzu (AI odamlarni almashtiradimi?)">
+<button class="btn bf" id="dbb" onclick="dbSub()">⚔️ Boshlash</button>
+</div>
+<div id="dbres"></div>
+</div>
+
+<div class="ft">⚡ <a href="index.html">Blip</a> · 2026</div>
+</div>
+
+<script>
+const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+const P="Blipzor921324";
+let rec=null,isR=false;
+
+function sw(n,el){
+  document.querySelectorAll('.tc').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.getElementById('t-'+n).classList.add('on');
+  if(el)el.classList.add('on');
+}
+function esc(s){return(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function ld(t){return'<div class="ld">'+t+'</div>'}
+function mic(i,b){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Ovoz qo\'llab-quvvatlanmaydi');return}
+  if(!rec){rec=new SR();rec.lang='uz-UZ'}
+  const btn=document.getElementById(b);
+  if(isR){rec.stop();return}
+  rec.onresult=e=>{const t=e.results[0][0].transcript;const x=document.getElementById(i);x.value+=(x.value?' ':'')+t};
+  rec.onend=()=>{isR=false;btn.classList.remove('rec')};
+  rec.onerror=()=>{isR=false;btn.classList.remove('rec')};
+  rec.start();isR=true;btn.classList.add('rec');
+}
+async function post(ep,body){
+  const r=await fetch(API+ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...body,parol:P})});
+  return await r.json();
+}
+
+// TURING
+async function tNew(){
+  document.getElementById('ttopic').textContent='Yuklanmoqda...';
+  document.getElementById('tans').value='';
+  document.getElementById('tres').innerHTML='';
+  document.getElementById('tbtn').disabled=true;
+  try{
+    const d=await post('/turing',{action:'topic'});
+    if(d.topic){document.getElementById('ttopic').textContent=d.topic;document.getElementById('tbtn').disabled=false}
+    else document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
+  }catch(e){document.getElementById('ttopic').textContent='❌ '+e.message}
+}
+async function tSub(){
+  const a=document.getElementById('tans').value.trim();
+  if(!a)return;
+  const tp=document.getElementById('ttopic').textContent;
+  const b=document.getElementById('tbtn');b.disabled=true;b.textContent='⏳...';
+  document.getElementById('tres').innerHTML=ld('🤔 Hakam o\'ylayapti');
+  try{
+    const d=await post('/turing',{action:'judge',topic:tp,userAnswer:a});
+    if(d.error){document.getElementById('tres').innerHTML='<div class="ld">❌ '+esc(d.error)+'</div>';return}
+    const cl=d.userWins?'w':'l',ti=d.userWins?'🎉 SEN G\'OLIB!':'😅 AI G\'OLIB!';
+    document.getElementById('tres').innerHTML=`
+      <div class="ans">
+        <div class="an"><b>🅰️ Javob 1</b><p>${esc(d.answer1)}</p></div>
+        <div class="an"><b>🅱️ Javob 2</b><p>${esc(d.answer2)}</p></div>
+      </div>
+      <div class="vd ${cl}"><h4>${ti}</h4><p>🤖 ${esc(d.judgeVerdict)}<br><br>✅ Odam: ${d.humanIsUser?'Sen':'AI'}<br>${esc(d.reasoning||'')}</p></div>
+      <button class="btn bf bs" onclick="tNew()">🔄 Yangi</button>`;
+  }catch(e){document.getElementById('tres').innerHTML='<div class="ld">❌ '+esc(e.message)+'</div>'}
+  finally{b.disabled=false;b.textContent='Yuborish'}
+}
+
+// DREAM
+async function dSub(){
+  const dr=document.getElementById('din').value.trim();
+  if(!dr){document.getElementById('dres').innerHTML='<div class="ld">❌ Tush yozing!</div>';return}
+  const b=document.getElementById('dbtn');b.disabled=true;b.textContent='⏳...';
+  document.getElementById('dres').innerHTML=ld('🌙 Tahlil qilinmoqda');
+  try{
+    const d=await post('/dream',{dream:dr});
+    if(d.error){document.getElementById('dres').innerHTML='<div class="ld">❌ '+esc(d.error)+'</div>';return}
+    const em={'xursand':'😊',"qo'rqinchli":'😨',"g'alati":'🤔','sokin':'😌','xafa':'😢','hayajonli':'😲'};
+    const sy=(d.symbols||[]).map(s=>`<span>🔮 ${esc(s)}</span>`).join('');
+    document.getElementById('dres').innerHTML=`
+      <div class="res">
+        <div class="rt">🌙 Tush tahlili</div>
+        <div class="rx">${esc(d.analysis||'')}</div>
+        ${sy?`<div class="sym">${sy}</div>`:''}
+        <div style="margin-top:8px;font-size:11px;color:var(--muted)">Kayfiyat: ${em[d.mood]||'🌙'} ${d.mood||''}</div>
+        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
+      </div>`;
+  }catch(e){document.getElementById('dres').innerHTML='<div class="ld">❌ '+esc(e.message)+'</div>'}
+  finally{b.disabled=false;b.textContent='🌙 Tahlil'}
+}
+
+// TIME
+async function tmSub(){
+  const yr=document.getElementById('tyr').value.trim();
+  const pl=document.getElementById('tpl').value.trim();
+  if(!yr){document.getElementById('tmres').innerHTML='<div class="ld">❌ Yil kiriting!</div>';return}
+  const b=document.getElementById('tmb');b.disabled=true;b.textContent='⏳...';
+  document.getElementById('tmres').innerHTML=ld('⏰ Sayohat');
+  try{
+    const d=await post('/time',{year:yr,place:pl});
+    if(d.error){document.getElementById('tmres').innerHTML='<div class="ld">❌ '+esc(d.error)+'</div>';return}
+    document.getElementById('tmres').innerHTML=`
+      <div class="res">
+        <div class="rt">⏰ ${esc(yr)} ${pl?'· '+esc(pl):''}</div>
+        <div class="rx">${esc(d.story||'')}</div>
+        ${d.fact?`<div class="nfo" style="margin-top:10px"><b>💡 Fakt:</b> ${esc(d.fact)}</div>`:''}
+        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
+      </div>`;
+  }catch(e){document.getElementById('tmres').innerHTML='<div class="ld">❌ '+esc(e.message)+'</div>'}
+  finally{b.disabled=false;b.textContent='⏰ Sayohat'}
+}
+
+// WORLD
+async function wSub(){
+  const b=document.getElementById('wbtn');b.disabled=true;b.textContent='⏳...';
+  document.getElementById('wres').innerHTML=ld('🎲 Yaratilmoqda');
+  try{
+    const d=await post('/world',{});
+    if(d.error){document.getElementById('wres').innerHTML='<div class="ld">❌ '+esc(d.error)+'</div>';return}
+    document.getElementById('wres').innerHTML=`
+      <div class="res">
+        <div class="rt">🎲 ${esc(d.name||'Yangi dunyo')}</div>
+        <div class="rx">${esc(d.story||'')}</div>
+        ${d.fact?`<div class="nfo" style="margin-top:10px"><b>💡 Fakt:</b> ${esc(d.fact)}</div>`:''}
+        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
+      </div>`;
+  }catch(e){document.getElementById('wres').innerHTML='<div class="ld">❌ '+esc(e.message)+'</div>'}
+  finally{b.disabled=false;b.textContent='🎲 YANGI DUNYO'}
+}
+
+// DEBATE
+async function dbSub(){
+  const tp=document.getElementById('dtp').value.trim();
+  if(!tp){document.getElementById('dbres').innerHTML='<div class="ld">❌ Mavzu kiriting!</div>';return}
+  const b=document.getElementById('dbb');b.disabled=true;b.textContent='⏳...';
+  document.getElementById('dbres').innerHTML=ld('⚔️ Bahslashmoqda');
+  try{
+    const d=await post('/debate',{topic:tp});
+    if(d.error){document.getElementById('dbres').innerHTML='<div class="ld">❌ '+esc(d.error)+'</div>';return}
+    document.getElementById('dbres').innerHTML=`
+      <div class="ans">
+        <div class="an" style="border-color:var(--grn)"><b style="color:var(--grn)">✅ FOR</b><p>${esc(d.forArg||'')}</p></div>
+        <div class="an" style="border-color:var(--red)"><b style="color:var(--red)">❌ AGAINST</b><p>${esc(d.againstArg||'')}</p></div>
+      </div>
+      <div class="vd w" style="border-color:var(--gld);background:rgba(251,191,36,.15)">
+        <h4 style="color:var(--gld)">⚖️ HAKAM</h4><p>${esc(d.verdict||'')}</p>
+      </div>`;
+  }catch(e){document.getElementById('dbres').innerHTML='<div class="ld">❌ '+esc(e.message)+'</div>'}
+  finally{b.disabled=false;b.textContent='⚔️ Boshlash'}
+}
+
+window.addEventListener('DOMContentLoaded',tNew);
+</script>
 </body>
   </html>
