@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dream Journal — Blip</title>
+<style>
+  :root{
+    --bg:#0a0515;--card:#150a25;--text:#e6e0f5;--muted:#9088aa;
+    --accent:#a855f7;--accent2:#6366f1;--border:#2a1f45;
+    --gold:#fbbf24;--pink:#ec4899;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:16px;
+    background-image:
+      radial-gradient(circle at 15% 15%,rgba(168,85,247,.2),transparent 40%),
+      radial-gradient(circle at 85% 85%,rgba(236,72,153,.2),transparent 40%),
+      radial-gradient(circle at 50% 50%,rgba(99,102,241,.1),transparent 60%);
+  }
+  .container{max-width:750px;margin:auto}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+  .back{color:var(--accent);text-decoration:none;font-size:14px}
+  .nav-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;margin-left:6px}
+  header{text-align:center;padding:30px 0 20px}
+  h1{
+    font-size:38px;font-weight:900;
+    background:linear-gradient(90deg,#a855f7,#ec4899,#f59e0b,#a855f7);
+    background-size:300% 300%;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;animation:grad 4s ease infinite;
+  }
+  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .sub{color:var(--muted);margin-top:8px;font-size:14px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:18px;margin-bottom:16px}
+  textarea{
+    width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
+    resize:vertical;min-height:120px;outline:none
+  }
+  textarea:focus{border-color:var(--accent)}
+  .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .btn{
+    padding:12px 22px;border:none;border-radius:10px;cursor:pointer;
+    background:linear-gradient(90deg,var(--accent),var(--pink));
+    color:#fff;font-weight:700;font-size:14px;flex:1;min-width:140px
+  }
+  .btn:disabled{opacity:.5;cursor:wait}
+  .btn-sec{background:var(--card);border:1px solid var(--border);color:var(--text);flex:0 0 auto}
+  .mic-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:12px 16px;border-radius:10px;cursor:pointer;font-size:18px}
+  .mic-btn.rec{background:var(--pink);color:#fff;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .result{background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:18px;margin-bottom:16px;animation:fade .5s ease}
+  .result img{width:100%;border-radius:12px;margin-top:12px;border:1px solid var(--border)}
+  .result-title{font-size:18px;font-weight:800;color:var(--accent);
+    margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .result-text{font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--text);opacity:.95}
+  .symbols{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+  .symbol{background:rgba(168,85,247,.2);border:1px solid var(--accent);
+    padding:4px 12px;border-radius:999px;font-size:12px;color:var(--accent)}
+  .mood{margin-top:12px;font-size:13px;color:var(--muted)}
+  .mood-badge{display:inline-block;padding:4px 12px;border-radius:999px;
+    font-size:12px;font-weight:700;margin-left:6px}
+  .loading{text-align:center;padding:40px;color:var(--muted)}
+  .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
+  @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .hist-item{background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    padding:12px;margin-bottom:8px;cursor:pointer}
+  .hist-item:hover{border-color:var(--accent)}
+  .hist-date{font-size:11px;color:var(--muted)}
+  .hist-text{font-size:13px;margin-top:4px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;
+    display:none;padding:20px;overflow-y:auto}
+  .modal.show{display:block}
+  .modal-inner{max-width:600px;margin:20px auto;background:var(--card);
+    border-radius:16px;padding:20px}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .modal-title{font-size:18px;font-weight:800;color:var(--accent)}
+  .close-btn{background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer}
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:12px;margin-top:16px}
+  footer a{color:var(--accent);text-decoration:none}
+  @media(max-width:600px){h1{font-size:28px}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav>
+  <a href="multiverse.html" class="back">← Multiverse</a>
+  <div>
+    <button class="nav-btn" onclick="showHistory()">💾 Tarix</button>
+  </div>
+</nav>
+
+<header>
+  <h1>🌙 DREAM JOURNAL</h1>
+  <p class="sub">Tushingizni yozing — AI rasm chizadi va tahlil qiladi</p>
+</header>
+
+<div class="card">
+  <textarea id="dream" placeholder="Tushingizni yozing... Masalan: 'Men uchayotgan edim, ostimda bulutlar, atrofimda yulduzlar...'"></textarea>
+  <div class="row">
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Ovoz bilan yozish">🎤</button>
+    <button class="btn" id="analyzeBtn" onclick="analyzeDream()">🌙 Tahlil qilish</button>
+  </div>
+</div>
+
+<div id="out"></div>
+
+<!-- TARIX MODAL -->
+<div class="modal" id="histModal">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-title">💾 Tushlar tarixi</div>
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+    <div id="histBody"></div>
+  </div>
+</div>
+
+<footer>
+  ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> · 2026
+</footer>
+
+  </div>
+  <script>
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/dream";
+const PAROL = "Blipzor921324";
+
+let recognition = null;
+let isRec = false;
+
+// ============================================================
+// 🎤 OVOZLI KIRITISH
+// ============================================================
+function initMic(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ document.getElementById('micBtn').style.display = 'none'; return; }
+  recognition = new SR();
+  recognition.lang = 'uz-UZ';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    document.getElementById('dream').value += (document.getElementById('dream').value ? ' ' : '') + text;
+  };
+  recognition.onend = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
+  recognition.onerror = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
+}
+
+function toggleMic(){
+  if(!recognition) initMic();
+  if(!recognition) return;
+  if(isRec){ recognition.stop(); return; }
+  recognition.start();
+  isRec = true;
+  document.getElementById('micBtn').classList.add('rec');
+}
+
+// ============================================================
+// 💾 TARIX
+// ============================================================
+function getHist(){ try { return JSON.parse(localStorage.getItem('dream_hist') || '[]'); } catch { return []; } }
+function saveHist(h){ localStorage.setItem('dream_hist', JSON.stringify(h.slice(0, 30))); }
+
+function addHist(dream, data){
+  const h = getHist();
+  h.unshift({ dream, data, date: Date.now() });
+  saveHist(h);
+}
+
+function showHistory(){
+  const h = getHist();
+  const body = document.getElementById('histBody');
+  if(!h.length){
+    body.innerHTML = '<div class="loading">Tarix bo\'sh</div>';
+  } else {
+    body.innerHTML = h.map((item, i) => `
+      <div class="hist-item" onclick="loadHist(${i})">
+        <div class="hist-date">${new Date(item.date).toLocaleString()}</div>
+        <div class="hist-text">${esc(item.dream.slice(0, 100))}...</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('histModal').classList.add('show');
+}
+
+function loadHist(i){
+  const h = getHist();
+  if(!h[i]) return;
+  closeModal();
+  renderResult(h[i].data, h[i].dream);
+}
+
+function closeModal(){
+  document.getElementById('histModal').classList.remove('show');
+}
+
+// ============================================================
+// 🎨 RENDER
+// ============================================================
+function renderResult(d, dreamText){
+  const moodEmoji = {
+    "xursand": "😊", "qo'rqinchli": "😨", "g'alati": "🤔",
+    "sokin": "😌", "xafa": "😢", "hayajonli": "😲"
+  };
+  const mood = (d.mood || "g'alati").toLowerCase();
+  const emoji = moodEmoji[mood] || "🌙";
+
+  const symbolsHtml = (d.symbols || []).map(s =>
+    `<span class="symbol">🔮 ${esc(s)}</span>`
+  ).join('');
+
+  let html = `
+    <div class="result">
+      <div class="result-title">🌙 Tush tahlili</div>
+      <div class="result-text">${esc(d.analysis || "Tahlil yo'q")}</div>
+      ${symbolsHtml ? `<div class="symbols">${symbolsHtml}</div>` : ''}
+      <div class="mood">Kayfiyat:<span class="mood-badge" style="background:rgba(168,85,247,.3);color:#e6e0f5">${emoji} ${mood}</span></div>
+      ${d.imageUrl ? `<img src="${d.imageUrl}" alt="Tush rasmi" onerror="this.style.display='none'">` : ''}
+    </div>
+  `;
+
+  document.getElementById('out').innerHTML = html;
+}
+
+function esc(s){
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+// ============================================================
+// 🌙 ASOSIY FUNKSIYA
+// ============================================================
+async function analyzeDream(){
+  const dream = document.getElementById('dream').value.trim();
+  if(!dream){
+    document.getElementById('out').innerHTML = '<div class="loading">❌ Tushingizni yozing!</div>';
+    return;
+  }
+
+  const btn = document.getElementById('analyzeBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ AI tahlil qilmoqda...';
+  document.getElementById('out').innerHTML = '<div class="loading">🌙 Tush o\'rganilmoqda<span class="dots"></span></div>';
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ dream: dream, parol: PAROL })
+    });
+    const d = await r.json();
+
+    if(d.error){
+      document.getElementById('out').innerHTML = '<div class="loading">❌ ' + esc(d.error) + '</div>';
+      return;
+    }
+
+    addHist(dream, d);
+    renderResult(d, dream);
+  } catch(e){
+    document.getElementById('out').innerHTML = '<div class="loading">❌ ' + esc(e.message) + '</div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🌙 Tahlil qilish';
+  }
+}
+
+// ============================================================
+// 🎬 INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  initMic();
+});
+</script>
+</body>
+</html>
