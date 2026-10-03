@@ -47,7 +47,7 @@ Analyze 5 AI answers and write a brief general conclusion in ENGLISH (5-7 senten
 Combine best ideas, highlight contradictions.`
 };
 
-const COUNCIL_PAROL = "Blipzor921324";
+const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
 
 const TOOLS = [
   { type: "function", function: {
