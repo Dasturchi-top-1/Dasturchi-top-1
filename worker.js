@@ -19,7 +19,7 @@ const JUDGE_SYSTEM = {
   en: `You are the wise chairman of the AI Council. Analyze answers and write brief conclusion in ENGLISH (5-7 sentences).`
 };
 
-const COUNCIL_PAROL = "Blipzor921324";
+const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
 
 // ============================================================
 // 🌟 GEMINI MODELLARI
