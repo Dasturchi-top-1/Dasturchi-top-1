@@ -127,6 +127,16 @@ const TURING_TOPICS = [
   "Musiqa kayfiyatga ta'sir qiladimi?",
   "Do'stlik puldan qimmatmi?"
 ];
+const DREAM_SYSTEM = `Sen professional tush tahlilchisisan. Foydalanuvchi tushini o'qib, quyidagi JSON formatda javob ber:
+
+{
+  "analysis": "Tushning ma'nosi va psixologik tahlili (3-5 gap, o'zbek tilida)",
+  "symbols": ["ramz1", "ramz2", "ramz3"],
+  "mood": "xursand/qo'rqinchli/g'alati/sokin/xafa/hayajonli",
+  "imagePrompt": "Tushni tasvirlovchi inglizcha prompt (rasm chizish uchun)"
+}
+
+FAQAT JSON qaytar. Boshqa hech narsa yozma.`;
 
 // ============================================================
 // 🌟 GEMINI 3 MODELLARI (YANGI)
@@ -243,6 +253,58 @@ export default {
     const path = url.pathname;
 
     // ============================================================
+// 🌙 DREAM JOURNAL
+// ============================================================
+if (path === "/dream" && request.method === "POST") {
+  try {
+    const body = await request.json();
+    const parol = (body.parol || "").trim();
+    const dream = (body.dream || "").trim();
+
+    if (parol !== COUNCIL_PAROL) {
+      return json({ error: "🔐 Parol xato!" }, 403);
+    }
+    if (!dream) return json({ error: "Tush matni yo'q" }, 400);
+    if (dream.length > 2000) return json({ error: "Tush juda uzun" }, 400);
+
+    const result = await geminiCall("gemini-3.8-flash", DREAM_SYSTEM, dream, env, 600);
+
+    if (result.error) {
+      return json({ error: "AI tahlil xatosi: " + result.error }, 500);
+    }
+
+    let data = {
+      analysis: "Tahlil qilinmadi",
+      symbols: [],
+      mood: "g'alati",
+      imagePrompt: "mystical dream scene, surreal, ethereal"
+    };
+
+    try {
+      const text = result.text;
+      const s = text.indexOf('{');
+      const e = text.lastIndexOf('}') + 1;
+      if (s >= 0 && e > s) {
+        data = { ...data, ...JSON.parse(text.slice(s, e)) };
+      }
+    } catch (e) {}
+
+    const imagePrompt = data.imagePrompt || dream.slice(0, 100);
+    const encodedPrompt = encodeURIComponent(imagePrompt);
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=768&height=768&nologo=true&seed=${Date.now()}`;
+
+    return json({
+      analysis: data.analysis,
+      symbols: data.symbols || [],
+      mood: data.mood || "g'alati",
+      imageUrl: imageUrl
+    });
+  } catch (e) {
+    return json({ error: e.message }, 500);
+  }
+    }
+                   
+      // ============================================================
     // 🏛 AI COUNCIL
     // ============================================================
     if (path === "/council" && request.method === "POST") {
