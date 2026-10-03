@@ -8,86 +8,144 @@
   :root{
     --bg:#0a0a1a;--card:#141428;--text:#e6e6f0;--muted:#8888aa;
     --accent:#6366f1;--accent2:#a855f7;--border:#2a2a44;
-    --gold:#fbbf24;--red:#ef4444;
+    --gold:#fbbf24;--red:#ef4444;--green:#10b981;
   }
-  *{margin:0;padding:0;box-sizing:border-box}
+  [data-theme="light"]{
+    --bg:#f0f2ff;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
+    --accent:#4f46e5;--accent2:#9333ea;--border:#e5e7eb;
+    --gold:#d97706;--red:#dc2626;--green:#059669;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s}
   body{
     font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-    min-height:100vh;padding:20px;
+    min-height:100vh;padding:16px;
     background-image:radial-gradient(circle at 20% 10%,rgba(99,102,241,.15),transparent 50%),
                      radial-gradient(circle at 80% 90%,rgba(168,85,247,.15),transparent 50%);
   }
   .container{max-width:900px;margin:auto}
-  header{text-align:center;padding:40px 0 30px}
+  nav{display:flex;justify-content:space-between;align-items:center;
+      padding:8px 0 20px;gap:8px;flex-wrap:wrap}
+  .logo{font-weight:800;font-size:18px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .nav-btns{display:flex;gap:6px;flex-wrap:wrap}
+  .nav-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
+  .nav-btn:hover{border-color:var(--accent)}
+  header{text-align:center;padding:20px 0 24px}
   h1{
-    font-size:42px;font-weight:900;
-    background:linear-gradient(90deg,#6366f1,#a855f7,#6366f1);
-    background-size:200% 200%;-webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;animation:grad 4s ease infinite;
+    font-size:38px;font-weight:900;
+    background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#6366f1);
+    background-size:300% 300%;-webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;background-clip:text;
+    animation:grad 5s ease infinite;
   }
   @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-  .sub{color:var(--muted);margin-top:8px;font-size:15px}
-  .badges{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
-  .badge{font-size:12px;padding:4px 10px;border:1px solid var(--border);
+  .sub{color:var(--muted);margin-top:8px;font-size:14px}
+  .badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .badge{font-size:11px;padding:4px 10px;border:1px solid var(--border);
          border-radius:999px;color:var(--muted)}
   .ask{background:var(--card);border:1px solid var(--border);border-radius:16px;
-       padding:16px;margin-bottom:24px}
+       padding:14px;margin-bottom:20px}
+  .parol-row{display:flex;gap:6px;margin-bottom:10px}
   input[type="password"]{
-    width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);
-    background:var(--bg);color:var(--text);font-size:15px;margin-bottom:10px;outline:none
+    flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text);font-size:14px;outline:none
   }
   input[type="password"]:focus{border-color:var(--accent)}
+  .mic-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:0 14px;border-radius:10px;cursor:pointer;font-size:18px}
+  .mic-btn.rec{background:var(--red);color:#fff;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
   textarea{
     width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
     background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
-    resize:vertical;min-height:80px;outline:none
+    resize:vertical;min-height:70px;outline:none
   }
   textarea:focus{border-color:var(--accent)}
-  .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
   .examples{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-  .ex{font-size:12px;padding:6px 12px;border-radius:999px;background:var(--bg);
+  .ex{font-size:11px;padding:5px 10px;border-radius:999px;background:var(--bg);
       border:1px solid var(--border);color:var(--muted);cursor:pointer}
   .ex:hover{border-color:var(--accent);color:var(--accent)}
   #askBtn{
-    padding:12px 28px;border:none;border-radius:10px;cursor:pointer;
+    padding:12px 24px;border:none;border-radius:10px;cursor:pointer;
     background:linear-gradient(90deg,var(--accent),var(--accent2));
-    color:#fff;font-weight:700;font-size:15px
+    color:#fff;font-weight:700;font-size:15px;min-width:160px
   }
   #askBtn:disabled{opacity:.5;cursor:wait}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-        gap:12px;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+        gap:12px;margin-bottom:20px}
   .ai-card{
     background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:16px;animation:fade .4s ease
+    padding:14px;animation:fade .5s ease;position:relative
   }
-  .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .ai-emoji{font-size:22px}
-  .ai-name{font-weight:700;font-size:14px}
-  .ai-text{font-size:13px;line-height:1.6;color:#c8c8dc;white-space:pre-wrap}
+  .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .ai-emoji{font-size:20px}
+  .ai-name{font-weight:700;font-size:13px;flex:1}
+  .vote-btn{background:transparent;border:1px solid var(--border);color:var(--muted);
+    padding:2px 8px;border-radius:6px;cursor:pointer;font-size:11px}
+  .vote-btn:hover,.vote-btn.voted{background:var(--gold);border-color:var(--gold);color:#000}
+  .ai-text{font-size:13px;line-height:1.6;color:var(--text);white-space:pre-wrap;opacity:.9}
   .council{
     background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(168,85,247,.1));
-    border:2px solid var(--gold);border-radius:16px;padding:24px;
-    animation:fade .6s ease
+    border:2px solid var(--gold);border-radius:16px;padding:20px;
+    animation:fade .7s ease;margin-bottom:16px
   }
-  .council-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-  .council-title{font-size:18px;font-weight:800;color:var(--gold)}
+  .council-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .council-title{font-size:17px;font-weight:800;color:var(--gold)}
   .council-text{font-size:15px;line-height:1.7;white-space:pre-wrap}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+    gap:10px;margin-bottom:20px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:12px;text-align:center}
+  .stat-n{font-size:22px;font-weight:800;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .stat-l{font-size:11px;color:var(--muted);margin-top:4px}
+  .hist-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
+    padding:12px;margin-bottom:8px;cursor:pointer}
+  .hist-item:hover{border-color:var(--accent)}
+  .hist-q{font-weight:600;font-size:14px;margin-bottom:4px}
+  .hist-date{font-size:11px;color:var(--muted)}
   @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   .loading{text-align:center;padding:40px;color:var(--muted)}
-  .error{text-align:center;padding:20px;color:var(--red)}
+  .error{text-align:center;padding:16px;color:var(--red)}
   .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
   @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
-  footer{text-align:center;padding:30px;color:var(--muted);font-size:12px;margin-top:20px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;
+    display:none;padding:20px;overflow-y:auto}
+  .modal.show{display:block}
+  .modal-inner{max-width:600px;margin:20px auto;background:var(--card);
+    border-radius:16px;padding:20px}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .modal-title{font-size:18px;font-weight:800;color:var(--accent)}
+  .close-btn{background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer}
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:12px;margin-top:16px}
   footer a{color:var(--accent);text-decoration:none}
-  @media(max-width:600px){h1{font-size:30px}header{padding:20px 0}}
+  @media(max-width:600px){
+    h1{font-size:26px}
+    .grid{grid-template-columns:1fr}
+    .nav-btn{padding:5px 10px;font-size:12px}
+  }
 </style>
 </head>
 <body>
 <div class="container">
 
+<nav>
+  <div class="logo">🏛 AI Kengash</div>
+  <div class="nav-btns">
+    <button class="nav-btn" onclick="showStats()">📊 Statistika</button>
+    <button class="nav-btn" onclick="showHistory()">💾 Tarix</button>
+    <button class="nav-btn" onclick="toggleLang()" id="langBtn">🌐 UZ</button>
+    <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</nav>
+
 <header>
-  <h1>🏛 AI KENGASH</h1>
-  <p class="sub">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
+  <h1 id="title">AI KENGASH</h1>
+  <p class="sub" id="subtitle">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
   <div class="badges">
     <span class="badge">🌟 Qwen3.6</span>
     <span class="badge">🧠 Nemotron</span>
@@ -98,12 +156,14 @@
 </header>
 
 <div class="ask">
-  <input type="password" id="parol" placeholder="🔐 Parol..." autocomplete="off">
+  <div class="parol-row">
+    <input type="password" id="parol" placeholder="🔐 Parol..." autocomplete="off">
+    <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Ovoz bilan yozish">🎤</button>
+  </div>
   <textarea id="q" placeholder="Savolingizni yozing..."></textarea>
   <div class="row">
-    <div class="examples">
+    <div class="examples" id="examples">
       <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">Hayot ma'nosi</span>
-      <span class="ex" onclick="fill('Eng yaxshi dasturlash tili?')">Dasturlash tili</span>
       <span class="ex" onclick="fill('Kelajakda AI qanday bo\'ladi?')">AI kelajagi</span>
       <span class="ex" onclick="fill('13 yoshda qanday dasturchi bo\'lish mumkin?')">Dasturchi bo'lish</span>
     </div>
@@ -113,51 +173,306 @@
 
 <div id="out"></div>
 
+<!-- STATISTIKA MODAL -->
+<div class="modal" id="statsModal">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-title">📊 Statistika</div>
+      <button class="close-btn" onclick="closeModal('statsModal')">×</button>
+    </div>
+    <div id="statsBody"></div>
+  </div>
+</div>
+
+<!-- TARIX MODAL -->
+<div class="modal" id="histModal">
+  <div class="modal-inner">
+    <div class="modal-head">
+      <div class="modal-title">💾 Tarix</div>
+      <button class="close-btn" onclick="closeModal('histModal')">×</button>
+    </div>
+    <div id="histBody"></div>
+  </div>
+</div>
+
 <footer>
   ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> tomonidan yaratildi · 2026
 </footer>
 
-        </div>
-        <script>
+      </div>
+      <script>
+// ============================================================
+// ⚙️ SOZLAMALAR
+// ============================================================
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
 
-// Parolni eslab qolish
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('council_parol');
-  if (saved) document.getElementById('parol').value = saved;
-  document.getElementById('parol').addEventListener('change', (e) => {
-    localStorage.setItem('council_parol', e.target.value);
+const LANGS = {
+  uz: {
+    title: "AI KENGASH",
+    subtitle: "Bitta savol — 5 ta AI javob — 1 ta dono xulosa",
+    parol: "🔐 Parol...",
+    savol: "Savolingizni yozing...",
+    ask: "Kengashni chaqirish",
+    asking: "⏳ Kengash yig'ilmoqda...",
+    thinking: "🤖 5 ta AI o'ylayapti",
+    conclusion: "KENGASH XULOSASI",
+    noParol: "🔐 Parolni kiriting!",
+    noQ: "❓ Savolni yozing!",
+    loading: "⏳ Yuklanmoqda...",
+    history: "💾 Tarix",
+    stats: "📊 Statistika",
+    totalQ: "Jami savollar",
+    totalVotes: "Ovozlar",
+    topAI: "Eng yaxshi AI",
+    noHistory: "Tarix bo'sh",
+    theme: "🌙"
+  },
+  ru: {
+    title: "AI СОВЕТ",
+    subtitle: "Один вопрос — 5 AI ответов — 1 мудрый вывод",
+    parol: "🔐 Пароль...",
+    savol: "Напишите ваш вопрос...",
+    ask: "Созвать совет",
+    asking: "⏳ Совет собирается...",
+    thinking: "🤖 5 AI думают",
+    conclusion: "ВЫВОД СОВЕТА",
+    noParol: "🔐 Введите пароль!",
+    noQ: "❓ Напишите вопрос!",
+    loading: "⏳ Загрузка...",
+    history: "💾 История",
+    stats: "📊 Статистика",
+    totalQ: "Всего вопросов",
+    totalVotes: "Голоса",
+    topAI: "Лучший AI",
+    noHistory: "История пуста",
+    theme: "🌙"
+  },
+  en: {
+    title: "AI COUNCIL",
+    subtitle: "One question — 5 AI answers — 1 wise conclusion",
+    parol: "🔐 Password...",
+    savol: "Write your question...",
+    ask: "Summon the council",
+    asking: "⏳ Council assembling...",
+    thinking: "🤖 5 AIs are thinking",
+    conclusion: "COUNCIL CONCLUSION",
+    noParol: "🔐 Enter password!",
+    noQ: "❓ Write a question!",
+    loading: "⏳ Loading...",
+    history: "💾 History",
+    stats: "📊 Statistics",
+    totalQ: "Total questions",
+    totalVotes: "Votes",
+    topAI: "Best AI",
+    noHistory: "History is empty",
+    theme: "🌙"
+  }
+};
+
+let LANG = localStorage.getItem('council_lang') || 'uz';
+const T = () => LANGS[LANG];
+
+// ============================================================
+// 🎨 MAVZU
+// ============================================================
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const nxt = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', nxt);
+  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('council_theme', nxt);
+}
+(function(){
+  const t = localStorage.getItem('council_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+})();
+
+// ============================================================
+// 🌐 TIL
+// ============================================================
+function toggleLang(){
+  const order = ['uz', 'ru', 'en'];
+  LANG = order[(order.indexOf(LANG) + 1) % 3];
+  localStorage.setItem('council_lang', LANG);
+  applyLang();
+}
+
+function applyLang(){
+  const t = T();
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('subtitle').textContent = t.subtitle;
+  document.getElementById('parol').placeholder = t.parol;
+  document.getElementById('q').placeholder = t.savol;
+  document.getElementById('askBtn').textContent = t.ask;
+  document.getElementById('langBtn').textContent = '🌐 ' + LANG.toUpperCase();
+}
+applyLang();
+        // ============================================================
+// 🎤 OVOZLI KIRITISH
+// ============================================================
+let recognition = null;
+let isRec = false;
+
+function initMic(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ document.getElementById('micBtn').style.display = 'none'; return; }
+  recognition = new SR();
+  recognition.lang = LANG === 'ru' ? 'ru-RU' : LANG === 'en' ? 'en-US' : 'uz-UZ';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    document.getElementById('q').value += (document.getElementById('q').value ? ' ' : '') + text;
+  };
+  recognition.onend = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
+  recognition.onerror = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
+}
+
+function toggleMic(){
+  if(!recognition) initMic();
+  if(!recognition) return;
+  if(isRec){ recognition.stop(); return; }
+  recognition.lang = LANG === 'ru' ? 'ru-RU' : LANG === 'en' ? 'en-US' : 'uz-UZ';
+  recognition.start();
+  isRec = true;
+  document.getElementById('micBtn').classList.add('rec');
+}
+
+// ============================================================
+// 💾 TARIX
+// ============================================================
+function getHist(){ try { return JSON.parse(localStorage.getItem('council_hist') || '[]'); } catch { return []; } }
+function saveHist(h){ localStorage.setItem('council_hist', JSON.stringify(h.slice(0, 50))); }
+
+function addHist(q, data){
+  const h = getHist();
+  h.unshift({ q, data, date: Date.now(), votes: {} });
+  saveHist(h);
+}
+
+function showHistory(){
+  const h = getHist();
+  const body = document.getElementById('histBody');
+  if(!h.length){
+    body.innerHTML = '<div class="loading">' + T().noHistory + '</div>';
+  } else {
+    body.innerHTML = h.map((item, i) => `
+      <div class="hist-item" onclick="loadHist(${i})">
+        <div class="hist-q">${esc(item.q)}</div>
+        <div class="hist-date">${new Date(item.date).toLocaleString()}</div>
+      </div>
+    `).join('');
+  }
+  document.getElementById('histModal').classList.add('show');
+}
+
+function loadHist(i){
+  const h = getHist();
+  if(!h[i]) return;
+  closeModal('histModal');
+  renderResults(h[i].data, i);
+}
+
+// ============================================================
+// 📊 STATISTIKA
+// ============================================================
+function showStats(){
+  const h = getHist();
+  const totalQ = h.length;
+  let totalVotes = 0;
+  const aiVotes = {};
+  h.forEach(item => {
+    if(item.votes){
+      Object.entries(item.votes).forEach(([name, v]) => {
+        if(v){ totalVotes++; aiVotes[name] = (aiVotes[name] || 0) + 1; }
+      });
+    }
   });
-});
+  const topAI = Object.entries(aiVotes).sort((a,b) => b[1]-a[1])[0];
+  
+  document.getElementById('statsBody').innerHTML = `
+    <div class="stats">
+      <div class="stat"><div class="stat-n">${totalQ}</div><div class="stat-l">${T().totalQ}</div></div>
+      <div class="stat"><div class="stat-n">${totalVotes}</div><div class="stat-l">${T().totalVotes}</div></div>
+      <div class="stat"><div class="stat-n">${topAI ? topAI[0] : '—'}</div><div class="stat-l">${T().topAI}</div></div>
+    </div>
+  `;
+  document.getElementById('statsModal').classList.add('show');
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+// ============================================================
+// 🗳 OVOZ BERISH
+// ============================================================
+function vote(histIdx, aiName, btn){
+  const h = getHist();
+  if(!h[histIdx]) return;
+  if(!h[histIdx].votes) h[histIdx].votes = {};
+  h[histIdx].votes[aiName] = !h[histIdx].votes[aiName];
+  saveHist(h);
+  btn.classList.toggle('voted');
+}
+
+// ============================================================
+// 🎨 RENDER
+// ============================================================
+function renderResults(d, histIdx){
+  const t = T();
+  let html = '<div class="grid">';
+  d.answers.forEach(a => {
+    html += `<div class="ai-card">
+      <div class="ai-head">
+        <span class="ai-emoji">${a.emoji}</span>
+        <span class="ai-name">${a.name}</span>
+        ${histIdx !== undefined ? `<button class="vote-btn" onclick="vote(${histIdx}, '${a.name}', this)">👍</button>` : ''}
+      </div>
+      <div class="ai-text">${esc(a.answer)}</div>
+    </div>`;
+  });
+  html += '</div>';
+  html += `<div class="council">
+    <div class="council-head">
+      <span style="font-size:26px">🏛</span>
+      <span class="council-title">${t.conclusion}</span>
+    </div>
+    <div class="council-text">${esc(d.conclusion)}</div>
+  </div>`;
+  document.getElementById('out').innerHTML = html;
+}
+
+function esc(s){
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
 
 function fill(t){ document.getElementById('q').value = t; }
 
+// ============================================================
+// 🚀 ASOSIY
+// ============================================================
 async function ask(){
+  const t = T();
   const q = document.getElementById('q').value.trim();
   const parol = document.getElementById('parol').value.trim();
   const btn = document.getElementById('askBtn');
   const out = document.getElementById('out');
 
-  if(!parol){
-    out.innerHTML = '<div class="error">🔐 Parolni kiriting!</div>';
-    return;
-  }
-  if(!q){
-    out.innerHTML = '<div class="error">❓ Savolni yozing!</div>';
-    return;
-  }
+  if(!parol){ out.innerHTML = '<div class="error">' + t.noParol + '</div>'; return; }
+  if(!q){ out.innerHTML = '<div class="error">' + t.noQ + '</div>'; return; }
 
   localStorage.setItem('council_parol', parol);
-
   btn.disabled = true;
-  btn.textContent = '⏳ Kengash yig\'ilmoqda...';
-  out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti<span class="dots"></span></div>';
+  btn.textContent = t.asking;
+  out.innerHTML = '<div class="loading">' + t.thinking + '<span class="dots"></span></div>';
 
   try{
     const r = await fetch(API, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ question: q, parol: parol })
+      body: JSON.stringify({ question: q, parol: parol, lang: LANG })
     });
     const d = await r.json();
 
@@ -166,40 +481,32 @@ async function ask(){
       return;
     }
 
-    let html = '<div class="grid">';
-    d.answers.forEach(a => {
-      html += `<div class="ai-card">
-        <div class="ai-head">
-          <span class="ai-emoji">${a.emoji}</span>
-          <span class="ai-name">${a.name}</span>
-        </div>
-        <div class="ai-text">${esc(a.answer)}</div>
-      </div>`;
-    });
-    html += '</div>';
-
-    html += `<div class="council">
-      <div class="council-head">
-        <span style="font-size:28px">🏛</span>
-        <span class="council-title">KENGASH XULOSASI</span>
-      </div>
-      <div class="council-text">${esc(d.conclusion)}</div>
-    </div>`;
-
-    out.innerHTML = html;
+    addHist(q, d);
+    renderResults(d, 0);
   } catch(e){
-    out.innerHTML = '<div class="error">❌ Xato: ' + e.message + '</div>';
+    out.innerHTML = '<div class="error">❌ ' + e.message + '</div>';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Kengashni chaqirish';
+    btn.textContent = t.ask;
   }
 }
 
-function esc(s){
-  return (s || '').replace(/[&<>"']/g, c => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
+// ============================================================
+// 🎬 INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('council_parol');
+  if(saved) document.getElementById('parol').value = saved;
+  document.getElementById('parol').addEventListener('change', (e) => {
+    localStorage.setItem('council_parol', e.target.value);
+  });
+  initMic();
+});
+
+// Modal tashqarisiga bosilsa yopish
+document.querySelectorAll('.modal').forEach(m => {
+  m.addEventListener('click', (e) => { if(e.target === m) m.classList.remove('show'); });
+});
 </script>
 </body>
 </html>
