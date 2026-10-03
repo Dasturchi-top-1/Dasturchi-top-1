@@ -24,10 +24,9 @@
     background-attachment:fixed;
   }
   .container{max-width:900px;margin:auto;padding:20px}
-
-  /* NAV */
   nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;
-    position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--border)}
+    position:sticky;top:0;background:var(--bg);z-index:10;
+    border-bottom:1px solid var(--border)}
   .logo{font-weight:800;font-size:18px;
     background:linear-gradient(90deg,var(--accent),var(--accent2));
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -35,8 +34,6 @@
   .nav-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
     padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
   .nav-btn:hover{border-color:var(--accent)}
-
-  /* HERO */
   header{text-align:center;padding:60px 20px 50px}
   .avatar{
     width:120px;height:120px;border-radius:50%;margin:0 auto 20px;
@@ -59,29 +56,30 @@
   .badges{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap}
   .badge{font-size:12px;padding:6px 14px;border-radius:999px;
     background:var(--card);border:1px solid var(--border);color:var(--muted)}
-
-  /* SECTIONS */
   section{padding:40px 0}
   h2{font-size:26px;margin-bottom:20px;text-align:center;font-weight:800}
   h2 span{background:linear-gradient(90deg,var(--accent),var(--accent2));
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-
-  /* ABOUT */
   .about{background:var(--card);border:1px solid var(--border);border-radius:16px;
     padding:24px;font-size:15px;line-height:1.8}
   .about-row{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap}
   .about-row b{color:var(--accent);min-width:110px}
-
-  /* PROJECTS */
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
   .project{
     background:var(--card);border:1px solid var(--border);border-radius:16px;
     padding:20px;text-decoration:none;color:var(--text);
-    transition:all .3s;display:block;
+    transition:all .3s;display:block;position:relative;overflow:hidden;
+  }
+  .project::before{
+    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(99,102,241,.1),transparent);
+    transition:left .6s;
   }
   .project:hover{transform:translateY(-6px);border-color:var(--accent);
     box-shadow:0 16px 32px rgba(99,102,241,.3)}
-  .project-ico{font-size:36px;display:block;margin-bottom:10px}
+  .project:hover::before{left:100%}
+  .project-ico{font-size:36px;display:block;margin-bottom:10px;transition:transform .3s}
+  .project:hover .project-ico{transform:scale(1.15) rotate(-5deg)}
   .project h3{font-size:16px;margin-bottom:6px}
   .project p{font-size:12px;color:var(--muted);line-height:1.5}
   .project .tag{display:inline-block;margin-top:10px;font-size:10px;
@@ -89,14 +87,12 @@
     color:var(--accent);border:1px solid var(--accent)}
   .project.new .tag{background:rgba(236,72,153,.2);color:var(--pink);
     border-color:var(--pink)}
-
-  /* SKILLS */
+  .project.hot .tag{background:rgba(16,185,129,.2);color:var(--green);
+    border-color:var(--green)}
   .skills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
   .skill{background:var(--card);border:1px solid var(--border);
     padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600}
   .skill:hover{border-color:var(--accent);color:var(--accent)}
-
-  /* CONTACT */
   .contact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   .contact a{
     display:flex;align-items:center;gap:8px;
@@ -106,10 +102,9 @@
   }
   .contact a:hover{border-color:var(--accent);transform:translateY(-3px)}
   .contact span{font-size:20px}
-
   footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:12px;
     border-top:1px solid var(--border);margin-top:30px}
-
+  footer a{color:var(--accent);text-decoration:none}
   @media(max-width:600px){
     h1{font-size:34px}
     .avatar{width:90px;height:90px;font-size:42px}
@@ -131,7 +126,7 @@
 <header>
   <div class="avatar">B</div>
   <h1>Blip</h1>
-  <p class="subtitle">13 yoshli dasturchi · Tojikiston, Dushanbe</p>
+  <p class="subtitle">13 yoshli dasturchi · Tojikiston, Dushanbe 🇹🇯</p>
   <div class="badges">
     <span class="badge">🐍 Python</span>
     <span class="badge">⚡ JavaScript</span>
@@ -157,11 +152,11 @@
   <h2>🚀 <span>Loyihalarim</span></h2>
   <div class="grid">
 
-    <a class="project new" href="multiverse.html">
+    <a class="project hot" href="multiverse.html">
       <span class="project-ico">🌌</span>
       <h3>Blip Multiverse</h3>
-      <p>5 ta AI o'yin — bitta joyda. Turing Test, Dream Journal, Time Machine, One-Button World, AI Debate.</p>
-      <span class="tag">YANGI</span>
+      <p>5 ta AI o'yin — bitta joyda! Turing Test, Dream Journal, Time Machine, One-Button World, AI Debate.</p>
+      <span class="tag">🔥 YANGI</span>
     </a>
 
     <a class="project" href="council.html">
@@ -174,7 +169,7 @@
     <a class="project new" href="turing.html">
       <span class="project-ico">🎭</span>
       <h3>Reverse Turing Test</h3>
-      <p>Sen AI bo'lib o'yna, AI odam bo'lib o'yna. Hakam qaysi biri odam ekanini topadi.</p>
+      <p>Sen AI bo'lib o'yna, AI odam bo'lib. Hakam qaysi biri odam ekanini topadi.</p>
       <span class="tag">O'YIN</span>
     </a>
 
@@ -256,4 +251,4 @@ function toggleTheme(){
 })();
 </script>
 </body>
-                         </html>
+        </html>
