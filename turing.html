@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reverse Turing Test — Blip</title>
+<style>
+  :root{
+    --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
+    --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
+    --green:#10b981;--red:#ef4444;--gold:#fbbf24;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;padding:16px;
+    background-image:
+      radial-gradient(circle at 15% 15%,rgba(99,102,241,.15),transparent 40%),
+      radial-gradient(circle at 85% 85%,rgba(236,72,153,.15),transparent 40%);
+  }
+  .container{max-width:700px;margin:auto}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
+  .back{color:var(--accent);text-decoration:none;font-size:14px}
+  .score{font-size:14px;color:var(--muted)}
+  .score b{color:var(--gold);font-size:18px}
+  header{text-align:center;padding:30px 0 24px}
+  h1{
+    font-size:36px;font-weight:900;
+    background:linear-gradient(90deg,#6366f1,#ec4899,#f59e0b,#6366f1);
+    background-size:300% 300%;
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;animation:grad 4s ease infinite;
+  }
+  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+  .sub{color:var(--muted);margin-top:8px;font-size:14px;line-height:1.6}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:16px;
+    padding:20px;margin-bottom:16px
+  }
+  .topic-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .topic{font-size:20px;font-weight:700;margin-top:6px;color:var(--accent)}
+  textarea{
+    width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
+    background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
+    resize:vertical;min-height:90px;outline:none;margin-top:12px
+  }
+  textarea:focus{border-color:var(--accent)}
+  .btn{
+    padding:12px 24px;border:none;border-radius:10px;cursor:pointer;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#fff;font-weight:700;font-size:15px;margin-top:12px
+  }
+  .btn:disabled{opacity:.5;cursor:wait}
+  .btn-full{width:100%}
+  .btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}
+  .answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  .answer{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px}
+  .answer-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .answer-text{font-size:14px;line-height:1.6;white-space:pre-wrap}
+  .verdict{
+    text-align:center;padding:20px;border-radius:14px;
+    animation:fade .5s ease;margin-bottom:16px
+  }
+  .verdict.win{background:rgba(16,185,129,.15);border:2px solid var(--green)}
+  .verdict.lose{background:rgba(239,68,68,.15);border:2px solid var(--red)}
+  .verdict-title{font-size:22px;font-weight:800;margin-bottom:8px}
+  .verdict-text{font-size:14px;line-height:1.6;color:var(--text);opacity:.9}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .loading{text-align:center;padding:30px;color:var(--muted)}
+  .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
+  @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+  .info{background:rgba(99,102,241,.1);border:1px solid var(--accent);border-radius:12px;
+    padding:14px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+  @media(max-width:600px){
+    h1{font-size:26px}
+    .answers{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<nav>
+  <a href="multiverse.html" class="back">← Multiverse</a>
+  <div class="score">Hisob: <b id="score">0</b> / <span id="total">0</span></div>
+</nav>
+
+<header>
+  <h1>🎭 REVERSE TURING TEST</h1>
+  <p class="sub">Sen <b style="color:var(--accent)">AI bo'lib</b> o'yna. AI <b style="color:var(--accent2)">odam bo'lib</b> o'yna.<br>Hakam qaysi biri odam ekanini topishi kerak!</p>
+</header>
+
+<div id="game">
+  <div class="info">
+    💡 <b>Qoida:</b> Hakam ikkita javobni o'qiydi va <b>qaysi biri odam tomonidan yozilganini</b> topadi.
+    Sen AI bo'lib yozsang, AI odam bo'lib yozadi. Hakam adashsa — sen g'olib!
+  </div>
+
+  <div class="card">
+    <div class="topic-label">📌 Mavzu</div>
+    <div class="topic" id="topic">Yuklanmoqda...</div>
+    <textarea id="answer" placeholder="AI bo'lib javob yozing... (rasmiy, tuzilgan, aniq)"></textarea>
+    <button class="btn btn-full" id="submitBtn" onclick="submitAnswer()">Yuborish</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+</div>
+
+<script>
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/turing";
+const PAROL = "Blipzor921324";
+let score = parseInt(localStorage.getItem('turing_score') || '0');
+let total = parseInt(localStorage.getItem('turing_total') || '0');
+let currentTopic = "";
+
+document.getElementById('score').textContent = score;
+document.getElementById('total').textContent = total;
+
+async function newRound(){
+  document.getElementById('topic').textContent = 'Yuklanmoqda...';
+  document.getElementById('answer').value = '';
+  document.getElementById('result').innerHTML = '';
+  document.getElementById('submitBtn').disabled = true;
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ action: "topic", parol: PAROL })
+    });
+    const d = await r.json();
+    if(d.topic){
+      currentTopic = d.topic;
+      document.getElementById('topic').textContent = d.topic;
+      document.getElementById('submitBtn').disabled = false;
+    } else {
+      document.getElementById('topic').textContent = '❌ ' + (d.error || 'Xato');
+    }
+  } catch(e){
+    document.getElementById('topic').textContent = '❌ ' + e.message;
+  }
+}
+
+async function submitAnswer(){
+  const answer = document.getElementById('answer').value.trim();
+  if(!answer) return;
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Hakam o\'ylayapti...';
+  document.getElementById('result').innerHTML = '<div class="loading">🤔 AI odam bo\'lib yozmoqda<span class="dots"></span></div>';
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        action: "judge",
+        topic: currentTopic,
+        userAnswer: answer,
+        parol: PAROL
+      })
+    });
+    const d = await r.json();
+
+    if(d.error){
+      document.getElementById('result').innerHTML = '<div class="loading">❌ ' + d.error + '</div>';
+      btn.disabled = false;
+      btn.textContent = 'Yuborish';
+      return;
+    }
+
+    // Natija
+    total++;
+    if(d.userWins) score++;
+    localStorage.setItem('turing_score', score);
+    localStorage.setItem('turing_total', total);
+    document.getElementById('score').textContent = score;
+    document.getElementById('total').textContent = total;
+
+    const winClass = d.userWins ? 'win' : 'lose';
+    const winTitle = d.userWins ? '🎉 SEN G\'OLIB!' : '😅 AI G\'OLIB!';
+
+    document.getElementById('result').innerHTML = `
+      <div class="answers">
+        <div class="answer">
+          <div class="answer-label">🅰️ Javob (1)</div>
+          <div class="answer-text">${esc(d.answer1)}</div>
+        </div>
+        <div class="answer">
+          <div class="answer-label">🅱️ Javob (2)</div>
+          <div class="answer-text">${esc(d.answer2)}</div>
+        </div>
+      </div>
+      <div class="verdict ${winClass}">
+        <div class="verdict-title">${winTitle}</div>
+        <div class="verdict-text">
+          🤖 <b>Hakam qarori:</b> ${esc(d.judgeVerdict)}<br><br>
+          ✅ <b>Odam:</b> ${d.humanIsUser ? 'Sen (Foydalanuvchi)' : 'AI'}<br>
+          ${esc(d.reasoning || '')}
+        </div>
+      </div>
+      <button class="btn btn-full btn-secondary" onclick="newRound()">🔄 Yangi raund</button>
+    `;
+  } catch(e){
+    document.getElementById('result').innerHTML = '<div class="loading">❌ ' + e.message + '</div>';
+    btn.disabled = false;
+    btn.textContent = 'Yuborish';
+  }
+}
+
+function esc(s){
+  return (s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+newRound();
+</script>
+</body>
+  </html>
