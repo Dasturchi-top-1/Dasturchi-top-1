@@ -1,157 +1,66 @@
 // ============================================================
-// ⚡ BLIP AI WORKER v3.2 — Til qo'llab-quvvatlash
+// ⚡ BLIP AI WORKER v4.0 — Google Gemini API
 // ============================================================
 
 const SYSTEM = `Sen Blip Agent — Telegram bot orqali ishlovchi AI yordamchisan.
-
-FOYDALANUVCHI HAQIDA:
-- Ism: Blip (Salohiddin)
-- Joy: Tojikiston, Dushanbe
-- Yosh: 13
-- Til: O'zbek (lotin)
-- Loyihalar: Blip Order Bot, DeepSeek Agent, CyberHub, Blip AI
-- GitHub: Dasturchi-top-1
-
-VAZIFA:
+Foydalanuvchi: Blip (Salohiddin), Tojikiston, Dushanbe, 13 yosh.
 O'zbek tilida (lotin) qisqa va aniq javob ber.
 Buyruq kutma — oddiy xabarga ham javob ber.`;
 
-// ============================================================
-// 🌐 TILGA MOS COUNCIL PROMPTLAR
-// ============================================================
 const COUNCIL_SYSTEM = {
-  uz: `Sen aqlli va dono yordamchisan.
-O'zbek tilida (lotin) qisqa va aniq javob ber (3-5 gap).
-Faqat savolga javob ber, ortiqcha gapirma.`,
-  
-  ru: `Ты умный и мудрый помощник.
-Отвечай на русском языке кратко и точно (3-5 предложений).
-Отвечай только на вопрос, не говори лишнего.`,
-  
-  en: `You are a smart and wise assistant.
-Answer in English briefly and accurately (3-5 sentences).
-Answer only the question, don't say extra.`
+  uz: `Sen aqlli va dono yordamchisan. O'zbek tilida (lotin) qisqa va aniq javob ber (3-5 gap). Faqat savolga javob ber.`,
+  ru: `Ты умный и мудрый помощник. Отвечай на русском кратко и точно (3-5 предложений).`,
+  en: `You are a smart and wise assistant. Answer in English briefly and accurately (3-5 sentences).`
 };
 
 const JUDGE_SYSTEM = {
-  uz: `Sen AI Kengashning dono raisisisan.
-5 ta AI javobini tahlil qilib, O'ZBEK TILIDA qisqa umumiy xulosa yoz (5-7 gap).
-Eng yaxshi fikrlarni birlashtir, qarama-qarshiliklarni ajrat.`,
-  
-  ru: `Ты мудрый председатель AI Совета.
-Проанализируй ответы 5 AI и напиши краткий общий вывод на РУССКОМ языке (5-7 предложений).
-Объедини лучшие идеи, выдели противоречия.`,
-  
-  en: `You are the wise chairman of the AI Council.
-Analyze 5 AI answers and write a brief general conclusion in ENGLISH (5-7 sentences).
-Combine best ideas, highlight contradictions.`
+  uz: `Sen AI Kengashning dono raisisisan. Javoblarni tahlil qilib, O'ZBEK TILIDA qisqa xulosa yoz (5-7 gap).`,
+  ru: `Ты мудрый председатель AI Совета. Проанализируй ответы и напиши краткий вывод на РУССКОМ (5-7 предложений).`,
+  en: `You are the wise chairman of the AI Council. Analyze answers and write brief conclusion in ENGLISH (5-7 sentences).`
 };
 
-const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
+const COUNCIL_PAROL = "Blipzor921324";
 
-const TOOLS = [
-  { type: "function", function: {
-    name: "get_time", description: "Hozirgi vaqtni oladi",
-    parameters: { type: "object", properties: {} } } },
-  { type: "function", function: {
-    name: "calc", description: "Matematik ifodani hisoblaydi",
-    parameters: { type: "object", properties: { expr: { type: "string" } }, required: ["expr"] } } },
-  { type: "function", function: {
-    name: "save_note", description: "Eslatma saqlaydi",
-    parameters: { type: "object", properties: { text: { type: "string" } }, required: ["text"] } } },
-  { type: "function", function: {
-    name: "get_notes", description: "Eslatmalarni oladi",
-    parameters: { type: "object", properties: {} } } }
-];
-
-const COUNCIL_MODELS = [
-  { id: "qwen/qwen3.6-plus-preview:free", name: "Qwen3.6", emoji: "🌟" },
-  { id: "nvidia/nemotron-3-ultra-550b-a55b:free", name: "Nemotron", emoji: "🧠" },
-  { id: "stepfun/step-3.5-flash:free", name: "StepFun", emoji: "⚡" },
-  { id: "liquid/lfm-2.5-2.6b:free", name: "LFM", emoji: "🌪" },
-  { id: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3", emoji: "🦙" }
+// ============================================================
+// 🌟 GEMINI MODELLARI
+// ============================================================
+const GEMINI_MODELS = [
+  { id: "gemini-2.0-flash-exp", name: "Gemini 2.0", emoji: "🧠" },
+  { id: "gemini-1.5-flash", name: "Gemini Flash", emoji: "⚡" },
+  { id: "gemini-1.5-flash-8b", name: "Gemini 8B", emoji: "🌟" },
+  { id: "gemini-1.5-pro", name: "Gemini Pro", emoji: "💎" },
+  { id: "gemini-2.0-flash-thinking-exp-1219", name: "Gemini Think", emoji: "🤔" }
 ];
 
 // ============================================================
-// 🛠 TOOL'LAR
+// 🌟 GEMINI API
 // ============================================================
-async function runTool(name, args, env, chatId) {
+async function geminiCall(model, sysMsg, userMsg, env, maxTokens = 800) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
   try {
-    if (name === "get_time")
-      return new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Dushanbe" });
-    if (name === "calc") {
-      const allowed = "0123456789+-*/(). ";
-      if (![...args.expr].every(c => allowed.includes(c))) return "Xato";
-      return String(new Function("return (" + args.expr + ")")());
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          { role: "user", parts: [{ text: userMsg }] }
+        ],
+        systemInstruction: { parts: [{ text: sysMsg }] },
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: maxTokens
+        }
+      })
+    });
+    const d = await r.json();
+    if (d.error) {
+      return { error: d.error.message || "Xato" };
     }
-    if (name === "save_note") {
-      const k = "notes:" + chatId;
-      const list = JSON.parse(await env.AGENT_KV.get(k) || "[]");
-      list.push({ text: args.text, at: Date.now() });
-      await env.AGENT_KV.put(k, JSON.stringify(list));
-      return "Saqlandi. Jami: " + list.length;
-    }
-    if (name === "get_notes") {
-      const list = JSON.parse(await env.AGENT_KV.get("notes:" + chatId) || "[]");
-      return list.length ? list.map((n, i) => (i+1) + ". " + n.text).join("\n") : "Bo'sh.";
-    }
-    return "Noma'lum";
-  } catch (e) { return "Xato: " + e.message; }
-}
-
-// ============================================================
-// 🤖 AI
-// ============================================================
-async function callAI(messages, env, useTools = true) {
-  const payload = {
-    model: "qwen/qwen3.6-plus-preview:free",
-    messages: messages
-  };
-  if (useTools) {
-    payload.tools = TOOLS;
-    payload.tool_choice = "auto";
+    const text = d.candidates?.[0]?.content?.parts?.[0]?.text;
+    return { text: text || "Javob yo'q" };
+  } catch (e) {
+    return { error: e.message };
   }
-  const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(payload)
-  });
-  return await r.json();
-}
-
-async function agentLoop(userMsg, chatId, env) {
-  const key = "hist:" + chatId;
-  let history = JSON.parse(await env.AGENT_KV.get(key) || "[]");
-  if (!history.length) history.push({ role: "system", content: SYSTEM });
-  history.push({ role: "user", content: userMsg });
-
-  let reply = "", steps = 0;
-  while (steps < 5) {
-    steps++;
-    const data = await callAI(history, env, true);
-    const msg = data.choices?.[0]?.message;
-    if (!msg) { reply = "AI javob bermadi."; break; }
-
-    if (msg.tool_calls?.length) {
-      history.push(msg);
-      for (const tc of msg.tool_calls) {
-        const args = JSON.parse(tc.function.arguments || "{}");
-        const out = await runTool(tc.function.name, args, env, chatId);
-        history.push({ role: "tool", tool_call_id: tc.id, content: String(out) });
-      }
-      continue;
-    }
-    reply = msg.content || "";
-    history.push({ role: "assistant", content: reply });
-    break;
-  }
-
-  if (history.length > 40) history = [history[0], ...history.slice(-39)];
-  await env.AGENT_KV.put(key, JSON.stringify(history));
-  return reply || "Javob bo'sh.";
 }
 
 // ============================================================
@@ -175,6 +84,30 @@ async function sendTyping(chatId, env) {
       body: JSON.stringify({ chat_id: chatId, action: "typing" })
     });
   } catch {}
+}
+
+// ============================================================
+// 🤖 AGENT LOOP (Telegram uchun)
+// ============================================================
+async function agentLoop(userMsg, chatId, env) {
+  const key = "hist:" + chatId;
+  let history = JSON.parse(await env.AGENT_KV.get(key) || "[]");
+  if (!history.length) history.push({ role: "system", content: SYSTEM });
+
+  // Kontekst
+  const context = history.slice(-10).map(h =>
+    (h.role === "user" ? "Foydalanuvchi: " : "AI: ") + h.content
+  ).join("\n") + "\nFoydalanuvchi: " + userMsg;
+
+  const result = await geminiCall("gemini-2.0-flash-exp", SYSTEM, context, env, 800);
+  const reply = result.error ? ("❌ " + result.error) : result.text;
+
+  history.push({ role: "user", content: userMsg });
+  history.push({ role: "assistant", content: reply });
+  if (history.length > 40) history = [history[0], ...history.slice(-39)];
+  await env.AGENT_KV.put(key, JSON.stringify(history));
+
+  return reply;
 }
 
 // ============================================================
@@ -225,65 +158,32 @@ export default {
         const sysMsg = COUNCIL_SYSTEM[lang] || COUNCIL_SYSTEM.uz;
         const judgeSys = JUDGE_SYSTEM[lang] || JUDGE_SYSTEM.uz;
 
-        const promises = COUNCIL_MODELS.map(m =>
-          fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: {
-              "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              model: m.id,
-              messages: [
-                { role: "system", content: sysMsg },
-                { role: "user", content: question }
-              ],
-              max_tokens: 500,
-              temperature: 0.7
-            })
-          })
-          .then(r => r.json())
-          .then(d => ({
-            emoji: m.emoji,
-            name: m.name,
-            answer: d.choices?.[0]?.message?.content || "Javob olinmadi"
-          }))
-          .catch(e => ({
-            emoji: m.emoji,
-            name: m.name,
-            answer: "❌ Xato"
-          }))
+        // 5 ta Gemini model parallel
+        const promises = GEMINI_MODELS.map(m =>
+          geminiCall(m.id, sysMsg, question, env, 500)
+            .then(r => ({
+              emoji: m.emoji,
+              name: m.name,
+              answer: r.error ? ("❌ " + r.error) : r.text
+            }))
         );
 
         const answers = await Promise.all(promises);
 
+        // Rais xulosasi
         let judgePrompt;
         if (lang === "ru") {
-          judgePrompt = `Вопрос: "${question}"\n\n5 AI ответили:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nТы председатель. Напиши общий вывод на РУССКОМ (5-7 предложений).`;
+          judgePrompt = `Вопрос: "${question}"\n\nОтветы:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nНапиши общий вывод на РУССКОМ (5-7 предложений).`;
         } else if (lang === "en") {
-          judgePrompt = `Question: "${question}"\n\n5 AIs answered:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nYou are chairman. Write general conclusion in ENGLISH (5-7 sentences).`;
+          judgePrompt = `Question: "${question}"\n\nAnswers:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nWrite general conclusion in ENGLISH (5-7 sentences).`;
         } else {
-          judgePrompt = `Savol: "${question}"\n\n5 ta AI javob berdi:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nSen rais. Umumiy xulosa yoz O'ZBEK TILIDA (5-7 gap).`;
+          judgePrompt = `Savol: "${question}"\n\nJavoblar:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nUmumiy xulosa yoz O'ZBEK TILIDA (5-7 gap).`;
         }
 
-        const judgeRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "qwen/qwen3.6-plus-preview:free",
-            messages: [
-              { role: "system", content: judgeSys },
-              { role: "user", content: judgePrompt }
-            ],
-            max_tokens: 700,
-            temperature: 0.7
-          })
-        });
-        const jd = await judgeRes.json();
-        const conclusion = jd.choices?.[0]?.message?.content || "Xulosa olinmadi";
+        const judgeResult = await geminiCall("gemini-2.0-flash-exp", judgeSys, judgePrompt, env, 700);
+        const conclusion = judgeResult.error
+          ? ("❌ " + judgeResult.error)
+          : judgeResult.text;
 
         return json({ answers, conclusion });
       } catch (e) {
@@ -347,7 +247,7 @@ export default {
     // ============================================================
     // 🏠 HEALTH CHECK
     // ============================================================
-    return new Response("Blip AI v3.2 ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐 (uz/ru/en)\n/webhook", {
+    return new Response("Blip AI v4.0 (Gemini) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
   }
