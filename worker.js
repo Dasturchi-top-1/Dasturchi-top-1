@@ -1,5 +1,5 @@
 // ============================================================
-// ⚡ BLIP AI WORKER v4.0 — Google Gemini API
+// ⚡ BLIP AI WORKER v4.1 — Google Gemini (tuzatilgan model ID)
 // ============================================================
 
 const SYSTEM = `Sen Blip Agent — Telegram bot orqali ishlovchi AI yordamchisan.
@@ -22,14 +22,14 @@ const JUDGE_SYSTEM = {
 const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
 
 // ============================================================
-// 🌟 GEMINI MODELLARI
+// 🌟 GEMINI MODELLARI (TUZATILGAN)
 // ============================================================
 const GEMINI_MODELS = [
-  { id: "gemini-2.0-flash-exp", name: "Gemini 2.0", emoji: "🧠" },
-  { id: "gemini-1.5-flash", name: "Gemini Flash", emoji: "⚡" },
-  { id: "gemini-1.5-flash-8b", name: "Gemini 8B", emoji: "🌟" },
-  { id: "gemini-1.5-pro", name: "Gemini Pro", emoji: "💎" },
-  { id: "gemini-2.0-flash-thinking-exp-1219", name: "Gemini Think", emoji: "🤔" }
+  { id: "gemini-2.0-flash", name: "Gemini 2.0", emoji: "🧠" },
+  { id: "gemini-2.0-flash-lite", name: "Gemini Lite", emoji: "⚡" },
+  { id: "gemini-2.5-flash", name: "Gemini 2.5", emoji: "🌟" },
+  { id: "gemini-2.5-pro", name: "Gemini 2.5 Pro", emoji: "💎" },
+  { id: "gemini-2.0-flash", name: "Gemini Flash", emoji: "🚀" }
 ];
 
 // ============================================================
@@ -53,9 +53,7 @@ async function geminiCall(model, sysMsg, userMsg, env, maxTokens = 800) {
       })
     });
     const d = await r.json();
-    if (d.error) {
-      return { error: d.error.message || "Xato" };
-    }
+    if (d.error) return { error: d.error.message || "Xato" };
     const text = d.candidates?.[0]?.content?.parts?.[0]?.text;
     return { text: text || "Javob yo'q" };
   } catch (e) {
@@ -87,19 +85,18 @@ async function sendTyping(chatId, env) {
 }
 
 // ============================================================
-// 🤖 AGENT LOOP (Telegram uchun)
+// 🤖 AGENT LOOP (Telegram)
 // ============================================================
 async function agentLoop(userMsg, chatId, env) {
   const key = "hist:" + chatId;
   let history = JSON.parse(await env.AGENT_KV.get(key) || "[]");
   if (!history.length) history.push({ role: "system", content: SYSTEM });
 
-  // Kontekst
   const context = history.slice(-10).map(h =>
     (h.role === "user" ? "Foydalanuvchi: " : "AI: ") + h.content
   ).join("\n") + "\nFoydalanuvchi: " + userMsg;
 
-  const result = await geminiCall("gemini-2.0-flash-exp", SYSTEM, context, env, 800);
+  const result = await geminiCall("gemini-2.0-flash", SYSTEM, context, env, 800);
   const reply = result.error ? ("❌ " + result.error) : result.text;
 
   history.push({ role: "user", content: userMsg });
@@ -151,14 +148,12 @@ export default {
         if (parol !== COUNCIL_PAROL) {
           return json({ error: "🔐 Parol xato! Faqat Blip uchun." }, 403);
         }
-
         if (!question) return json({ error: "Savol yo'q" }, 400);
         if (question.length > 2000) return json({ error: "Savol juda uzun" }, 400);
 
         const sysMsg = COUNCIL_SYSTEM[lang] || COUNCIL_SYSTEM.uz;
         const judgeSys = JUDGE_SYSTEM[lang] || JUDGE_SYSTEM.uz;
 
-        // 5 ta Gemini model parallel
         const promises = GEMINI_MODELS.map(m =>
           geminiCall(m.id, sysMsg, question, env, 500)
             .then(r => ({
@@ -170,7 +165,6 @@ export default {
 
         const answers = await Promise.all(promises);
 
-        // Rais xulosasi
         let judgePrompt;
         if (lang === "ru") {
           judgePrompt = `Вопрос: "${question}"\n\nОтветы:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nНапиши общий вывод на РУССКОМ (5-7 предложений).`;
@@ -180,10 +174,8 @@ export default {
           judgePrompt = `Savol: "${question}"\n\nJavoblar:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nUmumiy xulosa yoz O'ZBEK TILIDA (5-7 gap).`;
         }
 
-        const judgeResult = await geminiCall("gemini-2.0-flash-exp", judgeSys, judgePrompt, env, 700);
-        const conclusion = judgeResult.error
-          ? ("❌ " + judgeResult.error)
-          : judgeResult.text;
+        const judgeResult = await geminiCall("gemini-2.0-flash", judgeSys, judgePrompt, env, 700);
+        const conclusion = judgeResult.error ? ("❌ " + judgeResult.error) : judgeResult.text;
 
         return json({ answers, conclusion });
       } catch (e) {
@@ -220,8 +212,7 @@ export default {
       const name = msg.chat.first_name || "Blip";
 
       if (text === "/start") {
-        await sendTg(chatId,
-          `Salom ${name}! 👋\n\nMen Blip Agent — AI yordamching.\n\n/reset — tozalash\n/help — yordam`, env);
+        await sendTg(chatId, `Salom ${name}! 👋\n\nMen Blip Agent — AI yordamching.\n\n/reset — tozalash\n/help — yordam`, env);
         return new Response("ok");
       }
       if (text === "/reset") {
@@ -247,7 +238,7 @@ export default {
     // ============================================================
     // 🏠 HEALTH CHECK
     // ============================================================
-    return new Response("Blip AI v4.0 (Gemini) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
+    return new Response("Blip AI v4.1 (Gemini) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
   }
