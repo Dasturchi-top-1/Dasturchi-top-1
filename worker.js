@@ -5,9 +5,9 @@
       try {
         const body = await request.json();
         const parol = (body.parol || "").trim();
-        if (parol !== COUNCIL_PAROL) {
-          return json({ error: "🔐 Parol xato!" }, 403);
-        }
+       // if (parol !== COUNCIL_PAROL) {
+        //  return json({ error: "🔐 Parol xato!" }, 403);
+      //  }
 
         // Yangi mavzu
         if (body.action === "topic") {
