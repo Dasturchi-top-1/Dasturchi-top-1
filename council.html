@@ -18,18 +18,37 @@ body{
     radial-gradient(circle at 15% 15%,rgba(99,102,241,.18),transparent 40%),
     radial-gradient(circle at 85% 85%,rgba(168,85,247,.18),transparent 40%);
   background-attachment:fixed;
+  overflow-x:hidden;
 }
-.c{max-width:900px;margin:auto}
+#particles{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;
+}
+.c{max-width:900px;margin:auto;position:relative;z-index:1}
 .screen{display:none}
 .screen.on{display:block;animation:fade .4s ease}
 @keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== LOGIN ===== */
 .login-wrap{min-height:85vh;display:flex;align-items:center;justify-content:center}
 .login-box{
   background:var(--card);border:1px solid var(--brd);border-radius:20px;
   padding:32px 24px;width:100%;max-width:380px;
-  box-shadow:0 20px 60px rgba(99,102,241,.3);
+  position:relative;overflow:hidden;
+  animation:pulseBox 4s ease-in-out infinite;
 }
-.login-logo{text-align:center;font-size:52px;margin-bottom:12px}
+@keyframes pulseBox{
+  0%,100%{box-shadow:0 20px 60px rgba(99,102,241,.3)}
+  50%{box-shadow:0 20px 80px rgba(168,85,247,.5)}
+}
+.login-logo{
+  text-align:center;font-size:52px;margin-bottom:12px;
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{transform:translateY(0) rotate(-5deg)}
+  50%{transform:translateY(-8px) rotate(5deg)}
+}
 .login-box h1{
   text-align:center;font-size:24px;font-weight:900;margin-bottom:6px;
   background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);
@@ -39,21 +58,30 @@ body{
 }
 @keyframes grad{0%,100%{background-position:0%}50%{background-position:100%}}
 .login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
-.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.lbl{
+  display:block;font-size:11px;color:var(--muted);margin-bottom:6px;
+  font-weight:700;text-transform:uppercase;letter-spacing:1px
+}
 .inp{
   width:100%;padding:13px 15px;border-radius:12px;
   border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
   font-size:15px;outline:none;margin-bottom:14px;
   transition:all .25s;font-family:inherit
 }
-.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.inp:focus{
+  border-color:var(--acc);
+  box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)
+}
 .inp::placeholder{color:var(--muted);opacity:.6}
 .btn-login{
   width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
   background:linear-gradient(135deg,var(--acc),var(--acc2));
   color:#fff;font-weight:800;font-size:15px;transition:all .25s
 }
-.btn-login:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(99,102,241,.4)}
+.btn-login:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)
+}
 .err{
   background:rgba(239,68,68,.15);border:1px solid var(--red);
   color:var(--red);padding:10px;border-radius:10px;
@@ -65,15 +93,24 @@ body{
   text-align:center;font-size:11px;color:var(--muted);
   margin-top:18px;padding-top:14px;border-top:1px solid var(--brd)
 }
-.top{display:flex;justify-content:space-between;align-items:center;
-  padding:10px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:20px}
-.brand{font-weight:800;font-size:16px;
+
+/* ===== COUNCIL ===== */
+.top{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:20px
+}
+.brand{
+  font-weight:800;font-size:16px;
   background:linear-gradient(90deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent
+}
 .user-tag{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
 .user-tag b{color:var(--acc)}
-.logout-b{background:transparent;border:1px solid var(--brd);color:var(--muted);
-  padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600}
+.logout-b{
+  background:transparent;border:1px solid var(--brd);color:var(--muted);
+  padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;
+  transition:all .25s
+}
 .logout-b:hover{border-color:var(--red);color:var(--red)}
 .hero{text-align:center;padding:24px 0 20px}
 .hero h1{
@@ -85,35 +122,66 @@ body{
 }
 .hero p{color:var(--muted);font-size:13px;margin-top:8px}
 .badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
-.badge{font-size:10px;padding:4px 10px;border-radius:999px;
-  background:var(--card);border:1px solid var(--brd);color:var(--muted);font-weight:600}
-.ask-box{background:var(--card);border:1px solid var(--brd);
-  border-radius:16px;padding:16px;margin-bottom:20px}
+.badge{
+  font-size:10px;padding:4px 10px;border-radius:999px;
+  background:var(--card);border:1px solid var(--brd);
+  color:var(--muted);font-weight:600;transition:all .3s
+}
+.badge:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-2px)}
+.ask-box{
+  background:var(--card);border:1px solid var(--brd);
+  border-radius:16px;padding:16px;margin-bottom:20px
+}
 .ask-inp{
   width:100%;padding:14px;border-radius:12px;
   border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
   font-size:15px;font-family:inherit;outline:none;
-  resize:vertical;min-height:90px;line-height:1.5
+  resize:vertical;min-height:90px;line-height:1.5;transition:all .25s
 }
-.ask-inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.ask-inp:focus{
+  border-color:var(--acc);
+  box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)
+}
 .ask-inp::placeholder{color:var(--muted);opacity:.6}
 .ask-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .ex-list{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.ex{font-size:11px;padding:6px 12px;border-radius:999px;
+.ex{
+  font-size:11px;padding:6px 12px;border-radius:999px;
   background:var(--bg);border:1px solid var(--brd);color:var(--muted);
-  cursor:pointer;font-weight:600}
+  cursor:pointer;font-weight:600;transition:all .25s
+}
 .ex:hover{border-color:var(--acc);color:var(--acc)}
-.ask-btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;
+.ask-btn{
+  padding:12px 24px;border:none;border-radius:12px;cursor:pointer;
   background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff;font-weight:800;font-size:14px;min-width:150px}
+  color:#fff;font-weight:800;font-size:14px;min-width:150px;transition:all .25s
+}
+.ask-btn:hover:not(:disabled){
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)
+}
 .ask-btn:disabled{opacity:.55;cursor:not-allowed}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;margin-bottom:20px}
-.ai-card{background:var(--card);border:1px solid var(--brd);
-  border-radius:14px;padding:16px;position:relative;overflow:hidden;
-  animation:fade .4s ease}
-.ai-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;
-  background:linear-gradient(180deg,var(--acc),var(--acc2))}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;margin-bottom:20px
+}
+.ai-card{
+  background:linear-gradient(145deg,#0f0f22,#15152d);
+  border:1px solid var(--brd);border-radius:14px;padding:16px;
+  position:relative;overflow:hidden;animation:fade .4s ease;
+  transition:all .35s ease
+}
+.ai-card:hover{
+  transform:translateY(-4px) scale(1.02);
+  border-color:var(--acc);
+  box-shadow:0 20px 40px rgba(99,102,241,.35),0 0 30px rgba(168,85,247,.25)
+}
+.ai-card::before{
+  content:'';position:absolute;top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(180deg,var(--acc),var(--acc2));
+  box-shadow:0 0 20px rgba(99,102,241,.5);
+  transition:all .35s ease
+}
 .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .ai-emoji{font-size:22px}
 .ai-name{font-weight:700;font-size:13px;color:var(--acc)}
@@ -121,18 +189,29 @@ body{
 .council-result{
   background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));
   border:2px solid var(--gold);border-radius:16px;padding:22px;
-  animation:fade .6s ease
+  animation:fade .6s ease;position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(251,191,36,.2)
 }
-.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.council-result::after{
+  content:'';position:absolute;inset:0;border-radius:16px;
+  background:linear-gradient(135deg,transparent,rgba(251,191,36,.1),transparent);
+  pointer-events:none;animation:shine 3s ease-in-out infinite
+}
+@keyframes shine{0%,100%{opacity:0}50%{opacity:1}}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;position:relative;z-index:1}
 .c-title{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:1px}
-.c-text{font-size:14px;line-height:1.8;white-space:pre-wrap}
+.c-text{font-size:14px;line-height:1.8;white-space:pre-wrap;position:relative;z-index:1}
 .loading{text-align:center;padding:36px;color:var(--muted);font-size:14px}
 .loading::after{content:'';animation:dots 1.5s infinite}
 @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-.footer{text-align:center;padding:24px 0;color:var(--muted);
-  font-size:11px;border-top:1px solid var(--brd);margin-top:30px}
-.footer b{background:linear-gradient(90deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer{
+  text-align:center;padding:24px 0;color:var(--muted);
+  font-size:11px;border-top:1px solid var(--brd);margin-top:30px
+}
+.footer b{
+  background:linear-gradient(90deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent
+}
 @media(max-width:600px){
   .hero h1{font-size:26px}
   .grid{grid-template-columns:1fr}
@@ -195,8 +274,63 @@ body{
 </div>
 
 </div>
+
 <script>
-// FOYDALANUVCHILAR
+// ===== PARTICLE FON =====
+(function(){
+  const canvas = document.createElement('canvas');
+  canvas.id = 'particles';
+  document.body.insertBefore(canvas, document.body.firstChild);
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  const count = 40;
+  for(let i = 0; i < count; i++){
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
+      r: Math.random() * 2 + 1,
+      c: Math.random() > 0.5 ? '99,102,241' : '168,85,247'
+    });
+  }
+  function draw(){
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.x < 0 || p.x > W) p.vx *= -1;
+      if(p.y < 0 || p.y > H) p.vy *= -1;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.c + ',0.5)';
+      ctx.fill();
+    });
+    particles.forEach((a, i) => {
+      particles.slice(i+1).forEach(b => {
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if(d < 120){
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.strokeStyle = 'rgba(99,102,241,' + (0.15 * (1 - d/120)) + ')';
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+// ===== FOYDALANUVCHILAR =====
 const USERS = {
   "blip": { parol: "Blipzor921324", ism: "Blip" },
   "oqituvchi": { parol: "Muallim2026", ism: "O'qituvchi" }
@@ -206,7 +340,7 @@ const KUN = 30;
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
 const AP = "Blipzor921324";
 
-// LOGIN
+// ===== LOGIN =====
 function doLogin(){
   const u = document.getElementById('user').value.trim().toLowerCase();
   const p = document.getElementById('pass').value;
@@ -247,7 +381,7 @@ function showCouncil(){
   document.getElementById('uName').textContent = localStorage.getItem('ai_ism') || 'Foydalanuvchi';
 }
 
-// AUTO LOGIN
+// ===== AUTO LOGIN =====
 window.addEventListener('DOMContentLoaded', () => {
   const u = localStorage.getItem('ai_user');
   const t = parseInt(localStorage.getItem('ai_time') || '0');
@@ -257,7 +391,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// KENGASH
+// ===== KENGASH =====
 function fill(t){ document.getElementById('q').value = t; }
 
 async function doAsk(){
@@ -310,3 +444,5 @@ function esc(s){
   }[c]));
 }
 </script>
+</body>
+      </html>
