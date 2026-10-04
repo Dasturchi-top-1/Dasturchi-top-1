@@ -109,7 +109,7 @@ const JUDGE_SYSTEM = {
   en: `You are the wise chairman of the AI Council. Analyze answers and write brief conclusion in ENGLISH (5-7 sentences).`
 };
 
-const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
+const COUNCIL_PAROL = "921324";
 const TURING_TOPICS = [
   "Hayotning ma'nosi nima?",
   "Eng yaxshi dasturlash tili qaysi?",
