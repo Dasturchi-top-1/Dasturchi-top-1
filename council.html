@@ -260,8 +260,8 @@ body{
   <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
 </div>
 
-      </div>
-      <script>
+  </div>
+  <script>
 // ============================================================
 // ⚙️ SOZLAMALAR — BU YERNI O'ZINGGA MOSLANG!
 // ============================================================
@@ -336,12 +336,11 @@ function saveUsers(u){
   localStorage.setItem('ai_users', JSON.stringify(u));
 }
 
+// ⚠️ TUZATILGAN: Har safar admin parolini yangilaydi
 function initUsers(){
   const u = getUsers();
-  if(!u[ADMIN_LOGIN]){
-    u[ADMIN_LOGIN] = { parol: ADMIN_PAROL, ism: ADMIN_ISM, rol: "admin" };
-    saveUsers(u);
-  }
+  u[ADMIN_LOGIN] = { parol: ADMIN_PAROL, ism: ADMIN_ISM, rol: "admin" };
+  saveUsers(u);
 }
 initUsers();
 
@@ -543,4 +542,4 @@ function esc(s){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
-      </script>
+  </script>
