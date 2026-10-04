@@ -34,6 +34,11 @@ body{
   0%,100%{box-shadow:0 20px 60px rgba(99,102,241,.3)}
   50%{box-shadow:0 20px 80px rgba(168,85,247,.5)}
 }
+.login-box.secret{animation:secretPulse 3s ease-in-out infinite}
+@keyframes secretPulse{
+  0%,100%{box-shadow:0 20px 60px rgba(251,191,36,.4);border-color:var(--gold)}
+  50%{box-shadow:0 20px 80px rgba(251,191,36,.7);border-color:var(--gold)}
+}
 .login-logo{
   text-align:center;font-size:52px;margin-bottom:12px;
   animation:float 3s ease-in-out infinite;
@@ -49,21 +54,14 @@ body{
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;animation:grad 4s infinite;
 }
+.login-box.secret h1{
+  background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
 @keyframes grad{0%,100%{background-position:0%}50%{background-position:100%}}
-.login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:18px}
-.tabs-login{
-  display:flex;gap:6px;margin-bottom:18px;
-  background:var(--bg);padding:4px;border-radius:12px;border:1px solid var(--brd)
-}
-.tab-login{
-  flex:1;padding:9px;border:none;border-radius:9px;cursor:pointer;
-  background:transparent;color:var(--muted);font-weight:700;font-size:13px;
-  transition:all .25s;font-family:inherit
-}
-.tab-login.on{
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff;box-shadow:0 4px 12px rgba(99,102,241,.4)
-}
+.login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
 .lbl{
   display:block;font-size:11px;color:var(--muted);margin-bottom:6px;
   font-weight:700;text-transform:uppercase;letter-spacing:1px
@@ -72,13 +70,18 @@ body{
   width:100%;padding:13px 15px;border-radius:12px;
   border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
   font-size:15px;outline:none;margin-bottom:14px;
-  transition:all .25s;font-family:inherit
+  transition:all .25s;font-family:inherit;text-align:center;
+  letter-spacing:2px
 }
 .inp:focus{
   border-color:var(--acc);
   box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)
 }
-.inp::placeholder{color:var(--muted);opacity:.6}
+.login-box.secret .inp:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(251,191,36,.2),0 0 30px rgba(251,191,36,.3)
+}
+.inp::placeholder{color:var(--muted);opacity:.6;letter-spacing:normal}
 .btn-login{
   width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
   background:linear-gradient(135deg,var(--acc),var(--acc2));
@@ -88,12 +91,26 @@ body{
   transform:translateY(-2px);
   box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)
 }
+.btn-login.gold{
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);
+  color:#1a1a1a
+}
+.btn-login.gold:hover{
+  box-shadow:0 10px 30px rgba(251,191,36,.6),0 0 40px rgba(251,191,36,.4)
+}
+.btn-back{
+  width:100%;padding:10px;border:1px solid var(--brd);border-radius:12px;
+  background:transparent;color:var(--muted);font-size:13px;font-weight:600;
+  cursor:pointer;margin-top:8px;transition:all .25s
+}
+.btn-back:hover{border-color:var(--acc);color:var(--acc)}
 .msg{
   padding:10px;border-radius:10px;font-size:13px;
   text-align:center;margin-bottom:14px;display:none
 }
 .msg.err{background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red)}
 .msg.ok{background:rgba(16,185,129,.15);border:1px solid var(--grn);color:var(--grn)}
+.msg.gold{background:rgba(251,191,36,.15);border:1px solid var(--gold);color:var(--gold)}
 .msg.on{display:block;animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .hint{
@@ -105,8 +122,11 @@ body{
 .brand{font-weight:800;font-size:16px;
   background:linear-gradient(90deg,var(--acc),var(--acc2));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand.gold{background:linear-gradient(90deg,#fbbf24,#f59e0b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .user-tag{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
 .user-tag b{color:var(--acc)}
+.user-tag b.gold{color:var(--gold)}
 .logout-b{background:transparent;border:1px solid var(--brd);color:var(--muted);
   padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;
   transition:all .25s}
@@ -118,6 +138,12 @@ body{
   background-size:400% 400%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;animation:grad 6s infinite
+}
+.hero h1.gold{
+  background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text
 }
 .hero p{color:var(--muted);font-size:13px;margin-top:8px}
 .badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
@@ -131,7 +157,7 @@ body{
   width:100%;padding:14px;border-radius:12px;
   border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
   font-size:15px;font-family:inherit;outline:none;
-  resize:vertical;min-height:90px;line-height:1.5;transition:all .25s
+  resize:vertical;min-height:90px;line-height:1.5;transition:all .25s;text-align:left;letter-spacing:normal
 }
 .ask-inp:focus{border-color:var(--acc);
   box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)}
@@ -185,6 +211,22 @@ body{
   font-size:11px;border-top:1px solid var(--brd);margin-top:30px}
 .footer b{background:linear-gradient(90deg,var(--acc),var(--acc2));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--brd);border-radius:12px;
+  padding:16px;text-align:center}
+.stat-num{font-size:28px;font-weight:900;
+  background:linear-gradient(90deg,#fbbf24,#f59e0b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}
+.user-item{background:var(--card);border:1px solid var(--brd);border-radius:12px;
+  padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.user-item.admin{border-color:var(--gold);background:linear-gradient(135deg,rgba(251,191,36,.1),transparent)}
+.user-name{font-weight:700;font-size:14px}
+.user-name span{color:var(--gold);font-size:10px;margin-left:6px;font-weight:600}
+.user-time{font-size:11px;color:var(--muted)}
+.btn-del{background:transparent;border:1px solid var(--brd);color:var(--muted);
+  padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600}
+.btn-del:hover{border-color:var(--red);color:var(--red)}
 @media(max-width:600px){
   .hero h1{font-size:26px}
   .grid{grid-template-columns:1fr}
@@ -195,37 +237,35 @@ body{
 <body>
 <div class="c">
 
+<!-- 1. LOGIN -->
 <div class="screen on" id="loginScreen">
   <div class="login-wrap">
-    <div class="login-box">
-      <div class="login-logo">🏛</div>
-      <h1>AI KENGASH</h1>
-      <p class="login-sub" id="subText">Faqat ruxsat berilgan foydalanuvchilar</p>
-
-      <div class="tabs-login">
-        <button class="tab-login on" id="tabKirish" onclick="setMode('kirish')">🔐 Kirish</button>
-        <button class="tab-login" id="tabRoyxat" onclick="setMode('royxat')">📝 Ro'yxat</button>
-      </div>
+    <div class="login-box" id="loginBox">
+      <div class="login-logo" id="loginIcon">🏛</div>
+      <h1 id="loginTitle">AI KENGASH</h1>
+      <p class="login-sub" id="loginSub">Ismingizni kiriting</p>
 
       <div class="msg" id="msg"></div>
 
-      <label class="lbl">👤 Login</label>
-      <input class="inp" type="text" id="user" placeholder="username" autocomplete="username" autofocus>
-
-      <label class="lbl">🔒 Parol</label>
-      <input class="inp" type="password" id="pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doSubmit()">
-
-      <div id="extraPass" style="display:none">
-        <label class="lbl">🔒 Parolni takrorlang</label>
-        <input class="inp" type="password" id="pass2" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSubmit()">
+      <div id="nameBlock">
+        <label class="lbl">👤 Ismingiz</label>
+        <input class="inp" type="text" id="user" placeholder="Ismingizni yozing" autocomplete="off" autofocus onkeydown="if(event.key==='Enter')checkName()">
+        <button class="btn-login" onclick="checkName()">🚀 KIRISH</button>
+        <div class="hint">🔓 Parol kerak emas</div>
       </div>
 
-      <button class="btn-login" id="btnMain" onclick="doSubmit()">🚀 KIRISH</button>
-      <div class="hint">🔐 30 kun eslab qoladi</div>
+      <div id="codeBlock" style="display:none">
+        <label class="lbl">🔐 Maxsus kod</label>
+        <input class="inp" type="password" id="code" placeholder="• • • • • •" autocomplete="off" onkeydown="if(event.key==='Enter')checkCode()">
+        <button class="btn-login gold" onclick="checkCode()">👑 ADMIN KIRISH</button>
+        <button class="btn-back" onclick="backToName()">← Orqaga</button>
+        <div class="hint">🔐 Faqat admin uchun</div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- 2. COUNCIL -->
 <div class="screen" id="councilScreen">
   <div class="top">
     <div class="brand">⚡ Blip AI</div>
@@ -260,12 +300,31 @@ body{
   <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
 </div>
 
-                                  </div>
-                                  <script>
+<!-- 3. ADMIN -->
+<div class="screen" id="adminScreen">
+  <div class="top">
+    <div class="brand gold">👑 Admin Panel</div>
+    <div class="user-tag">
+      <b class="gold">Blip</b>
+      <button class="logout-b" onclick="doLogout()">🚪 Chiqish</button>
+    </div>
+  </div>
+  <div class="hero">
+    <h1 class="gold">👑 ADMIN PANEL</h1>
+    <p>Foydalanuvchilar va statistika</p>
+  </div>
+  <div class="admin-grid" id="statsBox"></div>
+  <h2 style="font-size:15px;margin-bottom:12px;color:var(--muted);letter-spacing:1px">👥 FOYDALANUVCHILAR</h2>
+  <div id="usersBox"></div>
+  <div class="footer">⚡ <b>Blip AI</b> · 2026 · Admin</div>
+</div>
+
+  </div>
+  <script>
 // ============================================================
 // 🔄 VERSIYA — HAR SAFAR O'ZGARTIRSANG, KESH TOZALANADI
 // ============================================================
-const VERSION = "1.0";  // ← Har safar yangilaganda: 1.1, 1.2, 1.3...
+const VERSION = "1.0";
 
 if(localStorage.getItem('ai_version') !== VERSION){
   localStorage.removeItem('ai_users');
@@ -278,10 +337,9 @@ if(localStorage.getItem('ai_version') !== VERSION){
 // ============================================================
 // ⚙️ SOZLAMALAR — BU YERNI O'ZINGGA MOSLANG!
 // ============================================================
-const ADMIN_LOGIN = "Blip";
-const ADMIN_PAROL = "921324";
-const ADMIN_ISM = "Salohiddin";
-const ROYXAT_OCHIQ = true;
+const ADMIN_ISM = "Blip";                    // ← Maxsus ism (kichik harf!)
+const ADMIN_KOD = "921324";           // ← Maxsus kod
+const ADMIN_DISPLAY = "Blip";                // ← Ko'rinadigan ism
 
 const KUN = 30;
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
@@ -342,39 +400,11 @@ const AP = "Blipzor921324";
 // ============================================================
 function getUsers(){
   try {
-    return JSON.parse(localStorage.getItem('ai_users') || '{}');
-  } catch { return {}; }
+    return JSON.parse(localStorage.getItem('ai_users') || '[]');
+  } catch { return []; }
 }
 function saveUsers(u){
   localStorage.setItem('ai_users', JSON.stringify(u));
-}
-
-// Admin har doim yangilanadi
-function initUsers(){
-  const u = getUsers();
-  u[ADMIN_LOGIN] = { parol: ADMIN_PAROL, ism: ADMIN_ISM, rol: "admin" };
-  saveUsers(u);
-}
-initUsers();
-
-// ============================================================
-// 🔄 MODE
-// ============================================================
-let mode = "kirish";
-
-function setMode(m){
-  mode = m;
-  document.getElementById('tabKirish').classList.toggle('on', m === 'kirish');
-  document.getElementById('tabRoyxat').classList.toggle('on', m === 'royxat');
-  document.getElementById('subText').textContent = m === 'kirish'
-    ? "Faqat ruxsat berilgan foydalanuvchilar"
-    : "Yangi akkaunt yarating";
-  document.getElementById('btnMain').textContent = m === 'kirish'
-    ? "🚀 KIRISH" : "📝 RO'YXATDAN O'TISH";
-  document.getElementById('extraPass').style.display = m === 'royxat' ? 'block' : 'none';
-  document.getElementById('msg').classList.remove('on');
-  document.getElementById('pass').value = '';
-  document.getElementById('pass2').value = '';
 }
 
 // ============================================================
@@ -384,91 +414,104 @@ function showMsg(text, type){
   const m = document.getElementById('msg');
   m.textContent = text;
   m.className = 'msg ' + type + ' on';
+  setTimeout(() => m.classList.remove('on'), 3000);
 }
 
 // ============================================================
-// 🚀 ASOSIY
+// 1️⃣ ISMNI TEKSHIRISH
 // ============================================================
-function doSubmit(){
-  if(mode === 'kirish') doLogin();
-  else doRegister();
-}
+function checkName(){
+  const name = document.getElementById('user').value.trim();
+  const low = name.toLowerCase();
 
-// ============================================================
-// 🔐 LOGIN
-// ============================================================
-function doLogin(){
-  const u = document.getElementById('user').value.trim().toLowerCase();
-  const p = document.getElementById('pass').value;
-
-  if(!u || !p){
-    showMsg("❌ Barcha maydonlarni to'ldiring!", "err");
+  if(!name){
+    showMsg("❌ Ismingizni kiriting!", "err");
     return;
   }
 
+  // 🔐 Agar "blip" bo'lsa — maxsus kod oynasiga o'tish
+  if(low === ADMIN_ISM){
+    document.getElementById('loginBox').classList.add('secret');
+    document.getElementById('loginIcon').textContent = '👑';
+    document.getElementById('loginTitle').textContent = 'MAXSUS KIRISH';
+    document.getElementById('loginSub').textContent = 'Faqat admin uchun';
+    document.getElementById('nameBlock').style.display = 'none';
+    document.getElementById('codeBlock').style.display = 'block';
+    document.getElementById('code').value = '';
+    document.getElementById('code').focus();
+    document.getElementById('msg').classList.remove('on');
+    return;
+  }
+
+  // ✅ Oddiy foydalanuvchi
+  if(name.length < 2){
+    showMsg("❌ Ism kamida 2 belgi!", "err");
+    return;
+  }
+
+  // Foydalanuvchini saqlash
   const users = getUsers();
-  const user = users[u];
-
-  if(!user || user.parol !== p){
-    showMsg("❌ Login yoki parol xato!", "err");
-    document.getElementById('pass').value = '';
-    return;
+  const existing = users.find(u => u.ism.toLowerCase() === low);
+  if(!existing){
+    users.push({ ism: name, time: Date.now(), rol: "user" });
+    saveUsers(users);
   }
 
-  localStorage.setItem('ai_user', u);
-  localStorage.setItem('ai_ism', user.ism);
+  // Council'ga o'tish
+  localStorage.setItem('ai_user', name);
+  localStorage.setItem('ai_ism', name);
   localStorage.setItem('ai_time', Date.now());
   showCouncil();
 }
 
 // ============================================================
-// 📝 RO'YXATDAN O'TISH
+// 2️⃣ KODNI TEKSHIRISH
 // ============================================================
-function doRegister(){
-  if(!ROYXAT_OCHIQ){
-    showMsg("❌ Ro'yxatdan o'tish yopiq!", "err");
+function checkCode(){
+  const code = document.getElementById('code').value;
+
+  if(!code){
+    showMsg("❌ Kodni kiriting!", "err");
     return;
   }
 
-  const u = document.getElementById('user').value.trim().toLowerCase();
-  const p = document.getElementById('pass').value;
-  const p2 = document.getElementById('pass2').value;
+  if(code === ADMIN_KOD){
+    // ✅ To'g'ri kod — admin panel
+    localStorage.setItem('ai_user', ADMIN_DISPLAY);
+    localStorage.setItem('ai_ism', ADMIN_DISPLAY);
+    localStorage.setItem('ai_time', Date.now());
+    localStorage.setItem('ai_admin', '1');
 
-  if(!u || !p || !p2){
-    showMsg("❌ Barcha maydonlarni to'ldiring!", "err");
-    return;
-  }
-  if(u.length < 3){
-    showMsg("❌ Login kamida 3 belgi!", "err");
-    return;
-  }
-  if(p.length < 6){
-    showMsg("❌ Parol kamida 6 belgi!", "err");
-    return;
-  }
-  if(p !== p2){
-    showMsg("❌ Parollar mos emas!", "err");
-    document.getElementById('pass2').value = '';
-    return;
-  }
+    // Admin ro'yxatida
+    const users = getUsers();
+    const existing = users.find(u => u.ism.toLowerCase() === ADMIN_ISM);
+    if(!existing){
+      users.push({ ism: ADMIN_DISPLAY, time: Date.now(), rol: "admin" });
+      saveUsers(users);
+    }
 
-  const users = getUsers();
-  if(users[u]){
-    showMsg("❌ Bu login band!", "err");
-    return;
+    showAdmin();
+  } else {
+    // ❌ Xato kod
+    showMsg("❌ Kod xato! Faqat admin kiradi.", "err");
+    document.getElementById('code').value = '';
   }
+}
 
-  users[u] = { parol: p, ism: u, rol: "user" };
-  saveUsers(users);
-
-  showMsg("✅ Ro'yxatdan o'tdingiz! Endi kiring.", "ok");
-
-  setTimeout(() => {
-    setMode('kirish');
-    document.getElementById('user').value = u;
-    document.getElementById('pass').value = '';
-    document.getElementById('pass').focus();
-  }, 1500);
+// ============================================================
+// 3️⃣ ORQAGA
+// ============================================================
+function backToName(){
+  document.getElementById('loginBox').classList.remove('secret');
+  document.getElementById('loginIcon').textContent = '🏛';
+  document.getElementById('loginTitle').textContent = 'AI KENGASH';
+  document.getElementById('loginSub').textContent = 'Ismingizni kiriting';
+  document.getElementById('nameBlock').style.display = 'block';
+  document.getElementById('codeBlock').style.display = 'none';
+  document.getElementById('user').value = '';
+  document.getElementById('code').value = '';
+  document.getElementById('msg').classList.remove('on');
+  document.getElementById('user').focus();
 }
 
 // ============================================================
@@ -479,13 +522,84 @@ function doLogout(){
   localStorage.removeItem('ai_user');
   localStorage.removeItem('ai_ism');
   localStorage.removeItem('ai_time');
+  localStorage.removeItem('ai_admin');
   location.reload();
 }
 
+// ============================================================
+// 🏛 COUNCIL KO'RSATISH
+// ============================================================
 function showCouncil(){
   document.getElementById('loginScreen').classList.remove('on');
+  document.getElementById('adminScreen').classList.remove('on');
   document.getElementById('councilScreen').classList.add('on');
   document.getElementById('uName').textContent = localStorage.getItem('ai_ism') || 'Foydalanuvchi';
+}
+
+// ============================================================
+// 👑 ADMIN PANEL
+// ============================================================
+function showAdmin(){
+  document.getElementById('loginScreen').classList.remove('on');
+  document.getElementById('councilScreen').classList.remove('on');
+  document.getElementById('adminScreen').classList.add('on');
+  renderAdmin();
+}
+
+function renderAdmin(){
+  const users = getUsers();
+  const total = users.length;
+
+  // Statistika
+  document.getElementById('statsBox').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-num">${total}</div>
+      <div class="stat-lbl">👥 FOYDALANUVCHILAR</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">6</div>
+      <div class="stat-lbl">🤖 AI MODELLAR</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">∞</div>
+      <div class="stat-lbl">💬 SAVOLLAR</div>
+    </div>
+  `;
+
+  // Foydalanuvchilar
+  const box = document.getElementById('usersBox');
+  if(users.length === 0){
+    box.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Hozircha foydalanuvchi yo\'q</div>';
+    return;
+  }
+
+  // Oxirgi birinchi
+  const sorted = [...users].sort((a, b) => (b.time || 0) - (a.time || 0));
+
+  box.innerHTML = sorted.map((u, i) => {
+    const isAdmin = u.rol === 'admin';
+    const time = u.time ? new Date(u.time).toLocaleString('uz-UZ') : '—';
+    return `
+      <div class="user-item ${isAdmin ? 'admin' : ''}">
+        <div>
+          <div class="user-name">
+            ${esc(u.ism)}
+            ${isAdmin ? '<span>👑 ADMIN</span>' : ''}
+          </div>
+          <div class="user-time">🕐 ${time}</div>
+        </div>
+        ${!isAdmin ? `<button class="btn-del" onclick="delUser('${esc(u.ism)}')">🗑️</button>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function delUser(name){
+  if(!confirm(`"${name}" o'chirilsinmi?`)) return;
+  let users = getUsers();
+  users = users.filter(u => u.ism !== name);
+  saveUsers(users);
+  renderAdmin();
 }
 
 // ============================================================
@@ -494,10 +608,12 @@ function showCouncil(){
 window.addEventListener('DOMContentLoaded', () => {
   const u = localStorage.getItem('ai_user');
   const t = parseInt(localStorage.getItem('ai_time') || '0');
+  const isAdmin = localStorage.getItem('ai_admin') === '1';
   const limit = KUN * 24 * 3600 * 1000;
-  const users = getUsers();
-  if(u && users[u] && (Date.now() - t) < limit){
-    showCouncil();
+
+  if(u && (Date.now() - t) < limit){
+    if(isAdmin) showAdmin();
+    else showCouncil();
   }
 });
 
