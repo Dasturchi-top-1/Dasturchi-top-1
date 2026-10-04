@@ -261,9 +261,9 @@ if (path === "/dream" && request.method === "POST") {
     const parol = (body.parol || "").trim();
     const dream = (body.dream || "").trim();
 
-    if (parol !== COUNCIL_PAROL) {
-      return json({ error: "🔐 Parol xato!" }, 403);
-    }
+    //if (parol !== COUNCIL_PAROL) {
+     // return json({ error: "🔐 Parol xato!" }, 403);
+   // }
     if (!dream) return json({ error: "Tush matni yo'q" }, 400);
     if (dream.length > 2000) return json({ error: "Tush juda uzun" }, 400);
 
