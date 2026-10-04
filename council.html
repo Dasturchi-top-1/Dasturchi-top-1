@@ -24,6 +24,25 @@ body{
 .screen{display:none}
 .screen.on{display:block;animation:fade .4s ease}
 @keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+/* LANG SELECTOR */
+.lang-top{
+  position:fixed;top:12px;right:12px;z-index:100;
+  display:flex;gap:4px;background:rgba(15,15,34,.9);
+  padding:4px;border-radius:12px;border:1px solid var(--brd);
+  backdrop-filter:blur(10px)
+}
+.lang-btn{
+  padding:6px 10px;border:none;border-radius:8px;cursor:pointer;
+  background:transparent;color:var(--muted);font-weight:700;
+  font-size:12px;transition:all .2s;font-family:inherit
+}
+.lang-btn:hover{color:var(--text)}
+.lang-btn.on{
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.4)
+}
+
 .login-wrap{min-height:85vh;display:flex;align-items:center;justify-content:center}
 .login-box{
   background:var(--card);border:1px solid var(--brd);border-radius:20px;
@@ -230,10 +249,21 @@ body{
   .hero h1{font-size:26px}
   .grid{grid-template-columns:1fr}
   .login-box{padding:26px 20px}
+  .lang-top{top:8px;right:8px}
+  .lang-btn{padding:5px 8px;font-size:11px}
 }
 </style>
 </head>
 <body>
+
+<!-- LANG SELECTOR -->
+<div class="lang-top">
+  <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿 UZ</button>
+  <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺 RU</button>
+  <button class="lang-btn" id="langEN" onclick="setLang('en')">🇬🇧 EN</button>
+  <button class="lang-btn" id="langTJ" onclick="setLang('tj')">🇹🇯 TJ</button>
+</div>
+
 <div class="c">
 
 <div class="screen on" id="loginScreen">
@@ -246,18 +276,18 @@ body{
       <div class="msg" id="msg"></div>
 
       <div id="nameBlock">
-        <label class="lbl">👤 Ismingiz</label>
+        <label class="lbl" id="lblName">👤 Ismingiz</label>
         <input class="inp" type="text" id="user" placeholder="Ismingizni yozing" autocomplete="off" autofocus onkeydown="if(event.key==='Enter')checkName()">
-        <button class="btn-login" onclick="checkName()">🚀 KIRISH</button>
-        <div class="hint">🔓 Parol kerak emas</div>
+        <button class="btn-login" id="btnName" onclick="checkName()">🚀 KIRISH</button>
+        <div class="hint" id="hintName">🔓 Parol kerak emas</div>
       </div>
 
       <div id="codeBlock" style="display:none">
-        <label class="lbl">🔐 Maxsus kod</label>
+        <label class="lbl" id="lblCode">🔐 Maxsus kod</label>
         <input class="inp" type="password" id="code" placeholder="• • • • • •" autocomplete="off" onkeydown="if(event.key==='Enter')checkCode()">
-        <button class="btn-login gold" onclick="checkCode()">👑 ADMIN KIRISH</button>
-        <button class="btn-back" onclick="backToName()">← Orqaga</button>
-        <div class="hint">🔐 Faqat admin uchun</div>
+        <button class="btn-login gold" id="btnCode" onclick="checkCode()">👑 ADMIN KIRISH</button>
+        <button class="btn-back" id="btnBack" onclick="backToName()">← Orqaga</button>
+        <div class="hint" id="hintCode">🔐 Faqat admin uchun</div>
       </div>
     </div>
   </div>
@@ -268,12 +298,12 @@ body{
     <div class="brand">⚡ Blip AI</div>
     <div class="user-tag">
       👤 <b id="uName">...</b>
-      <button class="logout-b" onclick="doLogout()">🚪 Chiqish</button>
+      <button class="logout-b" id="btnLogout1" onclick="doLogout()">🚪 Chiqish</button>
     </div>
   </div>
   <div class="hero">
-    <h1>🏛 AI KENGASH</h1>
-    <p>Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
+    <h1 id="heroTitle">🏛 AI KENGASH</h1>
+    <p id="heroSub">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
     <div class="badges">
       <span class="badge">🌟 Gemini 3.8</span>
       <span class="badge">🧠 Gemini 3.5</span>
@@ -286,15 +316,15 @@ body{
     <textarea class="ask-inp" id="q" placeholder="Savolingizni yozing..."></textarea>
     <div class="ask-row">
       <div class="ex-list">
-        <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">💭 Hayot</span>
-        <span class="ex" onclick="fill('Kelajakda AI qanday bo\'ladi?')">🤖 AI</span>
-        <span class="ex" onclick="fill('13 yoshda qanday dasturchi bo\'lish mumkin?')">💻 Dasturchi</span>
+        <span class="ex" id="ex1" onclick="fill(EXAMPLES[LANG][0])">💭 Hayot</span>
+        <span class="ex" id="ex2" onclick="fill(EXAMPLES[LANG][1])">🤖 AI</span>
+        <span class="ex" id="ex3" onclick="fill(EXAMPLES[LANG][2])">💻 Dasturchi</span>
       </div>
       <button class="ask-btn" id="askB" onclick="doAsk()">Kengashni chaqirish</button>
     </div>
   </div>
   <div id="out"></div>
-  <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
+  <div class="footer" id="footer1">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
 </div>
 
 <div class="screen" id="adminScreen">
@@ -302,26 +332,25 @@ body{
     <div class="brand gold">👑 Admin Panel</div>
     <div class="user-tag">
       <b class="gold">Blip</b>
-      <button class="logout-b" onclick="doLogout()">🚪 Chiqish</button>
+      <button class="logout-b" id="btnLogout2" onclick="doLogout()">🚪 Chiqish</button>
     </div>
   </div>
   <div class="hero">
-    <h1 class="gold">👑 ADMIN PANEL</h1>
-    <p>Foydalanuvchilar va statistika</p>
+    <h1 class="gold" id="adminTitle">👑 ADMIN PANEL</h1>
+    <p id="adminSub">Foydalanuvchilar va statistika</p>
   </div>
   <div class="admin-grid" id="statsBox"></div>
-  <h2 style="font-size:15px;margin-bottom:12px;color:var(--muted);letter-spacing:1px">👥 FOYDALANUVCHILAR</h2>
+  <h2 id="usersTitle" style="font-size:15px;margin-bottom:12px;color:var(--muted);letter-spacing:1px">👥 FOYDALANUVCHILAR</h2>
   <div id="usersBox"></div>
-  <div class="footer">⚡ <b>Blip AI</b> · 2026 · Admin</div>
+  <div class="footer" id="footer2">⚡ <b>Blip AI</b> · 2026 · Admin</div>
 </div>
 
   </div>
   <script>
 // ============================================================
-// 🔄 VERSIYA — HAR SAFAR O'ZGARTIRSANG, KESH TOZALANADI
+// 🔄 VERSIYA
 // ============================================================
-const VERSION = "5.0";
-
+const VERSION = "6.0";
 if(localStorage.getItem('ai_version') !== VERSION){
   localStorage.removeItem('ai_users');
   localStorage.removeItem('ai_user');
@@ -332,9 +361,97 @@ if(localStorage.getItem('ai_version') !== VERSION){
 }
 
 // ============================================================
-// ⚙️ SOZLAMALAR — BU YERNI O'ZINGGA MOSLANG!
+// 🌐 TILLAR
 // ============================================================
-const ADMIN_ISM = "blip";
+const T = {
+  uz: {
+    loginTitle: "AI KENGASH", loginSub: "Ismingizni kiriting",
+    lblName: "👤 Ismingiz", phName: "Ismingizni yozing",
+    btnName: "🚀 KIRISH", hintName: "🔓 Parol kerak emas",
+    secretTitle: "MAXSUS KIRISH", secretSub: "Faqat admin uchun",
+    lblCode: "🔐 Maxsus kod", btnCode: "👑 ADMIN KIRISH",
+    btnBack: "← Orqaga", hintCode: "🔐 Faqat admin uchun",
+    heroTitle: "🏛 AI KENGASH", heroSub: "Bitta savol — 5 ta AI javob — 1 ta dono xulosa",
+    askPh: "Savolingizni yozing...", askBtn: "Kengashni chaqirish",
+    asking: "⏳ Yig'ilmoqda...", thinking: "🤖 5 ta AI o'ylayapti",
+    conclusion: "KENGASH XULOSASI", logout: "🚪 Chiqish",
+    adminTitle: "👑 ADMIN PANEL", adminSub: "Foydalanuvchilar va statistika",
+    usersTitle: "👥 FOYDALANUVCHILAR", users: "👥 FOYDALANUVCHILAR",
+    models: "🤖 AI MODELLAR", questions: "💬 SAVOLLAR",
+    noUsers: "Hozircha foydalanuvchi yo'q", noName: "❌ Ismingizni kiriting!",
+    shortName: "❌ Ism kamida 2 belgi!", noCode: "❌ Kodni kiriting!",
+    wrongCode: "❌ Kod xato!", noQ: "❌ Savol yozing!",
+    logoutConfirm: "Chiqishni xohlaysizmi?", delConfirm: "o'chirilsinmi?",
+    admin: "ADMIN", examples: ["Hayotning ma'nosi nima?", "Kelajakda AI qanday bo'ladi?", "13 yoshda qanday dasturchi bo'lish mumkin?"]
+  },
+  ru: {
+    loginTitle: "AI СОВЕТ", loginSub: "Введите ваше имя",
+    lblName: "👤 Ваше имя", phName: "Введите имя",
+    btnName: "🚀 ВОЙТИ", hintName: "🔓 Пароль не нужен",
+    secretTitle: "СЕКРЕТНЫЙ ВХОД", secretSub: "Только для админа",
+    lblCode: "🔐 Секретный код", btnCode: "👑 ВХОД АДМИНА",
+    btnBack: "← Назад", hintCode: "🔐 Только для админа",
+    heroTitle: "🏛 AI СОВЕТ", heroSub: "Один вопрос — 5 AI ответов — 1 мудрый вывод",
+    askPh: "Напишите ваш вопрос...", askBtn: "Созвать совет",
+    asking: "⏳ Собирается...", thinking: "🤖 5 AI думают",
+    conclusion: "ВЫВОД СОВЕТА", logout: "🚪 Выйти",
+    adminTitle: "👑 АДМИН ПАНЕЛЬ", adminSub: "Пользователи и статистика",
+    usersTitle: "👥 ПОЛЬЗОВАТЕЛИ", users: "👥 ПОЛЬЗОВАТЕЛИ",
+    models: "🤖 AI МОДЕЛИ", questions: "💬 ВОПРОСЫ",
+    noUsers: "Пока нет пользователей", noName: "❌ Введите имя!",
+    shortName: "❌ Имя минимум 2 буквы!", noCode: "❌ Введите код!",
+    wrongCode: "❌ Неверный код!", noQ: "❌ Напишите вопрос!",
+    logoutConfirm: "Хотите выйти?", delConfirm: "удалить?",
+    admin: "АДМИН", examples: ["В чём смысл жизни?", "Каким будет AI в будущем?", "Как стать программистом в 13 лет?"]
+  },
+  en: {
+    loginTitle: "AI COUNCIL", loginSub: "Enter your name",
+    lblName: "👤 Your name", phName: "Enter your name",
+    btnName: "🚀 ENTER", hintName: "🔓 No password needed",
+    secretTitle: "SECRET ENTRY", secretSub: "Admin only",
+    lblCode: "🔐 Secret code", btnCode: "👑 ADMIN ENTRY",
+    btnBack: "← Back", hintCode: "🔐 Admin only",
+    heroTitle: "🏛 AI COUNCIL", heroSub: "One question — 5 AI answers — 1 wise conclusion",
+    askPh: "Write your question...", askBtn: "Summon the council",
+    asking: "⏳ Assembling...", thinking: "🤖 5 AIs are thinking",
+    conclusion: "COUNCIL CONCLUSION", logout: "🚪 Logout",
+    adminTitle: "👑 ADMIN PANEL", adminSub: "Users and statistics",
+    usersTitle: "👥 USERS", users: "👥 USERS",
+    models: "🤖 AI MODELS", questions: "💬 QUESTIONS",
+    noUsers: "No users yet", noName: "❌ Enter your name!",
+    shortName: "❌ Name min 2 characters!", noCode: "❌ Enter the code!",
+    wrongCode: "❌ Wrong code!", noQ: "❌ Write a question!",
+    logoutConfirm: "Want to logout?", delConfirm: "delete?",
+    admin: "ADMIN", examples: ["What is the meaning of life?", "How will AI be in the future?", "How to become a programmer at 13?"]
+  },
+  tj: {
+    loginTitle: "AI ШӮРО", loginSub: "Номи худро нависед",
+    lblName: "👤 Номи шумо", phName: "Номро нависед",
+    btnName: "🚀 ДАРОМАД", hintName: "🔓 Рамз лозим нест",
+    secretTitle: "ДАРОМАДИ МАХСУС", secretSub: "Танҳо барои админ",
+    lblCode: "🔐 Рамзи махсус", btnCode: "👑 ДАРОМАДИ АДМИН",
+    btnBack: "← Бозгашт", hintCode: "🔐 Танҳо барои админ",
+    heroTitle: "🏛 AI ШӮРО", heroSub: "Як савол — 5 ҷавоби AI — 1 хулосаи доно",
+    askPh: "Саволи худро нависед...", askBtn: "Шӯроро даъват кунед",
+    asking: "⏳ Ҷамъ мешавад...", thinking: "🤖 5 AI фикр мекунанд",
+    conclusion: "ХУЛОСАИ ШӮРО", logout: "🚪 Баромад",
+    adminTitle: "👑 ПАНЕЛИ АДМИН", adminSub: "Корбарон ва омор",
+    usersTitle: "👥 КОРБАРОН", users: "👥 КОРБАРОН",
+    models: "🤖 МОДЕЛҲОИ AI", questions: "💬 САВОЛҲО",
+    noUsers: "Ҳоло корбар нест", noName: "❌ Номро нависед!",
+    shortName: "❌ Ном ҳадди ақал 2 ҳарф!", noCode: "❌ Рамзро нависед!",
+    wrongCode: "❌ Рамз нодуруст!", noQ: "❌ Саволро нависед!",
+    logoutConfirm: "Баромадан мехоҳед?", delConfirm: "нест карда шавад?",
+    admin: "АДМИН", examples: ["Маънои ҳаёт чист?", "AI дар оянда чӣ гуна хоҳад буд?", "Дар 13-солагӣ чӣ гуна барномасоз шудан мумкин?"]
+  }
+};
+
+const EXAMPLES = { uz: T.uz.examples, ru: T.ru.examples, en: T.en.examples, tj: T.tj.examples };
+
+// ============================================================
+// ⚙️ SOZLAMALAR
+// ============================================================
+const ADMIN_ISM = "Blip";
 const ADMIN_KOD = "921324";
 const ADMIN_DISPLAY = "Blip";
 const KUN = 30;
@@ -342,8 +459,56 @@ const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
 const AP = "Blipzor921324";
 
 // ============================================================
-// PARTICLE FON
+// 🌐 TIL
 // ============================================================
+let LANG = localStorage.getItem('ai_lang') || 'uz';
+
+function setLang(l){
+  LANG = l;
+  localStorage.setItem('ai_lang', l);
+  applyLang();
+}
+
+function applyLang(){
+  const t = T[LANG];
+  document.documentElement.lang = LANG === 'tj' ? 'tg' : LANG;
+  ['uz','ru','en','tj'].forEach(l => {
+    const btn = document.getElementById('lang' + l.toUpperCase());
+    if(btn) btn.classList.toggle('on', l === LANG);
+  });
+
+  document.getElementById('loginTitle').textContent = t.loginTitle;
+  document.getElementById('loginSub').textContent = t.loginSub;
+  document.getElementById('lblName').textContent = t.lblName;
+  document.getElementById('user').placeholder = t.phName;
+  document.getElementById('btnName').textContent = t.btnName;
+  document.getElementById('hintName').textContent = t.hintName;
+  document.getElementById('lblCode').textContent = t.lblCode;
+  document.getElementById('btnCode').textContent = t.btnCode;
+  document.getElementById('btnBack').textContent = t.btnBack;
+  document.getElementById('hintCode').textContent = t.hintCode;
+
+  document.getElementById('heroTitle').textContent = t.heroTitle;
+  document.getElementById('heroSub').textContent = t.heroSub;
+  document.getElementById('q').placeholder = t.askPh;
+  document.getElementById('askB').textContent = t.askBtn;
+  document.getElementById('btnLogout1').textContent = t.logout;
+
+  document.getElementById('ex1').textContent = '💭 ' + t.examples[0].slice(0, 18);
+  document.getElementById('ex2').textContent = '🤖 ' + t.examples[1].slice(0, 18);
+  document.getElementById('ex3').textContent = '💻 ' + t.examples[2].slice(0, 18);
+
+  document.getElementById('adminTitle').textContent = t.adminTitle;
+  document.getElementById('adminSub').textContent = t.adminSub;
+  document.getElementById('usersTitle').textContent = t.usersTitle;
+  document.getElementById('btnLogout2').textContent = t.logout;
+
+  if(document.getElementById('adminScreen').classList.contains('on')){
+    renderAdmin();
+  }
+}
+
+// PARTICLE
 (function(){
   const canvas = document.createElement('canvas');
   canvas.id = 'particles';
@@ -385,18 +550,13 @@ const AP = "Blipzor921324";
   draw();
 })();
 
-// ============================================================
-// 👥 FOYDALANUVCHILAR
-// ============================================================
+// FOYDALANUVCHILAR
 function getUsers(){
   try { return JSON.parse(localStorage.getItem('ai_users') || '[]'); }
   catch { return []; }
 }
 function saveUsers(u){ localStorage.setItem('ai_users', JSON.stringify(u)); }
 
-// ============================================================
-// 📨 XABAR
-// ============================================================
 function showMsg(text, type){
   const m = document.getElementById('msg');
   m.textContent = text;
@@ -404,21 +564,16 @@ function showMsg(text, type){
   setTimeout(() => m.classList.remove('on'), 3000);
 }
 
-// ============================================================
-// 1️⃣ ISM TEKSHIRISH
-// ============================================================
 function checkName(){
+  const t = T[LANG];
   const name = document.getElementById('user').value.trim();
   const low = name.toLowerCase();
-
-  if(!name){ showMsg("❌ Ismingizni kiriting!", "err"); return; }
-
-  // BLIP bo'lsa — kod oynasi
+  if(!name){ showMsg(t.noName, "err"); return; }
   if(low === ADMIN_ISM){
     document.getElementById('loginBox').classList.add('secret');
     document.getElementById('loginIcon').textContent = '👑';
-    document.getElementById('loginTitle').textContent = 'MAXSUS KIRISH';
-    document.getElementById('loginSub').textContent = 'Faqat admin uchun';
+    document.getElementById('loginTitle').textContent = t.secretTitle;
+    document.getElementById('loginSub').textContent = t.secretSub;
     document.getElementById('nameBlock').style.display = 'none';
     document.getElementById('codeBlock').style.display = 'block';
     document.getElementById('code').value = '';
@@ -426,17 +581,13 @@ function checkName(){
     document.getElementById('msg').classList.remove('on');
     return;
   }
-
-  // Oddiy foydalanuvchi
-  if(name.length < 2){ showMsg("❌ Ism kamida 2 belgi!", "err"); return; }
-
+  if(name.length < 2){ showMsg(t.shortName, "err"); return; }
   const users = getUsers();
   const existing = users.find(u => u.ism.toLowerCase() === low);
   if(!existing){
     users.push({ ism: name, time: Date.now(), rol: "user" });
     saveUsers(users);
   }
-
   localStorage.setItem('ai_user', name);
   localStorage.setItem('ai_ism', name);
   localStorage.setItem('ai_time', Date.now());
@@ -444,19 +595,15 @@ function checkName(){
   showCouncil();
 }
 
-// ============================================================
-// 2️⃣ KOD TEKSHIRISH
-// ============================================================
 function checkCode(){
+  const t = T[LANG];
   const code = document.getElementById('code').value;
-  if(!code){ showMsg("❌ Kodni kiriting!", "err"); return; }
-
+  if(!code){ showMsg(t.noCode, "err"); return; }
   if(code === ADMIN_KOD){
     localStorage.setItem('ai_user', ADMIN_DISPLAY);
     localStorage.setItem('ai_ism', ADMIN_DISPLAY);
     localStorage.setItem('ai_time', Date.now());
     localStorage.setItem('ai_admin', '1');
-
     const users = getUsers();
     const existing = users.find(u => u.ism.toLowerCase() === ADMIN_ISM);
     if(!existing){
@@ -465,19 +612,17 @@ function checkCode(){
     }
     showAdmin();
   } else {
-    showMsg("❌ Kod xato! Faqat admin kiradi.", "err");
+    showMsg(t.wrongCode, "err");
     document.getElementById('code').value = '';
   }
 }
 
-// ============================================================
-// 3️⃣ ORQAGA
-// ============================================================
 function backToName(){
+  const t = T[LANG];
   document.getElementById('loginBox').classList.remove('secret');
   document.getElementById('loginIcon').textContent = '🏛';
-  document.getElementById('loginTitle').textContent = 'AI KENGASH';
-  document.getElementById('loginSub').textContent = 'Ismingizni kiriting';
+  document.getElementById('loginTitle').textContent = t.loginTitle;
+  document.getElementById('loginSub').textContent = t.loginSub;
   document.getElementById('nameBlock').style.display = 'block';
   document.getElementById('codeBlock').style.display = 'none';
   document.getElementById('user').value = '';
@@ -486,11 +631,8 @@ function backToName(){
   document.getElementById('user').focus();
 }
 
-// ============================================================
-// 🚪 CHIQISH
-// ============================================================
 function doLogout(){
-  if(!confirm('Chiqishni xohlaysizmi?')) return;
+  if(!confirm(T[LANG].logoutConfirm)) return;
   localStorage.removeItem('ai_user');
   localStorage.removeItem('ai_ism');
   localStorage.removeItem('ai_time');
@@ -498,19 +640,13 @@ function doLogout(){
   location.reload();
 }
 
-// ============================================================
-// 🏛 COUNCIL
-// ============================================================
 function showCouncil(){
   document.getElementById('loginScreen').classList.remove('on');
   document.getElementById('adminScreen').classList.remove('on');
   document.getElementById('councilScreen').classList.add('on');
-  document.getElementById('uName').textContent = localStorage.getItem('ai_ism') || 'Foydalanuvchi';
+  document.getElementById('uName').textContent = localStorage.getItem('ai_ism') || 'User';
 }
 
-// ============================================================
-// 👑 ADMIN PANEL
-// ============================================================
 function showAdmin(){
   document.getElementById('loginScreen').classList.remove('on');
   document.getElementById('councilScreen').classList.remove('on');
@@ -519,49 +655,42 @@ function showAdmin(){
 }
 
 function renderAdmin(){
+  const t = T[LANG];
   const users = getUsers();
-  const total = users.length;
-
   document.getElementById('statsBox').innerHTML = `
-    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-lbl">👥 FOYDALANUVCHILAR</div></div>
-    <div class="stat-card"><div class="stat-num">6</div><div class="stat-lbl">🤖 AI MODELLAR</div></div>
-    <div class="stat-card"><div class="stat-num">∞</div><div class="stat-lbl">💬 SAVOLLAR</div></div>
+    <div class="stat-card"><div class="stat-num">${users.length}</div><div class="stat-lbl">${t.users}</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-lbl">${t.models}</div></div>
+    <div class="stat-card"><div class="stat-num">∞</div><div class="stat-lbl">${t.questions}</div></div>
   `;
-
   const box = document.getElementById('usersBox');
   if(users.length === 0){
-    box.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Hozircha foydalanuvchi yo\'q</div>';
+    box.innerHTML = `<div style="text-align:center;color:var(--muted);padding:20px">${t.noUsers}</div>`;
     return;
   }
-
   const sorted = [...users].sort((a, b) => (b.time || 0) - (a.time || 0));
   box.innerHTML = sorted.map(u => {
     const isAdmin = u.rol === 'admin';
-    const time = u.time ? new Date(u.time).toLocaleString('uz-UZ') : '—';
-    return `
-      <div class="user-item ${isAdmin ? 'admin' : ''}">
-        <div>
-          <div class="user-name">${esc(u.ism)}${isAdmin ? '<span>👑 ADMIN</span>' : ''}</div>
-          <div class="user-time">🕐 ${time}</div>
-        </div>
-        ${!isAdmin ? `<button class="btn-del" onclick="delUser('${esc(u.ism)}')">🗑️</button>` : ''}
+    const time = u.time ? new Date(u.time).toLocaleString() : '—';
+    return `<div class="user-item ${isAdmin ? 'admin' : ''}">
+      <div>
+        <div class="user-name">${esc(u.ism)}${isAdmin ? '<span>👑 ' + t.admin + '</span>' : ''}</div>
+        <div class="user-time">🕐 ${time}</div>
       </div>
-    `;
+      ${!isAdmin ? `<button class="btn-del" onclick="delUser('${esc(u.ism)}')">🗑️</button>` : ''}
+    </div>`;
   }).join('');
 }
 
 function delUser(name){
-  if(!confirm(`"${name}" o'chirilsinmi?`)) return;
+  if(!confirm(`"${name}" ${T[LANG].delConfirm}`)) return;
   let users = getUsers();
   users = users.filter(u => u.ism !== name);
   saveUsers(users);
   renderAdmin();
 }
 
-// ============================================================
-// 🔄 AUTO LOGIN
-// ============================================================
 window.addEventListener('DOMContentLoaded', () => {
+  applyLang();
   const u = localStorage.getItem('ai_user');
   const t = parseInt(localStorage.getItem('ai_time') || '0');
   const isAdmin = localStorage.getItem('ai_admin') === '1';
@@ -572,24 +701,29 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ============================================================
-// 🏛 KENGASH
-// ============================================================
 function fill(t){ document.getElementById('q').value = t; }
 
 async function doAsk(){
+  const tt = T[LANG];
   const q = document.getElementById('q').value.trim();
-  if(!q){ document.getElementById('out').innerHTML = '<div class="loading">❌ Savol yozing!</div>'; return; }
+  if(!q){
+    document.getElementById('out').innerHTML = '<div class="loading">' + tt.noQ + '</div>';
+    return;
+  }
   const btn = document.getElementById('askB');
   const out = document.getElementById('out');
   btn.disabled = true;
-  btn.textContent = '⏳ Yig\'ilmoqda...';
-  out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti</div>';
+  btn.textContent = tt.asking;
+  out.innerHTML = '<div class="loading">' + tt.thinking + '</div>';
+
+  // Til kodini Gemini uchun
+  const langCode = LANG === 'tj' ? 'tg' : LANG;
+
   try{
     const r = await fetch(API, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ question: q, parol: AP, lang: 'uz' })
+      body: JSON.stringify({ question: q, parol: AP, lang: langCode })
     });
     const d = await r.json();
     if(!r.ok || d.error){
@@ -605,7 +739,7 @@ async function doAsk(){
     });
     html += '</div>';
     html += `<div class="council-result">
-      <div class="c-head"><span style="font-size:26px">🏛</span><span class="c-title">KENGASH XULOSASI</span></div>
+      <div class="c-head"><span style="font-size:26px">🏛</span><span class="c-title">${tt.conclusion}</span></div>
       <div class="c-text">${esc(d.conclusion)}</div>
     </div>`;
     out.innerHTML = html;
@@ -613,7 +747,7 @@ async function doAsk(){
     out.innerHTML = '<div class="loading">❌ ' + esc(e.message) + '</div>';
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Kengashni chaqirish';
+    btn.textContent = tt.askBtn;
   }
 }
 
