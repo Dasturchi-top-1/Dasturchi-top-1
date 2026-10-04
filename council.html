@@ -260,14 +260,27 @@ body{
   <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
 </div>
 
-  </div>
-  <script>
+                                  </div>
+                                  <script>
+// ============================================================
+// 🔄 VERSIYA — HAR SAFAR O'ZGARTIRSANG, KESH TOZALANADI
+// ============================================================
+const VERSION = "1.0";  // ← Har safar yangilaganda: 1.1, 1.2, 1.3...
+
+if(localStorage.getItem('ai_version') !== VERSION){
+  localStorage.removeItem('ai_users');
+  localStorage.removeItem('ai_user');
+  localStorage.removeItem('ai_ism');
+  localStorage.removeItem('ai_time');
+  localStorage.setItem('ai_version', VERSION);
+}
+
 // ============================================================
 // ⚙️ SOZLAMALAR — BU YERNI O'ZINGGA MOSLANG!
 // ============================================================
-const ADMIN_LOGIN = "Blip";              // ← KICHIK HARF bilan!
-const ADMIN_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";     // ← O'z parolingiz
-const ADMIN_ISM = "Salohiddin";          // ← Ko'rinadigan ism
+const ADMIN_LOGIN = "Blip";
+const ADMIN_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
+const ADMIN_ISM = "Salohiddin";
 const ROYXAT_OCHIQ = true;
 
 const KUN = 30;
@@ -336,7 +349,7 @@ function saveUsers(u){
   localStorage.setItem('ai_users', JSON.stringify(u));
 }
 
-// ⚠️ HAR SAFAR admin yangilanadi
+// Admin har doim yangilanadi
 function initUsers(){
   const u = getUsers();
   u[ADMIN_LOGIN] = { parol: ADMIN_PAROL, ism: ADMIN_ISM, rol: "admin" };
@@ -382,10 +395,9 @@ function doSubmit(){
 }
 
 // ============================================================
-// 🔐 LOGIN — TUZATILGAN
+// 🔐 LOGIN
 // ============================================================
 function doLogin(){
-  // ⚠️ Kichik harfga o'girish — "Blip" → "blip"
   const u = document.getElementById('user').value.trim().toLowerCase();
   const p = document.getElementById('pass').value;
 
@@ -418,7 +430,6 @@ function doRegister(){
     return;
   }
 
-  // ⚠️ Kichik harfga o'girish
   const u = document.getElementById('user').value.trim().toLowerCase();
   const p = document.getElementById('pass').value;
   const p2 = document.getElementById('pass2').value;
@@ -544,4 +555,4 @@ function esc(s){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
-</script>
+  </script>
