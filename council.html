@@ -110,7 +110,6 @@ body{
 }
 .msg.err{background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red)}
 .msg.ok{background:rgba(16,185,129,.15);border:1px solid var(--grn);color:var(--grn)}
-.msg.gold{background:rgba(251,191,36,.15);border:1px solid var(--gold);color:var(--gold)}
 .msg.on{display:block;animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .hint{
@@ -237,7 +236,6 @@ body{
 <body>
 <div class="c">
 
-<!-- 1. LOGIN -->
 <div class="screen on" id="loginScreen">
   <div class="login-wrap">
     <div class="login-box" id="loginBox">
@@ -265,7 +263,6 @@ body{
   </div>
 </div>
 
-<!-- 2. COUNCIL -->
 <div class="screen" id="councilScreen">
   <div class="top">
     <div class="brand">⚡ Blip AI</div>
@@ -300,7 +297,6 @@ body{
   <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
 </div>
 
-<!-- 3. ADMIN -->
 <div class="screen" id="adminScreen">
   <div class="top">
     <div class="brand gold">👑 Admin Panel</div>
@@ -324,23 +320,23 @@ body{
 // ============================================================
 // 🔄 VERSIYA — HAR SAFAR O'ZGARTIRSANG, KESH TOZALANADI
 // ============================================================
-const VERSION = "1.0";
+const VERSION = "5.0";
 
 if(localStorage.getItem('ai_version') !== VERSION){
   localStorage.removeItem('ai_users');
   localStorage.removeItem('ai_user');
   localStorage.removeItem('ai_ism');
   localStorage.removeItem('ai_time');
+  localStorage.removeItem('ai_admin');
   localStorage.setItem('ai_version', VERSION);
 }
 
 // ============================================================
 // ⚙️ SOZLAMALAR — BU YERNI O'ZINGGA MOSLANG!
 // ============================================================
-const ADMIN_ISM = "Blip";                    // ← Maxsus ism (kichik harf!)
-const ADMIN_KOD = "921324";           // ← Maxsus kod
-const ADMIN_DISPLAY = "Blip";                // ← Ko'rinadigan ism
-
+const ADMIN_ISM = "blip";
+const ADMIN_KOD = "Blipzor921324";
+const ADMIN_DISPLAY = "Blip";
 const KUN = 30;
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
 const AP = "Blipzor921324";
@@ -354,10 +350,7 @@ const AP = "Blipzor921324";
   document.body.insertBefore(canvas, document.body.firstChild);
   const ctx = canvas.getContext('2d');
   let W, H, particles = [];
-  function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
   for(let i = 0; i < 40; i++){
@@ -374,17 +367,14 @@ const AP = "Blipzor921324";
       p.x += p.vx; p.y += p.vy;
       if(p.x < 0 || p.x > W) p.vx *= -1;
       if(p.y < 0 || p.y > H) p.vy *= -1;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(' + p.c + ',0.5)';
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.c + ',0.5)'; ctx.fill();
     });
     particles.forEach((a, i) => {
       particles.slice(i+1).forEach(b => {
         const d = Math.hypot(a.x - b.x, a.y - b.y);
         if(d < 120){
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
           ctx.strokeStyle = 'rgba(99,102,241,' + (0.15 * (1 - d/120)) + ')';
           ctx.lineWidth = 0.5; ctx.stroke();
         }
@@ -399,13 +389,10 @@ const AP = "Blipzor921324";
 // 👥 FOYDALANUVCHILAR
 // ============================================================
 function getUsers(){
-  try {
-    return JSON.parse(localStorage.getItem('ai_users') || '[]');
-  } catch { return []; }
+  try { return JSON.parse(localStorage.getItem('ai_users') || '[]'); }
+  catch { return []; }
 }
-function saveUsers(u){
-  localStorage.setItem('ai_users', JSON.stringify(u));
-}
+function saveUsers(u){ localStorage.setItem('ai_users', JSON.stringify(u)); }
 
 // ============================================================
 // 📨 XABAR
@@ -418,18 +405,15 @@ function showMsg(text, type){
 }
 
 // ============================================================
-// 1️⃣ ISMNI TEKSHIRISH
+// 1️⃣ ISM TEKSHIRISH
 // ============================================================
 function checkName(){
   const name = document.getElementById('user').value.trim();
   const low = name.toLowerCase();
 
-  if(!name){
-    showMsg("❌ Ismingizni kiriting!", "err");
-    return;
-  }
+  if(!name){ showMsg("❌ Ismingizni kiriting!", "err"); return; }
 
-  // 🔐 Agar "blip" bo'lsa — maxsus kod oynasiga o'tish
+  // BLIP bo'lsa — kod oynasi
   if(low === ADMIN_ISM){
     document.getElementById('loginBox').classList.add('secret');
     document.getElementById('loginIcon').textContent = '👑';
@@ -443,13 +427,9 @@ function checkName(){
     return;
   }
 
-  // ✅ Oddiy foydalanuvchi
-  if(name.length < 2){
-    showMsg("❌ Ism kamida 2 belgi!", "err");
-    return;
-  }
+  // Oddiy foydalanuvchi
+  if(name.length < 2){ showMsg("❌ Ism kamida 2 belgi!", "err"); return; }
 
-  // Foydalanuvchini saqlash
   const users = getUsers();
   const existing = users.find(u => u.ism.toLowerCase() === low);
   if(!existing){
@@ -457,42 +437,34 @@ function checkName(){
     saveUsers(users);
   }
 
-  // Council'ga o'tish
   localStorage.setItem('ai_user', name);
   localStorage.setItem('ai_ism', name);
   localStorage.setItem('ai_time', Date.now());
+  localStorage.removeItem('ai_admin');
   showCouncil();
 }
 
 // ============================================================
-// 2️⃣ KODNI TEKSHIRISH
+// 2️⃣ KOD TEKSHIRISH
 // ============================================================
 function checkCode(){
   const code = document.getElementById('code').value;
-
-  if(!code){
-    showMsg("❌ Kodni kiriting!", "err");
-    return;
-  }
+  if(!code){ showMsg("❌ Kodni kiriting!", "err"); return; }
 
   if(code === ADMIN_KOD){
-    // ✅ To'g'ri kod — admin panel
     localStorage.setItem('ai_user', ADMIN_DISPLAY);
     localStorage.setItem('ai_ism', ADMIN_DISPLAY);
     localStorage.setItem('ai_time', Date.now());
     localStorage.setItem('ai_admin', '1');
 
-    // Admin ro'yxatida
     const users = getUsers();
     const existing = users.find(u => u.ism.toLowerCase() === ADMIN_ISM);
     if(!existing){
       users.push({ ism: ADMIN_DISPLAY, time: Date.now(), rol: "admin" });
       saveUsers(users);
     }
-
     showAdmin();
   } else {
-    // ❌ Xato kod
     showMsg("❌ Kod xato! Faqat admin kiradi.", "err");
     document.getElementById('code').value = '';
   }
@@ -527,7 +499,7 @@ function doLogout(){
 }
 
 // ============================================================
-// 🏛 COUNCIL KO'RSATISH
+// 🏛 COUNCIL
 // ============================================================
 function showCouncil(){
   document.getElementById('loginScreen').classList.remove('on');
@@ -550,42 +522,26 @@ function renderAdmin(){
   const users = getUsers();
   const total = users.length;
 
-  // Statistika
   document.getElementById('statsBox').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-num">${total}</div>
-      <div class="stat-lbl">👥 FOYDALANUVCHILAR</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">6</div>
-      <div class="stat-lbl">🤖 AI MODELLAR</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num">∞</div>
-      <div class="stat-lbl">💬 SAVOLLAR</div>
-    </div>
+    <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-lbl">👥 FOYDALANUVCHILAR</div></div>
+    <div class="stat-card"><div class="stat-num">6</div><div class="stat-lbl">🤖 AI MODELLAR</div></div>
+    <div class="stat-card"><div class="stat-num">∞</div><div class="stat-lbl">💬 SAVOLLAR</div></div>
   `;
 
-  // Foydalanuvchilar
   const box = document.getElementById('usersBox');
   if(users.length === 0){
     box.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px">Hozircha foydalanuvchi yo\'q</div>';
     return;
   }
 
-  // Oxirgi birinchi
   const sorted = [...users].sort((a, b) => (b.time || 0) - (a.time || 0));
-
-  box.innerHTML = sorted.map((u, i) => {
+  box.innerHTML = sorted.map(u => {
     const isAdmin = u.rol === 'admin';
     const time = u.time ? new Date(u.time).toLocaleString('uz-UZ') : '—';
     return `
       <div class="user-item ${isAdmin ? 'admin' : ''}">
         <div>
-          <div class="user-name">
-            ${esc(u.ism)}
-            ${isAdmin ? '<span>👑 ADMIN</span>' : ''}
-          </div>
+          <div class="user-name">${esc(u.ism)}${isAdmin ? '<span>👑 ADMIN</span>' : ''}</div>
           <div class="user-time">🕐 ${time}</div>
         </div>
         ${!isAdmin ? `<button class="btn-del" onclick="delUser('${esc(u.ism)}')">🗑️</button>` : ''}
@@ -610,7 +566,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const t = parseInt(localStorage.getItem('ai_time') || '0');
   const isAdmin = localStorage.getItem('ai_admin') === '1';
   const limit = KUN * 24 * 3600 * 1000;
-
   if(u && (Date.now() - t) < limit){
     if(isAdmin) showAdmin();
     else showCouncil();
@@ -624,16 +579,12 @@ function fill(t){ document.getElementById('q').value = t; }
 
 async function doAsk(){
   const q = document.getElementById('q').value.trim();
-  if(!q){
-    document.getElementById('out').innerHTML = '<div class="loading">❌ Savol yozing!</div>';
-    return;
-  }
+  if(!q){ document.getElementById('out').innerHTML = '<div class="loading">❌ Savol yozing!</div>'; return; }
   const btn = document.getElementById('askB');
   const out = document.getElementById('out');
   btn.disabled = true;
   btn.textContent = '⏳ Yig\'ilmoqda...';
   out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti</div>';
-
   try{
     const r = await fetch(API, {
       method: "POST",
