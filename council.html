@@ -3,443 +3,305 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Council — Blip</title>
+<title>AI Kengash</title>
 <style>
-  :root{
-    --bg:#0a0a1a;--card:#141428;--text:#e6e6f0;--muted:#8888aa;
-    --accent:#6366f1;--accent2:#a855f7;--border:#2a2a44;
-    --gold:#fbbf24;--red:#ef4444;--green:#10b981;
-  }
-  [data-theme="light"]{
-    --bg:#f0f2ff;--card:#fff;--text:#1a1a2e;--muted:#6b7280;
-    --accent:#4f46e5;--accent2:#9333ea;--border:#e5e7eb;
-    --gold:#d97706;--red:#dc2626;--green:#059669;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s}
-  body{
-    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-    min-height:100vh;padding:16px;
-    background-image:radial-gradient(circle at 20% 10%,rgba(99,102,241,.15),transparent 50%),
-                     radial-gradient(circle at 80% 90%,rgba(168,85,247,.15),transparent 50%);
-  }
-  .container{max-width:900px;margin:auto}
-  nav{display:flex;justify-content:space-between;align-items:center;
-      padding:8px 0 20px;gap:8px;flex-wrap:wrap}
-  .logo{font-weight:800;font-size:18px;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .nav-btns{display:flex;gap:6px;flex-wrap:wrap}
-  .nav-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
-    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-  .nav-btn:hover{border-color:var(--accent)}
-  header{text-align:center;padding:20px 0 24px}
-  h1{
-    font-size:38px;font-weight:900;
-    background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#6366f1);
-    background-size:300% 300%;-webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;background-clip:text;
-    animation:grad 5s ease infinite;
-  }
-  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-  .sub{color:var(--muted);margin-top:8px;font-size:14px}
-  .badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
-  .badge{font-size:11px;padding:4px 10px;border:1px solid var(--border);
-         border-radius:999px;color:var(--muted)}
-  .ask{background:var(--card);border:1px solid var(--border);border-radius:16px;
-       padding:14px;margin-bottom:20px}
-  .parol-row{display:flex;gap:6px;margin-bottom:10px}
-  input[type="password"]{
-    flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);
-    background:var(--bg);color:var(--text);font-size:14px;outline:none
-  }
-  input[type="password"]:focus{border-color:var(--accent)}
-  .mic-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
-    padding:0 14px;border-radius:10px;cursor:pointer;font-size:18px}
-  .mic-btn.rec{background:var(--red);color:#fff;animation:pulse 1s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-  textarea{
-    width:100%;padding:14px;border-radius:10px;border:1px solid var(--border);
-    background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;
-    resize:vertical;min-height:70px;outline:none
-  }
-  textarea:focus{border-color:var(--accent)}
-  .row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-  .examples{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-  .ex{font-size:11px;padding:5px 10px;border-radius:999px;background:var(--bg);
-      border:1px solid var(--border);color:var(--muted);cursor:pointer}
-  .ex:hover{border-color:var(--accent);color:var(--accent)}
-  #askBtn{
-    padding:12px 24px;border:none;border-radius:10px;cursor:pointer;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    color:#fff;font-weight:700;font-size:15px;min-width:160px
-  }
-  #askBtn:disabled{opacity:.5;cursor:wait}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-        gap:12px;margin-bottom:20px}
-  .ai-card{
-    background:var(--card);border:1px solid var(--border);border-radius:14px;
-    padding:14px;animation:fade .5s ease;position:relative
-  }
-  .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .ai-emoji{font-size:20px}
-  .ai-name{font-weight:700;font-size:13px;flex:1}
-  .vote-btn{background:transparent;border:1px solid var(--border);color:var(--muted);
-    padding:2px 8px;border-radius:6px;cursor:pointer;font-size:11px}
-  .vote-btn:hover,.vote-btn.voted{background:var(--gold);border-color:var(--gold);color:#000}
-  .ai-text{font-size:13px;line-height:1.6;color:var(--text);white-space:pre-wrap;opacity:.9}
-  .council{
-    background:linear-gradient(135deg,rgba(251,191,36,.1),rgba(168,85,247,.1));
-    border:2px solid var(--gold);border-radius:16px;padding:20px;
-    animation:fade .7s ease;margin-bottom:16px
-  }
-  .council-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .council-title{font-size:17px;font-weight:800;color:var(--gold)}
-  .council-text{font-size:15px;line-height:1.7;white-space:pre-wrap}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
-    gap:10px;margin-bottom:20px}
-  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;
-    padding:12px;text-align:center}
-  .stat-n{font-size:22px;font-weight:800;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .stat-l{font-size:11px;color:var(--muted);margin-top:4px}
-  .hist-item{background:var(--card);border:1px solid var(--border);border-radius:12px;
-    padding:12px;margin-bottom:8px;cursor:pointer}
-  .hist-item:hover{border-color:var(--accent)}
-  .hist-q{font-weight:600;font-size:14px;margin-bottom:4px}
-  .hist-date{font-size:11px;color:var(--muted)}
-  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  .loading{text-align:center;padding:40px;color:var(--muted)}
-  .error{text-align:center;padding:16px;color:var(--red)}
-  .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
-  @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;
-    display:none;padding:20px;overflow-y:auto}
-  .modal.show{display:block}
-  .modal-inner{max-width:600px;margin:20px auto;background:var(--card);
-    border-radius:16px;padding:20px}
-  .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-  .modal-title{font-size:18px;font-weight:800;color:var(--accent)}
-  .close-btn{background:transparent;border:none;color:var(--muted);font-size:24px;cursor:pointer}
-  footer{text-align:center;padding:24px;color:var(--muted);font-size:12px;margin-top:16px}
-  footer a{color:var(--accent);text-decoration:none}
-  @media(max-width:600px){
-    h1{font-size:26px}
-    .grid{grid-template-columns:1fr}
-    .nav-btn{padding:5px 10px;font-size:12px}
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
+  --acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;
+  --gold:#fbbf24;--red:#ef4444;
+}
+body{
+  font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;padding:16px;
+  background-image:
+    radial-gradient(circle at 15% 15%,rgba(99,102,241,.18),transparent 40%),
+    radial-gradient(circle at 85% 85%,rgba(168,85,247,.18),transparent 40%);
+  background-attachment:fixed;
+}
+.c{max-width:900px;margin:auto}
+.screen{display:none}
+.screen.on{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.login-wrap{min-height:85vh;display:flex;align-items:center;justify-content:center}
+.login-box{
+  background:var(--card);border:1px solid var(--brd);border-radius:20px;
+  padding:32px 24px;width:100%;max-width:380px;
+  box-shadow:0 20px 60px rgba(99,102,241,.3);
+}
+.login-logo{text-align:center;font-size:52px;margin-bottom:12px}
+.login-box h1{
+  text-align:center;font-size:24px;font-weight:900;margin-bottom:6px;
+  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);
+  background-size:200% 200%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:grad 4s infinite;
+}
+@keyframes grad{0%,100%{background-position:0%}50%{background-position:100%}}
+.login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
+.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.inp{
+  width:100%;padding:13px 15px;border-radius:12px;
+  border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
+  font-size:15px;outline:none;margin-bottom:14px;
+  transition:all .25s;font-family:inherit
+}
+.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.inp::placeholder{color:var(--muted);opacity:.6}
+.btn-login{
+  width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff;font-weight:800;font-size:15px;transition:all .25s
+}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(99,102,241,.4)}
+.err{
+  background:rgba(239,68,68,.15);border:1px solid var(--red);
+  color:var(--red);padding:10px;border-radius:10px;
+  font-size:13px;text-align:center;margin-bottom:14px;display:none
+}
+.err.on{display:block;animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.hint{
+  text-align:center;font-size:11px;color:var(--muted);
+  margin-top:18px;padding-top:14px;border-top:1px solid var(--brd)
+}
+.top{display:flex;justify-content:space-between;align-items:center;
+  padding:10px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:20px}
+.brand{font-weight:800;font-size:16px;
+  background:linear-gradient(90deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.user-tag{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.user-tag b{color:var(--acc)}
+.logout-b{background:transparent;border:1px solid var(--brd);color:var(--muted);
+  padding:5px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600}
+.logout-b:hover{border-color:var(--red);color:var(--red)}
+.hero{text-align:center;padding:24px 0 20px}
+.hero h1{
+  font-size:36px;font-weight:900;
+  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
+  background-size:400% 400%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:grad 6s infinite
+}
+.hero p{color:var(--muted);font-size:13px;margin-top:8px}
+.badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.badge{font-size:10px;padding:4px 10px;border-radius:999px;
+  background:var(--card);border:1px solid var(--brd);color:var(--muted);font-weight:600}
+.ask-box{background:var(--card);border:1px solid var(--brd);
+  border-radius:16px;padding:16px;margin-bottom:20px}
+.ask-inp{
+  width:100%;padding:14px;border-radius:12px;
+  border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
+  font-size:15px;font-family:inherit;outline:none;
+  resize:vertical;min-height:90px;line-height:1.5
+}
+.ask-inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.ask-inp::placeholder{color:var(--muted);opacity:.6}
+.ask-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.ex-list{display:flex;gap:6px;flex-wrap:wrap;flex:1}
+.ex{font-size:11px;padding:6px 12px;border-radius:999px;
+  background:var(--bg);border:1px solid var(--brd);color:var(--muted);
+  cursor:pointer;font-weight:600}
+.ex:hover{border-color:var(--acc);color:var(--acc)}
+.ask-btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;
+  background:linear-gradient(135deg,var(--acc),var(--acc2));
+  color:#fff;font-weight:800;font-size:14px;min-width:150px}
+.ask-btn:disabled{opacity:.55;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:12px;margin-bottom:20px}
+.ai-card{background:var(--card);border:1px solid var(--brd);
+  border-radius:14px;padding:16px;position:relative;overflow:hidden;
+  animation:fade .4s ease}
+.ai-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(180deg,var(--acc),var(--acc2))}
+.ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.ai-emoji{font-size:22px}
+.ai-name{font-weight:700;font-size:13px;color:var(--acc)}
+.ai-text{font-size:13px;line-height:1.7;color:#c8c8dc;white-space:pre-wrap}
+.council-result{
+  background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));
+  border:2px solid var(--gold);border-radius:16px;padding:22px;
+  animation:fade .6s ease
+}
+.c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.c-title{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:1px}
+.c-text{font-size:14px;line-height:1.8;white-space:pre-wrap}
+.loading{text-align:center;padding:36px;color:var(--muted);font-size:14px}
+.loading::after{content:'';animation:dots 1.5s infinite}
+@keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+.footer{text-align:center;padding:24px 0;color:var(--muted);
+  font-size:11px;border-top:1px solid var(--brd);margin-top:30px}
+.footer b{background:linear-gradient(90deg,var(--acc),var(--acc2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+@media(max-width:600px){
+  .hero h1{font-size:26px}
+  .grid{grid-template-columns:1fr}
+  .login-box{padding:26px 20px}
+}
 </style>
 </head>
 <body>
-<div class="container">
+<div class="c">
 
-<nav>
-  <div class="logo">🏛 AI Kengash</div>
-  <div class="nav-btns">
-    <button class="nav-btn" onclick="showStats()">📊 Statistika</button>
-    <button class="nav-btn" onclick="showHistory()">💾 Tarix</button>
-    <button class="nav-btn" onclick="toggleLang()" id="langBtn">🌐 UZ</button>
-    <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-  </div>
-</nav>
-
-<header>
-  <h1 id="title">AI KENGASH</h1>
-  <p class="sub" id="subtitle">Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
-  <div class="badges">
-    <span class="badge">🌟 Qwen3.6</span>
-    <span class="badge">🧠 Nemotron</span>
-    <span class="badge">⚡ StepFun</span>
-    <span class="badge">🌪 LFM</span>
-    <span class="badge">🦙 Llama 3.3</span>
-  </div>
-</header>
-
-<div class="ask">
-  <div class="parol-row">
-    <input type="password" id="parol" placeholder="🔐 Parol..." autocomplete="off">
-    <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="Ovoz bilan yozish">🎤</button>
-  </div>
-  <textarea id="q" placeholder="Savolingizni yozing..."></textarea>
-  <div class="row">
-    <div class="examples" id="examples">
-      <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">Hayot ma'nosi</span>
-      <span class="ex" onclick="fill('Kelajakda AI qanday bo\'ladi?')">AI kelajagi</span>
-      <span class="ex" onclick="fill('13 yoshda qanday dasturchi bo\'lish mumkin?')">Dasturchi bo'lish</span>
+<div class="screen on" id="loginScreen">
+  <div class="login-wrap">
+    <div class="login-box">
+      <div class="login-logo">🏛</div>
+      <h1>AI KENGASH</h1>
+      <p class="login-sub">Faqat ruxsat berilgan foydalanuvchilar</p>
+      <div class="err" id="err"></div>
+      <label class="lbl">👤 Login</label>
+      <input class="inp" type="text" id="user" placeholder="username" autocomplete="username" autofocus>
+      <label class="lbl">🔒 Parol</label>
+      <input class="inp" type="password" id="pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="btn-login" onclick="doLogin()">🚀 KIRISH</button>
+      <div class="hint">🔐 Maxsus kirish · 30 kun eslab qoladi</div>
     </div>
-    <button id="askBtn" onclick="ask()">Kengashni chaqirish</button>
   </div>
 </div>
 
-<div id="out"></div>
-
-<!-- STATISTIKA MODAL -->
-<div class="modal" id="statsModal">
-  <div class="modal-inner">
-    <div class="modal-head">
-      <div class="modal-title">📊 Statistika</div>
-      <button class="close-btn" onclick="closeModal('statsModal')">×</button>
+<div class="screen" id="councilScreen">
+  <div class="top">
+    <div class="brand">⚡ Blip AI</div>
+    <div class="user-tag">
+      👤 <b id="uName">...</b>
+      <button class="logout-b" onclick="doLogout()">🚪 Chiqish</button>
     </div>
-    <div id="statsBody"></div>
   </div>
-</div>
-
-<!-- TARIX MODAL -->
-<div class="modal" id="histModal">
-  <div class="modal-inner">
-    <div class="modal-head">
-      <div class="modal-title">💾 Tarix</div>
-      <button class="close-btn" onclick="closeModal('histModal')">×</button>
+  <div class="hero">
+    <h1>🏛 AI KENGASH</h1>
+    <p>Bitta savol — 5 ta AI javob — 1 ta dono xulosa</p>
+    <div class="badges">
+      <span class="badge">🌟 Gemini 3.8</span>
+      <span class="badge">🧠 Gemini 3.5</span>
+      <span class="badge">⚡ Gemini 3.5 Lite</span>
+      <span class="badge">💎 Gemini 3.1</span>
+      <span class="badge">🚀 Gemini Flash</span>
     </div>
-    <div id="histBody"></div>
   </div>
-</div>
-
-<footer>
-  ⚡ <a href="https://dasturchi-top-1.github.io/Dasturchi-top-1/">Blip AI</a> tomonidan yaratildi · 2026
-</footer>
-
+  <div class="ask-box">
+    <textarea class="ask-inp" id="q" placeholder="Savolingizni yozing..."></textarea>
+    <div class="ask-row">
+      <div class="ex-list">
+        <span class="ex" onclick="fill('Hayotning ma\'nosi nima?')">💭 Hayot</span>
+        <span class="ex" onclick="fill('Kelajakda AI qanday bo\'ladi?')">🤖 AI</span>
+        <span class="ex" onclick="fill('13 yoshda qanday dasturchi bo\'lish mumkin?')">💻 Dasturchi</span>
       </div>
-      <script>
-// ============================================================
-// ⚙️ SOZLAMALAR
-// ============================================================
-const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
+      <button class="ask-btn" id="askB" onclick="doAsk()">Kengashni chaqirish</button>
+    </div>
+  </div>
+  <div id="out"></div>
+  <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
+</div>
 
-const LANGS = {
-  uz: {
-    title: "AI KENGASH",
-    subtitle: "Bitta savol — 5 ta AI javob — 1 ta dono xulosa",
-    parol: "🔐 Parol...",
-    savol: "Savolingizni yozing...",
-    ask: "Kengashni chaqirish",
-    asking: "⏳ Kengash yig'ilmoqda...",
-    thinking: "🤖 5 ta AI o'ylayapti",
-    conclusion: "KENGASH XULOSASI",
-    noParol: "🔐 Parolni kiriting!",
-    noQ: "❓ Savolni yozing!",
-    loading: "⏳ Yuklanmoqda...",
-    history: "💾 Tarix",
-    stats: "📊 Statistika",
-    totalQ: "Jami savollar",
-    totalVotes: "Ovozlar",
-    topAI: "Eng yaxshi AI",
-    noHistory: "Tarix bo'sh",
-    theme: "🌙"
-  },
-  ru: {
-    title: "AI СОВЕТ",
-    subtitle: "Один вопрос — 5 AI ответов — 1 мудрый вывод",
-    parol: "🔐 Пароль...",
-    savol: "Напишите ваш вопрос...",
-    ask: "Созвать совет",
-    asking: "⏳ Совет собирается...",
-    thinking: "🤖 5 AI думают",
-    conclusion: "ВЫВОД СОВЕТА",
-    noParol: "🔐 Введите пароль!",
-    noQ: "❓ Напишите вопрос!",
-    loading: "⏳ Загрузка...",
-    history: "💾 История",
-    stats: "📊 Статистика",
-    totalQ: "Всего вопросов",
-    totalVotes: "Голоса",
-    topAI: "Лучший AI",
-    noHistory: "История пуста",
-    theme: "🌙"
-  },
-  en: {
-    title: "AI COUNCIL",
-    subtitle: "One question — 5 AI answers — 1 wise conclusion",
-    parol: "🔐 Password...",
-    savol: "Write your question...",
-    ask: "Summon the council",
-    asking: "⏳ Council assembling...",
-    thinking: "🤖 5 AIs are thinking",
-    conclusion: "COUNCIL CONCLUSION",
-    noParol: "🔐 Enter password!",
-    noQ: "❓ Write a question!",
-    loading: "⏳ Loading...",
-    history: "💾 History",
-    stats: "📊 Statistics",
-    totalQ: "Total questions",
-    totalVotes: "Votes",
-    topAI: "Best AI",
-    noHistory: "History is empty",
-    theme: "🌙"
-  }
+</div>
+<script>
+// FOYDALANUVCHILAR
+const USERS = {
+  "blip": { parol: "Blipzor921324", ism: "Blip" },
+  "oqituvchi": { parol: "Muallim2026", ism: "O'qituvchi" }
 };
 
-let LANG = localStorage.getItem('council_lang') || 'uz';
-const T = () => LANGS[LANG];
+const KUN = 30;
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
+const AP = "Blipzor921324";
 
-// ============================================================
-// 🎨 MAVZU
-// ============================================================
-function toggleTheme(){
-  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-  const nxt = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', nxt);
-  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '🌙' : '☀️';
-  localStorage.setItem('council_theme', nxt);
-}
-(function(){
-  const t = localStorage.getItem('council_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-  document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
-})();
+// LOGIN
+function doLogin(){
+  const u = document.getElementById('user').value.trim().toLowerCase();
+  const p = document.getElementById('pass').value;
+  const err = document.getElementById('err');
+  err.classList.remove('on');
 
-// ============================================================
-// 🌐 TIL
-// ============================================================
-function toggleLang(){
-  const order = ['uz', 'ru', 'en'];
-  LANG = order[(order.indexOf(LANG) + 1) % 3];
-  localStorage.setItem('council_lang', LANG);
-  applyLang();
-}
-
-function applyLang(){
-  const t = T();
-  document.getElementById('title').textContent = t.title;
-  document.getElementById('subtitle').textContent = t.subtitle;
-  document.getElementById('parol').placeholder = t.parol;
-  document.getElementById('q').placeholder = t.savol;
-  document.getElementById('askBtn').textContent = t.ask;
-  document.getElementById('langBtn').textContent = '🌐 ' + LANG.toUpperCase();
-}
-applyLang();
-        // ============================================================
-// 🎤 OVOZLI KIRITISH
-// ============================================================
-let recognition = null;
-let isRec = false;
-
-function initMic(){
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ document.getElementById('micBtn').style.display = 'none'; return; }
-  recognition = new SR();
-  recognition.lang = LANG === 'ru' ? 'ru-RU' : LANG === 'en' ? 'en-US' : 'uz-UZ';
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.onresult = (e) => {
-    const text = e.results[0][0].transcript;
-    document.getElementById('q').value += (document.getElementById('q').value ? ' ' : '') + text;
-  };
-  recognition.onend = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
-  recognition.onerror = () => { isRec = false; document.getElementById('micBtn').classList.remove('rec'); };
-}
-
-function toggleMic(){
-  if(!recognition) initMic();
-  if(!recognition) return;
-  if(isRec){ recognition.stop(); return; }
-  recognition.lang = LANG === 'ru' ? 'ru-RU' : LANG === 'en' ? 'en-US' : 'uz-UZ';
-  recognition.start();
-  isRec = true;
-  document.getElementById('micBtn').classList.add('rec');
-}
-
-// ============================================================
-// 💾 TARIX
-// ============================================================
-function getHist(){ try { return JSON.parse(localStorage.getItem('council_hist') || '[]'); } catch { return []; } }
-function saveHist(h){ localStorage.setItem('council_hist', JSON.stringify(h.slice(0, 50))); }
-
-function addHist(q, data){
-  const h = getHist();
-  h.unshift({ q, data, date: Date.now(), votes: {} });
-  saveHist(h);
-}
-
-function showHistory(){
-  const h = getHist();
-  const body = document.getElementById('histBody');
-  if(!h.length){
-    body.innerHTML = '<div class="loading">' + T().noHistory + '</div>';
-  } else {
-    body.innerHTML = h.map((item, i) => `
-      <div class="hist-item" onclick="loadHist(${i})">
-        <div class="hist-q">${esc(item.q)}</div>
-        <div class="hist-date">${new Date(item.date).toLocaleString()}</div>
-      </div>
-    `).join('');
+  if(!u || !p){
+    err.textContent = "❌ Barcha maydonlarni to'ldiring!";
+    err.classList.add('on');
+    return;
   }
-  document.getElementById('histModal').classList.add('show');
+
+  const user = USERS[u];
+  if(!user || user.parol !== p){
+    err.textContent = "❌ Login yoki parol xato!";
+    err.classList.add('on');
+    document.getElementById('pass').value = '';
+    return;
+  }
+
+  localStorage.setItem('ai_user', u);
+  localStorage.setItem('ai_ism', user.ism);
+  localStorage.setItem('ai_time', Date.now());
+  showCouncil();
 }
 
-function loadHist(i){
-  const h = getHist();
-  if(!h[i]) return;
-  closeModal('histModal');
-  renderResults(h[i].data, i);
+function doLogout(){
+  if(!confirm('Chiqishni xohlaysizmi?')) return;
+  localStorage.removeItem('ai_user');
+  localStorage.removeItem('ai_ism');
+  localStorage.removeItem('ai_time');
+  location.reload();
 }
 
-// ============================================================
-// 📊 STATISTIKA
-// ============================================================
-function showStats(){
-  const h = getHist();
-  const totalQ = h.length;
-  let totalVotes = 0;
-  const aiVotes = {};
-  h.forEach(item => {
-    if(item.votes){
-      Object.entries(item.votes).forEach(([name, v]) => {
-        if(v){ totalVotes++; aiVotes[name] = (aiVotes[name] || 0) + 1; }
-      });
+function showCouncil(){
+  document.getElementById('loginScreen').classList.remove('on');
+  document.getElementById('councilScreen').classList.add('on');
+  document.getElementById('uName').textContent = localStorage.getItem('ai_ism') || 'Foydalanuvchi';
+}
+
+// AUTO LOGIN
+window.addEventListener('DOMContentLoaded', () => {
+  const u = localStorage.getItem('ai_user');
+  const t = parseInt(localStorage.getItem('ai_time') || '0');
+  const limit = KUN * 24 * 3600 * 1000;
+  if(u && USERS[u] && (Date.now() - t) < limit){
+    showCouncil();
+  }
+});
+
+// KENGASH
+function fill(t){ document.getElementById('q').value = t; }
+
+async function doAsk(){
+  const q = document.getElementById('q').value.trim();
+  if(!q){
+    document.getElementById('out').innerHTML = '<div class="loading">❌ Savol yozing!</div>';
+    return;
+  }
+  const btn = document.getElementById('askB');
+  const out = document.getElementById('out');
+  btn.disabled = true;
+  btn.textContent = '⏳ Yig\'ilmoqda...';
+  out.innerHTML = '<div class="loading">🤖 5 ta AI o\'ylayapti</div>';
+
+  try{
+    const r = await fetch(API, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ question: q, parol: AP, lang: 'uz' })
+    });
+    const d = await r.json();
+    if(!r.ok || d.error){
+      out.innerHTML = '<div class="loading">❌ ' + esc(d.error || 'Xato') + '</div>';
+      return;
     }
-  });
-  const topAI = Object.entries(aiVotes).sort((a,b) => b[1]-a[1])[0];
-  
-  document.getElementById('statsBody').innerHTML = `
-    <div class="stats">
-      <div class="stat"><div class="stat-n">${totalQ}</div><div class="stat-l">${T().totalQ}</div></div>
-      <div class="stat"><div class="stat-n">${totalVotes}</div><div class="stat-l">${T().totalVotes}</div></div>
-      <div class="stat"><div class="stat-n">${topAI ? topAI[0] : '—'}</div><div class="stat-l">${T().topAI}</div></div>
-    </div>
-  `;
-  document.getElementById('statsModal').classList.add('show');
-}
-
-function closeModal(id){ document.getElementById(id).classList.remove('show'); }
-
-// ============================================================
-// 🗳 OVOZ BERISH
-// ============================================================
-function vote(histIdx, aiName, btn){
-  const h = getHist();
-  if(!h[histIdx]) return;
-  if(!h[histIdx].votes) h[histIdx].votes = {};
-  h[histIdx].votes[aiName] = !h[histIdx].votes[aiName];
-  saveHist(h);
-  btn.classList.toggle('voted');
-}
-
-// ============================================================
-// 🎨 RENDER
-// ============================================================
-function renderResults(d, histIdx){
-  const t = T();
-  let html = '<div class="grid">';
-  d.answers.forEach(a => {
-    html += `<div class="ai-card">
-      <div class="ai-head">
-        <span class="ai-emoji">${a.emoji}</span>
-        <span class="ai-name">${a.name}</span>
-        ${histIdx !== undefined ? `<button class="vote-btn" onclick="vote(${histIdx}, '${a.name}', this)">👍</button>` : ''}
-      </div>
-      <div class="ai-text">${esc(a.answer)}</div>
+    let html = '<div class="grid">';
+    d.answers.forEach(a => {
+      html += `<div class="ai-card">
+        <div class="ai-head"><span class="ai-emoji">${a.emoji}</span><span class="ai-name">${a.name}</span></div>
+        <div class="ai-text">${esc(a.answer)}</div>
+      </div>`;
+    });
+    html += '</div>';
+    html += `<div class="council-result">
+      <div class="c-head"><span style="font-size:26px">🏛</span><span class="c-title">KENGASH XULOSASI</span></div>
+      <div class="c-text">${esc(d.conclusion)}</div>
     </div>`;
-  });
-  html += '</div>';
-  html += `<div class="council">
-    <div class="council-head">
-      <span style="font-size:26px">🏛</span>
-      <span class="council-title">${t.conclusion}</span>
-    </div>
-    <div class="council-text">${esc(d.conclusion)}</div>
-  </div>`;
-  document.getElementById('out').innerHTML = html;
+    out.innerHTML = html;
+  } catch(e){
+    out.innerHTML = '<div class="loading">❌ ' + esc(e.message) + '</div>';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Kengashni chaqirish';
+  }
 }
 
 function esc(s){
@@ -447,66 +309,4 @@ function esc(s){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
-
-function fill(t){ document.getElementById('q').value = t; }
-
-// ============================================================
-// 🚀 ASOSIY
-// ============================================================
-async function ask(){
-  const t = T();
-  const q = document.getElementById('q').value.trim();
-  const parol = document.getElementById('parol').value.trim();
-  const btn = document.getElementById('askBtn');
-  const out = document.getElementById('out');
-
-  if(!parol){ out.innerHTML = '<div class="error">' + t.noParol + '</div>'; return; }
-  if(!q){ out.innerHTML = '<div class="error">' + t.noQ + '</div>'; return; }
-
-  localStorage.setItem('council_parol', parol);
-  btn.disabled = true;
-  btn.textContent = t.asking;
-  out.innerHTML = '<div class="loading">' + t.thinking + '<span class="dots"></span></div>';
-
-  try{
-    const r = await fetch(API, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ question: q, parol: parol, lang: LANG })
-    });
-    const d = await r.json();
-
-    if(!r.ok || d.error){
-      out.innerHTML = '<div class="error">' + (d.error || 'Xato') + '</div>';
-      return;
-    }
-
-    addHist(q, d);
-    renderResults(d, 0);
-  } catch(e){
-    out.innerHTML = '<div class="error">❌ ' + e.message + '</div>';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = t.ask;
-  }
-}
-
-// ============================================================
-// 🎬 INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('council_parol');
-  if(saved) document.getElementById('parol').value = saved;
-  document.getElementById('parol').addEventListener('change', (e) => {
-    localStorage.setItem('council_parol', e.target.value);
-  });
-  initMic();
-});
-
-// Modal tashqarisiga bosilsa yopish
-document.querySelectorAll('.modal').forEach(m => {
-  m.addEventListener('click', (e) => { if(e.target === m) m.classList.remove('show'); });
-});
 </script>
-</body>
-</html>
