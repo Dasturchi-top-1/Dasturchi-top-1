@@ -314,9 +314,9 @@ if (path === "/dream" && request.method === "POST") {
         const parol = (body.parol || "").trim();
         const lang = (body.lang || "uz").toLowerCase();
 
-        if (parol !== COUNCIL_PAROL) {
-          return json({ error: "🔐 Parol xato! Faqat Blip uchun." }, 403);
-        }
+       // if (parol !== COUNCIL_PAROL) {
+        //  return json({ error: "🔐 Parol xato! Faqat Blip uchun." }, 403);
+    //  }
         if (!question) return json({ error: "Savol yo'q" }, 400);
         if (question.length > 2000) return json({ error: "Savol juda uzun" }, 400);
 
