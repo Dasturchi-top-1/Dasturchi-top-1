@@ -1,95 +1,5 @@
-    // ============================================================
-    // 🎭 REVERSE TURING TEST
-    // ============================================================
-    if (path === "/turing" && request.method === "POST") {
-      try {
-        const body = await request.json();
-        const parol = (body.parol || "").trim();
-       // if (parol !== COUNCIL_PAROL) {
-        //  return json({ error: "🔐 Parol xato!" }, 403);
-      //  }
-
-        // Yangi mavzu
-        if (body.action === "topic") {
-          const topic = TURING_TOPICS[Math.floor(Math.random() * TURING_TOPICS.length)];
-          return json({ topic });
-        }
-
-        // Hakam qarori
-        if (body.action === "judge") {
-          const topic = (body.topic || "").trim();
-          const userAnswer = (body.userAnswer || "").trim();
-          if (!topic || !userAnswer) return json({ error: "Mavzu yoki javob yo'q" }, 400);
-
-          // 1. AI odam bo'lib yozadi
-          const aiHumanPrompt = `Sen oddiy 14 yoshli o'smir odamsan. Quyidagi savolga ODDIY, SODDA, his-tuyg'uli javob yoz. Xuddi odam kabi — xato bilan, norasmiy, qisqa (2-4 gap). FAQAT javob yoz.
-
-Savol: ${topic}`;
-
-          const aiResult = await geminiCall("gemini-3.8-flash",
-            "Sen oddiy o'smir odamsan. Odam kabi yoz.",
-            aiHumanPrompt, env, 400);
-          const aiAnswer = aiResult.error ? "Javob yo'q" : aiResult.text;
-
-          // 2. Tasodifiy tartib
-          const userFirst = Math.random() < 0.5;
-          const answer1 = userFirst ? userAnswer : aiAnswer;
-          const answer2 = userFirst ? aiAnswer : userAnswer;
-
-          // 3. Hakam qaror qabul qiladi
-          const judgePrompt = `Sen Turing Test hakamisan. Ikki javobni o'qi.
-Biri ODAM tomonidan yozilgan, biri AI tomonidan.
-Qaysi biri ODAM ekanini aniqlashing kerak.
-
-SAVOL: ${topic}
-
-JAVOB 1:
-${answer1}
-
-JAVOB 2:
-${answer2}
-
-Qaysi biri odam? Faqat JSON qaytar:
-{"human": 1 yoki 2, "reason": "qisqa sabab"}`;
-
-          const judgeResult = await geminiCall("gemini-3.8-flash",
-            "Sen Turing Test hakamisan. Faqat JSON qaytar.",
-            judgePrompt, env, 300);
-
-          let judgeData = { human: 1, reason: "Aniqlanmadi" };
-          if(!judgeResult.error){
-            try {
-              const text = judgeResult.text;
-              const s = text.indexOf('{');
-              const e = text.lastIndexOf('}') + 1;
-              if(s >= 0 && e > s){
-                judgeData = JSON.parse(text.slice(s, e));
-              }
-            } catch(e){}
-          }
-
-          // Hakam to'g'ri topdimi?
-          const judgeSaysHuman = judgeData.human; // 1 yoki 2
-          const actualHuman = userFirst ? 1 : 2;
-          const judgeCorrect = (judgeSaysHuman === actualHuman);
-
-          return json({
-            answer1: answer1,
-            answer2: answer2,
-            judgeVerdict: `Hakam ${judgeSaysHuman}-javobni odam deb topdi`,
-            humanIsUser: userFirst ? true : false,
-            userWins: !judgeCorrect,
-            reasoning: judgeData.reason || ""
-          });
-        }
-
-        return json({ error: "Noma'lum action" }, 400);
-      } catch (e) {
-        return json({ error: e.message }, 500);
-      }
-            }
 // ============================================================
-// ⚡ BLIP AI WORKER v4.2 — Google Gemini 3 (yangi modellar)
+// ⚡ BLIP AI WORKER v5.0 — Gemini 3, parolsiz
 // ============================================================
 
 const SYSTEM = `Sen Blip Agent — Telegram bot orqali ishlovchi AI yordamchisan.
@@ -97,85 +7,93 @@ Foydalanuvchi: Blip (Salohiddin), Tojikiston, Dushanbe, 13 yosh.
 O'zbek tilida (lotin) qisqa va aniq javob ber.
 Buyruq kutma — oddiy xabarga ham javob ber.`;
 
+// ============================================================
+// 🌐 TILLAR
+// ============================================================
 const COUNCIL_SYSTEM = {
   uz: `Sen aqlli va dono yordamchisan. O'zbek tilida (lotin) qisqa va aniq javob ber (3-5 gap). Faqat savolga javob ber.`,
   ru: `Ты умный и мудрый помощник. Отвечай на русском кратко и точно (3-5 предложений).`,
-  en: `You are a smart and wise assistant. Answer in English briefly and accurately (3-5 sentences).`
+  en: `You are a smart and wise assistant. Answer in English briefly and accurately (3-5 sentences).`,
+  tg: `Ту ёвари оқил ва доно ҳастӣ. Ба забони тоҷикӣ кӯтоҳ ва дақиқ ҷавоб деҳ (3-5 ҷумла).`
 };
 
 const JUDGE_SYSTEM = {
   uz: `Sen AI Kengashning dono raisisisan. Javoblarni tahlil qilib, O'ZBEK TILIDA qisqa xulosa yoz (5-7 gap).`,
   ru: `Ты мудрый председатель AI Совета. Проанализируй ответы и напиши краткий вывод на РУССКОМ (5-7 предложений).`,
-  en: `You are the wise chairman of the AI Council. Analyze answers and write brief conclusion in ENGLISH (5-7 sentences).`
+  en: `You are the wise chairman of the AI Council. Analyze answers and write brief conclusion in ENGLISH (5-7 sentences).`,
+  tg: `Ту раиси донои Шӯрои AI ҳастӣ. Ҷавобҳоро таҳлил кун ва хулосаи кӯтоҳ ба ЗАБОНИ ТОҶИКӢ нависед (5-7 ҷумла).`
 };
 
-const COUNCIL_PAROL = "921324";
+const TIME_SYSTEM = `Sen vaqt sayohatchisisan. Foydalanuvchi yil va joyni aytadi. Sen o'sha davrdagi voqeani tasvirlab berasan.
+FAQAT JSON qaytar:
+{"story":"O'sha davr haqida qisqa hikoya (4-6 gap)","fact":"Qiziqarli tarixiy fakt","imagePrompt":"English prompt for image"}`;
+
+const WORLD_SYSTEM = `Sen dunyo yaratuvchisisan. Har safar yangi fantastik dunyo o'ylab topasan.
+FAQAT JSON qaytar:
+{"name":"Dunyo nomi","story":"Dunyo haqida qisqa tavsif (4-6 gap)","fact":"Qiziqarli fakt","imagePrompt":"English prompt for image"}`;
+
+const DEBATE_FOR_SYSTEM = `Sen FOR tomoni vakilisan. Berilgan mavzuni HIMOYA qilasan. Kuchli argumentlar yoz (3-4 gap).`;
+const DEBATE_AGAINST_SYSTEM = `Sen AGAINST tomoni vakilisan. Berilgan mavzuga QARSHI chiqasan. Kuchli argumentlar yoz (3-4 gap).`;
+const DEBATE_JUDGE_SYSTEM = `Sen munozara hakamisan. Ikki tomon argumentini o'qib, xolis qaror chiqarasan (2-3 gap).`;
+
+const DREAM_SYSTEM = `Sen professional tush tahlilchisisan. Tushni o'qib, JSON formatda javob ber:
+{"analysis":"Tushning ma'nosi (3-5 gap)","symbols":["ramz1","ramz2"],"mood":"xursand/qo'rqinchli/g'alati/sokin/xafa","imagePrompt":"English prompt for image"}
+FAQAT JSON qaytar.`;
+
+const COUNCIL_PAROL = "SALOXIDDINJON UMARJON ENEM VA OILA";
+
 const TURING_TOPICS = [
-  "Hayotning ma'nosi nima?",
-  "Eng yaxshi dasturlash tili qaysi?",
-  "Kelajakda AI odamlarni almashtiradimi?",
-  "Pul baxt keltiradimi?",
-  "Maktab kerakmi yoki o'z-o'zini o'qitish yaxshimi?",
-  "Ijtimoiy tarmoqlar foydalimi yoki zararlimi?",
-  "Eng katta ixtiro nima?",
-  "Kosmik sayohat muhimmi?",
-  "Ta'lim tizimi qanday bo'lishi kerak?",
-  "Sun'iy intellekt xavflimi?",
-  "Kitob o'qish yoki film ko'rish?",
-  "Yolg'izlik yaxshimi yoki yomonmi?",
-  "Sport sog'liq uchun foydalimi?",
-  "Musiqa kayfiyatga ta'sir qiladimi?",
-  "Do'stlik puldan qimmatmi?"
+  "Hayotning ma'nosi nima?", "Eng yaxshi dasturlash tili qaysi?",
+  "Kelajakda AI odamlarni almashtiradimi?", "Pul baxt keltiradimi?",
+  "Maktab kerakmi yoki o'z-o'zini o'qitish yaxshimi?", "Ijtimoiy tarmoqlar foydalimi?",
+  "Eng katta ixtiro nima?", "Kosmik sayohat muhimmi?",
+  "Sun'iy intellekt xavflimi?", "Kitob o'qish yoki film ko'rish?"
 ];
-const DREAM_SYSTEM = `Sen professional tush tahlilchisisan. Foydalanuvchi tushini o'qib, quyidagi JSON formatda javob ber:
 
-{
-  "analysis": "Tushning ma'nosi va psixologik tahlili (3-5 gap, o'zbek tilida)",
-  "symbols": ["ramz1", "ramz2", "ramz3"],
-  "mood": "xursand/qo'rqinchli/g'alati/sokin/xafa/hayajonli",
-  "imagePrompt": "Tushni tasvirlovchi inglizcha prompt (rasm chizish uchun)"
-}
-
-FAQAT JSON qaytar. Boshqa hech narsa yozma.`;
-
-// ============================================================
-// 🌟 GEMINI 3 MODELLARI (YANGI)
-// ============================================================
 const GEMINI_MODELS = [
   { id: "gemini-3.8-flash", name: "Gemini 3.8", emoji: "🧠" },
   { id: "gemini-3.5-flash", name: "Gemini 3.5", emoji: "⚡" },
   { id: "gemini-3.5-flash-lite", name: "Gemini 3.5 Lite", emoji: "🌟" },
   { id: "gemini-3.1-flash-lite", name: "Gemini 3.1 Lite", emoji: "💎" },
-  { id: "gemini-3.8-flash", name: "Gemini 3.8 Flash", emoji: "🚀" }
+  { id: "gemini-3.8-flash", name: "Gemini Flash", emoji: "🚀" }
 ];
 
+const FALLBACK_MODELS = ["gemini-3.5-flash-lite", "gemini-3.1-flash-lite", "gemini-3.5-flash", "gemini-3.8-flash"];
+
 // ============================================================
-// 🌟 GEMINI API CHAQIRUV
+// 🌟 GEMINI API
 // ============================================================
-async function geminiCall(model, sysMsg, userMsg, env, maxTokens = 800) {
+async function geminiRaw(model, sysMsg, userMsg, env, maxTokens) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GEMINI_API_KEY}`;
   try {
     const r = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [
-          { role: "user", parts: [{ text: userMsg }] }
-        ],
+        contents: [{ role: "user", parts: [{ text: userMsg }] }],
         systemInstruction: { parts: [{ text: sysMsg }] },
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: maxTokens
-        }
+        generationConfig: { temperature: 0.7, maxOutputTokens: maxTokens }
       })
     });
     const d = await r.json();
     if (d.error) return { error: d.error.message || "Xato" };
     const text = d.candidates?.[0]?.content?.parts?.[0]?.text;
-    return { text: text || "Javob yo'q" };
+    if (!text) return { error: "Javob bo'sh" };
+    return { text: text };
   } catch (e) {
     return { error: e.message };
   }
+}
+
+async function geminiCall(model, sysMsg, userMsg, env, maxTokens = 800) {
+  let result = await geminiRaw(model, sysMsg, userMsg, env, maxTokens);
+  if (result.text) return result;
+  for (const fb of FALLBACK_MODELS) {
+    if (fb === model) continue;
+    result = await geminiRaw(fb, sysMsg, userMsg, env, maxTokens);
+    if (result.text) return result;
+  }
+  return { error: result.error || "Barcha modellar ishlamadi" };
 }
 
 // ============================================================
@@ -186,7 +104,7 @@ async function sendTg(chatId, text, env) {
     await fetch("https://api.telegram.org/bot" + env.TELEGRAM_TOKEN + "/sendMessage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text: text.slice(i, i+4000) })
+      body: JSON.stringify({ chat_id: chatId, text: text.slice(i, i + 4000) })
     });
   }
 }
@@ -202,7 +120,7 @@ async function sendTyping(chatId, env) {
 }
 
 // ============================================================
-// 🤖 AGENT LOOP (Telegram uchun)
+// 🤖 AGENT LOOP (Telegram)
 // ============================================================
 async function agentLoop(userMsg, chatId, env) {
   const key = "hist:" + chatId;
@@ -239,7 +157,6 @@ function json(obj, status = 200) {
     headers: { ...CORS, "Content-Type": "application/json" }
   });
 }
-
 // ============================================================
 // 🚀 MAIN
 // ============================================================
@@ -253,77 +170,20 @@ export default {
     const path = url.pathname;
 
     // ============================================================
-// 🌙 DREAM JOURNAL
-// ============================================================
-if (path === "/dream" && request.method === "POST") {
-  try {
-    const body = await request.json();
-    const parol = (body.parol || "").trim();
-    const dream = (body.dream || "").trim();
-
-    //if (parol !== COUNCIL_PAROL) {
-     // return json({ error: "🔐 Parol xato!" }, 403);
-   // }
-    if (!dream) return json({ error: "Tush matni yo'q" }, 400);
-    if (dream.length > 2000) return json({ error: "Tush juda uzun" }, 400);
-
-    const result = await geminiCall("gemini-3.8-flash", DREAM_SYSTEM, dream, env, 600);
-
-    if (result.error) {
-      return json({ error: "AI tahlil xatosi: " + result.error }, 500);
-    }
-
-    let data = {
-      analysis: "Tahlil qilinmadi",
-      symbols: [],
-      mood: "g'alati",
-      imagePrompt: "mystical dream scene, surreal, ethereal"
-    };
-
-    try {
-      const text = result.text;
-      const s = text.indexOf('{');
-      const e = text.lastIndexOf('}') + 1;
-      if (s >= 0 && e > s) {
-        data = { ...data, ...JSON.parse(text.slice(s, e)) };
-      }
-    } catch (e) {}
-
-    const imagePrompt = data.imagePrompt || dream.slice(0, 100);
-    const encodedPrompt = encodeURIComponent(imagePrompt);
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=768&height=768&nologo=true&seed=${Date.now()}`;
-
-    return json({
-      analysis: data.analysis,
-      symbols: data.symbols || [],
-      mood: data.mood || "g'alati",
-      imageUrl: imageUrl
-    });
-  } catch (e) {
-    return json({ error: e.message }, 500);
-  }
-    }
-                   
-      // ============================================================
     // 🏛 AI COUNCIL
     // ============================================================
     if (path === "/council" && request.method === "POST") {
       try {
         const body = await request.json();
         const question = (body.question || "").trim();
-        const parol = (body.parol || "").trim();
         const lang = (body.lang || "uz").toLowerCase();
 
-       // if (parol !== COUNCIL_PAROL) {
-        //  return json({ error: "🔐 Parol xato! Faqat Blip uchun." }, 403);
-    //  }
         if (!question) return json({ error: "Savol yo'q" }, 400);
         if (question.length > 2000) return json({ error: "Savol juda uzun" }, 400);
 
         const sysMsg = COUNCIL_SYSTEM[lang] || COUNCIL_SYSTEM.uz;
         const judgeSys = JUDGE_SYSTEM[lang] || JUDGE_SYSTEM.uz;
 
-        // 5 ta Gemini parallel
         const promises = GEMINI_MODELS.map(m =>
           geminiCall(m.id, sysMsg, question, env, 500)
             .then(r => ({
@@ -335,12 +195,13 @@ if (path === "/dream" && request.method === "POST") {
 
         const answers = await Promise.all(promises);
 
-        // Rais xulosasi
         let judgePrompt;
         if (lang === "ru") {
           judgePrompt = `Вопрос: "${question}"\n\nОтветы:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nНапиши общий вывод на РУССКОМ (5-7 предложений).`;
         } else if (lang === "en") {
           judgePrompt = `Question: "${question}"\n\nAnswers:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nWrite general conclusion in ENGLISH (5-7 sentences).`;
+        } else if (lang === "tg") {
+          judgePrompt = `Савол: "${question}"\n\nҶавобҳо:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nХулосаи умумӣ ба ЗАБОНИ ТОҶИКӢ нависед (5-7 ҷумла).`;
         } else {
           judgePrompt = `Savol: "${question}"\n\nJavoblar:\n\n${answers.map((a, i) => `${i+1}. ${a.name}:\n${a.answer}`).join("\n\n")}\n\nUmumiy xulosa yoz O'ZBEK TILIDA (5-7 gap).`;
         }
@@ -349,6 +210,184 @@ if (path === "/dream" && request.method === "POST") {
         const conclusion = judgeResult.error ? ("❌ " + judgeResult.error) : judgeResult.text;
 
         return json({ answers, conclusion });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // 🌙 DREAM JOURNAL
+    // ============================================================
+    if (path === "/dream" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const dream = (body.dream || "").trim();
+
+        if (!dream) return json({ error: "Tush matni yo'q" }, 400);
+        if (dream.length > 2000) return json({ error: "Tush juda uzun" }, 400);
+
+        const result = await geminiCall("gemini-3.8-flash", DREAM_SYSTEM, dream, env, 600);
+        if (result.error) return json({ error: "AI xatosi: " + result.error }, 500);
+
+        let data = { analysis: "Tahlil qilinmadi", symbols: [], mood: "g'alati", imagePrompt: "mystical dream, surreal" };
+        try {
+          const text = result.text;
+          const s = text.indexOf('{');
+          const e = text.lastIndexOf('}') + 1;
+          if (s >= 0 && e > s) data = { ...data, ...JSON.parse(text.slice(s, e)) };
+        } catch {}
+
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(data.imagePrompt || 'dream')}?width=768&height=768&nologo=true&seed=${Date.now()}`;
+
+        return json({
+          analysis: data.analysis,
+          symbols: data.symbols || [],
+          mood: data.mood || "g'alati",
+          imageUrl: imageUrl
+        });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // ⏰ TIME MACHINE
+    // ============================================================
+    if (path === "/time" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const year = (body.year || "").toString().trim();
+        const place = (body.place || "").trim();
+
+        if (!year) return json({ error: "Yil yo'q" }, 400);
+
+        const prompt = `Yil: ${year}${place ? '\nJoy: ' + place : ''}\n\nO'sha davr haqida hikoya yoz.`;
+        const result = await geminiCall("gemini-3.8-flash", TIME_SYSTEM, prompt, env, 600);
+        if (result.error) return json({ error: "AI xatosi: " + result.error }, 500);
+
+        let data = { story: "Hikoya yaratilmadi", fact: "", imagePrompt: `year ${year} historical scene` };
+        try {
+          const text = result.text;
+          const s = text.indexOf('{');
+          const e = text.lastIndexOf('}') + 1;
+          if (s >= 0 && e > s) data = { ...data, ...JSON.parse(text.slice(s, e)) };
+        } catch {}
+
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(data.imagePrompt || year)}?width=768&height=768&nologo=true&seed=${Date.now()}`;
+
+        return json({ story: data.story, fact: data.fact || "", imageUrl });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // 🎲 ONE-BUTTON WORLD
+    // ============================================================
+    if (path === "/world" && request.method === "POST") {
+      try {
+        const body = await request.json();
+
+        const prompt = `Yangi fantastik dunyo yarat. Tasodifiy mavzu tanla (kosmos, okean, sehr, texnologiya, o'rmon, cho'l).`;
+        const result = await geminiCall("gemini-3.8-flash", WORLD_SYSTEM, prompt, env, 600);
+        if (result.error) return json({ error: "AI xatosi: " + result.error }, 500);
+
+        let data = { name: "Yangi dunyo", story: "Dunyo yaratilmadi", fact: "", imagePrompt: "fantasy world, surreal" };
+        try {
+          const text = result.text;
+          const s = text.indexOf('{');
+          const e = text.lastIndexOf('}') + 1;
+          if (s >= 0 && e > s) data = { ...data, ...JSON.parse(text.slice(s, e)) };
+        } catch {}
+
+        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(data.imagePrompt || 'fantasy world')}?width=768&height=768&nologo=true&seed=${Date.now()}`;
+
+        return json({ name: data.name, story: data.story, fact: data.fact || "", imageUrl });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // ⚔️ AI DEBATE ARENA
+    // ============================================================
+    if (path === "/debate" && request.method === "POST") {
+      try {
+        const body = await request.json();
+        const topic = (body.topic || "").trim();
+
+        if (!topic) return json({ error: "Mavzu yo'q" }, 400);
+
+        const [forResult, againstResult] = await Promise.all([
+          geminiCall("gemini-3.8-flash", DEBATE_FOR_SYSTEM, topic, env, 400),
+          geminiCall("gemini-3.8-flash", DEBATE_AGAINST_SYSTEM, topic, env, 400)
+        ]);
+
+        const forArg = forResult.error ? "FOR argumenti olinmadi" : forResult.text;
+        const againstArg = againstResult.error ? "AGAINST argumenti olinmadi" : againstResult.text;
+
+        const judgePrompt = `Mavzu: "${topic}"\n\nFOR:\n${forArg}\n\nAGAINST:\n${againstArg}\n\nKim yaxshiroq argument keltirdi? Xolis qaror chiqar.`;
+        const judgeResult = await geminiCall("gemini-3.8-flash", DEBATE_JUDGE_SYSTEM, judgePrompt, env, 400);
+        const verdict = judgeResult.error ? "Hakam qaror qila olmadi" : judgeResult.text;
+
+        return json({ forArg, againstArg, verdict });
+      } catch (e) {
+        return json({ error: e.message }, 500);
+      }
+    }
+
+    // ============================================================
+    // 🎭 REVERSE TURING TEST
+    // ============================================================
+    if (path === "/turing" && request.method === "POST") {
+      try {
+        const body = await request.json();
+
+        if (body.action === "topic") {
+          const topic = TURING_TOPICS[Math.floor(Math.random() * TURING_TOPICS.length)];
+          return json({ topic });
+        }
+
+        if (body.action === "judge") {
+          const topic = (body.topic || "").trim();
+          const userAnswer = (body.userAnswer || "").trim();
+          if (!topic || !userAnswer) return json({ error: "Mavzu yoki javob yo'q" }, 400);
+
+          const aiHumanPrompt = `Sen oddiy 14 yoshli o'smir odamsan. Quyidagi savolga ODDIY, SODDA, his-tuyg'uli javob yoz (2-4 gap). FAQAT javob yoz.\n\nSavol: ${topic}`;
+          const aiResult = await geminiCall("gemini-3.8-flash", "Sen oddiy o'smir odamsan.", aiHumanPrompt, env, 400);
+          const aiAnswer = aiResult.error ? "Javob yo'q" : aiResult.text;
+
+          const userFirst = Math.random() < 0.5;
+          const answer1 = userFirst ? userAnswer : aiAnswer;
+          const answer2 = userFirst ? aiAnswer : userAnswer;
+
+          const judgePrompt = `Sen Turing Test hakamisan.\nSAVOL: ${topic}\n\nJAVOB 1:\n${answer1}\n\nJAVOB 2:\n${answer2}\n\nQaysi biri odam? Faqat JSON qaytar: {"human":1,"reason":"sabab"}`;
+          const judgeResult = await geminiCall("gemini-3.8-flash", "Sen Turing Test hakamisan.", judgePrompt, env, 300);
+
+          let judgeData = { human: 1, reason: "Aniqlanmadi" };
+          if (!judgeResult.error) {
+            try {
+              const text = judgeResult.text;
+              const s = text.indexOf('{');
+              const e = text.lastIndexOf('}') + 1;
+              if (s >= 0 && e > s) judgeData = JSON.parse(text.slice(s, e));
+            } catch {}
+          }
+
+          const actualHuman = userFirst ? 1 : 2;
+          const judgeCorrect = (judgeData.human === actualHuman);
+
+          return json({
+            answer1: answer1,
+            answer2: answer2,
+            judgeVerdict: `Hakam ${judgeData.human}-javobni odam deb topdi`,
+            humanIsUser: userFirst,
+            userWins: !judgeCorrect,
+            reasoning: judgeData.reason || ""
+          });
+        }
+
+        return json({ error: "Noma'lum action" }, 400);
       } catch (e) {
         return json({ error: e.message }, 500);
       }
@@ -383,7 +422,7 @@ if (path === "/dream" && request.method === "POST") {
       const name = msg.chat.first_name || "Blip";
 
       if (text === "/start") {
-        await sendTg(chatId, `Salom ${name}! 👋\n\nMen Blip Agent — AI yordamching.\n\n/reset — tozalash\n/help — yordam`, env);
+        await sendTg(chatId, `Salom ${name}! 👋\n\nMen Blip Agent.\n\n/reset — tozalash\n/help — yordam`, env);
         return new Response("ok");
       }
       if (text === "/reset") {
@@ -409,7 +448,7 @@ if (path === "/dream" && request.method === "POST") {
     // ============================================================
     // 🏠 HEALTH CHECK
     // ============================================================
-    return new Response("Blip AI v4.2 (Gemini 3) ishlayapti ✅\n\nEndpoints:\n/api\n/council 🔐\n/webhook", {
+    return new Response("Blip AI v5.0 ishlayapti ✅\n\nEndpoints:\n/council\n/dream\n/turing\n/time\n/world\n/debate\n/api\n/webhook", {
       headers: { "Content-Type": "text/plain; charset=utf-8" }
     });
   }
