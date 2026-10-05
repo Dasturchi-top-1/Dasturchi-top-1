@@ -3,414 +3,622 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Blip — 13 yoshli dasturchi</title>
+<title>Blip Multiverse</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
-  --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
-  --gold:#fbbf24;--pink:#ec4899;--green:#10b981;--cyan:#06b6d4;
-}
-[data-theme="light"]{
-  --bg:#f5f5fb;--card:#fff;--text:#111827;--muted:#6b7280;
-  --accent:#4f46e5;--accent2:#9333ea;--border:#e5e7eb;
-}
-*{transition:background .3s,color .3s,border-color .3s}
-body{
-  font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;line-height:1.6;
-  background-image:
-    radial-gradient(circle at 15% 10%,rgba(99,102,241,.15),transparent 40%),
-    radial-gradient(circle at 85% 90%,rgba(168,85,247,.15),transparent 40%);
-  background-attachment:fixed;
-}
-.container{max-width:900px;margin:auto;padding:20px}
-nav{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:14px 0;position:sticky;top:0;background:var(--bg);z-index:10;
-  border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;
-}
-.logo{
-  font-weight:800;font-size:18px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.nav-right{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.lang-switch{
-  display:flex;gap:3px;background:var(--card);
-  padding:4px;border-radius:10px;border:1px solid var(--border);
-}
-.lang-btn{
-  padding:5px 9px;border:none;border-radius:7px;cursor:pointer;
-  background:transparent;color:var(--muted);font-weight:700;
-  font-size:11px;transition:all .2s;font-family:inherit;
-}
-.lang-btn:hover{color:var(--text)}
-.lang-btn.on{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  color:#fff;
-}
-.theme-btn{
-  background:var(--card);border:1px solid var(--border);color:var(--text);
-  padding:6px 10px;border-radius:8px;cursor:pointer;font-size:14px;
-}
-header{text-align:center;padding:50px 20px 40px}
-.avatar{
-  width:120px;height:120px;border-radius:50%;margin:0 auto 20px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--pink));
-  display:flex;align-items:center;justify-content:center;
-  font-size:56px;font-weight:900;color:#fff;
-  box-shadow:0 0 60px rgba(99,102,241,.5);
-  animation:float 3s ease-in-out infinite;
-}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-h1{
-  font-size:52px;font-weight:900;
-  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
-  background-size:400% 400%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;animation:grad 6s ease infinite;
-}
+:root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--gold:#fbbf24;--red:#ef4444;--grn:#10b981;--pnk:#ec4899;--cyan:#06b6d4}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:12px;background-image:radial-gradient(circle at 15% 15%,rgba(99,102,241,.15),transparent 40%),radial-gradient(circle at 85% 85%,rgba(168,85,247,.15),transparent 40%);background-attachment:fixed}
+.c{max-width:800px;margin:auto}
+header{text-align:center;padding:24px 0 16px}
+h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 6s ease infinite}
 @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.subtitle{color:var(--muted);font-size:16px;margin-top:10px}
-.badges{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.badge{
-  font-size:12px;padding:6px 14px;border-radius:999px;
-  background:var(--card);border:1px solid var(--border);color:var(--muted);
-}
-section{padding:36px 0}
-h2{font-size:26px;margin-bottom:20px;text-align:center;font-weight:800}
-h2 span{
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.about{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;padding:24px;font-size:15px;line-height:1.8;
-}
-.about-row{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap}
-.about-row b{color:var(--accent);min-width:120px}
-.grid{
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:14px;
-}
-.project{
-  background:var(--card);border:1px solid var(--border);border-radius:16px;
-  padding:20px;text-decoration:none;color:var(--text);
-  transition:all .3s;display:block;position:relative;overflow:hidden;
-}
-.project::before{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(99,102,241,.1),transparent);
-  transition:left .6s;
-}
-.project:hover{
-  transform:translateY(-6px);border-color:var(--accent);
-  box-shadow:0 16px 32px rgba(99,102,241,.3);
-}
-.project:hover::before{left:100%}
-.project-ico{
-  font-size:36px;display:block;margin-bottom:10px;
-  transition:transform .3s;
-}
-.project:hover .project-ico{transform:scale(1.15) rotate(-5deg)}
-.project h3{font-size:16px;margin-bottom:6px}
-.project p{font-size:12px;color:var(--muted);line-height:1.5}
-.project .tag{
-  display:inline-block;margin-top:10px;font-size:10px;
-  padding:2px 8px;border-radius:999px;
-  background:rgba(99,102,241,.2);color:var(--accent);
-  border:1px solid var(--accent);
-}
-.project.hot .tag{
-  background:rgba(16,185,129,.2);color:var(--green);
-  border-color:var(--green);
-}
-.project.voice .tag{
-  background:rgba(6,182,212,.2);color:var(--cyan);
-  border-color:var(--cyan);
-}
-.skills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.skill{
-  background:var(--card);border:1px solid var(--border);
-  padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;
-}
-.skill:hover{border-color:var(--accent);color:var(--accent)}
-.contact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.contact a{
-  display:flex;align-items:center;gap:8px;
-  background:var(--card);border:1px solid var(--border);border-radius:12px;
-  padding:12px 20px;text-decoration:none;color:var(--text);font-weight:600;
-  transition:all .3s;
-}
-.contact a:hover{border-color:var(--accent);transform:translateY(-3px)}
-.contact span{font-size:20px}
-footer{
-  text-align:center;padding:30px 20px;color:var(--muted);
-  font-size:12px;border-top:1px solid var(--border);margin-top:30px;
-}
-footer a{color:var(--accent);text-decoration:none}
-@media(max-width:600px){
-  h1{font-size:34px}
-  .avatar{width:90px;height:90px;font-size:42px}
-  header{padding:40px 16px 30px}
-  h2{font-size:20px}
-  .lang-btn{padding:4px 7px;font-size:10px}
-  .about-row b{min-width:auto}
-}
+.sub{color:var(--muted);margin-top:6px;font-size:13px}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding:10px 0;border-bottom:1px solid var(--brd);margin-bottom:16px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 14px;border-radius:999px;cursor:pointer;background:var(--card);border:1px solid var(--brd);color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;transition:all .2s}
+.tab.active{background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
+.tab:hover{color:var(--text)}
+.tc{display:none;animation:fade .3s ease}
+.tc.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:14px}
+.gc{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all .3s}
+.gc:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 16px 32px rgba(99,102,241,.25)}
+.gc .i{font-size:36px;display:block;margin-bottom:10px}
+.gc h3{font-size:17px;margin-bottom:6px}
+.gc p{font-size:13px;color:var(--muted);line-height:1.6}
+.tag{display:inline-block;margin-top:10px;font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(236,72,153,.2);color:var(--pnk);border:1px solid var(--pnk)}
+.tag.new{background:rgba(16,185,129,.15);color:var(--grn);border-color:var(--grn)}
+textarea,input[type="text"],input[type="number"]{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
+textarea{resize:vertical;min-height:90px}
+textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+.btn{padding:12px 20px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:14px;transition:all .25s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-full{width:100%}
+.btn-sec{background:var(--card);border:1px solid var(--brd);color:var(--text)}
+.btn-sec:hover{background:#15152d;border-color:var(--acc)}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn-row .btn{flex:1;min-width:120px}
+.mic{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:12px 16px;border-radius:10px;cursor:pointer;font-size:18px}
+.mic:hover{border-color:var(--pnk)}
+.mic.rec{background:var(--pnk);color:#fff;border-color:var(--pnk);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.result{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:14px;animation:fade .5s ease;border-left:4px solid var(--acc)}
+.result img{width:100%;border-radius:12px;margin-top:10px;border:1px solid var(--brd)}
+.result-title{font-size:16px;font-weight:800;color:var(--acc);margin-bottom:10px}
+.result-text{font-size:14px;line-height:1.7;white-space:pre-wrap}
+.symbols{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.symbols span{background:rgba(168,85,247,.2);border:1px solid var(--acc);padding:3px 10px;border-radius:999px;font-size:11px;color:var(--acc2)}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.answer{background:var(--bg);border:1.5px solid var(--brd);border-radius:12px;padding:12px}
+.answer-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
+.answer-text{font-size:13px;line-height:1.6;white-space:pre-wrap}
+.verdict{text-align:center;padding:16px;border-radius:14px;margin-bottom:14px}
+.verdict.win{background:rgba(16,185,129,.15);border:2px solid var(--grn)}
+.verdict.lose{background:rgba(239,68,68,.15);border:2px solid var(--red)}
+.verdict.gold{background:rgba(251,191,36,.15);border:2px solid var(--gold)}
+.verdict-title{font-size:20px;font-weight:800;margin-bottom:6px}
+.verdict-text{font-size:13px;line-height:1.6}
+.loading{text-align:center;padding:30px;color:var(--muted);font-size:14px}
+.dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
+@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+.info{background:rgba(99,102,241,.1);border:1px solid var(--acc);border-radius:12px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:20px}
+.footer a{color:var(--acc);text-decoration:none}
+.debate-role{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.debate-role-title{font-size:13px;font-weight:800}
+.debate-text{font-size:13px;line-height:1.7;white-space:pre-wrap}
+.btn-mini{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;transition:all .25s}
+.btn-mini:hover{border-color:var(--acc);color:var(--acc)}
+.btn-mini.red{border-color:var(--red);color:var(--red)}
+.btn-mini.grn{border-color:var(--grn);color:var(--grn)}
+.btn-mini.gold{border-color:var(--gold);color:var(--gold)}
+.advocate-card{background:rgba(16,185,129,.08);border:1.5px solid var(--grn);border-radius:14px;padding:14px;margin-bottom:10px}
+.prosecutor-card{background:rgba(239,68,68,.08);border:1.5px solid var(--red);border-radius:14px;padding:14px;margin-bottom:10px}
+.judge-card{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:14px}
+.speech-active{background:var(--grn) !important;color:#fff !important}
+@media(max-width:600px){h1{font-size:24px}.answers{grid-template-columns:1fr}.c{padding:6px}body{padding:8px}}
 </style>
 </head>
 <body>
-<div class="container">
-
-<nav>
-  <div class="logo">⚡ Blip</div>
-  <div class="nav-right">
-    <div class="lang-switch">
-      <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿 UZ</button>
-      <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺 RU</button>
-      <button class="lang-btn" id="langEN" onclick="setLang('en')">🇬🇧 EN</button>
-      <button class="lang-btn" id="langTJ" onclick="setLang('tj')">🇹🇯 TJ</button>
-    </div>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-  </div>
-</nav>
+<div class="c">
 
 <header>
-  <div class="avatar">B</div>
-  <h1>Blip</h1>
-  <p class="subtitle" id="subtitle"></p>
-  <div class="badges">
-    <span class="badge">🐍 Python</span>
-    <span class="badge">⚡ JavaScript</span>
-    <span class="badge">☁️ Cloudflare</span>
-    <span class="badge">📱 Termux</span>
-    <span class="badge">🤖 AI</span>
-  </div>
+  <h1>🌌 BLIP MULTIVERSE</h1>
+  <p class="sub">5 ta AI o'yin · 24/7 bepul</p>
 </header>
 
-<section>
-  <h2 id="h-about"></h2>
-  <div class="about" id="aboutBox"></div>
-</section>
+<div class="tabs">
+  <div class="tab active" onclick="sw('home',this)">🏠 Bosh</div>
+  <div class="tab" onclick="sw('turing',this)">🎭 Turing</div>
+  <div class="tab" onclick="sw('dream',this)">🌙 Dream</div>
+  <div class="tab" onclick="sw('time',this)">⏰ Time</div>
+  <div class="tab" onclick="sw('world',this)">🎲 World</div>
+  <div class="tab" onclick="sw('debate',this)">⚔️ Debate</div>
+</div>
 
-<section>
-  <h2 id="h-projects"></h2>
-  <div class="grid" id="projectsBox"></div>
-</section>
+<div class="tc active" id="t-home">
+  <div class="gc" onclick="sw('turing')"><span class="i">🎭</span><h3>Reverse Turing Test</h3><p>Sen AI bo'lib o'yna, AI odam bo'lib o'yna.</p><span class="tag new">TAYYOR</span></div>
+  <div class="gc" onclick="sw('dream')"><span class="i">🌙</span><h3>Dream Journal</h3><p>Tushingizni yozing. AI rasm chizadi va tahlil qiladi.</p><span class="tag new">TAYYOR</span></div>
+  <div class="gc" onclick="sw('time')"><span class="i">⏰</span><h3>Time Machine</h3><p>Istalgan yilga sayohat qiling.</p><span class="tag">YANGI</span></div>
+  <div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3>One-Button World</h3><p>Bitta tugma. Har bosganda yangi dunyo.</p><span class="tag">YANGI</span></div>
+  <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3>AI Sud Majlisi</h3><p>Advokat, Prokuror, Hakam. Ovozli!</p><span class="tag new">🔊 YANGI</span></div>
+  <div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3>AI Kengash</h3><p>5 ta AI javob — 1 ta xulosa.</p><span class="tag">MAVJUD</span></div>
+</div>
 
-<section>
-  <h2 id="h-skills"></h2>
-  <div class="skills">
-    <span class="skill">Python</span>
-    <span class="skill">JavaScript</span>
-    <span class="skill">HTML/CSS</span>
-    <span class="skill">Flask</span>
-    <span class="skill">Cloudflare Workers</span>
-    <span class="skill">GitHub Actions</span>
-    <span class="skill">Render</span>
-    <span class="skill">Gemini API</span>
-    <span class="skill">OpenRouter</span>
-    <span class="skill">SQLite</span>
-    <span class="skill">Termux</span>
-    <span class="skill">Pydroid 3</span>
+<div class="tc" id="t-turing">
+  <div class="info">💡 Hakam qaysi biri <b>odam</b> ekanini topadi.</div>
+  <div class="card">
+    <div class="info" style="margin-bottom:8px"><b>📌 Mavzu:</b> <span id="ttopic">Yuklanmoqda...</span></div>
+    <textarea id="tans" placeholder="AI bo'lib javob yozing..."></textarea>
+    <button class="btn btn-full" id="tbtn" onclick="tSub()">Yuborish</button>
   </div>
-</section>
+  <div id="tres"></div>
+</div>
 
-<section>
-  <h2 id="h-contact"></h2>
-  <div class="contact">
-    <a href="https://t.me/BLIP_KIBER_XAFSIZLIK" target="_blank">
-      <span>💬</span> Telegram
-    </a>
-    <a href="https://github.com/Dasturchi-top-1" target="_blank">
-      <span>🐙</span> GitHub
-    </a>
-    <a href="mailto:sulhiyahasanova1@gmail.com">
-      <span>✉️</span> Email
-    </a>
+<div class="tc" id="t-dream">
+  <div class="info">💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.</div>
+  <div class="card">
+    <textarea id="din" placeholder="Tushingizni yozing..."></textarea>
+    <div class="btn-row">
+      <button class="mic" id="dmic" onclick="mic('din','dmic')">🎤</button>
+      <button class="btn" id="dbtn" onclick="dSub()">🌙 Tahlil qilish</button>
+    </div>
   </div>
-</section>
+  <div id="dres"></div>
+</div>
 
-<footer id="footer"></footer>
-
+<div class="tc" id="t-time">
+  <div class="info">💡 Yil va joyni kiriting.</div>
+  <div class="card">
+    <input type="number" id="tyr" placeholder="Yil (1900)">
+    <input type="text" id="tpl" placeholder="Joy (Dushanbe)">
+    <button class="btn btn-full" id="tmb" onclick="tmSub()">⏰ Sayohat</button>
   </div>
-  <script>
-// ============================================================
-// 🌐 TILLAR
-// ============================================================
-const T = {
-  uz: {
-    subtitle: "13 yoshli dasturchi · Tojikiston, Dushanbe 🇹🇯",
-    hAbout: "👤 Men haqimda",
-    hProjects: "🚀 Loyihalarim",
-    hSkills: "🛠 Ko'nikmalarim",
-    hContact: "📬 Aloqa",
-    footer: "⚡ Blip · 2026 · Tojikiston 🇹🇯",
-    about: [
-      ["Taxallus", "Blip"],
-      ["Yosh", "13"],
-      ["Joy", "Dushanbe, Tojikiston 🇹🇯"],
-      ["Yo'nalish", "Telegram botlar, AI, veb-saytlar"],
-      ["Muhit", "Pydroid 3, Termux, Cloudflare, Render"],
-      ["Maqsad", "Katta Python loyihasi qilish"]
-    ],
-    projects: [
-      { ico:"🌌", name:"Blip Multiverse", desc:"5 ta AI o'yin — bitta joyda! Turing, Dream, Time, World, Debate.", tag:"🔥 YANGI", cls:"hot", url:"multiverse.html" },
-      { ico:"🏛", name:"AI Kengash", desc:"Bitta savol — 5 ta AI javob — 1 ta dono xulosa.", tag:"AI", cls:"", url:"council.html" },
-      { ico:"🎭", name:"Reverse Turing Test", desc:"Sen AI bo'lib o'yna, AI odam bo'lib. Hakam topadi.", tag:"O'YIN", cls:"", url:"turing.html" },
-      { ico:"🌙", name:"Dream Journal", desc:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.", tag:"AI", cls:"", url:"dream.html" },
-      { ico:"🔊", name:"Ovozli Sud", desc:"Advokat, Prokuror, Hakam — 3 xil ovozda bahslashadi.", tag:"🔊 YANGI", cls:"voice", url:"multiverse.html" },
-      { ico:"🤖", name:"Telegram Botlar", desc:"Gmail Agent, GitHub Agent, AI botlar — 24/7.", tag:"BOT", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
-      { ico:"💻", name:"GitHub", desc:"Barcha kod, loyihalar va tajribalar. Ochiq kod.", tag:"KOD", cls:"", url:"https://github.com/Dasturchi-top-1" }
-    ]
-  },
-  ru: {
-    subtitle: "13-летний программист · Таджикистан, Душанбе 🇹🇯",
-    hAbout: "👤 Обо мне",
-    hProjects: "🚀 Мои проекты",
-    hSkills: "🛠 Мои навыки",
-    hContact: "📬 Контакты",
-    footer: "⚡ Blip · 2026 · Таджикистан 🇹🇯",
-    about: [
-      ["Псевдоним", "Blip"],
-      ["Возраст", "13"],
-      ["Город", "Душанбе, Таджикистан 🇹🇯"],
-      ["Направление", "Telegram-боты, AI, сайты"],
-      ["Среда", "Pydroid 3, Termux, Cloudflare, Render"],
-      ["Цель", "Создать большой Python-проект"]
-    ],
-    projects: [
-      { ico:"🌌", name:"Blip Multiverse", desc:"5 AI-игр в одном месте! Turing, Dream, Time, World, Debate.", tag:"🔥 НОВОЕ", cls:"hot", url:"multiverse.html" },
-      { ico:"🏛", name:"AI Совет", desc:"Один вопрос — 5 AI ответов — 1 мудрый вывод.", tag:"AI", cls:"", url:"council.html" },
-      { ico:"🎭", name:"Reverse Turing Test", desc:"Играй как AI, AI играет как человек. Судья определит.", tag:"ИГРА", cls:"", url:"turing.html" },
-      { ico:"🌙", name:"Dream Journal", desc:"Напиши сон. AI нарисует и проанализирует.", tag:"AI", cls:"", url:"dream.html" },
-      { ico:"🔊", name:"Голосовой суд", desc:"Адвокат, Прокурор, Судья — 3 разных голоса.", tag:"🔊 НОВОЕ", cls:"voice", url:"multiverse.html" },
-      { ico:"🤖", name:"Telegram-боты", desc:"Gmail Agent, GitHub Agent, AI-боты — 24/7.", tag:"БОТ", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
-      { ico:"💻", name:"GitHub", desc:"Весь код, проекты и опыт. Открытый код.", tag:"КОД", cls:"", url:"https://github.com/Dasturchi-top-1" }
-    ]
-  },
-  en: {
-    subtitle: "13-year-old developer · Tajikistan, Dushanbe 🇹🇯",
-    hAbout: "👤 About me",
-    hProjects: "🚀 My projects",
-    hSkills: "🛠 My skills",
-    hContact: "📬 Contact",
-    footer: "⚡ Blip · 2026 · Tajikistan 🇹🇯",
-    about: [
-      ["Nickname", "Blip"],
-      ["Age", "13"],
-      ["City", "Dushanbe, Tajikistan 🇹🇯"],
-      ["Focus", "Telegram bots, AI, websites"],
-      ["Environment", "Pydroid 3, Termux, Cloudflare, Render"],
-      ["Goal", "Build a big Python project"]
-    ],
-    projects: [
-      { ico:"🌌", name:"Blip Multiverse", desc:"5 AI games in one place! Turing, Dream, Time, World, Debate.", tag:"🔥 NEW", cls:"hot", url:"multiverse.html" },
-      { ico:"🏛", name:"AI Council", desc:"One question — 5 AI answers — 1 wise conclusion.", tag:"AI", cls:"", url:"council.html" },
-      { ico:"🎭", name:"Reverse Turing Test", desc:"You play as AI, AI plays as human. Judge decides.", tag:"GAME", cls:"", url:"turing.html" },
-      { ico:"🌙", name:"Dream Journal", desc:"Write your dream. AI draws and analyzes it.", tag:"AI", cls:"", url:"dream.html" },
-      { ico:"🔊", name:"Voice Court", desc:"Lawyer, Prosecutor, Judge — 3 different voices.", tag:"🔊 NEW", cls:"voice", url:"multiverse.html" },
-      { ico:"🤖", name:"Telegram Bots", desc:"Gmail Agent, GitHub Agent, AI bots — 24/7.", tag:"BOT", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
-      { ico:"💻", name:"GitHub", desc:"All code, projects and experiments. Open source.", tag:"CODE", cls:"", url:"https://github.com/Dasturchi-top-1" }
-    ]
-  },
-  tj: {
-    subtitle: "Барномасози 13-сола · Тоҷикистон, Душанбе 🇹🇯",
-    hAbout: "👤 Дар бораи ман",
-    hProjects: "🚀 Лоиҳаҳои ман",
-    hSkills: "🛠 Малакаҳои ман",
-    hContact: "📬 Тамос",
-    footer: "⚡ Blip · 2026 · Тоҷикистон 🇹🇯",
-    about: [
-      ["Тахаллус", "Blip"],
-      ["Синну сол", "13"],
-      ["Шаҳр", "Душанбе, Тоҷикистон 🇹🇯"],
-      ["Самт", "Ботҳои Telegram, AI, веб-сайтҳо"],
-      ["Муҳит", "Pydroid 3, Termux, Cloudflare, Render"],
-      ["Мақсад", "Лоиҳаи калони Python сохтан"]
-    ],
-    projects: [
-      { ico:"🌌", name:"Blip Multiverse", desc:"5 бозии AI дар як ҷо! Turing, Dream, Time, World, Debate.", tag:"🔥 НАВ", cls:"hot", url:"multiverse.html" },
-      { ico:"🏛", name:"Шӯрои AI", desc:"Як савол — 5 ҷавоби AI — 1 хулосаи доно.", tag:"AI", cls:"", url:"council.html" },
-      { ico:"🎭", name:"Reverse Turing Test", desc:"Ҳамчун AI бозӣ кун, AI ҳамчун инсон. Довар муайян мекунад.", tag:"БОЗӢ", cls:"", url:"turing.html" },
-      { ico:"🌙", name:"Dream Journal", desc:"Хоби худро нависед. AI расм мекашад ва таҳлил мекунад.", tag:"AI", cls:"", url:"dream.html" },
-      { ico:"🔊", name:"Суди овозӣ", desc:"Адвокат, Прокурор, Довар — 3 овози гуногун.", tag:"🔊 НАВ", cls:"voice", url:"multiverse.html" },
-      { ico:"🤖", name:"Ботҳои Telegram", desc:"Gmail Agent, GitHub Agent, AI-ботҳо — 24/7.", tag:"БОТ", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
-      { ico:"💻", name:"GitHub", desc:"Ҳамаи код, лоиҳаҳо ва таҷрибаҳо. Коди кушод.", tag:"КОД", cls:"", url:"https://github.com/Dasturchi-top-1" }
-    ]
-  }
-};
+  <div id="tmres"></div>
+</div>
+
+<div class="tc" id="t-world">
+  <div class="info">💡 Bitta tugma. Har bosganda yangi dunyo.</div>
+  <div class="card" style="text-align:center">
+    <button class="btn btn-full" id="wbtn" onclick="wSub()" style="font-size:16px;padding:22px">🎲 YANGI DUNYO</button>
+  </div>
+  <div id="wres"></div>
+</div>
+
+<div class="tc" id="t-debate">
+  <div class="info">💡 <b>👨‍💼 Advokat</b> himoya qiladi, <b>👨‍⚖️ Prokuror</b> qarshi chiqadi, <b>⚖️ Hakam</b> qaror chiqaradi.</div>
+  <div class="card">
+    <input type="text" id="dtp" placeholder="Mavzu (AI bilan do'stlashish kerakmi?)">
+    <button class="btn btn-full" id="dbb" onclick="dbSub()">⚔️ Sud majlisini boshlash</button>
+  </div>
+  <div id="dbres"></div>
+</div>
+
+<div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
+    </div>
+    <script>
+const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+const P="Blipzor921324";
+let rec=null,isR=false;
 
 // ============================================================
-// 🌐 TIL SOZLAMALARI
+// TAB
 // ============================================================
-let LANG = localStorage.getItem('blip_lang') || 'uz';
-
-function setLang(l){
-  LANG = l;
-  localStorage.setItem('blip_lang', l);
-  localStorage.setItem('ai_lang', l);
-  applyLang();
+function sw(n,el){
+  document.querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  const t=document.getElementById('t-'+n);
+  if(t)t.classList.add('active');
+  if(el)el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
 }
 
-function applyLang(){
-  const t = T[LANG];
-  document.documentElement.lang = LANG === 'tj' ? 'tg' : LANG;
+// ============================================================
+// HELPERS
+// ============================================================
+function esc(s){
+  return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function ld(t){return '<div class="loading">'+t+'<span class="dots"></span></div>';}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
-  ['uz','ru','en','tj'].forEach(l => {
-    const btn = document.getElementById('lang' + l.toUpperCase());
-    if(btn) btn.classList.toggle('on', l === LANG);
+// ============================================================
+// MIC
+// ============================================================
+function mic(inputId,btnId){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');return;}
+  if(!rec){rec=new SR();rec.lang='uz-UZ';rec.continuous=false;rec.interimResults=false;}
+  const btn=document.getElementById(btnId);
+  const inp=document.getElementById(inputId);
+  if(isR){try{rec.stop()}catch(e){}return;}
+  rec.onresult=e=>{
+    const t=e.results[0][0].transcript;
+    inp.value+=(inp.value?' ':'')+t;
+    inp.focus();
+  };
+  rec.onend=()=>{isR=false;btn.classList.remove('rec');};
+  rec.onerror=()=>{isR=false;btn.classList.remove('rec');};
+  try{rec.start();isR=true;btn.classList.add('rec');}catch(e){}
+}
+
+// ============================================================
+// POST
+// ============================================================
+async function post(ep,body){
+  const r=await fetch(API+ep,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({...body,parol:P})
   });
-
-  document.title = LANG === 'tj' ? 'Blip — барномасози 13-сола'
-                 : LANG === 'ru' ? 'Blip — 13-летний программист'
-                 : LANG === 'en' ? 'Blip — 13-year-old developer'
-                 : 'Blip — 13 yoshli dasturchi';
-
-  document.getElementById('subtitle').textContent = t.subtitle;
-  document.getElementById('h-about').textContent = t.hAbout;
-  document.getElementById('h-projects').textContent = t.hProjects;
-  document.getElementById('h-skills').textContent = t.hSkills;
-  document.getElementById('h-contact').textContent = t.hContact;
-  document.getElementById('footer').innerHTML = t.footer;
-
-  document.getElementById('aboutBox').innerHTML = t.about
-    .map(([k,v]) => `<div class="about-row"><b>${k}:</b> ${v}</div>`)
-    .join('');
-
-  document.getElementById('projectsBox').innerHTML = t.projects
-    .map(p => `
-      <a class="project ${p.cls || ''}" href="${p.url}" ${p.url.startsWith('http') ? 'target="_blank"' : ''}>
-        <span class="project-ico">${p.ico}</span>
-        <h3>${p.name}</h3>
-        <p>${p.desc}</p>
-        <span class="tag">${p.tag}</span>
-      </a>
-    `).join('');
+  return await r.json();
 }
 
 // ============================================================
-// 🎨 MAVZU
+// 🔊 OVOZ
 // ============================================================
-function toggleTheme(){
-  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-  const nxt = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', nxt);
-  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '🌙' : '☀️';
-  localStorage.setItem('blip_theme', nxt);
+let voices=[];
+
+function loadVoices(){
+  if(!window.speechSynthesis) return;
+  const v=window.speechSynthesis.getVoices();
+  if(v && v.length){ voices=v; }
+}
+loadVoices();
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+  setTimeout(loadVoices,100);
+  setTimeout(loadVoices,500);
+  setTimeout(loadVoices,1000);
+  setTimeout(loadVoices,2000);
+}
+
+function tanlaOvoz(tur){
+  if(!voices.length) loadVoices();
+  const all=voices;
+  if(!all.length) return null;
+  const byLang=(l)=>all.filter(v=>v.lang.toLowerCase().startsWith(l));
+  const uz=byLang('uz');
+  const tr=byLang('tr');
+  const ru=byLang('ru');
+  const en=byLang('en');
+  if(tur==='advocate'){ return uz[0]||tr[0]||en[0]||all[0]; }
+  if(tur==='prosecutor'){ return ru[0]||en[1]||en[0]||all[1]||all[0]; }
+  if(tur==='judge'){ return en[2]||ru[1]||en[0]||all[2]||all[0]; }
+  return all[0];
+}
+
+function splitText(text,max){
+  max=max||180;
+  const parts=[];
+  let current='';
+  const sentences=text.split(/(?<=[.!?])\s+/);
+  for(const s of sentences){
+    if((current+' '+s).length>max){
+      if(current) parts.push(current.trim());
+      current=s;
+    } else {
+      current+=' '+s;
+    }
+  }
+  if(current) parts.push(current.trim());
+  return parts.length?parts:[text];
+}
+
+function makeUtter(text,tur){
+  const u=new SpeechSynthesisUtterance(text);
+  const v=tanlaOvoz(tur);
+  if(v) u.voice=v;
+  u.lang=v?v.lang:'en-US';
+  u.rate=tur==='judge'?0.95:1.0;
+  u.pitch=tur==='advocate'?1.2:tur==='prosecutor'?0.8:1.0;
+  u.volume=1;
+  return u;
+}
+
+function speak(text,tur){
+  if(!window.speechSynthesis){
+    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const parts=splitText(text);
+  let i=0;
+  function next(){
+    if(i>=parts.length) return;
+    const u=makeUtter(parts[i],tur);
+    u.onend=()=>{i++;next();};
+    u.onerror=()=>{i++;next();};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
+
+function speakSeq(text,tur){
+  return new Promise(resolve=>{
+    if(!window.speechSynthesis){ resolve(); return; }
+    const parts=splitText(text);
+    let i=0;
+    function next(){
+      if(i>=parts.length){ resolve(); return; }
+      const u=makeUtter(parts[i],tur);
+      u.onend=()=>{i++;next();};
+      u.onerror=()=>{i++;next();};
+      window.speechSynthesis.speak(u);
+    }
+    next();
+  });
 }
 
 // ============================================================
-// 🎬 INIT
+// 🎭 TURING
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  const t = localStorage.getItem('blip_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', t);
-  document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
-  applyLang();
+async function tNew(){
+  document.getElementById('ttopic').textContent='Yuklanmoqda...';
+  document.getElementById('tans').value='';
+  document.getElementById('tres').innerHTML='';
+  document.getElementById('tbtn').disabled=true;
+  try{
+    const d=await post('/turing',{action:'topic'});
+    if(d.topic){
+      document.getElementById('ttopic').textContent=d.topic;
+      document.getElementById('tbtn').disabled=false;
+    } else {
+      document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
+    }
+  }catch(e){
+    document.getElementById('ttopic').textContent='❌ '+e.message;
+  }
+}
+
+async function tSub(){
+  const a=document.getElementById('tans').value.trim();
+  if(!a){alert('Javob yozing!');return;}
+  const tp=document.getElementById('ttopic').textContent;
+  const b=document.getElementById('tbtn');
+  b.disabled=true;b.textContent='⏳...';
+  document.getElementById('tres').innerHTML=ld('Hakam o\'ylayapti');
+  try{
+    const d=await post('/turing',{action:'judge',topic:tp,userAnswer:a});
+    if(d.error){
+      document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
+    const cl=d.userWins?'win':'lose';
+    const ti=d.userWins?'🎉 SEN G\'OLIB!':'😅 AI G\'OLIB!';
+    document.getElementById('tres').innerHTML=
+      '<div class="answers">'+
+        '<div class="answer"><div class="answer-label">🅰️ Javob 1</div><div class="answer-text">'+esc(d.answer1)+'</div></div>'+
+        '<div class="answer"><div class="answer-label">🅱️ Javob 2</div><div class="answer-text">'+esc(d.answer2)+'</div></div>'+
+      '</div>'+
+      '<div class="verdict '+cl+'">'+
+        '<div class="verdict-title">'+ti+'</div>'+
+        '<div class="verdict-text">🤖 '+esc(d.judgeVerdict)+'<br><br>✅ Odam: '+(d.humanIsUser?'Sen':'AI')+'<br>'+esc(d.reasoning||'')+'</div>'+
+      '</div>'+
+      '<button class="btn btn-full btn-sec" onclick="tNew()">🔄 Yangi raund</button>';
+  }catch(e){
+    document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='Yuborish';
+  }
+}
+
+// ============================================================
+// 🌙 DREAM
+// ============================================================
+async function dSub(){
+  const dr=document.getElementById('din').value.trim();
+  if(!dr){alert('Tushingizni yozing!');return;}
+  const b=document.getElementById('dbtn');
+  b.disabled=true;b.textContent='⏳...';
+  document.getElementById('dres').innerHTML=ld('Tush tahlil qilinmoqda');
+  try{
+    const d=await post('/dream',{dream:dr});
+    if(d.error){
+      document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
+    const em={'xursand':'😊',"qo'rqinchli":'😨',"g'alati":'🤔','sokin':'😌','xafa':'😢','hayajonli':'😲'};
+    const sy=(d.symbols||[]).map(s=>'<span>🔮 '+esc(s)+'</span>').join('');
+    document.getElementById('dres').innerHTML=
+      '<div class="result">'+
+        '<div class="result-title">🌙 Tush tahlili</div>'+
+        '<div class="result-text">'+esc(d.analysis||'')+'</div>'+
+        (sy?'<div class="symbols">'+sy+'</div>':'')+
+        '<div style="margin-top:10px;font-size:12px;color:var(--muted)">Kayfiyat: '+(em[d.mood]||'🌙')+' '+(d.mood||'')+'</div>'+
+        (d.imageUrl?'<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">':'')+
+      '</div>';
+  }catch(e){
+    document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='🌙 Tahlil qilish';
+  }
+}
+
+// ============================================================
+// ⏰ TIME
+// ============================================================
+async function tmSub(){
+  const yr=document.getElementById('tyr').value.trim();
+  const pl=document.getElementById('tpl').value.trim();
+  if(!yr){alert('Yilni kiriting!');return;}
+  const b=document.getElementById('tmb');
+  b.disabled=true;b.textContent='⏳...';
+  document.getElementById('tmres').innerHTML=ld('Vaqt mashinasi ishga tushdi');
+  try{
+    const d=await post('/time',{year:yr,place:pl});
+    if(d.error){
+      document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
+    document.getElementById('tmres').innerHTML=
+      '<div class="result">'+
+        '<div class="result-title">⏰ '+esc(yr)+(pl?' · '+esc(pl):'')+'</div>'+
+        '<div class="result-text">'+esc(d.story||'')+'</div>'+
+        (d.fact?'<div class="info" style="margin-top:12px"><b>💡 Fakt:</b> '+esc(d.fact)+'</div>':'')+
+        (d.imageUrl?'<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">':'')+
+      '</div>';
+  }catch(e){
+    document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='⏰ Sayohat';
+  }
+}
+
+// ============================================================
+// 🎲 WORLD
+// ============================================================
+async function wSub(){
+  const b=document.getElementById('wbtn');
+  b.disabled=true;b.textContent='⏳...';
+  document.getElementById('wres').innerHTML=ld('Yangi olam tug\'ilmoqda');
+  try{
+    const d=await post('/world',{});
+    if(d.error){
+      document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
+    document.getElementById('wres').innerHTML=
+      '<div class="result">'+
+        '<div class="result-title">🎲 '+esc(d.name||'Yangi dunyo')+'</div>'+
+        '<div class="result-text">'+esc(d.story||'')+'</div>'+
+        (d.fact?'<div class="info" style="margin-top:12px"><b>💡 Fakt:</b> '+esc(d.fact)+'</div>':'')+
+        (d.imageUrl?'<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">':'')+
+      '</div>';
+  }catch(e){
+    document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='🎲 YANGI DUNYO';
+  }
+}
+      // ============================================================
+// ⚔️ DEBATE
+// ============================================================
+async function dbSub(){
+  const tp=document.getElementById('dtp').value.trim();
+  if(!tp){alert('Mavzuni kiriting!');return;}
+  const b=document.getElementById('dbb');
+  b.disabled=true;b.textContent='⏳ Sud boshlanmoqda...';
+  document.getElementById('dbres').innerHTML=ld('⚖️ Sud majlisi boshlanmoqda');
+
+  try{
+    const d=await post('/debate',{topic:tp});
+    if(d.error){
+      document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
+
+    window._debate={
+      adv:d.forArg||'',
+      pros:d.againstArg||'',
+      judge:d.verdict||''
+    };
+
+    var html='';
+    html+='<div class="advocate-card">';
+    html+='<div class="debate-role">';
+    html+='<div class="debate-role-title" style="color:var(--grn)">👨‍💼 ADVOKAT (FOR)</div>';
+    html+='<button class="btn-mini grn" id="btn-adv" onclick="playOne(\'adv\')">🔊 Eshitish</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.forArg||'')+'</div>';
+    html+='</div>';
+
+    html+='<div class="prosecutor-card">';
+    html+='<div class="debate-role">';
+    html+='<div class="debate-role-title" style="color:var(--red)">👨‍⚖️ PROKUROR (AGAINST)</div>';
+    html+='<button class="btn-mini red" id="btn-pros" onclick="playOne(\'pros\')">🔊 Eshitish</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.againstArg||'')+'</div>';
+    html+='</div>';
+
+    html+='<div class="judge-card">';
+    html+='<div class="debate-role" style="border-bottom-color:var(--gold)">';
+    html+='<div class="debate-role-title" style="color:var(--gold)">⚖️ HAKAM QARORI</div>';
+    html+='<button class="btn-mini gold" id="btn-judge" onclick="playOne(\'judge\')">🔊 Eshitish</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.verdict||'')+'</div>';
+    html+='</div>';
+
+    html+='<button class="btn btn-full" style="background:linear-gradient(135deg,#10b981,#06b6d4)" id="playAllBtn" onclick="playAll()">🎙️ Sud majlisini to\'liq eshitish</button>';
+    html+='<button class="btn btn-full btn-sec" style="margin-top:8px" onclick="stopSpeak()">⏹ To\'xtatish</button>';
+
+    document.getElementById('dbres').innerHTML=html;
+
+  }catch(e){
+    document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='⚔️ Sud majlisini boshlash';
+  }
+}
+
+function playOne(tur){
+  if(!window._debate){ return; }
+  const map={
+    adv:{text:window._debate.adv,voice:'advocate',btn:'btn-adv'},
+    pros:{text:window._debate.pros,voice:'prosecutor',btn:'btn-pros'},
+    judge:{text:window._debate.judge,voice:'judge',btn:'btn-judge'}
+  };
+  const item=map[tur];
+  if(!item || !item.text) return;
+
+  if(!window.speechSynthesis){
+    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
+    return;
+  }
+  window.speechSynthesis.cancel();
+
+  const btn=document.getElementById(item.btn);
+  if(btn){
+    btn.classList.add('speech-active');
+    btn.textContent='🔊 O\'qilmoqda...';
+  }
+
+  speak(item.text,item.voice);
+
+  const timer=setInterval(()=>{
+    if(!window.speechSynthesis.speaking){
+      if(btn){
+        btn.classList.remove('speech-active');
+        btn.textContent='🔊 Eshitish';
+      }
+      clearInterval(timer);
+    }
+  },500);
+}
+
+async function playAll(){
+  if(!window._debate) return;
+  if(!window.speechSynthesis){
+    alert('❌ Ovoz qo\'llab-quvvatlanmaydi');
+    return;
+  }
+
+  const allBtn=document.getElementById('playAllBtn');
+  if(allBtn){
+    allBtn.disabled=true;
+    allBtn.textContent='🎙️ O\'qilmoqda...';
+  }
+
+  const adv=window._debate.adv;
+  const pros=window._debate.pros;
+  const judge=window._debate.judge;
+
+  function setBtn(id,txt){
+    const b=document.getElementById(id);
+    if(b){ b.classList.add('speech-active'); b.textContent=txt; }
+  }
+  function resetBtn(id){
+    const b=document.getElementById(id);
+    if(b){ b.classList.remove('speech-active'); b.textContent='🔊 Eshitish'; }
+  }
+
+  setBtn('btn-adv','🔊 O\'qilmoqda...');
+  await speakSeq('Advokat. '+adv,'advocate');
+  resetBtn('btn-adv');
+  await sleep(700);
+
+  setBtn('btn-pros','🔊 O\'qilmoqda...');
+  await speakSeq('Prokuror. '+pros,'prosecutor');
+  resetBtn('btn-pros');
+  await sleep(700);
+
+  setBtn('btn-judge','🔊 O\'qilmoqda...');
+  await speakSeq('Hakam qarori. '+judge,'judge');
+  resetBtn('btn-judge');
+
+  if(allBtn){
+    allBtn.disabled=false;
+    allBtn.textContent='🎙️ Sud majlisini to\'liq eshitish';
+  }
+}
+
+function stopSpeak(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  ['btn-adv','btn-pros','btn-judge'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){
+      b.classList.remove('speech-active');
+      b.textContent='🔊 Eshitish';
+    }
+  });
+  const allBtn=document.getElementById('playAllBtn');
+  if(allBtn){
+    allBtn.disabled=false;
+    allBtn.textContent='🎙️ Sud majlisini to\'liq eshitish';
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded',()=>{
+  tNew();
+  loadVoices();
+  setTimeout(loadVoices,500);
+  setTimeout(loadVoices,1500);
 });
 </script>
 </body>
