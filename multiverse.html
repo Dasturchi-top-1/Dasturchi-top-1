@@ -199,8 +199,8 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 </div>
 
 <div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
-  </div>
-  <script>
+    </div>
+    <script>
 const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
 const P="Blipzor921324";
 let rec=null,isR=false;
@@ -219,11 +219,12 @@ function sw(n,el){
 // HELPERS
 function esc(s){return(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function ld(t){return'<div class="loading">'+t+'<span class="dots"></span></div>'}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
 
 // MIC
 function mic(inputId,btnId){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi. Chrome ishlatib ko\'ring.');return}
+  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');return}
   if(!rec){rec=new SR();rec.lang='uz-UZ';rec.continuous=false;rec.interimResults=false}
   const btn=document.getElementById(btnId);
   const inp=document.getElementById(inputId);
@@ -245,76 +246,106 @@ async function post(ep,body){
 }
 
 // ============================================================
-// 🔊 OVOZLI O'QISH (TTS)
+// 🔊 OVOZ — TUZATILGAN
 // ============================================================
 let voices=[];
-function loadVoices(){ voices=window.speechSynthesis?window.speechSynthesis.getVoices():[] }
+
+function loadVoices(){
+  if(!window.speechSynthesis) return;
+  const v=window.speechSynthesis.getVoices();
+  if(v && v.length){ voices=v; }
+}
 loadVoices();
-if(window.speechSynthesis) window.speechSynthesis.onvoiceschanged=loadVoices;
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged=loadVoices;
+  setTimeout(loadVoices,100);
+  setTimeout(loadVoices,500);
+  setTimeout(loadVoices,1000);
+  setTimeout(loadVoices,2000);
+}
 
 function tanlaOvoz(tur){
-  const all=voices.length?voices:[];
+  if(!voices.length) loadVoices();
+  const all=voices;
   if(!all.length) return null;
+  const byLang=(l)=>all.filter(v=>v.lang.toLowerCase().startsWith(l));
+  const uz=byLang('uz'),tr=byLang('tr'),ru=byLang('ru'),en=byLang('en');
+
   if(tur==='advocate'){
-    return all.find(v=>v.lang.startsWith('uz')) ||
-           all.find(v=>v.lang.startsWith('tr')) ||
-           all.find(v=>v.lang.startsWith('en')) ||
-           all[0];
+    return uz[0]||tr[0]||en[0]||all[0];
   }
   if(tur==='prosecutor'){
-    return all.find(v=>v.lang.startsWith('ru')) ||
-           all.find(v=>v.lang.startsWith('en')) ||
-           all[1] || all[0];
+    return ru[0]||en[1]||en[0]||all[1]||all[0];
   }
   if(tur==='judge'){
-    return all.find(v=>v.lang.startsWith('en')) ||
-           all.find(v=>v.lang.startsWith('ru')) ||
-           all[2] || all[0];
+    return en[2]||ru[1]||en[0]||all[2]||all[0];
   }
   return all[0];
 }
 
-function speak(text, tur){
-  if(!window.speechSynthesis){ alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi'); return; }
-  window.speechSynthesis.cancel();
+function splitText(text,max){
+  max=max||180;
+  const parts=[];
+  let current='';
+  const sentences=text.split(/(?<=[.!?])\s+/);
+  for(const s of sentences){
+    if((current+' '+s).length>max){
+      if(current) parts.push(current.trim());
+      current=s;
+    } else {
+      current+=' '+s;
+    }
+  }
+  if(current) parts.push(current.trim());
+  return parts.length?parts:[text];
+}
+
+function makeUtter(text,tur){
   const u=new SpeechSynthesisUtterance(text);
   const v=tanlaOvoz(tur);
   if(v) u.voice=v;
-  u.rate = tur==='judge' ? 0.95 : 1.0;
-  u.pitch = tur==='advocate' ? 1.15 : tur==='prosecutor' ? 0.85 : 1.0;
-  u.volume = 1;
-  window.speechSynthesis.speak(u);
+  u.lang=v?v.lang:'en-US';
+  u.rate=tur==='judge'?0.95:1.0;
+  u.pitch=tur==='advocate'?1.2:tur==='prosecutor'?0.8:1.0;
+  u.volume=1;
+  return u;
 }
 
-function speakSeq(text, tur){
+function speak(text,tur){
+  if(!window.speechSynthesis){
+    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const parts=splitText(text);
+  let i=0;
+  function next(){
+    if(i>=parts.length) return;
+    const u=makeUtter(parts[i],tur);
+    u.onend=()=>{i++;next();};
+    u.onerror=()=>{i++;next();};
+    window.speechSynthesis.speak(u);
+  }
+  next();
+}
+
+function speakSeq(text,tur){
   return new Promise(resolve=>{
     if(!window.speechSynthesis){ resolve(); return; }
-    const u=new SpeechSynthesisUtterance(text);
-    const v=tanlaOvoz(tur);
-    if(v) u.voice=v;
-    u.rate = tur==='judge' ? 0.95 : 1.0;
-    u.pitch = tur==='advocate' ? 1.15 : tur==='prosecutor' ? 0.85 : 1.0;
-    u.onend = resolve;
-    u.onerror = resolve;
-    window.speechSynthesis.speak(u);
+    const parts=splitText(text);
+    let i=0;
+    function next(){
+      if(i>=parts.length){ resolve(); return; }
+      const u=makeUtter(parts[i],tur);
+      u.onend=()=>{i++;next();};
+      u.onerror=()=>{i++;next();};
+      window.speechSynthesis.speak(u);
+    }
+    next();
   });
 }
 
-async function speakAll(forText, againstText, verdictText){
-  if(!window.speechSynthesis){ alert('Ovoz qo\'llab-quvvatlanmaydi'); return; }
-  window.speechSynthesis.cancel();
-  await speakSeq('Advokat. ' + forText, 'advocate');
-  await sleep(600);
-  await speakSeq('Prokuror. ' + againstText, 'prosecutor');
-  await sleep(600);
-  await speakSeq('Hakam qarori. ' + verdictText, 'judge');
-}
-
-function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
-
-// ============================================================
-// 🎭 TURING
-// ============================================================
+// TURING
 async function tNew(){
   document.getElementById('ttopic').textContent='Yuklanmoqda...';
   document.getElementById('tans').value='';
@@ -322,8 +353,12 @@ async function tNew(){
   document.getElementById('tbtn').disabled=true;
   try{
     const d=await post('/turing',{action:'topic'});
-    if(d.topic){document.getElementById('ttopic').textContent=d.topic;document.getElementById('tbtn').disabled=false}
-    else document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
+    if(d.topic){
+      document.getElementById('ttopic').textContent=d.topic;
+      document.getElementById('tbtn').disabled=false;
+    } else {
+      document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
+    }
   }catch(e){document.getElementById('ttopic').textContent='❌ '+e.message}
 }
 
@@ -331,11 +366,15 @@ async function tSub(){
   const a=document.getElementById('tans').value.trim();
   if(!a){alert('Javob yozing!');return}
   const tp=document.getElementById('ttopic').textContent;
-  const b=document.getElementById('tbtn');b.disabled=true;b.textContent='⏳...';
+  const b=document.getElementById('tbtn');
+  b.disabled=true;b.textContent='⏳...';
   document.getElementById('tres').innerHTML=ld('Hakam o\'ylayapti');
   try{
     const d=await post('/turing',{action:'judge',topic:tp,userAnswer:a});
-    if(d.error){document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';return}
+    if(d.error){
+      document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
     const cl=d.userWins?'win':'lose';
     const ti=d.userWins?'🎉 SEN G\'OLIB!':'😅 AI G\'OLIB!';
     document.getElementById('tres').innerHTML=`
@@ -348,20 +387,26 @@ async function tSub(){
         <div class="verdict-text">🤖 ${esc(d.judgeVerdict)}<br><br>✅ Odam: ${d.humanIsUser?'Sen':'AI'}<br>${esc(d.reasoning||'')}</div>
       </div>
       <button class="btn btn-full btn-sec" onclick="tNew()">🔄 Yangi raund</button>`;
-  }catch(e){document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'}
-  finally{b.disabled=false;b.textContent='Yuborish'}
+  }catch(e){
+    document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='Yuborish';
+  }
 }
-    // ============================================================
-// 🌙 DREAM
-// ============================================================
+
+// DREAM
 async function dSub(){
   const dr=document.getElementById('din').value.trim();
   if(!dr){alert('Tushingizni yozing!');return}
-  const b=document.getElementById('dbtn');b.disabled=true;b.textContent='⏳...';
+  const b=document.getElementById('dbtn');
+  b.disabled=true;b.textContent='⏳...';
   document.getElementById('dres').innerHTML=ld('Tush tahlil qilinmoqda');
   try{
     const d=await post('/dream',{dream:dr});
-    if(d.error){document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';return}
+    if(d.error){
+      document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
     const em={'xursand':'😊',"qo'rqinchli":'😨',"g'alati":'🤔','sokin':'😌','xafa':'😢','hayajonli':'😲'};
     const sy=(d.symbols||[]).map(s=>`<span>🔮 ${esc(s)}</span>`).join('');
     document.getElementById('dres').innerHTML=`
@@ -372,22 +417,27 @@ async function dSub(){
         <div style="margin-top:10px;font-size:12px;color:var(--muted)">Kayfiyat: ${em[d.mood]||'🌙'} ${d.mood||''}</div>
         ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
       </div>`;
-  }catch(e){document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'}
-  finally{b.disabled=false;b.textContent='🌙 Tahlil qilish'}
+  }catch(e){
+    document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='🌙 Tahlil qilish';
+  }
 }
 
-// ============================================================
-// ⏰ TIME
-// ============================================================
+// TIME
 async function tmSub(){
   const yr=document.getElementById('tyr').value.trim();
   const pl=document.getElementById('tpl').value.trim();
   if(!yr){alert('Yilni kiriting!');return}
-  const b=document.getElementById('tmb');b.disabled=true;b.textContent='⏳...';
+  const b=document.getElementById('tmb');
+  b.disabled=true;b.textContent='⏳...';
   document.getElementById('tmres').innerHTML=ld('Vaqt mashinasi ishga tushdi');
   try{
     const d=await post('/time',{year:yr,place:pl});
-    if(d.error){document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';return}
+    if(d.error){
+      document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
     document.getElementById('tmres').innerHTML=`
       <div class="result">
         <div class="result-title">⏰ ${esc(yr)} ${pl?'· '+esc(pl):''}</div>
@@ -395,19 +445,24 @@ async function tmSub(){
         ${d.fact?`<div class="info" style="margin-top:12px"><b>💡 Fakt:</b> ${esc(d.fact)}</div>`:''}
         ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
       </div>`;
-  }catch(e){document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'}
-  finally{b.disabled=false;b.textContent='⏰ Sayohat'}
+  }catch(e){
+    document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='⏰ Sayohat';
+  }
 }
 
-// ============================================================
-// 🎲 WORLD
-// ============================================================
+// WORLD
 async function wSub(){
-  const b=document.getElementById('wbtn');b.disabled=true;b.textContent='⏳...';
+  const b=document.getElementById('wbtn');
+  b.disabled=true;b.textContent='⏳...';
   document.getElementById('wres').innerHTML=ld('Yangi olam tug\'ilmoqda');
   try{
     const d=await post('/world',{});
-    if(d.error){document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';return}
+    if(d.error){
+      document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
+      return;
+    }
     document.getElementById('wres').innerHTML=`
       <div class="result">
         <div class="result-title">🎲 ${esc(d.name||'Yangi dunyo')}</div>
@@ -416,11 +471,14 @@ async function wSub(){
         ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
       </div>`;
   }catch(e){
-  document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'}
-  finally{b.disabled=false;b.textContent='🎲 YANGI DUNYO'}
-    }
+    document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
+  }finally{
+    b.disabled=false;b.textContent='🎲 YANGI DUNYO';
+  }
+}
+    </script>
     // ============================================================
-// ⚔️ DEBATE — SUD MAJLISI (ovozli)
+// ⚔️ DEBATE
 // ============================================================
 async function dbSub(){
   const tp=document.getElementById('dtp').value.trim();
@@ -436,7 +494,6 @@ async function dbSub(){
       return;
     }
 
-    // Global saqlash
     window._debate = {
       adv: d.forArg || '',
       pros: d.againstArg || '',
@@ -474,10 +531,11 @@ async function dbSub(){
 
   }catch(e){
     document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{b.disabled=false;b.textContent='⚔️ Sud majlisini boshlash'}
+  }finally{
+    b.disabled=false;b.textContent='⚔️ Sud majlisini boshlash';
+  }
 }
 
-// Bittasini o'qish
 function playOne(tur){
   if(!window._debate){ return; }
   const map = {
@@ -486,10 +544,10 @@ function playOne(tur){
     judge: { text: window._debate.judge, voice: 'judge',       btn: 'btn-judge' }
   };
   const item = map[tur];
-  if(!item || !item.text){ return; }
+  if(!item || !item.text) return;
 
   if(!window.speechSynthesis){
-    alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
+    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
     return;
   }
   window.speechSynthesis.cancel();
@@ -500,28 +558,23 @@ function playOne(tur){
     btn.textContent = '🔊 O\'qilmoqda...';
   }
 
-  const u = new SpeechSynthesisUtterance(item.text);
-  const v = tanlaOvoz(item.voice);
-  if(v) u.voice = v;
-  u.rate = tur === 'judge' ? 0.95 : 1.0;
-  u.pitch = tur === 'adv' ? 1.15 : tur === 'pros' ? 0.85 : 1.0;
+  speak(item.text, item.voice);
 
-  const done = () => {
-    if(btn){
-      btn.classList.remove('speech-active');
-      btn.textContent = '🔊 Eshitish';
+  const timer = setInterval(() => {
+    if(!window.speechSynthesis.speaking){
+      if(btn){
+        btn.classList.remove('speech-active');
+        btn.textContent = '🔊 Eshitish';
+      }
+      clearInterval(timer);
     }
-  };
-  u.onend = done;
-  u.onerror = done;
-  window.speechSynthesis.speak(u);
+  }, 500);
 }
 
-// Hammasini ketma-ket o'qish
 async function playAll(){
-  if(!window._debate){ return; }
+  if(!window._debate) return;
   if(!window.speechSynthesis){
-    alert('Ovoz qo\'llab-quvvatlanmaydi');
+    alert('❌ Ovoz qo\'llab-quvvatlanmaydi');
     return;
   }
 
@@ -533,48 +586,39 @@ async function playAll(){
 
   const { adv, pros, judge } = window._debate;
 
-  // 1. Advokat
-  await playSeq('Advokat. ' + adv, 'advocate', 'btn-adv');
+  const setBtn = (id, txt) => {
+    const b = document.getElementById(id);
+    if(b){
+      b.classList.add('speech-active');
+      b.textContent = txt;
+    }
+  };
+  const resetBtn = (id) => {
+    const b = document.getElementById(id);
+    if(b){
+      b.classList.remove('speech-active');
+      b.textContent = '🔊 Eshitish';
+    }
+  };
+
+  setBtn('btn-adv', '🔊 O\'qilmoqda...');
+  await speakSeq('Advokat. ' + adv, 'advocate');
+  resetBtn('btn-adv');
   await sleep(700);
 
-  // 2. Prokuror
-  await playSeq('Prokuror. ' + pros, 'prosecutor', 'btn-pros');
+  setBtn('btn-pros', '🔊 O\'qilmoqda...');
+  await speakSeq('Prokuror. ' + pros, 'prosecutor');
+  resetBtn('btn-pros');
   await sleep(700);
 
-  // 3. Hakam
-  await playSeq('Hakam qarori. ' + judge, 'judge', 'btn-judge');
+  setBtn('btn-judge', '🔊 O\'qilmoqda...');
+  await speakSeq('Hakam qarori. ' + judge, 'judge');
+  resetBtn('btn-judge');
 
   if(allBtn){
     allBtn.disabled = false;
     allBtn.textContent = '🎙️ Sud majlisini to\'liq eshitish';
   }
-}
-
-function playSeq(text, voice, btnId){
-  return new Promise(resolve => {
-    const btn = btnId ? document.getElementById(btnId) : null;
-    if(btn){
-      btn.classList.add('speech-active');
-      btn.textContent = '🔊 O\'qilmoqda...';
-    }
-
-    const u = new SpeechSynthesisUtterance(text);
-    const v = tanlaOvoz(voice);
-    if(v) u.voice = v;
-    u.rate = voice === 'judge' ? 0.95 : 1.0;
-    u.pitch = voice === 'advocate' ? 1.15 : voice === 'prosecutor' ? 0.85 : 1.0;
-
-    const done = () => {
-      if(btn){
-        btn.classList.remove('speech-active');
-        btn.textContent = '🔊 Eshitish';
-      }
-      resolve();
-    };
-    u.onend = done;
-    u.onerror = done;
-    window.speechSynthesis.speak(u);
-  });
 }
 
 function stopSpeak(){
