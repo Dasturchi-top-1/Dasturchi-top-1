@@ -6,270 +6,103 @@
 <title>AI Kengash</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
-  --acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;
-  --gold:#fbbf24;--red:#ef4444;--grn:#10b981;
-}
-body{
-  font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-  min-height:100vh;padding:16px;
-  background-image:
-    radial-gradient(circle at 15% 15%,rgba(99,102,241,.18),transparent 40%),
-    radial-gradient(circle at 85% 85%,rgba(168,85,247,.18),transparent 40%);
-  background-attachment:fixed;overflow-x:hidden;
-}
+:root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--gold:#fbbf24;--red:#ef4444;--grn:#10b981}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;background-image:radial-gradient(circle at 15% 15%,rgba(99,102,241,.18),transparent 40%),radial-gradient(circle at 85% 85%,rgba(168,85,247,.18),transparent 40%);background-attachment:fixed;overflow-x:hidden}
 #particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 .c{max-width:900px;margin:auto;position:relative;z-index:1}
 .screen{display:none}
 .screen.on{display:block;animation:fade .4s ease}
 @keyframes fade{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-
-/* 🌐 TIL — ENDI PASTDA! */
-.lang-bar{
-  position:fixed;bottom:12px;right:12px;z-index:100;
-  display:flex;gap:4px;background:rgba(15,15,34,.95);
-  padding:6px;border-radius:14px;border:1px solid var(--brd);
-  backdrop-filter:blur(10px);
-  box-shadow:0 8px 24px rgba(0,0,0,.5)
-}
-.lang-btn{
-  padding:7px 11px;border:none;border-radius:9px;cursor:pointer;
-  background:transparent;color:var(--muted);font-weight:700;
-  font-size:12px;transition:all .2s;font-family:inherit
-}
+.lang-bar{position:fixed;bottom:12px;right:12px;z-index:100;display:flex;gap:4px;background:rgba(15,15,34,.95);padding:6px;border-radius:14px;border:1px solid var(--brd);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.lang-btn{padding:7px 11px;border:none;border-radius:9px;cursor:pointer;background:transparent;color:var(--muted);font-weight:700;font-size:12px;transition:all .2s;font-family:inherit}
 .lang-btn:hover{color:var(--text)}
-.lang-btn.on{
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.4)
-}
-
+.lang-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.4)}
 .login-wrap{min-height:85vh;display:flex;align-items:center;justify-content:center}
-.login-box{
-  background:var(--card);border:1px solid var(--brd);border-radius:20px;
-  padding:32px 24px;width:100%;max-width:380px;
-  animation:pulseBox 4s ease-in-out infinite;
-}
-@keyframes pulseBox{
-  0%,100%{box-shadow:0 20px 60px rgba(99,102,241,.3)}
-  50%{box-shadow:0 20px 80px rgba(168,85,247,.5)}
-}
+.login-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:32px 24px;width:100%;max-width:380px;animation:pulseBox 4s ease-in-out infinite}
+@keyframes pulseBox{0%,100%{box-shadow:0 20px 60px rgba(99,102,241,.3)}50%{box-shadow:0 20px 80px rgba(168,85,247,.5)}}
 .login-box.secret{animation:secretPulse 3s ease-in-out infinite}
-@keyframes secretPulse{
-  0%,100%{box-shadow:0 20px 60px rgba(251,191,36,.4);border-color:var(--gold)}
-  50%{box-shadow:0 20px 80px rgba(251,191,36,.7);border-color:var(--gold)}
-}
-.login-logo{
-  text-align:center;font-size:52px;margin-bottom:12px;
-  animation:float 3s ease-in-out infinite;
-}
-@keyframes float{
-  0%,100%{transform:translateY(0) rotate(-5deg)}
-  50%{transform:translateY(-8px) rotate(5deg)}
-}
-.login-box h1{
-  text-align:center;font-size:24px;font-weight:900;margin-bottom:6px;
-  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);
-  background-size:200% 200%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;animation:grad 4s infinite;
-}
-.login-box.secret h1{
-  background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);
-  background-size:200% 200%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
+@keyframes secretPulse{0%,100%{box-shadow:0 20px 60px rgba(251,191,36,.4);border-color:var(--gold)}50%{box-shadow:0 20px 80px rgba(251,191,36,.7);border-color:var(--gold)}}
+.login-logo{text-align:center;font-size:52px;margin-bottom:12px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-8px) rotate(5deg)}}
+.login-box h1{text-align:center;font-size:24px;font-weight:900;margin-bottom:6px;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 4s infinite}
+.login-box.secret h1{background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 @keyframes grad{0%,100%{background-position:0%}50%{background-position:100%}}
 .login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:22px}
-.lbl{
-  display:block;font-size:11px;color:var(--muted);margin-bottom:6px;
-  font-weight:700;text-transform:uppercase;letter-spacing:1px
-}
-.inp{
-  width:100%;padding:13px 15px;border-radius:12px;
-  border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
-  font-size:15px;outline:none;margin-bottom:14px;
-  transition:all .25s;font-family:inherit;text-align:center;letter-spacing:2px
-}
-.inp:focus{
-  border-color:var(--acc);
-  box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)
-}
-.login-box.secret .inp:focus{
-  border-color:var(--gold);
-  box-shadow:0 0 0 3px rgba(251,191,36,.2),0 0 30px rgba(251,191,36,.3)
-}
+.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.inp{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--brd);background:var(--bg);color:var(--text);font-size:15px;outline:none;margin-bottom:14px;transition:all .25s;font-family:inherit;text-align:center;letter-spacing:2px}
+.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)}
+.login-box.secret .inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(251,191,36,.2),0 0 30px rgba(251,191,36,.3)}
 .inp::placeholder{color:var(--muted);opacity:.6;letter-spacing:normal}
-.btn-login{
-  width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff;font-weight:800;font-size:15px;transition:all .25s
-}
-.btn-login:hover{
-  transform:translateY(-2px);
-  box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)
-}
-.btn-login.gold{
-  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a1a
-}
-.btn-login.gold:hover{
-  box-shadow:0 10px 30px rgba(251,191,36,.6),0 0 40px rgba(251,191,36,.4)
-}
-.btn-back{
-  width:100%;padding:10px;border:1px solid var(--brd);border-radius:12px;
-  background:transparent;color:var(--muted);font-size:13px;font-weight:600;
-  cursor:pointer;margin-top:8px;transition:all .25s
-}
+.btn-login{width:100%;padding:13px;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;font-size:15px;transition:all .25s}
+.btn-login:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)}
+.btn-login.gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a1a}
+.btn-login.gold:hover{box-shadow:0 10px 30px rgba(251,191,36,.6),0 0 40px rgba(251,191,36,.4)}
+.btn-back{width:100%;padding:10px;border:1px solid var(--brd);border-radius:12px;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;transition:all .25s}
 .btn-back:hover{border-color:var(--acc);color:var(--acc)}
-.msg{
-  padding:10px;border-radius:10px;font-size:13px;
-  text-align:center;margin-bottom:14px;display:none
-}
+.msg{padding:10px;border-radius:10px;font-size:13px;text-align:center;margin-bottom:14px;display:none}
 .msg.err{background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red)}
-.msg.ok{background:rgba(16,185,129,.15);border:1px solid var(--grn);color:var(--grn)}
 .msg.on{display:block;animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-.hint{
-  text-align:center;font-size:11px;color:var(--muted);
-  margin-top:18px;padding-top:14px;border-top:1px solid var(--brd)
-}
-.top{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:10px;padding:10px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:20px;
-  flex-wrap:wrap
-}
-.brand{font-weight:800;font-size:16px;
-  background:linear-gradient(90deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  white-space:nowrap}
-.brand.gold{background:linear-gradient(90deg,#fbbf24,#f59e0b);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.user-tag{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);
-  flex-wrap:wrap;justify-content:flex-end}
+.hint{text-align:center;font-size:11px;color:var(--muted);margin-top:18px;padding-top:14px;border-top:1px solid var(--brd)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0 16px;border-bottom:1px solid var(--brd);margin-bottom:20px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:16px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.brand.gold{background:linear-gradient(90deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.user-tag{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);flex-wrap:wrap;justify-content:flex-end}
 .user-tag b{color:var(--acc);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .user-tag b.gold{color:var(--gold)}
-.logout-b{background:transparent;border:1px solid var(--brd);color:var(--muted);
-  padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;
-  transition:all .25s;white-space:nowrap}
+.logout-b{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;transition:all .25s;white-space:nowrap}
 .logout-b:hover{border-color:var(--red);color:var(--red)}
 .hero{text-align:center;padding:24px 0 20px}
-.hero h1{
-  font-size:36px;font-weight:900;
-  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
-  background-size:400% 400%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;animation:grad 6s infinite
-}
-.hero h1.gold{
-  background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);
-  background-size:200% 200%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text
-}
+.hero h1{font-size:36px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 6s infinite}
+.hero h1.gold{background:linear-gradient(90deg,#fbbf24,#f59e0b,#fbbf24);background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero p{color:var(--muted);font-size:13px;margin-top:8px}
 .badges{display:flex;gap:6px;justify-content:center;margin-top:14px;flex-wrap:wrap}
-.badge{font-size:10px;padding:4px 10px;border-radius:999px;
-  background:var(--card);border:1px solid var(--brd);
-  color:var(--muted);font-weight:600;transition:all .3s}
+.badge{font-size:10px;padding:4px 10px;border-radius:999px;background:var(--card);border:1px solid var(--brd);color:var(--muted);font-weight:600;transition:all .3s}
 .badge:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-2px)}
-.ask-box{background:var(--card);border:1px solid var(--brd);
-  border-radius:16px;padding:16px;margin-bottom:20px}
-.ask-inp{
-  width:100%;padding:14px;border-radius:12px;
-  border:1.5px solid var(--brd);background:var(--bg);color:var(--text);
-  font-size:15px;font-family:inherit;outline:none;
-  resize:vertical;min-height:90px;line-height:1.5;transition:all .25s;
-  text-align:left;letter-spacing:normal
-}
-.ask-inp:focus{border-color:var(--acc);
-  box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)}
+.ask-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:20px}
+.ask-inp{width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--brd);background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;outline:none;resize:vertical;min-height:90px;line-height:1.5;transition:all .25s;text-align:left;letter-spacing:normal}
+.ask-inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.2),0 0 30px rgba(99,102,241,.15)}
 .ask-inp::placeholder{color:var(--muted);opacity:.6}
 .ask-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .ex-list{display:flex;gap:6px;flex-wrap:wrap;flex:1}
-.ex{font-size:11px;padding:6px 12px;border-radius:999px;
-  background:var(--bg);border:1px solid var(--brd);color:var(--muted);
-  cursor:pointer;font-weight:600;transition:all .25s}
+.ex{font-size:11px;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--brd);color:var(--muted);cursor:pointer;font-weight:600;transition:all .25s}
 .ex:hover{border-color:var(--acc);color:var(--acc)}
-.ask-btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;
-  background:linear-gradient(135deg,var(--acc),var(--acc2));
-  color:#fff;font-weight:800;font-size:14px;min-width:150px;transition:all .25s}
-.ask-btn:hover:not(:disabled){transform:translateY(-2px);
-  box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)}
+.ask-btn{padding:12px 24px;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;font-size:14px;min-width:150px;transition:all .25s}
+.ask-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 30px rgba(99,102,241,.6),0 0 40px rgba(168,85,247,.4)}
 .ask-btn:disabled{opacity:.55;cursor:not-allowed}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:12px;margin-bottom:20px}
-.ai-card{
-  background:linear-gradient(145deg,#0f0f22,#15152d);
-  border:1px solid var(--brd);border-radius:14px;padding:16px;
-  position:relative;overflow:hidden;animation:fade .4s ease;transition:all .35s ease
-}
-.ai-card:hover{transform:translateY(-4px) scale(1.02);
-  border-color:var(--acc);
-  box-shadow:0 20px 40px rgba(99,102,241,.35),0 0 30px rgba(168,85,247,.25)}
-.ai-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;
-  background:linear-gradient(180deg,var(--acc),var(--acc2));
-  box-shadow:0 0 20px rgba(99,102,241,.5);transition:all .35s ease}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:20px}
+.ai-card{background:linear-gradient(145deg,#0f0f22,#15152d);border:1px solid var(--brd);border-radius:14px;padding:16px;position:relative;overflow:hidden;animation:fade .4s ease;transition:all .35s ease}
+.ai-card:hover{transform:translateY(-4px) scale(1.02);border-color:var(--acc);box-shadow:0 20px 40px rgba(99,102,241,.35),0 0 30px rgba(168,85,247,.25)}
+.ai-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--acc),var(--acc2));box-shadow:0 0 20px rgba(99,102,241,.5);transition:all .35s ease}
 .ai-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .ai-emoji{font-size:22px}
 .ai-name{font-weight:700;font-size:13px;color:var(--acc)}
 .ai-text{font-size:13px;line-height:1.7;color:#c8c8dc;white-space:pre-wrap}
-.council-result{
-  background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));
-  border:2px solid var(--gold);border-radius:16px;padding:22px;
-  animation:fade .6s ease;position:relative;overflow:hidden;
-  box-shadow:0 0 60px rgba(251,191,36,.2)
-}
-.council-result::after{content:'';position:absolute;inset:0;border-radius:16px;
-  background:linear-gradient(135deg,transparent,rgba(251,191,36,.1),transparent);
-  pointer-events:none;animation:shine 3s ease-in-out infinite}
-@keyframes shine{0%,100%{opacity:0}50%{opacity:1}}
+.council-result{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:16px;padding:22px;animation:fade .6s ease;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(251,191,36,.2)}
 .c-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;position:relative;z-index:1}
 .c-title{font-size:17px;font-weight:900;color:var(--gold);letter-spacing:1px}
 .c-text{font-size:14px;line-height:1.8;white-space:pre-wrap;position:relative;z-index:1}
 .loading{text-align:center;padding:36px;color:var(--muted);font-size:14px}
 .loading::after{content:'';animation:dots 1.5s infinite}
 @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
-.footer{text-align:center;padding:24px 0;color:var(--muted);
-  font-size:11px;border-top:1px solid var(--brd);margin-top:30px}
-.footer b{background:linear-gradient(90deg,var(--acc),var(--acc2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.footer{text-align:center;padding:24px 0;color:var(--muted);font-size:11px;border-top:1px solid var(--brd);margin-top:30px}
+.footer b{background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.stat-card{background:var(--card);border:1px solid var(--brd);border-radius:12px;
-  padding:16px;text-align:center}
-.stat-num{font-size:28px;font-weight:900;
-  background:linear-gradient(90deg,#fbbf24,#f59e0b);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center}
+.stat-num{font-size:28px;font-weight:900;background:linear-gradient(90deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;font-weight:600}
-.user-item{background:var(--card);border:1px solid var(--brd);border-radius:12px;
-  padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;
-  align-items:center;gap:8px}
-.user-item.admin{border-color:var(--gold);
-  background:linear-gradient(135deg,rgba(251,191,36,.1),transparent)}
+.user-item{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:12px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.user-item.admin{border-color:var(--gold);background:linear-gradient(135deg,rgba(251,191,36,.1),transparent)}
 .user-name{font-weight:700;font-size:14px}
 .user-name span{color:var(--gold);font-size:10px;margin-left:6px;font-weight:600}
 .user-time{font-size:11px;color:var(--muted)}
-.btn-del{background:transparent;border:1px solid var(--brd);color:var(--muted);
-  padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600}
+.btn-del{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600}
 .btn-del:hover{border-color:var(--red);color:var(--red)}
-
-/* 📱 MOBIL */
-@media(max-width:600px){
-  .hero h1{font-size:26px}
-  .grid{grid-template-columns:1fr}
-  .login-box{padding:26px 20px}
-  .lang-bar{bottom:8px;right:8px;padding:5px}
-  .lang-btn{padding:6px 9px;font-size:11px}
-  .top{gap:6px;padding:8px 0 14px}
-  .brand{font-size:14px}
-  .user-tag{font-size:11px}
-  .logout-b{padding:5px 10px;font-size:10px}
-}
+@media(max-width:600px){.hero h1{font-size:26px}.grid{grid-template-columns:1fr}.login-box{padding:26px 20px}.lang-bar{bottom:8px;right:8px;padding:5px}.lang-btn{padding:6px 9px;font-size:11px}.top{gap:6px;padding:8px 0 14px}.brand{font-size:14px}.user-tag{font-size:11px}.logout-b{padding:5px 10px;font-size:10px}}
 </style>
 </head>
 <body>
 
-<!-- 🌐 TIL TANLASH — ENDI PASTDA! -->
 <div class="lang-bar">
   <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿 UZ</button>
   <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺 RU</button>
@@ -279,23 +112,19 @@ body{
 
 <div class="c">
 
-<!-- 1. LOGIN -->
 <div class="screen on" id="loginScreen">
   <div class="login-wrap">
     <div class="login-box" id="loginBox">
       <div class="login-logo" id="loginIcon">🏛</div>
       <h1 id="loginTitle">AI KENGASH</h1>
       <p class="login-sub" id="loginSub">Ismingizni kiriting</p>
-
       <div class="msg" id="msg"></div>
-
       <div id="nameBlock">
         <label class="lbl" id="lblName">👤 Ismingiz</label>
         <input class="inp" type="text" id="user" placeholder="Ismingizni yozing" autocomplete="off" autofocus onkeydown="if(event.key==='Enter')checkName()">
         <button class="btn-login" id="btnName" onclick="checkName()">🚀 KIRISH</button>
         <div class="hint" id="hintName">🔓 Parol kerak emas</div>
       </div>
-
       <div id="codeBlock" style="display:none">
         <label class="lbl" id="lblCode">🔐 Maxsus kod</label>
         <input class="inp" type="password" id="code" placeholder="• • • • • •" autocomplete="off" onkeydown="if(event.key==='Enter')checkCode()">
@@ -307,7 +136,6 @@ body{
   </div>
 </div>
 
-<!-- 2. COUNCIL -->
 <div class="screen" id="councilScreen">
   <div class="top">
     <div class="brand">⚡ Blip AI</div>
@@ -342,7 +170,6 @@ body{
   <div class="footer" id="footer1">⚡ <b>Blip AI</b> · 2026</div>
 </div>
 
-<!-- 3. ADMIN -->
 <div class="screen" id="adminScreen">
   <div class="top">
     <div class="brand gold">👑 Admin</div>
@@ -360,11 +187,13 @@ body{
   <div id="usersBox"></div>
   <div class="footer" id="footer2">⚡ <b>Blip AI</b> · 2026</div>
 </div>
-  <script>
+
+                                                                        </div>
+                                                                        <script>
 // ============================================================
-// 🔄 VERSIYA
+// 🔄 VERSIYA — KESH TOZALASH
 // ============================================================
-const VERSION = "7.0";
+const VERSION = "9.0";
 if(localStorage.getItem('ai_version') !== VERSION){
   localStorage.removeItem('ai_users');
   localStorage.removeItem('ai_user');
@@ -378,93 +207,13 @@ if(localStorage.getItem('ai_version') !== VERSION){
 // 🌐 TILLAR
 // ============================================================
 const T = {
-  uz: {
-    loginTitle:"AI KENGASH", loginSub:"Ismingizni kiriting",
-    lblName:"👤 Ismingiz", phName:"Ismingizni yozing",
-    btnName:"🚀 KIRISH", hintName:"🔓 Parol kerak emas",
-    secretTitle:"MAXSUS KIRISH", secretSub:"Faqat admin uchun",
-    lblCode:"🔐 Maxsus kod", btnCode:"👑 ADMIN KIRISH",
-    btnBack:"← Orqaga", hintCode:"🔐 Faqat admin uchun",
-    heroTitle:"🏛 AI KENGASH", heroSub:"Bitta savol — 5 ta AI javob — 1 ta dono xulosa",
-    askPh:"Savolingizni yozing...", askBtn:"Kengashni chaqirish",
-    asking:"⏳ Yig'ilmoqda...", thinking:"🤖 5 ta AI o'ylayapti",
-    conclusion:"KENGASH XULOSASI", logout:"🚪 Chiqish",
-    adminTitle:"👑 ADMIN PANEL", adminSub:"Foydalanuvchilar va statistika",
-    usersTitle:"👥 FOYDALANUVCHILAR", users:"👥 FOYDALANUVCHILAR",
-    models:"🤖 AI MODELLAR", questions:"💬 SAVOLLAR",
-    noUsers:"Hozircha foydalanuvchi yo'q", noName:"❌ Ismingizni kiriting!",
-    shortName:"❌ Ism kamida 2 belgi!", noCode:"❌ Kodni kiriting!",
-    wrongCode:"❌ Kod xato!", noQ:"❌ Savol yozing!",
-    logoutConfirm:"Chiqishni xohlaysizmi?", delConfirm:"o'chirilsinmi?",
-    admin:"ADMIN", footer:"⚡ Blip AI · 2026 · Tojikiston 🇹🇯",
-    examples:["Hayotning ma'nosi nima?","Kelajakda AI qanday bo'ladi?","13 yoshda qanday dasturchi bo'lish mumkin?"]
-  },
-  ru: {
-    loginTitle:"AI СОВЕТ", loginSub:"Введите ваше имя",
-    lblName:"👤 Ваше имя", phName:"Введите имя",
-    btnName:"🚀 ВОЙТИ", hintName:"🔓 Пароль не нужен",
-    secretTitle:"СЕКРЕТНЫЙ ВХОД", secretSub:"Только для админа",
-    lblCode:"🔐 Секретный код", btnCode:"👑 ВХОД АДМИНА",
-    btnBack:"← Назад", hintCode:"🔐 Только для админа",
-    heroTitle:"🏛 AI СОВЕТ", heroSub:"Один вопрос — 5 AI ответов — 1 мудрый вывод",
-    askPh:"Напишите ваш вопрос...", askBtn:"Созвать совет",
-    asking:"⏳ Собирается...", thinking:"🤖 5 AI думают",
-    conclusion:"ВЫВОД СОВЕТА", logout:"🚪 Выйти",
-    adminTitle:"👑 АДМИН ПАНЕЛЬ", adminSub:"Пользователи и статистика",
-    usersTitle:"👥 ПОЛЬЗОВАТЕЛИ", users:"👥 ПОЛЬЗОВАТЕЛИ",
-    models:"🤖 AI МОДЕЛИ", questions:"💬 ВОПРОСЫ",
-    noUsers:"Пока нет пользователей", noName:"❌ Введите имя!",
-    shortName:"❌ Имя минимум 2 буквы!", noCode:"❌ Введите код!",
-    wrongCode:"❌ Неверный код!", noQ:"❌ Напишите вопрос!",
-    logoutConfirm:"Хотите выйти?", delConfirm:"удалить?",
-    admin:"АДМИН", footer:"⚡ Blip AI · 2026 · 🇹🇯",
-    examples:["В чём смысл жизни?","Каким будет AI в будущем?","Как стать программистом в 13 лет?"]
-  },
-  en: {
-    loginTitle:"AI COUNCIL", loginSub:"Enter your name",
-    lblName:"👤 Your name", phName:"Enter your name",
-    btnName:"🚀 ENTER", hintName:"🔓 No password needed",
-    secretTitle:"SECRET ENTRY", secretSub:"Admin only",
-    lblCode:"🔐 Secret code", btnCode:"👑 ADMIN ENTRY",
-    btnBack:"← Back", hintCode:"🔐 Admin only",
-    heroTitle:"🏛 AI COUNCIL", heroSub:"One question — 5 AI answers — 1 wise conclusion",
-    askPh:"Write your question...", askBtn:"Summon the council",
-    asking:"⏳ Assembling...", thinking:"🤖 5 AIs are thinking",
-    conclusion:"COUNCIL CONCLUSION", logout:"🚪 Logout",
-    adminTitle:"👑 ADMIN PANEL", adminSub:"Users and statistics",
-    usersTitle:"👥 USERS", users:"👥 USERS",
-    models:"🤖 AI MODELS", questions:"💬 QUESTIONS",
-    noUsers:"No users yet", noName:"❌ Enter your name!",
-    shortName:"❌ Name min 2 chars!", noCode:"❌ Enter the code!",
-    wrongCode:"❌ Wrong code!", noQ:"❌ Write a question!",
-    logoutConfirm:"Want to logout?", delConfirm:"delete?",
-    admin:"ADMIN", footer:"⚡ Blip AI · 2026 · 🇹🇯",
-    examples:["What is the meaning of life?","How will AI be in the future?","How to become a programmer at 13?"]
-  },
-  tj: {
-    loginTitle:"AI ШӮРО", loginSub:"Номи худро нависед",
-    lblName:"👤 Номи шумо", phName:"Номро нависед",
-    btnName:"🚀 ДАРОМАД", hintName:"🔓 Рамз лозим нест",
-    secretTitle:"ДАРОМАДИ МАХСУС", secretSub:"Танҳо барои админ",
-    lblCode:"🔐 Рамзи махсус", btnCode:"👑 ДАРОМАДИ АДМИН",
-    btnBack:"← Бозгашт", hintCode:"🔐 Танҳо барои админ",
-    heroTitle:"🏛 AI ШӮРО", heroSub:"Як савол — 5 ҷавоби AI — 1 хулосаи доно",
-    askPh:"Саволи худро нависед...", askBtn:"Шӯроро даъват кунед",
-    asking:"⏳ Ҷамъ мешавад...", thinking:"🤖 5 AI фикр мекунанд",
-    conclusion:"ХУЛОСАИ ШӮРО", logout:"🚪 Баромад",
-    adminTitle:"👑 ПАНЕЛИ АДМИН", adminSub:"Корбарон ва омор",
-    usersTitle:"👥 КОРБАРОН", users:"👥 КОРБАРОН",
-    models:"🤖 МОДЕЛҲОИ AI", questions:"💬 САВОЛҲО",
-    noUsers:"Ҳоло корбар нест", noName:"❌ Номро нависед!",
-    shortName:"❌ Ном ҳадди ақал 2 ҳарф!", noCode:"❌ Рамзро нависед!",
-    wrongCode:"❌ Рамз нодуруст!", noQ:"❌ Саволро нависед!",
-    logoutConfirm:"Баромадан мехоҳед?", delConfirm:"нест карда шавад?",
-    admin:"АДМИН", footer:"⚡ Blip AI · 2026 · 🇹🇯",
-    examples:["Маънои ҳаёт чист?","AI дар оянда чӣ гуна хоҳад буд?","Дар 13-солагӣ чӣ гуна барномасоз шудан мумкин?"]
-  }
+  uz: {loginTitle:"AI KENGASH",loginSub:"Ismingizni kiriting",lblName:"👤 Ismingiz",phName:"Ismingizni yozing",btnName:"🚀 KIRISH",hintName:"🔓 Parol kerak emas",secretTitle:"MAXSUS KIRISH",secretSub:"Faqat admin uchun",lblCode:"🔐 Maxsus kod",btnCode:"👑 ADMIN KIRISH",btnBack:"← Orqaga",hintCode:"🔐 Faqat admin uchun",heroTitle:"🏛 AI KENGASH",heroSub:"Bitta savol — 5 ta AI javob — 1 ta dono xulosa",askPh:"Savolingizni yozing...",askBtn:"Kengashni chaqirish",asking:"⏳ Yig'ilmoqda...",thinking:"🤖 5 ta AI o'ylayapti",conclusion:"KENGASH XULOSASI",logout:"🚪 Chiqish",adminTitle:"👑 ADMIN PANEL",adminSub:"Foydalanuvchilar va statistika",usersTitle:"👥 FOYDALANUVCHILAR",users:"👥 FOYDALANUVCHILAR",models:"🤖 AI MODELLAR",questions:"💬 SAVOLLAR",noUsers:"Hozircha foydalanuvchi yo'q",noName:"❌ Ismingizni kiriting!",shortName:"❌ Ism kamida 2 belgi!",noCode:"❌ Kodni kiriting!",wrongCode:"❌ Kod xato!",noQ:"❌ Savol yozing!",logoutConfirm:"Chiqishni xohlaysizmi?",delConfirm:"o'chirilsinmi?",admin:"ADMIN",footer:"⚡ Blip AI · 2026 · Tojikiston 🇹🇯",examples:["Hayotning ma'nosi nima?","Kelajakda AI qanday bo'ladi?","13 yoshda qanday dasturchi bo'lish mumkin?"]},
+  ru: {loginTitle:"AI СОВЕТ",loginSub:"Введите ваше имя",lblName:"👤 Ваше имя",phName:"Введите имя",btnName:"🚀 ВОЙТИ",hintName:"🔓 Пароль не нужен",secretTitle:"СЕКРЕТНЫЙ ВХОД",secretSub:"Только для админа",lblCode:"🔐 Секретный код",btnCode:"👑 ВХОД АДМИНА",btnBack:"← Назад",hintCode:"🔐 Только для админа",heroTitle:"🏛 AI СОВЕТ",heroSub:"Один вопрос — 5 AI ответов — 1 мудрый вывод",askPh:"Напишите ваш вопрос...",askBtn:"Созвать совет",asking:"⏳ Собирается...",thinking:"🤖 5 AI думают",conclusion:"ВЫВОД СОВЕТА",logout:"🚪 Выйти",adminTitle:"👑 АДМИН ПАНЕЛЬ",adminSub:"Пользователи и статистика",usersTitle:"👥 ПОЛЬЗОВАТЕЛИ",users:"👥 ПОЛЬЗОВАТЕЛИ",models:"🤖 AI МОДЕЛИ",questions:"💬 ВОПРОСЫ",noUsers:"Пока нет пользователей",noName:"❌ Введите имя!",shortName:"❌ Имя минимум 2 буквы!",noCode:"❌ Введите код!",wrongCode:"❌ Неверный код!",noQ:"❌ Напишите вопрос!",logoutConfirm:"Хотите выйти?",delConfirm:"удалить?",admin:"АДМИН",footer:"⚡ Blip AI · 2026 · 🇹🇯",examples:["В чём смысл жизни?","Каким будет AI в будущем?","Как стать программистом в 13 лет?"]},
+  en: {loginTitle:"AI COUNCIL",loginSub:"Enter your name",lblName:"👤 Your name",phName:"Enter your name",btnName:"🚀 ENTER",hintName:"🔓 No password needed",secretTitle:"SECRET ENTRY",secretSub:"Admin only",lblCode:"🔐 Secret code",btnCode:"👑 ADMIN ENTRY",btnBack:"← Back",hintCode:"🔐 Admin only",heroTitle:"🏛 AI COUNCIL",heroSub:"One question — 5 AI answers — 1 wise conclusion",askPh:"Write your question...",askBtn:"Summon the council",asking:"⏳ Assembling...",thinking:"🤖 5 AIs are thinking",conclusion:"COUNCIL CONCLUSION",logout:"🚪 Logout",adminTitle:"👑 ADMIN PANEL",adminSub:"Users and statistics",usersTitle:"👥 USERS",users:"👥 USERS",models:"🤖 AI MODELS",questions:"💬 QUESTIONS",noUsers:"No users yet",noName:"❌ Enter your name!",shortName:"❌ Name min 2 chars!",noCode:"❌ Enter the code!",wrongCode:"❌ Wrong code!",noQ:"❌ Write a question!",logoutConfirm:"Want to logout?",delConfirm:"delete?",admin:"ADMIN",footer:"⚡ Blip AI · 2026 · 🇹🇯",examples:["What is the meaning of life?","How will AI be in the future?","How to become a programmer at 13?"]},
+  tj: {loginTitle:"AI ШӮРО",loginSub:"Номи худро нависед",lblName:"👤 Номи шумо",phName:"Номро нависед",btnName:"🚀 ДАРОМАД",hintName:"🔓 Рамз лозим нест",secretTitle:"ДАРОМАДИ МАХСУС",secretSub:"Танҳо барои админ",lblCode:"🔐 Рамзи махсус",btnCode:"👑 ДАРОМАДИ АДМИН",btnBack:"← Бозгашт",hintCode:"🔐 Танҳо барои админ",heroTitle:"🏛 AI ШӮРО",heroSub:"Як савол — 5 ҷавоби AI — 1 хулосаи доно",askPh:"Саволи худро нависед...",askBtn:"Шӯроро даъват кунед",asking:"⏳ Ҷамъ мешавад...",thinking:"🤖 5 AI фикр мекунанд",conclusion:"ХУЛОСАИ ШӮРО",logout:"🚪 Баромад",adminTitle:"👑 ПАНЕЛИ АДМИН",adminSub:"Корбарон ва омор",usersTitle:"👥 КОРБАРОН",users:"👥 КОРБАРОН",models:"🤖 МОДЕЛҲОИ AI",questions:"💬 САВОЛҲО",noUsers:"Ҳоло корбар нест",noName:"❌ Номро нависед!",shortName:"❌ Ном ҳадди ақал 2 ҳарф!",noCode:"❌ Рамзро нависед!",wrongCode:"❌ Рамз нодуруст!",noQ:"❌ Саволро нависед!",logoutConfirm:"Баромадан мехоҳед?",delConfirm:"нест карда шавад?",admin:"АДМИН",footer:"⚡ Blip AI · 2026 · 🇹🇯",examples:["Маънои ҳаёт чист?","AI дар оянда чӣ гуна хоҳад буд?","Дар 13-солагӣ чӣ гуна барномасоз шудан мумкин?"]}
 };
 
-const EXAMPLES = { uz:T.uz.examples, ru:T.ru.examples, en:T.en.examples, tj:T.tj.examples };
+const EXAMPLES = {uz:T.uz.examples,ru:T.ru.examples,en:T.en.examples,tj:T.tj.examples};
 
 // ============================================================
 // ⚙️ SOZLAMALAR
@@ -474,7 +223,7 @@ const ADMIN_KOD = "921324";
 const ADMIN_DISPLAY = "Blip";
 const KUN = 30;
 const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev/council";
-const AP = "Blipzor921324";
+const AP = "921324";
 
 // ============================================================
 // 🌐 TIL
@@ -490,14 +239,10 @@ function setLang(l){
 function applyLang(){
   const t = T[LANG];
   document.documentElement.lang = LANG === 'tj' ? 'tg' : LANG;
-
-  // Lang tugmalari
   ['uz','ru','en','tj'].forEach(l => {
     const btn = document.getElementById('lang' + l.toUpperCase());
     if(btn) btn.classList.toggle('on', l === LANG);
   });
-
-  // Login
   document.getElementById('loginTitle').textContent = t.loginTitle;
   document.getElementById('loginSub').textContent = t.loginSub;
   document.getElementById('lblName').textContent = t.lblName;
@@ -508,34 +253,27 @@ function applyLang(){
   document.getElementById('btnCode').textContent = t.btnCode;
   document.getElementById('btnBack').textContent = t.btnBack;
   document.getElementById('hintCode').textContent = t.hintCode;
-
-  // Council
   document.getElementById('heroTitle').textContent = t.heroTitle;
   document.getElementById('heroSub').textContent = t.heroSub;
   document.getElementById('q').placeholder = t.askPh;
   document.getElementById('askB').textContent = t.askBtn;
   document.getElementById('btnLogout1').textContent = t.logout;
   document.getElementById('footer1').innerHTML = t.footer;
-
-  // Misollar
   document.getElementById('ex1').textContent = '💭 ' + t.examples[0].slice(0, 18);
   document.getElementById('ex2').textContent = '🤖 ' + t.examples[1].slice(0, 18);
   document.getElementById('ex3').textContent = '💻 ' + t.examples[2].slice(0, 18);
-
-  // Admin
   document.getElementById('adminTitle').textContent = t.adminTitle;
   document.getElementById('adminSub').textContent = t.adminSub;
   document.getElementById('usersTitle').textContent = t.usersTitle;
   document.getElementById('btnLogout2').textContent = t.logout;
   document.getElementById('footer2').innerHTML = t.footer;
-
   if(document.getElementById('adminScreen').classList.contains('on')){
     renderAdmin();
   }
 }
 
 // ============================================================
-// PARTICLE FON
+// PARTICLE
 // ============================================================
 (function(){
   const canvas = document.createElement('canvas');
@@ -547,12 +285,7 @@ function applyLang(){
   resize();
   window.addEventListener('resize', resize);
   for(let i = 0; i < 40; i++){
-    particles.push({
-      x: Math.random() * W, y: Math.random() * H,
-      vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
-      r: Math.random() * 2 + 1,
-      c: Math.random() > 0.5 ? '99,102,241' : '168,85,247'
-    });
+    particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*2+1,c:Math.random()>0.5?'99,102,241':'168,85,247'});
   }
   function draw(){
     ctx.clearRect(0, 0, W, H);
@@ -604,7 +337,6 @@ function checkName(){
 
   if(!name){ showMsg(t.noName, "err"); return; }
 
-  // Admin
   if(low === ADMIN_ISM){
     document.getElementById('loginBox').classList.add('secret');
     document.getElementById('loginIcon').textContent = '👑';
@@ -618,7 +350,6 @@ function checkName(){
     return;
   }
 
-  // Oddiy
   if(name.length < 2){ showMsg(t.shortName, "err"); return; }
 
   const users = getUsers();
@@ -760,9 +491,7 @@ async function doAsk(){
   btn.disabled = true;
   btn.textContent = tt.asking;
   out.innerHTML = '<div class="loading">' + tt.thinking + '</div>';
-
   const langCode = LANG === 'tj' ? 'tg' : LANG;
-
   try{
     const r = await fetch(API, {
       method: "POST",
@@ -800,6 +529,6 @@ function esc(s){
     '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
   }[c]));
 }
-  </script>
-
-  </div>
+</script>
+</body>
+  </html>
