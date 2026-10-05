@@ -5,112 +5,161 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Blip — 13 yoshli dasturchi</title>
 <style>
-  :root{
-    --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
-    --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
-    --gold:#fbbf24;--pink:#ec4899;--green:#10b981;
-  }
-  [data-theme="light"]{
-    --bg:#f5f5fb;--card:#fff;--text:#111827;--muted:#6b7280;
-    --accent:#4f46e5;--accent2:#9333ea;--border:#e5e7eb;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;transition:background .3s,color .3s}
-  body{
-    font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
-    min-height:100vh;line-height:1.6;
-    background-image:
-      radial-gradient(circle at 15% 10%,rgba(99,102,241,.15),transparent 40%),
-      radial-gradient(circle at 85% 90%,rgba(168,85,247,.15),transparent 40%);
-    background-attachment:fixed;
-  }
-  .container{max-width:900px;margin:auto;padding:20px}
-  nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;
-    position:sticky;top:0;background:var(--bg);z-index:10;
-    border-bottom:1px solid var(--border)}
-  .logo{font-weight:800;font-size:18px;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .nav-btns{display:flex;gap:6px}
-  .nav-btn{background:var(--card);border:1px solid var(--border);color:var(--text);
-    padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600}
-  .nav-btn:hover{border-color:var(--accent)}
-  header{text-align:center;padding:60px 20px 50px}
-  .avatar{
-    width:120px;height:120px;border-radius:50%;margin:0 auto 20px;
-    background:linear-gradient(135deg,var(--accent),var(--accent2),var(--pink));
-    display:flex;align-items:center;justify-content:center;
-    font-size:56px;font-weight:900;color:#fff;
-    box-shadow:0 0 60px rgba(99,102,241,.5);
-    animation:float 3s ease-in-out infinite;
-  }
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-  h1{
-    font-size:52px;font-weight:900;
-    background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
-    background-size:400% 400%;
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-    background-clip:text;animation:grad 6s ease infinite;
-  }
-  @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-  .subtitle{color:var(--muted);font-size:16px;margin-top:10px}
-  .badges{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-  .badge{font-size:12px;padding:6px 14px;border-radius:999px;
-    background:var(--card);border:1px solid var(--border);color:var(--muted)}
-  section{padding:40px 0}
-  h2{font-size:26px;margin-bottom:20px;text-align:center;font-weight:800}
-  h2 span{background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .about{background:var(--card);border:1px solid var(--border);border-radius:16px;
-    padding:24px;font-size:15px;line-height:1.8}
-  .about-row{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap}
-  .about-row b{color:var(--accent);min-width:110px}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-  .project{
-    background:var(--card);border:1px solid var(--border);border-radius:16px;
-    padding:20px;text-decoration:none;color:var(--text);
-    transition:all .3s;display:block;position:relative;overflow:hidden;
-  }
-  .project::before{
-    content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-    background:linear-gradient(90deg,transparent,rgba(99,102,241,.1),transparent);
-    transition:left .6s;
-  }
-  .project:hover{transform:translateY(-6px);border-color:var(--accent);
-    box-shadow:0 16px 32px rgba(99,102,241,.3)}
-  .project:hover::before{left:100%}
-  .project-ico{font-size:36px;display:block;margin-bottom:10px;transition:transform .3s}
-  .project:hover .project-ico{transform:scale(1.15) rotate(-5deg)}
-  .project h3{font-size:16px;margin-bottom:6px}
-  .project p{font-size:12px;color:var(--muted);line-height:1.5}
-  .project .tag{display:inline-block;margin-top:10px;font-size:10px;
-    padding:2px 8px;border-radius:999px;background:rgba(99,102,241,.2);
-    color:var(--accent);border:1px solid var(--accent)}
-  .project.new .tag{background:rgba(236,72,153,.2);color:var(--pink);
-    border-color:var(--pink)}
-  .project.hot .tag{background:rgba(16,185,129,.2);color:var(--green);
-    border-color:var(--green)}
-  .skills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-  .skill{background:var(--card);border:1px solid var(--border);
-    padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600}
-  .skill:hover{border-color:var(--accent);color:var(--accent)}
-  .contact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-  .contact a{
-    display:flex;align-items:center;gap:8px;
-    background:var(--card);border:1px solid var(--border);border-radius:12px;
-    padding:12px 20px;text-decoration:none;color:var(--text);font-weight:600;
-    transition:all .3s;
-  }
-  .contact a:hover{border-color:var(--accent);transform:translateY(-3px)}
-  .contact span{font-size:20px}
-  footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:12px;
-    border-top:1px solid var(--border);margin-top:30px}
-  footer a{color:var(--accent);text-decoration:none}
-  @media(max-width:600px){
-    h1{font-size:34px}
-    .avatar{width:90px;height:90px;font-size:42px}
-    header{padding:40px 16px 30px}
-    h2{font-size:20px}
-  }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;
+  --accent:#6366f1;--accent2:#a855f7;--border:#1f1f3a;
+  --gold:#fbbf24;--pink:#ec4899;--green:#10b981;--cyan:#06b6d4;
+}
+[data-theme="light"]{
+  --bg:#f5f5fb;--card:#fff;--text:#111827;--muted:#6b7280;
+  --accent:#4f46e5;--accent2:#9333ea;--border:#e5e7eb;
+}
+*{transition:background .3s,color .3s,border-color .3s}
+body{
+  font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);
+  min-height:100vh;line-height:1.6;
+  background-image:
+    radial-gradient(circle at 15% 10%,rgba(99,102,241,.15),transparent 40%),
+    radial-gradient(circle at 85% 90%,rgba(168,85,247,.15),transparent 40%);
+  background-attachment:fixed;
+}
+.container{max-width:900px;margin:auto;padding:20px}
+nav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0;position:sticky;top:0;background:var(--bg);z-index:10;
+  border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap;
+}
+.logo{
+  font-weight:800;font-size:18px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.nav-right{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.lang-switch{
+  display:flex;gap:3px;background:var(--card);
+  padding:4px;border-radius:10px;border:1px solid var(--border);
+}
+.lang-btn{
+  padding:5px 9px;border:none;border-radius:7px;cursor:pointer;
+  background:transparent;color:var(--muted);font-weight:700;
+  font-size:11px;transition:all .2s;font-family:inherit;
+}
+.lang-btn:hover{color:var(--text)}
+.lang-btn.on{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;
+}
+.theme-btn{
+  background:var(--card);border:1px solid var(--border);color:var(--text);
+  padding:6px 10px;border-radius:8px;cursor:pointer;font-size:14px;
+}
+header{text-align:center;padding:50px 20px 40px}
+.avatar{
+  width:120px;height:120px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2),var(--pink));
+  display:flex;align-items:center;justify-content:center;
+  font-size:56px;font-weight:900;color:#fff;
+  box-shadow:0 0 60px rgba(99,102,241,.5);
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+h1{
+  font-size:52px;font-weight:900;
+  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);
+  background-size:400% 400%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;animation:grad 6s ease infinite;
+}
+@keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.subtitle{color:var(--muted);font-size:16px;margin-top:10px}
+.badges{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+.badge{
+  font-size:12px;padding:6px 14px;border-radius:999px;
+  background:var(--card);border:1px solid var(--border);color:var(--muted);
+}
+section{padding:36px 0}
+h2{font-size:26px;margin-bottom:20px;text-align:center;font-weight:800}
+h2 span{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.about{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:24px;font-size:15px;line-height:1.8;
+}
+.about-row{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap}
+.about-row b{color:var(--accent);min-width:120px}
+.grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:14px;
+}
+.project{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:20px;text-decoration:none;color:var(--text);
+  transition:all .3s;display:block;position:relative;overflow:hidden;
+}
+.project::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(99,102,241,.1),transparent);
+  transition:left .6s;
+}
+.project:hover{
+  transform:translateY(-6px);border-color:var(--accent);
+  box-shadow:0 16px 32px rgba(99,102,241,.3);
+}
+.project:hover::before{left:100%}
+.project-ico{
+  font-size:36px;display:block;margin-bottom:10px;
+  transition:transform .3s;
+}
+.project:hover .project-ico{transform:scale(1.15) rotate(-5deg)}
+.project h3{font-size:16px;margin-bottom:6px}
+.project p{font-size:12px;color:var(--muted);line-height:1.5}
+.project .tag{
+  display:inline-block;margin-top:10px;font-size:10px;
+  padding:2px 8px;border-radius:999px;
+  background:rgba(99,102,241,.2);color:var(--accent);
+  border:1px solid var(--accent);
+}
+.project.hot .tag{
+  background:rgba(16,185,129,.2);color:var(--green);
+  border-color:var(--green);
+}
+.project.voice .tag{
+  background:rgba(6,182,212,.2);color:var(--cyan);
+  border-color:var(--cyan);
+}
+.skills{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.skill{
+  background:var(--card);border:1px solid var(--border);
+  padding:8px 16px;border-radius:999px;font-size:13px;font-weight:600;
+}
+.skill:hover{border-color:var(--accent);color:var(--accent)}
+.contact{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.contact a{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:12px 20px;text-decoration:none;color:var(--text);font-weight:600;
+  transition:all .3s;
+}
+.contact a:hover{border-color:var(--accent);transform:translateY(-3px)}
+.contact span{font-size:20px}
+footer{
+  text-align:center;padding:30px 20px;color:var(--muted);
+  font-size:12px;border-top:1px solid var(--border);margin-top:30px;
+}
+footer a{color:var(--accent);text-decoration:none}
+@media(max-width:600px){
+  h1{font-size:34px}
+  .avatar{width:90px;height:90px;font-size:42px}
+  header{padding:40px 16px 30px}
+  h2{font-size:20px}
+  .lang-btn{padding:4px 7px;font-size:10px}
+  .about-row b{min-width:auto}
+}
 </style>
 </head>
 <body>
@@ -118,15 +167,21 @@
 
 <nav>
   <div class="logo">⚡ Blip</div>
-  <div class="nav-btns">
-    <button class="nav-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿 UZ</button>
+      <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺 RU</button>
+      <button class="lang-btn" id="langEN" onclick="setLang('en')">🇬🇧 EN</button>
+      <button class="lang-btn" id="langTJ" onclick="setLang('tj')">🇹🇯 TJ</button>
+    </div>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
   </div>
 </nav>
 
 <header>
   <div class="avatar">B</div>
   <h1>Blip</h1>
-  <p class="subtitle">13 yoshli dasturchi · Tojikiston, Dushanbe 🇹🇯</p>
+  <p class="subtitle" id="subtitle"></p>
   <div class="badges">
     <span class="badge">🐍 Python</span>
     <span class="badge">⚡ JavaScript</span>
@@ -137,68 +192,17 @@
 </header>
 
 <section>
-  <h2>👤 <span>Men haqimda</span></h2>
-  <div class="about">
-    <div class="about-row"><b>Taxallus:</b> Blip</div>
-    <div class="about-row"><b>Yosh:</b> 13</div>
-    <div class="about-row"><b>Joy:</b> Dushanbe, Tojikiston 🇹🇯</div>
-    <div class="about-row"><b>Yo'nalish:</b> Telegram botlar, AI, veb-saytlar</div>
-    <div class="about-row"><b>Muhit:</b> Pydroid 3, Termux, Cloudflare, Render</div>
-    <div class="about-row"><b>Maqsad:</b> Katta Python loyihasi qilish</div>
-  </div>
+  <h2 id="h-about"></h2>
+  <div class="about" id="aboutBox"></div>
 </section>
 
 <section>
-  <h2>🚀 <span>Loyihalarim</span></h2>
-  <div class="grid">
-
-    <a class="project hot" href="multiverse.html">
-      <span class="project-ico">🌌</span>
-      <h3>Blip Multiverse</h3>
-      <p>5 ta AI o'yin — bitta joyda! Turing Test, Dream Journal, Time Machine, One-Button World, AI Debate.</p>
-      <span class="tag">🔥 YANGI</span>
-    </a>
-
-    <a class="project" href="council.html">
-      <span class="project-ico">🏛</span>
-      <h3>AI Kengash</h3>
-      <p>Bitta savol — 5 ta AI javob — 1 ta dono xulosa. Gemini 3 modellari bilan.</p>
-      <span class="tag">AI</span>
-    </a>
-
-    <a class="project new" href="turing.html">
-      <span class="project-ico">🎭</span>
-      <h3>Reverse Turing Test</h3>
-      <p>Sen AI bo'lib o'yna, AI odam bo'lib. Hakam qaysi biri odam ekanini topadi.</p>
-      <span class="tag">O'YIN</span>
-    </a>
-
-    <a class="project new" href="dream.html">
-      <span class="project-ico">🌙</span>
-      <h3>Dream Journal</h3>
-      <p>Tushingizni yozing. AI rasm chizadi va ramzlarni tahlil qiladi.</p>
-      <span class="tag">AI</span>
-    </a>
-
-    <a class="project" href="https://t.me/BLIP_KIBER_XAFSIZLIK" target="_blank">
-      <span class="project-ico">🤖</span>
-      <h3>Telegram Botlar</h3>
-      <p>Gmail Agent, GitHub Agent, AI botlar — 24/7 ishlaydi.</p>
-      <span class="tag">BOT</span>
-    </a>
-
-    <a class="project" href="https://github.com/Dasturchi-top-1" target="_blank">
-      <span class="project-ico">💻</span>
-      <h3>GitHub</h3>
-      <p>Barcha kod, loyihalar va tajribalar. Ochiq kod.</p>
-      <span class="tag">KOD</span>
-    </a>
-
-  </div>
+  <h2 id="h-projects"></h2>
+  <div class="grid" id="projectsBox"></div>
 </section>
 
 <section>
-  <h2>🛠 <span>Ko'nikmalarim</span></h2>
+  <h2 id="h-skills"></h2>
   <div class="skills">
     <span class="skill">Python</span>
     <span class="skill">JavaScript</span>
@@ -216,7 +220,7 @@
 </section>
 
 <section>
-  <h2>📬 <span>Aloqa</span></h2>
+  <h2 id="h-contact"></h2>
   <div class="contact">
     <a href="https://t.me/BLIP_KIBER_XAFSIZLIK" target="_blank">
       <span>💬</span> Telegram
@@ -230,13 +234,167 @@
   </div>
 </section>
 
-<footer>
-  ⚡ Blip · 2026 · Tojikiston 🇹🇯
-</footer>
+<footer id="footer"></footer>
 
-</div>
+  </div>
+  <script>
+// ============================================================
+// 🌐 TILLAR
+// ============================================================
+const T = {
+  uz: {
+    subtitle: "13 yoshli dasturchi · Tojikiston, Dushanbe 🇹🇯",
+    hAbout: "👤 Men haqimda",
+    hProjects: "🚀 Loyihalarim",
+    hSkills: "🛠 Ko'nikmalarim",
+    hContact: "📬 Aloqa",
+    footer: "⚡ Blip · 2026 · Tojikiston 🇹🇯",
+    about: [
+      ["Taxallus", "Blip"],
+      ["Yosh", "13"],
+      ["Joy", "Dushanbe, Tojikiston 🇹🇯"],
+      ["Yo'nalish", "Telegram botlar, AI, veb-saytlar"],
+      ["Muhit", "Pydroid 3, Termux, Cloudflare, Render"],
+      ["Maqsad", "Katta Python loyihasi qilish"]
+    ],
+    projects: [
+      { ico:"🌌", name:"Blip Multiverse", desc:"5 ta AI o'yin — bitta joyda! Turing, Dream, Time, World, Debate.", tag:"🔥 YANGI", cls:"hot", url:"multiverse.html" },
+      { ico:"🏛", name:"AI Kengash", desc:"Bitta savol — 5 ta AI javob — 1 ta dono xulosa.", tag:"AI", cls:"", url:"council.html" },
+      { ico:"🎭", name:"Reverse Turing Test", desc:"Sen AI bo'lib o'yna, AI odam bo'lib. Hakam topadi.", tag:"O'YIN", cls:"", url:"turing.html" },
+      { ico:"🌙", name:"Dream Journal", desc:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.", tag:"AI", cls:"", url:"dream.html" },
+      { ico:"🔊", name:"Ovozli Sud", desc:"Advokat, Prokuror, Hakam — 3 xil ovozda bahslashadi.", tag:"🔊 YANGI", cls:"voice", url:"multiverse.html" },
+      { ico:"🤖", name:"Telegram Botlar", desc:"Gmail Agent, GitHub Agent, AI botlar — 24/7.", tag:"BOT", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
+      { ico:"💻", name:"GitHub", desc:"Barcha kod, loyihalar va tajribalar. Ochiq kod.", tag:"KOD", cls:"", url:"https://github.com/Dasturchi-top-1" }
+    ]
+  },
+  ru: {
+    subtitle: "13-летний программист · Таджикистан, Душанбе 🇹🇯",
+    hAbout: "👤 Обо мне",
+    hProjects: "🚀 Мои проекты",
+    hSkills: "🛠 Мои навыки",
+    hContact: "📬 Контакты",
+    footer: "⚡ Blip · 2026 · Таджикистан 🇹🇯",
+    about: [
+      ["Псевдоним", "Blip"],
+      ["Возраст", "13"],
+      ["Город", "Душанбе, Таджикистан 🇹🇯"],
+      ["Направление", "Telegram-боты, AI, сайты"],
+      ["Среда", "Pydroid 3, Termux, Cloudflare, Render"],
+      ["Цель", "Создать большой Python-проект"]
+    ],
+    projects: [
+      { ico:"🌌", name:"Blip Multiverse", desc:"5 AI-игр в одном месте! Turing, Dream, Time, World, Debate.", tag:"🔥 НОВОЕ", cls:"hot", url:"multiverse.html" },
+      { ico:"🏛", name:"AI Совет", desc:"Один вопрос — 5 AI ответов — 1 мудрый вывод.", tag:"AI", cls:"", url:"council.html" },
+      { ico:"🎭", name:"Reverse Turing Test", desc:"Играй как AI, AI играет как человек. Судья определит.", tag:"ИГРА", cls:"", url:"turing.html" },
+      { ico:"🌙", name:"Dream Journal", desc:"Напиши сон. AI нарисует и проанализирует.", tag:"AI", cls:"", url:"dream.html" },
+      { ico:"🔊", name:"Голосовой суд", desc:"Адвокат, Прокурор, Судья — 3 разных голоса.", tag:"🔊 НОВОЕ", cls:"voice", url:"multiverse.html" },
+      { ico:"🤖", name:"Telegram-боты", desc:"Gmail Agent, GitHub Agent, AI-боты — 24/7.", tag:"БОТ", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
+      { ico:"💻", name:"GitHub", desc:"Весь код, проекты и опыт. Открытый код.", tag:"КОД", cls:"", url:"https://github.com/Dasturchi-top-1" }
+    ]
+  },
+  en: {
+    subtitle: "13-year-old developer · Tajikistan, Dushanbe 🇹🇯",
+    hAbout: "👤 About me",
+    hProjects: "🚀 My projects",
+    hSkills: "🛠 My skills",
+    hContact: "📬 Contact",
+    footer: "⚡ Blip · 2026 · Tajikistan 🇹🇯",
+    about: [
+      ["Nickname", "Blip"],
+      ["Age", "13"],
+      ["City", "Dushanbe, Tajikistan 🇹🇯"],
+      ["Focus", "Telegram bots, AI, websites"],
+      ["Environment", "Pydroid 3, Termux, Cloudflare, Render"],
+      ["Goal", "Build a big Python project"]
+    ],
+    projects: [
+      { ico:"🌌", name:"Blip Multiverse", desc:"5 AI games in one place! Turing, Dream, Time, World, Debate.", tag:"🔥 NEW", cls:"hot", url:"multiverse.html" },
+      { ico:"🏛", name:"AI Council", desc:"One question — 5 AI answers — 1 wise conclusion.", tag:"AI", cls:"", url:"council.html" },
+      { ico:"🎭", name:"Reverse Turing Test", desc:"You play as AI, AI plays as human. Judge decides.", tag:"GAME", cls:"", url:"turing.html" },
+      { ico:"🌙", name:"Dream Journal", desc:"Write your dream. AI draws and analyzes it.", tag:"AI", cls:"", url:"dream.html" },
+      { ico:"🔊", name:"Voice Court", desc:"Lawyer, Prosecutor, Judge — 3 different voices.", tag:"🔊 NEW", cls:"voice", url:"multiverse.html" },
+      { ico:"🤖", name:"Telegram Bots", desc:"Gmail Agent, GitHub Agent, AI bots — 24/7.", tag:"BOT", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
+      { ico:"💻", name:"GitHub", desc:"All code, projects and experiments. Open source.", tag:"CODE", cls:"", url:"https://github.com/Dasturchi-top-1" }
+    ]
+  },
+  tj: {
+    subtitle: "Барномасози 13-сола · Тоҷикистон, Душанбе 🇹🇯",
+    hAbout: "👤 Дар бораи ман",
+    hProjects: "🚀 Лоиҳаҳои ман",
+    hSkills: "🛠 Малакаҳои ман",
+    hContact: "📬 Тамос",
+    footer: "⚡ Blip · 2026 · Тоҷикистон 🇹🇯",
+    about: [
+      ["Тахаллус", "Blip"],
+      ["Синну сол", "13"],
+      ["Шаҳр", "Душанбе, Тоҷикистон 🇹🇯"],
+      ["Самт", "Ботҳои Telegram, AI, веб-сайтҳо"],
+      ["Муҳит", "Pydroid 3, Termux, Cloudflare, Render"],
+      ["Мақсад", "Лоиҳаи калони Python сохтан"]
+    ],
+    projects: [
+      { ico:"🌌", name:"Blip Multiverse", desc:"5 бозии AI дар як ҷо! Turing, Dream, Time, World, Debate.", tag:"🔥 НАВ", cls:"hot", url:"multiverse.html" },
+      { ico:"🏛", name:"Шӯрои AI", desc:"Як савол — 5 ҷавоби AI — 1 хулосаи доно.", tag:"AI", cls:"", url:"council.html" },
+      { ico:"🎭", name:"Reverse Turing Test", desc:"Ҳамчун AI бозӣ кун, AI ҳамчун инсон. Довар муайян мекунад.", tag:"БОЗӢ", cls:"", url:"turing.html" },
+      { ico:"🌙", name:"Dream Journal", desc:"Хоби худро нависед. AI расм мекашад ва таҳлил мекунад.", tag:"AI", cls:"", url:"dream.html" },
+      { ico:"🔊", name:"Суди овозӣ", desc:"Адвокат, Прокурор, Довар — 3 овози гуногун.", tag:"🔊 НАВ", cls:"voice", url:"multiverse.html" },
+      { ico:"🤖", name:"Ботҳои Telegram", desc:"Gmail Agent, GitHub Agent, AI-ботҳо — 24/7.", tag:"БОТ", cls:"", url:"https://t.me/BLIP_KIBER_XAFSIZLIK" },
+      { ico:"💻", name:"GitHub", desc:"Ҳамаи код, лоиҳаҳо ва таҷрибаҳо. Коди кушод.", tag:"КОД", cls:"", url:"https://github.com/Dasturchi-top-1" }
+    ]
+  }
+};
 
-<script>
+// ============================================================
+// 🌐 TIL SOZLAMALARI
+// ============================================================
+let LANG = localStorage.getItem('blip_lang') || 'uz';
+
+function setLang(l){
+  LANG = l;
+  localStorage.setItem('blip_lang', l);
+  localStorage.setItem('ai_lang', l);
+  applyLang();
+}
+
+function applyLang(){
+  const t = T[LANG];
+  document.documentElement.lang = LANG === 'tj' ? 'tg' : LANG;
+
+  ['uz','ru','en','tj'].forEach(l => {
+    const btn = document.getElementById('lang' + l.toUpperCase());
+    if(btn) btn.classList.toggle('on', l === LANG);
+  });
+
+  document.title = LANG === 'tj' ? 'Blip — барномасози 13-сола'
+                 : LANG === 'ru' ? 'Blip — 13-летний программист'
+                 : LANG === 'en' ? 'Blip — 13-year-old developer'
+                 : 'Blip — 13 yoshli dasturchi';
+
+  document.getElementById('subtitle').textContent = t.subtitle;
+  document.getElementById('h-about').textContent = t.hAbout;
+  document.getElementById('h-projects').textContent = t.hProjects;
+  document.getElementById('h-skills').textContent = t.hSkills;
+  document.getElementById('h-contact').textContent = t.hContact;
+  document.getElementById('footer').innerHTML = t.footer;
+
+  document.getElementById('aboutBox').innerHTML = t.about
+    .map(([k,v]) => `<div class="about-row"><b>${k}:</b> ${v}</div>`)
+    .join('');
+
+  document.getElementById('projectsBox').innerHTML = t.projects
+    .map(p => `
+      <a class="project ${p.cls || ''}" href="${p.url}" ${p.url.startsWith('http') ? 'target="_blank"' : ''}>
+        <span class="project-ico">${p.ico}</span>
+        <h3>${p.name}</h3>
+        <p>${p.desc}</p>
+        <span class="tag">${p.tag}</span>
+      </a>
+    `).join('');
+}
+
+// ============================================================
+// 🎨 MAVZU
+// ============================================================
 function toggleTheme(){
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const nxt = cur === 'dark' ? 'light' : 'dark';
@@ -244,11 +402,16 @@ function toggleTheme(){
   document.getElementById('themeBtn').textContent = nxt === 'dark' ? '🌙' : '☀️';
   localStorage.setItem('blip_theme', nxt);
 }
-(function(){
+
+// ============================================================
+// 🎬 INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
   const t = localStorage.getItem('blip_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', t);
   document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
-})();
+  applyLang();
+});
 </script>
 </body>
-        </html>
+</html>
