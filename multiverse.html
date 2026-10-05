@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Blip Multiverse — 5 ta AI o'yin</title>
+<title>Blip Multiverse</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--gold:#fbbf24;--red:#ef4444;--grn:#10b981;--pnk:#ec4899;--cyan:#06b6d4}
@@ -13,6 +13,10 @@ header{text-align:center;padding:24px 0 16px}
 h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 6s ease infinite}
 @keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 .sub{color:var(--muted);margin-top:6px;font-size:13px}
+.lang-switch{display:flex;gap:3px;background:var(--card);padding:4px;border-radius:10px;border:1px solid var(--brd);justify-content:center;margin:8px auto 16px;width:fit-content}
+.lang-btn{padding:5px 9px;border:none;border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);font-weight:700;font-size:11px;transition:all .2s;font-family:inherit}
+.lang-btn:hover{color:var(--text)}
+.lang-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
 .tabs{display:flex;gap:4px;overflow-x:auto;padding:10px 0;border-bottom:1px solid var(--brd);margin-bottom:16px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{padding:8px 14px;border-radius:999px;cursor:pointer;background:var(--card);border:1px solid var(--brd);color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;transition:all .2s}
@@ -22,7 +26,7 @@ h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855
 .tc.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .card{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:14px}
-.gc{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.gc{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;transition:all .3s}
 .gc:hover{transform:translateY(-4px);border-color:var(--acc);box-shadow:0 16px 32px rgba(99,102,241,.25)}
 .gc .i{font-size:36px;display:block;margin-bottom:10px}
 .gc h3{font-size:17px;margin-bottom:6px}
@@ -40,28 +44,26 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 .btn-sec:hover{background:#15152d;border-color:var(--acc)}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .btn-row .btn{flex:1;min-width:120px}
-.mic{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:12px 16px;border-radius:10px;cursor:pointer;font-size:18px;transition:all .25s}
+.mic{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:12px 16px;border-radius:10px;cursor:pointer;font-size:18px}
 .mic:hover{border-color:var(--pnk)}
 .mic.rec{background:var(--pnk);color:#fff;border-color:var(--pnk);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-.result{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:14px;animation:fade .5s ease;position:relative;overflow:hidden}
-.result::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(180deg,var(--acc),var(--acc2),var(--pnk))}
+.result{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:16px;margin-bottom:14px;animation:fade .5s ease;border-left:4px solid var(--acc)}
 .result img{width:100%;border-radius:12px;margin-top:10px;border:1px solid var(--brd)}
-.result-title{font-size:16px;font-weight:800;color:var(--acc);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.result-title{font-size:16px;font-weight:800;color:var(--acc);margin-bottom:10px}
 .result-text{font-size:14px;line-height:1.7;white-space:pre-wrap}
 .symbols{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .symbols span{background:rgba(168,85,247,.2);border:1px solid var(--acc);padding:3px 10px;border-radius:999px;font-size:11px;color:var(--acc2)}
 .answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.answer{background:var(--bg);border:1.5px solid var(--brd);border-radius:12px;padding:12px;transition:all .25s}
-.answer:hover{border-color:var(--acc)}
+.answer{background:var(--bg);border:1.5px solid var(--brd);border-radius:12px;padding:12px}
 .answer-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
 .answer-text{font-size:13px;line-height:1.6;white-space:pre-wrap}
-.verdict{text-align:center;padding:16px;border-radius:14px;animation:fade .5s ease;margin-bottom:14px}
+.verdict{text-align:center;padding:16px;border-radius:14px;margin-bottom:14px}
 .verdict.win{background:rgba(16,185,129,.15);border:2px solid var(--grn)}
 .verdict.lose{background:rgba(239,68,68,.15);border:2px solid var(--red)}
 .verdict.gold{background:rgba(251,191,36,.15);border:2px solid var(--gold)}
 .verdict-title{font-size:20px;font-weight:800;margin-bottom:6px}
-.verdict-text{font-size:13px;line-height:1.6;opacity:.95}
+.verdict-text{font-size:13px;line-height:1.6}
 .loading{text-align:center;padding:30px;color:var(--muted);font-size:14px}
 .dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
 @keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
@@ -69,28 +71,18 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 .footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:20px}
 .footer a{color:var(--acc);text-decoration:none}
 .debate-role{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;padding-bottom:6px;border-bottom:1px solid var(--brd)}
-.debate-role-title{font-size:13px;font-weight:800;display:flex;align-items:center;gap:6px}
+.debate-role-title{font-size:13px;font-weight:800}
 .debate-text{font-size:13px;line-height:1.7;white-space:pre-wrap}
-.btn-mini{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;transition:all .25s;display:inline-flex;align-items:center;gap:5px}
-.btn-mini:hover{border-color:var(--acc);color:var(--acc);transform:translateY(-2px)}
+.btn-mini{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;transition:all .25s}
+.btn-mini:hover{border-color:var(--acc);color:var(--acc)}
 .btn-mini.red{border-color:var(--red);color:var(--red)}
-.btn-mini.red:hover{background:rgba(239,68,68,.15)}
 .btn-mini.grn{border-color:var(--grn);color:var(--grn)}
-.btn-mini.grn:hover{background:rgba(16,185,129,.15)}
 .btn-mini.gold{border-color:var(--gold);color:var(--gold)}
-.btn-mini.gold:hover{background:rgba(251,191,36,.15)}
 .advocate-card{background:rgba(16,185,129,.08);border:1.5px solid var(--grn);border-radius:14px;padding:14px;margin-bottom:10px}
 .prosecutor-card{background:rgba(239,68,68,.08);border:1.5px solid var(--red);border-radius:14px;padding:14px;margin-bottom:10px}
-.judge-card{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
-.judge-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent,rgba(251,191,36,.1),transparent);pointer-events:none;animation:shine 3s ease-in-out infinite}
-@keyframes shine{0%,100%{opacity:0}50%{opacity:1}}
-.speech-active{background:var(--grn) !important;color:#fff !important;border-color:var(--grn) !important}
-@media(max-width:600px){
-  h1{font-size:24px}
-  .answers{grid-template-columns:1fr}
-  .c{padding:6px}
-  body{padding:8px}
-}
+.judge-card{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:14px}
+.speech-active{background:var(--grn) !important;color:#fff !important}
+@media(max-width:600px){h1{font-size:24px}.answers{grid-template-columns:1fr}.c{padding:6px}body{padding:8px}}
 </style>
 </head>
 <body>
@@ -98,102 +90,79 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 
 <header>
   <h1>🌌 BLIP MULTIVERSE</h1>
-  <p class="sub">5 ta AI o'yin · 24/7 bepul</p>
+  <p class="sub" id="subTitle">5 ta AI o'yin · 24/7 bepul</p>
 </header>
 
+<div class="lang-switch">
+  <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿 UZ</button>
+  <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺 RU</button>
+  <button class="lang-btn" id="langEN" onclick="setLang('en')">🇬🇧 EN</button>
+  <button class="lang-btn" id="langTJ" onclick="setLang('tj')">🇹🇯 TJ</button>
+</div>
+
 <div class="tabs">
-  <div class="tab active" onclick="sw('home',this)">🏠 Bosh</div>
-  <div class="tab" onclick="sw('turing',this)">🎭 Turing</div>
-  <div class="tab" onclick="sw('dream',this)">🌙 Dream</div>
-  <div class="tab" onclick="sw('time',this)">⏰ Time</div>
-  <div class="tab" onclick="sw('world',this)">🎲 World</div>
-  <div class="tab" onclick="sw('debate',this)">⚔️ Debate</div>
+  <div class="tab active" id="tab-home" onclick="sw('home',this)">🏠 <span class="t-home"></span></div>
+  <div class="tab" id="tab-turing" onclick="sw('turing',this)">🎭 <span class="t-turing"></span></div>
+  <div class="tab" id="tab-dream" onclick="sw('dream',this)">🌙 <span class="t-dream"></span></div>
+  <div class="tab" id="tab-time" onclick="sw('time',this)">⏰ <span class="t-time"></span></div>
+  <div class="tab" id="tab-world" onclick="sw('world',this)">🎲 <span class="t-world"></span></div>
+  <div class="tab" id="tab-debate" onclick="sw('debate',this)">⚔️ <span class="t-debate"></span></div>
 </div>
 
 <div class="tc active" id="t-home">
-  <div class="gc" onclick="sw('turing')">
-    <span class="i">🎭</span>
-    <h3>Reverse Turing Test</h3>
-    <p>Sen AI bo'lib o'yna, AI odam bo'lib o'yna. Hakam qaysi biri odam ekanini topadi.</p>
-    <span class="tag new">TAYYOR</span>
-  </div>
-  <div class="gc" onclick="sw('dream')">
-    <span class="i">🌙</span>
-    <h3>Dream Journal</h3>
-    <p>Tushingizni yozing. AI rasm chizadi va ramzlarni tahlil qiladi.</p>
-    <span class="tag new">TAYYOR</span>
-  </div>
-  <div class="gc" onclick="sw('time')">
-    <span class="i">⏰</span>
-    <h3>Time Machine</h3>
-    <p>Istalgan yilga sayohat. AI yangiliklar, fakt va rasm beradi.</p>
-    <span class="tag">YANGI</span>
-  </div>
-  <div class="gc" onclick="sw('world')">
-    <span class="i">🎲</span>
-    <h3>One-Button World</h3>
-    <p>Bitta tugma. Har bosganda yangi dunyo yaratiladi.</p>
-    <span class="tag">YANGI</span>
-  </div>
-  <div class="gc" onclick="sw('debate')">
-    <span class="i">⚔️</span>
-    <h3>AI Sud Majlisi</h3>
-    <p>Advokat va Prokuror bahslashadi. Hakam qaror chiqaradi. Ovozli!</p>
-    <span class="tag new">🔊 YANGI</span>
-  </div>
-  <div class="gc" onclick="location.href='council.html'">
-    <span class="i">🏛</span>
-    <h3>AI Kengash</h3>
-    <p>5 ta AI javob — 1 ta dono xulosa.</p>
-    <span class="tag">MAVJUD</span>
-  </div>
+  <div class="gc" onclick="sw('turing')"><span class="i">🎭</span><h3 id="gc1-h"></h3><p id="gc1-p"></p><span class="tag new" id="gc1-t"></span></div>
+  <div class="gc" onclick="sw('dream')"><span class="i">🌙</span><h3 id="gc2-h"></h3><p id="gc2-p"></p><span class="tag new" id="gc2-t"></span></div>
+  <div class="gc" onclick="sw('time')"><span class="i">⏰</span><h3 id="gc3-h"></h3><p id="gc3-p"></p><span class="tag" id="gc3-t"></span></div>
+  <div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3 id="gc4-h"></h3><p id="gc4-p"></p><span class="tag" id="gc4-t"></span></div>
+  <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3 id="gc5-h"></h3><p id="gc5-p"></p><span class="tag new" id="gc5-t"></span></div>
+  <div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3 id="gc6-h"></h3><p id="gc6-p"></p><span class="tag" id="gc6-t"></span></div>
 </div>
 
 <div class="tc" id="t-turing">
-  <div class="info">💡 Hakam ikkita javobdan qaysi biri <b>odam</b> ekanini topadi. Sen <b>AI bo'lib</b> yozasan.</div>
+  <div class="info" id="turing-info"></div>
   <div class="card">
-    <div class="info" style="margin-bottom:8px"><b>📌 Mavzu:</b> <span id="ttopic">Yuklanmoqda...</span></div>
-    <textarea id="tans" placeholder="AI bo'lib javob yozing..."></textarea>
-    <button class="btn btn-full" id="tbtn" onclick="tSub()">Yuborish</button>
+    <div class="info" style="margin-bottom:8px"><b>📌 <span class="t-topic"></span>:</b> <span id="ttopic">...</span></div>
+    <textarea id="tans" placeholder="..."></textarea>
+    <button class="btn btn-full" id="tbtn" onclick="tSub()"></button>
   </div>
   <div id="tres"></div>
 </div>
 
 <div class="tc" id="t-dream">
-  <div class="info">💡 Tushingizni yozing. AI tahlil qiladi, ramzlarni topadi va rasm chizadi.</div>
+  <div class="info" id="dream-info"></div>
   <div class="card">
-    <textarea id="din" placeholder="Tushingizni yozing..."></textarea>
+    <textarea id="din" placeholder="..."></textarea>
     <div class="btn-row">
       <button class="mic" id="dmic" onclick="mic('din','dmic')">🎤</button>
-      <button class="btn" id="dbtn" onclick="dSub()">🌙 Tahlil qilish</button>
+      <button class="btn" id="dbtn" onclick="dSub()"></button>
     </div>
   </div>
   <div id="dres"></div>
 </div>
 
 <div class="tc" id="t-time">
-  <div class="info">💡 Yil va joyni kiriting. AI sayohat qiladi.</div>
+  <div class="info" id="time-info"></div>
   <div class="card">
-    <input type="number" id="tyr" placeholder="Yil (1900)">
-    <input type="text" id="tpl" placeholder="Joy (Dushanbe)">
-    <button class="btn btn-full" id="tmb" onclick="tmSub()">⏰ Sayohat</button>
+    <input type="number" id="tyr" placeholder="1900">
+    <input type="text" id="tpl" placeholder="Dushanbe">
+    <button class="btn btn-full" id="tmb" onclick="tmSub()"></button>
   </div>
   <div id="tmres"></div>
 </div>
 
 <div class="tc" id="t-world">
-  <div class="info">💡 Bitta tugma. Har bosganda yangi dunyo.</div>
+  <div class="info" id="world-info"></div>
   <div class="card" style="text-align:center">
-    <button class="btn btn-full" id="wbtn" onclick="wSub()" style="font-size:16px;padding:22px">🎲 YANGI DUNYO</button>
+    <button class="btn btn-full" id="wbtn" onclick="wSub()" style="font-size:16px;padding:22px"></button>
   </div>
   <div id="wres"></div>
 </div>
 
 <div class="tc" id="t-debate">
-  <div class="info">💡 Mavzu bering. <b>👨‍💼 Advokat</b> himoya qiladi, <b>👨‍⚖️ Prokuror</b> qarshi chiqadi, <b>⚖️ Hakam</b> qaror chiqaradi. Ovozli!</div>
+  <div class="info" id="debate-info"></div>
   <div class="card">
-    <input type="text" id="dtp" placeholder="Mavzu (AI bilan do'stlashish kerakmi?)">
-    <button class="btn btn-full" id="dbb" onclick="dbSub()">⚔️ Sud majlisini boshlash</button>
+    <input type="text" id="dtp" placeholder="...">
+    <button class="btn btn-full" id="dbb" onclick="dbSub()"></button>
   </div>
   <div id="dbres"></div>
 </div>
@@ -205,7 +174,162 @@ const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
 const P="Blipzor921324";
 let rec=null,isR=false;
 
+// ============================================================
+// 🌐 TILLAR
+// ============================================================
+const T={
+  uz:{
+    sub:"5 ta AI o'yin · 24/7 bepul",
+    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate"},
+    gc1:{h:"Reverse Turing Test",p:"Sen AI bo'lib o'yna, AI odam bo'lib o'yna.",t:"TAYYOR"},
+    gc2:{h:"Dream Journal",p:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.",t:"TAYYOR"},
+    gc3:{h:"Time Machine",p:"Istalgan yilga sayohat qiling.",t:"YANGI"},
+    gc4:{h:"One-Button World",p:"Bitta tugma. Har bosganda yangi dunyo.",t:"YANGI"},
+    gc5:{h:"AI Sud Majlisi",p:"Advokat, Prokuror, Hakam. Ovozli!",t:"🔊 YANGI"},
+    gc6:{h:"AI Kengash",p:"5 ta AI javob — 1 ta xulosa.",t:"MAVJUD"},
+    turingInfo:"💡 Hakam qaysi biri odam ekanini topadi.",
+    topic:"Mavzu",tansPh:"AI bo'lib javob yozing...",tbtn:"Yuborish",
+    dreamInfo:"💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.",
+    dinPh:"Tushingizni yozing...",dbtn:"🌙 Tahlil qilish",
+    timeInfo:"💡 Yil va joyni kiriting.",tmb:"⏰ Sayohat",
+    worldInfo:"💡 Bitta tugma. Har bosganda yangi dunyo.",wbtn:"🎲 YANGI DUNYO",
+    debateInfo:"💡 Advokat himoya qiladi, Prokuror qarshi chiqadi, Hakam qaror chiqaradi.",
+    dtpPh:"Mavzu (AI bilan do'stlashish kerakmi?)",dbb:"⚔️ Sud majlisini boshlash",
+    adv:"ADVOKAT (FOR)",pros:"PROKUROR (AGAINST)",judge:"HAKAM QARORI",
+    listen:"🔊 Eshitish",listening:"🔊 O'qilmoqda...",listenAll:"🎙️ Sud majlisini to'liq eshitish",stop:"⏹ To'xtatish",
+    loading:"Yuklanmoqda...",thinking:"Hakam o'ylayapti",dreaming:"Tush tahlil qilinmoqda",traveling:"Vaqt mashinasi ishga tushdi",creating:"Yangi olam tug'ilmoqda",court:"Sud majlisi boshlanmoqda",
+    newRound:"🔄 Yangi raund",youWin:"🎉 SEN G'OLIB!",aiWin:"😅 AI G'OLIB!",
+    human:"Odam",mood:"Kayfiyat"
+  },
+  ru:{
+    sub:"5 AI-игр · 24/7 бесплатно",
+    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд"},
+    gc1:{h:"Reverse Turing Test",p:"Играй как AI, AI играет как человек.",t:"ГОТОВО"},
+    gc2:{h:"Dream Journal",p:"Напиши сон. AI нарисует и проанализирует.",t:"ГОТОВО"},
+    gc3:{h:"Time Machine",p:"Путешествие в любой год.",t:"НОВОЕ"},
+    gc4:{h:"One-Button World",p:"Одна кнопка. Новый мир каждый раз.",t:"НОВОЕ"},
+    gc5:{h:"AI Суд",p:"Адвокат, Прокурор, Судья. Голосовой!",t:"🔊 НОВОЕ"},
+    gc6:{h:"AI Совет",p:"5 AI ответов — 1 вывод.",t:"ЕСТЬ"},
+    turingInfo:"💡 Судья определяет, кто человек.",
+    topic:"Тема",tansPh:"Напиши ответ как AI...",tbtn:"Отправить",
+    dreamInfo:"💡 Опиши сон. AI проанализирует и нарисует.",
+    dinPh:"Опиши сон...",dbtn:"🌙 Анализировать",
+    timeInfo:"💡 Введи год и место.",tmb:"⏰ Путешествие",
+    worldInfo:"💡 Одна кнопка. Новый мир.",wbtn:"🎲 НОВЫЙ МИР",
+    debateInfo:"💡 Адвокат защищает, Прокурор обвиняет, Судья решает.",
+    dtpPh:"Тема (Стоит ли дружить с AI?)",dbb:"⚔️ Начать суд",
+    adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"РЕШЕНИЕ СУДЬИ",
+    listen:"🔊 Слушать",listening:"🔊 Читается...",listenAll:"🎙️ Слушать весь суд",stop:"⏹ Стоп",
+    loading:"Загрузка...",thinking:"Судья думает",dreaming:"Анализ сна",traveling:"Машина времени работает",creating:"Новый мир создаётся",court:"Суд начинается",
+    newRound:"🔄 Новый раунд",youWin:"🎉 ТЫ ПОБЕДИЛ!",aiWin:"😅 AI ПОБЕДИЛ!",
+    human:"Человек",mood:"Настроение"
+  },
+  en:{
+    sub:"5 AI games · 24/7 free",
+    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate"},
+    gc1:{h:"Reverse Turing Test",p:"You play as AI, AI plays as human.",t:"READY"},
+    gc2:{h:"Dream Journal",p:"Write your dream. AI draws and analyzes it.",t:"READY"},
+    gc3:{h:"Time Machine",p:"Travel to any year.",t:"NEW"},
+    gc4:{h:"One-Button World",p:"One button. New world each time.",t:"NEW"},
+    gc5:{h:"AI Court",p:"Lawyer, Prosecutor, Judge. Voice!",t:"🔊 NEW"},
+    gc6:{h:"AI Council",p:"5 AI answers — 1 conclusion.",t:"EXISTS"},
+    turingInfo:"💡 The judge decides who is human.",
+    topic:"Topic",tansPh:"Write answer as AI...",tbtn:"Send",
+    dreamInfo:"💡 Describe your dream. AI analyzes and draws.",
+    dinPh:"Describe your dream...",dbtn:"🌙 Analyze",
+    timeInfo:"💡 Enter year and place.",tmb:"⏰ Travel",
+    worldInfo:"💡 One button. New world.",wbtn:"🎲 NEW WORLD",
+    debateInfo:"💡 Lawyer defends, Prosecutor accuses, Judge decides.",
+    dtpPh:"Topic (Should we befriend AI?)",dbb:"⚔️ Start court",
+    adv:"LAWYER (FOR)",pros:"PROSECUTOR (AGAINST)",judge:"JUDGE DECISION",
+    listen:"🔊 Listen",listening:"🔊 Reading...",listenAll:"🎙️ Listen to full court",stop:"⏹ Stop",
+    loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",traveling:"Time machine working",creating:"New world being born",court:"Court is starting",
+    newRound:"🔄 New round",youWin:"🎉 YOU WIN!",aiWin:"😅 AI WINS!",
+    human:"Human",mood:"Mood"
+  },
+  tj:{
+    sub:"5 бозии AI · 24/7 ройгон",
+    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд"},
+    gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун, AI ҳамчун инсон.",t:"ТАЙЁР"},
+    gc2:{h:"Dream Journal",p:"Хоби худро нависед. AI расм мекашад.",t:"ТАЙЁР"},
+    gc3:{h:"Time Machine",p:"Ба ҳар сол сафар кунед.",t:"НАВ"},
+    gc4:{h:"One-Button World",p:"Як тугма. Ҳар дафъа ҷаҳони нав.",t:"НАВ"},
+    gc5:{h:"Суди AI",p:"Адвокат, Прокурор, Довар. Овозӣ!",t:"🔊 НАВ"},
+    gc6:{h:"Шӯрои AI",p:"5 ҷавоби AI — 1 хулоса.",t:"МАВҶУД"},
+    turingInfo:"💡 Довар муайян мекунад, ки кӣ инсон аст.",
+    topic:"Мавзӯъ",tansPh:"Ҳамчун AI ҷавоб нависед...",tbtn:"Фиристодан",
+    dreamInfo:"💡 Хоби худро тавсиф кунед.",
+    dinPh:"Хоби худро нависед...",dbtn:"🌙 Таҳлил",
+    timeInfo:"💡 Сол ва ҷойро ворид кунед.",tmb:"⏰ Сафар",
+    worldInfo:"💡 Як тугма. Ҳар дафъа ҷаҳони нав.",wbtn:"🎲 ҶАҲОНИ НАВ",
+    debateInfo:"💡 Адвокат ҳимоя мекунад, Прокурор айбдор мекунад, Довар ҳал мекунад.",
+    dtpPh:"Мавзӯъ (Оё бо AI дӯст шудан мумкин?)",dbb:"⚔️ Оғози суд",
+    adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"ҚАРОРИ ДОВАР",
+    listen:"🔊 Гӯш кардан",listening:"🔊 Хонда мешавад...",listenAll:"🎙️ Тамоми судро гӯш кунед",stop:"⏹ Қатъ",
+    loading:"Боргирӣ...",thinking:"Довар фикр мекунад",dreaming:"Таҳлили хоб",traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
+    newRound:"🔄 Даври нав",youWin:"🎉 ШУМО ҒОЛИБ!",aiWin:"😅 AI ҒОЛИБ!",
+    human:"Инсон",mood:"Ҳолат"
+  }
+};
+
+let LANG=localStorage.getItem('ai_lang')||'uz';
+
+// ============================================================
+// 🌐 TILNI QO'LLASH
+// ============================================================
+function setLang(l){
+  LANG=l;
+  localStorage.setItem('ai_lang',l);
+  applyLang();
+}
+
+function applyLang(){
+  const t=T[LANG];
+  document.documentElement.lang=LANG==='tj'?'tg':LANG;
+
+  ['uz','ru','en','tj'].forEach(l=>{
+    const btn=document.getElementById('lang'+l.toUpperCase());
+    if(btn) btn.classList.toggle('on',l===LANG);
+  });
+
+  document.querySelector('.t-home').textContent=t.tabs.home;
+  document.querySelector('.t-turing').textContent=t.tabs.turing;
+  document.querySelector('.t-dream').textContent=t.tabs.dream;
+  document.querySelector('.t-time').textContent=t.tabs.time;
+  document.querySelector('.t-world').textContent=t.tabs.world;
+  document.querySelector('.t-debate').textContent=t.tabs.debate;
+
+  document.getElementById('subTitle').textContent=t.sub;
+
+  for(var i=1;i<=6;i++){
+    document.getElementById('gc'+i+'-h').textContent=t['gc'+i].h;
+    document.getElementById('gc'+i+'-p').textContent=t['gc'+i].p;
+    document.getElementById('gc'+i+'-t').textContent=t['gc'+i].t;
+  }
+
+  document.getElementById('turing-info').innerHTML=t.turingInfo;
+  document.querySelector('.t-topic').textContent=t.topic;
+  document.getElementById('tans').placeholder=t.tansPh;
+  document.getElementById('tbtn').textContent=t.tbtn;
+
+  document.getElementById('dream-info').innerHTML=t.dreamInfo;
+  document.getElementById('din').placeholder=t.dinPh;
+  document.getElementById('dbtn').textContent=t.dbtn;
+
+  document.getElementById('time-info').innerHTML=t.timeInfo;
+  document.getElementById('tmb').textContent=t.tmb;
+
+  document.getElementById('world-info').innerHTML=t.worldInfo;
+  document.getElementById('wbtn').textContent=t.wbtn;
+
+  document.getElementById('debate-info').innerHTML=t.debateInfo;
+  document.getElementById('dtp').placeholder=t.dtpPh;
+  document.getElementById('dbb').textContent=t.dbb;
+}
+
+// ============================================================
 // TAB
+// ============================================================
 function sw(n,el){
   document.querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
@@ -216,45 +340,46 @@ function sw(n,el){
   if(window.speechSynthesis) window.speechSynthesis.cancel();
 }
 
+// ============================================================
 // HELPERS
-function esc(s){return(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function ld(t){return'<div class="loading">'+t+'<span class="dots"></span></div>'}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+// ============================================================
+function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function ld(t){return '<div class="loading">'+t+'<span class="dots"></span></div>';}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
 
+// ============================================================
 // MIC
+// ============================================================
 function mic(inputId,btnId){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');return}
-  if(!rec){rec=new SR();rec.lang='uz-UZ';rec.continuous=false;rec.interimResults=false}
+  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');return;}
+  if(!rec){rec=new SR();rec.lang=LANG==='ru'?'ru-RU':LANG==='en'?'en-US':'uz-UZ';rec.continuous=false;rec.interimResults=false;}
   const btn=document.getElementById(btnId);
   const inp=document.getElementById(inputId);
-  if(isR){try{rec.stop()}catch(e){}return}
+  if(isR){try{rec.stop()}catch(e){}return;}
   rec.onresult=e=>{
     const t=e.results[0][0].transcript;
     inp.value+=(inp.value?' ':'')+t;
     inp.focus();
   };
-  rec.onend=()=>{isR=false;btn.classList.remove('rec')};
-  rec.onerror=()=>{isR=false;btn.classList.remove('rec')};
-  try{rec.start();isR=true;btn.classList.add('rec')}catch(e){}
+  rec.onend=()=>{isR=false;btn.classList.remove('rec');};
+  rec.onerror=()=>{isR=false;btn.classList.remove('rec');};
+  try{rec.start();isR=true;btn.classList.add('rec');}catch(e){}
 }
 
+// ============================================================
 // POST
+// ============================================================
 async function post(ep,body){
-  const r=await fetch(API+ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...body,parol:P})});
+  const r=await fetch(API+ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},body,{parol:P}))});
   return await r.json();
 }
 
 // ============================================================
-// 🔊 OVOZ — TUZATILGAN
+// 🔊 OVOZ
 // ============================================================
 let voices=[];
-
-function loadVoices(){
-  if(!window.speechSynthesis) return;
-  const v=window.speechSynthesis.getVoices();
-  if(v && v.length){ voices=v; }
-}
+function loadVoices(){ if(!window.speechSynthesis)return; const v=window.speechSynthesis.getVoices(); if(v&&v.length) voices=v; }
 loadVoices();
 if(window.speechSynthesis){
   window.speechSynthesis.onvoiceschanged=loadVoices;
@@ -268,33 +393,21 @@ function tanlaOvoz(tur){
   if(!voices.length) loadVoices();
   const all=voices;
   if(!all.length) return null;
-  const byLang=(l)=>all.filter(v=>v.lang.toLowerCase().startsWith(l));
+  const byLang=l=>all.filter(v=>v.lang.toLowerCase().startsWith(l));
   const uz=byLang('uz'),tr=byLang('tr'),ru=byLang('ru'),en=byLang('en');
-
-  if(tur==='advocate'){
-    return uz[0]||tr[0]||en[0]||all[0];
-  }
-  if(tur==='prosecutor'){
-    return ru[0]||en[1]||en[0]||all[1]||all[0];
-  }
-  if(tur==='judge'){
-    return en[2]||ru[1]||en[0]||all[2]||all[0];
-  }
+  if(tur==='advocate') return uz[0]||tr[0]||en[0]||all[0];
+  if(tur==='prosecutor') return ru[0]||en[1]||en[0]||all[1]||all[0];
+  if(tur==='judge') return en[2]||ru[1]||en[0]||all[2]||all[0];
   return all[0];
 }
 
 function splitText(text,max){
   max=max||180;
-  const parts=[];
-  let current='';
+  const parts=[]; let current='';
   const sentences=text.split(/(?<=[.!?])\s+/);
   for(const s of sentences){
-    if((current+' '+s).length>max){
-      if(current) parts.push(current.trim());
-      current=s;
-    } else {
-      current+=' '+s;
-    }
+    if((current+' '+s).length>max){ if(current) parts.push(current.trim()); current=s; }
+    else current+=' '+s;
   }
   if(current) parts.push(current.trim());
   return parts.length?parts:[text];
@@ -312,10 +425,7 @@ function makeUtter(text,tur){
 }
 
 function speak(text,tur){
-  if(!window.speechSynthesis){
-    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
-    return;
-  }
+  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
   window.speechSynthesis.cancel();
   const parts=splitText(text);
   let i=0;
@@ -344,307 +454,231 @@ function speakSeq(text,tur){
     next();
   });
 }
-
-// TURING
+      // ============================================================
+// 🎭 TURING
+// ============================================================
 async function tNew(){
-  document.getElementById('ttopic').textContent='Yuklanmoqda...';
+  const t=T[LANG];
+  document.getElementById('ttopic').textContent=t.loading;
   document.getElementById('tans').value='';
   document.getElementById('tres').innerHTML='';
   document.getElementById('tbtn').disabled=true;
   try{
     const d=await post('/turing',{action:'topic'});
-    if(d.topic){
-      document.getElementById('ttopic').textContent=d.topic;
-      document.getElementById('tbtn').disabled=false;
-    } else {
-      document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
-    }
-  }catch(e){document.getElementById('ttopic').textContent='❌ '+e.message}
+    if(d.topic){ document.getElementById('ttopic').textContent=d.topic; document.getElementById('tbtn').disabled=false; }
+    else document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
+  }catch(e){ document.getElementById('ttopic').textContent='❌ '+e.message; }
 }
 
 async function tSub(){
+  const t=T[LANG];
   const a=document.getElementById('tans').value.trim();
-  if(!a){alert('Javob yozing!');return}
+  if(!a){alert('Javob yozing!');return;}
   const tp=document.getElementById('ttopic').textContent;
   const b=document.getElementById('tbtn');
-  b.disabled=true;b.textContent='⏳...';
-  document.getElementById('tres').innerHTML=ld('Hakam o\'ylayapti');
+  b.disabled=true; b.textContent='⏳...';
+  document.getElementById('tres').innerHTML=ld(t.thinking);
   try{
     const d=await post('/turing',{action:'judge',topic:tp,userAnswer:a});
-    if(d.error){
-      document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
-      return;
-    }
+    if(d.error){ document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
     const cl=d.userWins?'win':'lose';
-    const ti=d.userWins?'🎉 SEN G\'OLIB!':'😅 AI G\'OLIB!';
-    document.getElementById('tres').innerHTML=`
-      <div class="answers">
-        <div class="answer"><div class="answer-label">🅰️ Javob 1</div><div class="answer-text">${esc(d.answer1)}</div></div>
-        <div class="answer"><div class="answer-label">🅱️ Javob 2</div><div class="answer-text">${esc(d.answer2)}</div></div>
-      </div>
-      <div class="verdict ${cl}">
-        <div class="verdict-title">${ti}</div>
-        <div class="verdict-text">🤖 ${esc(d.judgeVerdict)}<br><br>✅ Odam: ${d.humanIsUser?'Sen':'AI'}<br>${esc(d.reasoning||'')}</div>
-      </div>
-      <button class="btn btn-full btn-sec" onclick="tNew()">🔄 Yangi raund</button>`;
-  }catch(e){
-    document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{
-    b.disabled=false;b.textContent='Yuborish';
-  }
+    const ti=d.userWins?t.youWin:t.aiWin;
+    var html='';
+    html+='<div class="answers">';
+    html+='<div class="answer"><div class="answer-label">🅰️ Javob 1</div><div class="answer-text">'+esc(d.answer1)+'</div></div>';
+    html+='<div class="answer"><div class="answer-label">🅱️ Javob 2</div><div class="answer-text">'+esc(d.answer2)+'</div></div>';
+    html+='</div>';
+    html+='<div class="verdict '+cl+'">';
+    html+='<div class="verdict-title">'+ti+'</div>';
+    html+='<div class="verdict-text">🤖 '+esc(d.judgeVerdict)+'<br><br>✅ '+t.human+': '+(d.humanIsUser?'Sen':'AI')+'<br>'+esc(d.reasoning||'')+'</div>';
+    html+='</div>';
+    html+='<button class="btn btn-full btn-sec" onclick="tNew()">'+t.newRound+'</button>';
+    document.getElementById('tres').innerHTML=html;
+  }catch(e){ document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
+  finally{ b.disabled=false; b.textContent=t.tbtn; }
 }
 
-// DREAM
+// ============================================================
+// 🌙 DREAM
+// ============================================================
 async function dSub(){
+  const t=T[LANG];
   const dr=document.getElementById('din').value.trim();
-  if(!dr){alert('Tushingizni yozing!');return}
+  if(!dr){alert('Tushingizni yozing!');return;}
   const b=document.getElementById('dbtn');
-  b.disabled=true;b.textContent='⏳...';
-  document.getElementById('dres').innerHTML=ld('Tush tahlil qilinmoqda');
+  b.disabled=true; b.textContent='⏳...';
+  document.getElementById('dres').innerHTML=ld(t.dreaming);
   try{
     const d=await post('/dream',{dream:dr});
-    if(d.error){
-      document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
-      return;
-    }
+    if(d.error){ document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
     const em={'xursand':'😊',"qo'rqinchli":'😨',"g'alati":'🤔','sokin':'😌','xafa':'😢','hayajonli':'😲'};
-    const sy=(d.symbols||[]).map(s=>`<span>🔮 ${esc(s)}</span>`).join('');
-    document.getElementById('dres').innerHTML=`
-      <div class="result">
-        <div class="result-title">🌙 Tush tahlili</div>
-        <div class="result-text">${esc(d.analysis||'')}</div>
-        ${sy?`<div class="symbols">${sy}</div>`:''}
-        <div style="margin-top:10px;font-size:12px;color:var(--muted)">Kayfiyat: ${em[d.mood]||'🌙'} ${d.mood||''}</div>
-        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
-      </div>`;
-  }catch(e){
-    document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{
-    b.disabled=false;b.textContent='🌙 Tahlil qilish';
-  }
+    const sy=(d.symbols||[]).map(s=>'<span>🔮 '+esc(s)+'</span>').join('');
+    var html='';
+    html+='<div class="result">';
+    html+='<div class="result-title">🌙 '+t.mood+': '+(em[d.mood]||'🌙')+' '+esc(d.mood||'')+'</div>';
+    html+='<div class="result-text">'+esc(d.analysis||'')+'</div>';
+    if(sy) html+='<div class="symbols">'+sy+'</div>';
+    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
+    html+='</div>';
+    document.getElementById('dres').innerHTML=html;
+  }catch(e){ document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
+  finally{ b.disabled=false; b.textContent=t.dbtn; }
 }
 
-// TIME
+// ============================================================
+// ⏰ TIME
+// ============================================================
 async function tmSub(){
+  const t=T[LANG];
   const yr=document.getElementById('tyr').value.trim();
   const pl=document.getElementById('tpl').value.trim();
-  if(!yr){alert('Yilni kiriting!');return}
+  if(!yr){alert('Yilni kiriting!');return;}
   const b=document.getElementById('tmb');
-  b.disabled=true;b.textContent='⏳...';
-  document.getElementById('tmres').innerHTML=ld('Vaqt mashinasi ishga tushdi');
+  b.disabled=true; b.textContent='⏳...';
+  document.getElementById('tmres').innerHTML=ld(t.traveling);
   try{
     const d=await post('/time',{year:yr,place:pl});
-    if(d.error){
-      document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
-      return;
-    }
-    document.getElementById('tmres').innerHTML=`
-      <div class="result">
-        <div class="result-title">⏰ ${esc(yr)} ${pl?'· '+esc(pl):''}</div>
-        <div class="result-text">${esc(d.story||'')}</div>
-        ${d.fact?`<div class="info" style="margin-top:12px"><b>💡 Fakt:</b> ${esc(d.fact)}</div>`:''}
-        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
-      </div>`;
-  }catch(e){
-    document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{
-    b.disabled=false;b.textContent='⏰ Sayohat';
-  }
+    if(d.error){ document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
+    var html='';
+    html+='<div class="result">';
+    html+='<div class="result-title">⏰ '+esc(yr)+(pl?' · '+esc(pl):'')+'</div>';
+    html+='<div class="result-text">'+esc(d.story||'')+'</div>';
+    if(d.fact) html+='<div class="info" style="margin-top:12px"><b>💡:</b> '+esc(d.fact)+'</div>';
+    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
+    html+='</div>';
+    document.getElementById('tmres').innerHTML=html;
+  }catch(e){ document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
+  finally{ b.disabled=false; b.textContent=t.tmb; }
 }
 
-// WORLD
+// ============================================================
+// 🎲 WORLD
+// ============================================================
 async function wSub(){
+  const t=T[LANG];
   const b=document.getElementById('wbtn');
-  b.disabled=true;b.textContent='⏳...';
-  document.getElementById('wres').innerHTML=ld('Yangi olam tug\'ilmoqda');
+  b.disabled=true; b.textContent='⏳...';
+  document.getElementById('wres').innerHTML=ld(t.creating);
   try{
     const d=await post('/world',{});
-    if(d.error){
-      document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
-      return;
-    }
-    document.getElementById('wres').innerHTML=`
-      <div class="result">
-        <div class="result-title">🎲 ${esc(d.name||'Yangi dunyo')}</div>
-        <div class="result-text">${esc(d.story||'')}</div>
-        ${d.fact?`<div class="info" style="margin-top:12px"><b>💡 Fakt:</b> ${esc(d.fact)}</div>`:''}
-        ${d.imageUrl?`<img src="${d.imageUrl}" onerror="this.style.display='none'">`:''}
-      </div>`;
-  }catch(e){
-    document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{
-    b.disabled=false;b.textContent='🎲 YANGI DUNYO';
-  }
+    if(d.error){ document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
+    var html='';
+    html+='<div class="result">';
+    html+='<div class="result-title">🎲 '+esc(d.name||'?')+'</div>';
+    html+='<div class="result-text">'+esc(d.story||'')+'</div>';
+    if(d.fact) html+='<div class="info" style="margin-top:12px"><b>💡:</b> '+esc(d.fact)+'</div>';
+    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
+    html+='</div>';
+    document.getElementById('wres').innerHTML=html;
+  }catch(e){ document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
+  finally{ b.disabled=false; b.textContent=t.wbtn; }
 }
-    </script>
-    // ============================================================
+
+// ============================================================
 // ⚔️ DEBATE
 // ============================================================
 async function dbSub(){
+  const t=T[LANG];
   const tp=document.getElementById('dtp').value.trim();
-  if(!tp){alert('Mavzuni kiriting!');return}
+  if(!tp){alert('Mavzuni kiriting!');return;}
   const b=document.getElementById('dbb');
-  b.disabled=true;b.textContent='⏳ Sud boshlanmoqda...';
-  document.getElementById('dbres').innerHTML=ld('⚖️ Sud majlisi boshlanmoqda');
-
+  b.disabled=true; b.textContent='⏳...';
+  document.getElementById('dbres').innerHTML=ld(t.court);
   try{
     const d=await post('/debate',{topic:tp});
-    if(d.error){
-      document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>';
-      return;
-    }
+    if(d.error){ document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
 
-    window._debate = {
-      adv: d.forArg || '',
-      pros: d.againstArg || '',
-      judge: d.verdict || ''
-    };
+    window._debate={adv:d.forArg||'',pros:d.againstArg||'',judge:d.verdict||''};
 
-    document.getElementById('dbres').innerHTML=`
-      <div class="advocate-card">
-        <div class="debate-role">
-          <div class="debate-role-title" style="color:var(--grn)">👨‍💼 ADVOKAT (FOR)</div>
-          <button class="btn-mini grn" id="btn-adv" onclick="playOne('adv')">🔊 Eshitish</button>
-        </div>
-        <div class="debate-text">${esc(d.forArg||'')}</div>
-      </div>
+    var html='';
+    html+='<div class="advocate-card">';
+    html+='<div class="debate-role">';
+    html+='<div class="debate-role-title" style="color:var(--grn)">👨‍💼 '+t.adv+'</div>';
+    html+='<button class="btn-mini grn" id="btn-adv" onclick="playOne(\'adv\')">'+t.listen+'</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.forArg||'')+'</div>';
+    html+='</div>';
 
-      <div class="prosecutor-card">
-        <div class="debate-role">
-          <div class="debate-role-title" style="color:var(--red)">👨‍⚖️ PROKUROR (AGAINST)</div>
-          <button class="btn-mini red" id="btn-pros" onclick="playOne('pros')">🔊 Eshitish</button>
-        </div>
-        <div class="debate-text">${esc(d.againstArg||'')}</div>
-      </div>
+    html+='<div class="prosecutor-card">';
+    html+='<div class="debate-role">';
+    html+='<div class="debate-role-title" style="color:var(--red)">👨‍⚖️ '+t.pros+'</div>';
+    html+='<button class="btn-mini red" id="btn-pros" onclick="playOne(\'pros\')">'+t.listen+'</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.againstArg||'')+'</div>';
+    html+='</div>';
 
-      <div class="judge-card">
-        <div class="debate-role" style="border-bottom-color:var(--gold)">
-          <div class="debate-role-title" style="color:var(--gold)">⚖️ HAKAM QARORI</div>
-          <button class="btn-mini gold" id="btn-judge" onclick="playOne('judge')">🔊 Eshitish</button>
-        </div>
-        <div class="debate-text">${esc(d.verdict||'')}</div>
-      </div>
+    html+='<div class="judge-card">';
+    html+='<div class="debate-role" style="border-bottom-color:var(--gold)">';
+    html+='<div class="debate-role-title" style="color:var(--gold)">⚖️ '+t.judge+'</div>';
+    html+='<button class="btn-mini gold" id="btn-judge" onclick="playOne(\'judge\')">'+t.listen+'</button>';
+    html+='</div>';
+    html+='<div class="debate-text">'+esc(d.verdict||'')+'</div>';
+    html+='</div>';
 
-      <button class="btn btn-full" style="background:linear-gradient(135deg,#10b981,#06b6d4)" id="playAllBtn" onclick="playAll()">🎙️ Sud majlisini to'liq eshitish</button>
-      <button class="btn btn-full btn-sec" style="margin-top:8px" onclick="stopSpeak()">⏹ To'xtatish</button>
-    `;
+    html+='<button class="btn btn-full" style="background:linear-gradient(135deg,#10b981,#06b6d4)" id="playAllBtn" onclick="playAll()">'+t.listenAll+'</button>';
+    html+='<button class="btn btn-full btn-sec" style="margin-top:8px" onclick="stopSpeak()">'+t.stop+'</button>';
 
-  }catch(e){
-    document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>';
-  }finally{
-    b.disabled=false;b.textContent='⚔️ Sud majlisini boshlash';
-  }
+    document.getElementById('dbres').innerHTML=html;
+  }catch(e){ document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
+  finally{ b.disabled=false; b.textContent=t.dbb; }
 }
 
 function playOne(tur){
-  if(!window._debate){ return; }
-  const map = {
-    adv:   { text: window._debate.adv,   voice: 'advocate',    btn: 'btn-adv' },
-    pros:  { text: window._debate.pros,  voice: 'prosecutor',  btn: 'btn-pros' },
-    judge: { text: window._debate.judge, voice: 'judge',       btn: 'btn-judge' }
-  };
-  const item = map[tur];
-  if(!item || !item.text) return;
-
-  if(!window.speechSynthesis){
-    alert('❌ Brauzeringiz ovozni qo\'llab-quvvatlamaydi');
-    return;
-  }
+  const t=T[LANG];
+  if(!window._debate) return;
+  const map={adv:{text:window._debate.adv,voice:'advocate',btn:'btn-adv'},pros:{text:window._debate.pros,voice:'prosecutor',btn:'btn-pros'},judge:{text:window._debate.judge,voice:'judge',btn:'btn-judge'}};
+  const item=map[tur];
+  if(!item||!item.text) return;
+  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
   window.speechSynthesis.cancel();
-
-  const btn = document.getElementById(item.btn);
-  if(btn){
-    btn.classList.add('speech-active');
-    btn.textContent = '🔊 O\'qilmoqda...';
-  }
-
-  speak(item.text, item.voice);
-
-  const timer = setInterval(() => {
+  const btn=document.getElementById(item.btn);
+  if(btn){ btn.classList.add('speech-active'); btn.textContent=t.listening; }
+  speak(item.text,item.voice);
+  const timer=setInterval(()=>{
     if(!window.speechSynthesis.speaking){
-      if(btn){
-        btn.classList.remove('speech-active');
-        btn.textContent = '🔊 Eshitish';
-      }
+      if(btn){ btn.classList.remove('speech-active'); btn.textContent=t.listen; }
       clearInterval(timer);
     }
-  }, 500);
+  },500);
 }
 
 async function playAll(){
+  const t=T[LANG];
   if(!window._debate) return;
-  if(!window.speechSynthesis){
-    alert('❌ Ovoz qo\'llab-quvvatlanmaydi');
-    return;
-  }
+  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
+  const allBtn=document.getElementById('playAllBtn');
+  if(allBtn){ allBtn.disabled=true; allBtn.textContent=t.listening; }
+  const adv=window._debate.adv, pros=window._debate.pros, judge=window._debate.judge;
+  function setBtn(id){ const b=document.getElementById(id); if(b){ b.classList.add('speech-active'); b.textContent=t.listening; } }
+  function resetBtn(id){ const b=document.getElementById(id); if(b){ b.classList.remove('speech-active'); b.textContent=t.listen; } }
 
-  const allBtn = document.getElementById('playAllBtn');
-  if(allBtn){
-    allBtn.disabled = true;
-    allBtn.textContent = '🎙️ O\'qilmoqda...';
-  }
+  setBtn('btn-adv'); await speakSeq(adv,'advocate'); resetBtn('btn-adv'); await sleep(700);
+  setBtn('btn-pros'); await speakSeq(pros,'prosecutor'); resetBtn('btn-pros'); await sleep(700);
+  setBtn('btn-judge'); await speakSeq(judge,'judge'); resetBtn('btn-judge');
 
-  const { adv, pros, judge } = window._debate;
-
-  const setBtn = (id, txt) => {
-    const b = document.getElementById(id);
-    if(b){
-      b.classList.add('speech-active');
-      b.textContent = txt;
-    }
-  };
-  const resetBtn = (id) => {
-    const b = document.getElementById(id);
-    if(b){
-      b.classList.remove('speech-active');
-      b.textContent = '🔊 Eshitish';
-    }
-  };
-
-  setBtn('btn-adv', '🔊 O\'qilmoqda...');
-  await speakSeq('Advokat. ' + adv, 'advocate');
-  resetBtn('btn-adv');
-  await sleep(700);
-
-  setBtn('btn-pros', '🔊 O\'qilmoqda...');
-  await speakSeq('Prokuror. ' + pros, 'prosecutor');
-  resetBtn('btn-pros');
-  await sleep(700);
-
-  setBtn('btn-judge', '🔊 O\'qilmoqda...');
-  await speakSeq('Hakam qarori. ' + judge, 'judge');
-  resetBtn('btn-judge');
-
-  if(allBtn){
-    allBtn.disabled = false;
-    allBtn.textContent = '🎙️ Sud majlisini to\'liq eshitish';
-  }
+  if(allBtn){ allBtn.disabled=false; allBtn.textContent=t.listenAll; }
 }
 
 function stopSpeak(){
+  const t=T[LANG];
   if(window.speechSynthesis) window.speechSynthesis.cancel();
-  ['btn-adv','btn-pros','btn-judge'].forEach(id => {
-    const b = document.getElementById(id);
-    if(b){
-      b.classList.remove('speech-active');
-      b.textContent = '🔊 Eshitish';
-    }
+  ['btn-adv','btn-pros','btn-judge'].forEach(id=>{
+    const b=document.getElementById(id);
+    if(b){ b.classList.remove('speech-active'); b.textContent=t.listen; }
   });
-  const allBtn = document.getElementById('playAllBtn');
-  if(allBtn){
-    allBtn.disabled = false;
-    allBtn.textContent = '🎙️ Sud majlisini to\'liq eshitish';
-  }
+  const allBtn=document.getElementById('playAllBtn');
+  if(allBtn){ allBtn.disabled=false; allBtn.textContent=t.listenAll; }
 }
 
 // ============================================================
 // INIT
 // ============================================================
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded',()=>{
+  applyLang();
   tNew();
   loadVoices();
-  setTimeout(loadVoices, 500);
-  setTimeout(loadVoices, 1500);
+  setTimeout(loadVoices,500);
+  setTimeout(loadVoices,1500);
 });
 </script>
 </body>
