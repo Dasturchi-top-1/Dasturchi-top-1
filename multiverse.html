@@ -766,165 +766,278 @@ function stopSpeak(){
 }
 
 // ============================================================
-// 🎬 VIDEO MAKER
+// 🎬 VIDEO MAKER v3.0 — AI rasm + Ken Burns + Ovoz
 // ============================================================
-const V_THEMES = {
-  dark:   { bg1:'#050510', bg2:'#1a1a3a', text:'#e6e6f0', accent:'#6366f1' },
-  gold:   { bg1:'#1a1400', bg2:'#3a2800', text:'#ffe4a0', accent:'#fbbf24' },
-  blue:   { bg1:'#001428', bg2:'#002a4d', text:'#cce6ff', accent:'#06b6d4' },
-  purple: { bg1:'#14002a', bg2:'#2a0050', text:'#e6ccff', accent:'#a855f7' },
-  sunset: { bg1:'#1a0800', bg2:'#4d1a00', text:'#ffd9b3', accent:'#ec4899' }
-};
-
 let vCanvas, vCtx;
-let vRecorder, vChunks=[];
-let vScenes=[], vTheme, vDur, vW, vH;
-let vSceneIdx=0, vSceneStart=0, vAnim=null;
+let vRecorder, vChunks = [];
+let vScenes = [], vDur, vW, vH;
+let vSceneIdx = 0, vSceneStart = 0, vAnim = null;
+let vImages = [];
+let vAudioCtx = null;
+let vAudioStream = null;
 
-function vSetSize(s){
-  const p=s.split('x');
-  vW=parseInt(p[0]);
-  vH=parseInt(p[1]);
-  vCanvas.width=vW;
-  vCanvas.height=vH;
+function vSetSize(s) {
+  const p = s.split('x');
+  vW = parseInt(p[0]);
+  vH = parseInt(p[1]);
+  vCanvas.width = vW;
+  vCanvas.height = vH;
 }
 
-function vDraw(sceneText, progress, alpha){
-  const t=vTheme;
-  const grad=vCtx.createLinearGradient(0,0,vW,vH);
-  grad.addColorStop(0,t.bg1);
-  grad.addColorStop(1,t.bg2);
-  vCtx.fillStyle=grad;
-  vCtx.fillRect(0,0,vW,vH);
+// AI rasm yuklash
+function vLoadImage(url) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    let done = false;
+    img.onload = () => { if (!done) { done = true; resolve(img); } };
+    img.onerror = () => { if (!done) { done = true; resolve(null); } };
+    img.src = url;
+    setTimeout(() => { if (!done) { done = true; resolve(null); } }, 20000);
+  });
+}
 
-  const time=Date.now()/1000;
-  for(let i=0;i<30;i++){
-    const x=((i*137+time*30)%vW);
-    const y=((i*89+time*20)%vH);
-    const r=2+(i%3);
-    vCtx.beginPath();
-    vCtx.arc(x,y,r,0,Math.PI*2);
-    vCtx.fillStyle=t.accent+'33';
-    vCtx.fill();
+// Ovoz — yumshoq fon musiqa (Web Audio API)
+function vCreateAudio() {
+  try {
+    vAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const dest = vAudioCtx.createMediaStreamDestination();
+    vAudioStream = dest.stream;
+
+    // 3 ta yumshoq ton (chord)
+    const notes = [261.63, 329.63, 392.00]; // C, E, G
+    notes.forEach((freq, i) => {
+      const osc = vAudioCtx.createOscillator();
+      const gain = vAudioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.value = 0.04;
+      osc.connect(gain);
+      gain.connect(dest);
+      osc.start();
+      // Yumshoq tebranish (vibrato)
+      const lfo = vAudioCtx.createOscillator();
+      const lfoGain = vAudioCtx.createGain();
+      lfo.frequency.value = 0.5 + i * 0.2;
+      lfoGain.gain.value = 1;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start();
+    });
+    return vAudioStream;
+  } catch(e) {
+    console.log('Audio xato:', e);
+    return null;
+  }
+}
+
+// Ken Burns effekt bilan sahna chizish
+function vDrawScene(img, text, progress, alpha, idx, total) {
+  // Fon
+  vCtx.fillStyle = "#000";
+  vCtx.fillRect(0, 0, vW, vH);
+
+  if (img) {
+    // Ken Burns: sekin zoom + pan
+    const zoom = 1 + progress * 0.20;
+    const iw = vW * zoom;
+    const ih = vH * zoom;
+    const panX = Math.sin(progress * Math.PI) * vW * 0.04;
+    const panY = Math.cos(progress * Math.PI) * vH * 0.02;
+    const ix = (vW - iw) / 2 + panX;
+    const iy = (vH - ih) / 2 + panY;
+
+    vCtx.save();
+    vCtx.globalAlpha = alpha;
+    vCtx.drawImage(img, ix, iy, iw, ih);
+    vCtx.restore();
+
+    // Qoraytiruvchi gradient
+    const grad = vCtx.createLinearGradient(0, 0, 0, vH);
+    grad.addColorStop(0, 'rgba(0,0,0,0.3)');
+    grad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.75)');
+    vCtx.fillStyle = grad;
+    vCtx.fillRect(0, 0, vW, vH);
+  } else {
+    // Rasm yo'q — gradient
+    const grad = vCtx.createLinearGradient(0, 0, vW, vH);
+    grad.addColorStop(0, "#050510");
+    grad.addColorStop(1, "#2a1a4a");
+    vCtx.fillStyle = grad;
+    vCtx.fillRect(0, 0, vW, vH);
   }
 
-  vCtx.fillStyle=t.accent;
-  vCtx.fillRect(vW*0.35,vH*0.15,vW*0.3*progress,4);
+  // Yuqorida progress bar
+  vCtx.fillStyle = 'rgba(255,255,255,0.2)';
+  vCtx.fillRect(vW * 0.3, vH * 0.06, vW * 0.4, 4);
+  vCtx.fillStyle = '#fbbf24';
+  const totalProgress = (idx + progress) / total;
+  vCtx.fillRect(vW * 0.3, vH * 0.06, vW * 0.4 * totalProgress, 4);
 
+  // Matn — animatsiya bilan
   vCtx.save();
-  vCtx.globalAlpha=alpha;
-  vCtx.fillStyle=t.text;
-  vCtx.textAlign='center';
-  vCtx.textBaseline='middle';
+  // Fade + slide up
+  const textProgress = Math.min(progress * 3, 1);
+  const yOffset = (1 - textProgress) * 30;
 
-  const fontSize=Math.min(vW,vH)*0.09;
-  vCtx.font='bold '+fontSize+'px system-ui, sans-serif';
+  vCtx.globalAlpha = alpha * textProgress;
+  vCtx.fillStyle = "#fff";
+  vCtx.textAlign = "center";
+  vCtx.textBaseline = "middle";
 
-  const maxWidth=vW*0.85;
-  const words=sceneText.split(' ');
-  const lines=[];
-  let line='';
-  for(const w of words){
-    const test=line?line+' '+w:w;
-    if(vCtx.measureText(test).width>maxWidth){
-      if(line) lines.push(line);
-      line=w;
-    } else { line=test; }
+  const fontSize = Math.min(vW, vH) * 0.085;
+  vCtx.font = "bold " + fontSize + "px system-ui, -apple-system, sans-serif";
+  vCtx.shadowColor = "rgba(0,0,0,0.9)";
+  vCtx.shadowBlur = 20;
+  vCtx.shadowOffsetY = 4;
+
+  const maxWidth = vW * 0.85;
+  const words = text.split(" ");
+  const lines = [];
+  let line = "";
+  for (const w of words) {
+    const test = line ? line + " " + w : w;
+    if (vCtx.measureText(test).width > maxWidth) {
+      if (line) lines.push(line);
+      line = w;
+    } else {
+      line = test;
+    }
   }
-  if(line) lines.push(line);
+  if (line) lines.push(line);
 
-  const lineHeight=fontSize*1.3;
-  const totalHeight=lines.length*lineHeight;
-  const startY=vH/2-totalHeight/2+lineHeight/2;
+  const lineHeight = fontSize * 1.3;
+  const totalHeight = lines.length * lineHeight;
+  const startY = vH / 2 - totalHeight / 2 + lineHeight / 2;
 
-  lines.forEach((l,i)=>{ vCtx.fillText(l,vW/2,startY+i*lineHeight); });
+  lines.forEach((l, i) => {
+    vCtx.fillText(l, vW / 2, startY + i * lineHeight + yOffset);
+  });
   vCtx.restore();
 
-  vCtx.fillStyle=t.text+'88';
-  vCtx.font='500 '+(fontSize*0.35)+'px system-ui, sans-serif';
-  vCtx.textAlign='center';
-  vCtx.fillText('Blip · 2026', vW/2, vH*0.9);
+  // Pastda imzo
+  vCtx.save();
+  vCtx.globalAlpha = alpha * 0.8;
+  vCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  vCtx.font = '500 ' + (fontSize * 0.32) + 'px system-ui, sans-serif';
+  vCtx.textAlign = "center";
+  vCtx.shadowBlur = 0;
+  vCtx.fillText('Blip AI · 2026', vW / 2, vH * 0.92);
+  vCtx.restore();
 }
 
-function vAnimate(){
-  const now=Date.now();
-  const sceneDur=vDur*1000;
-  const elapsed=now-vSceneStart;
+function vAnimate() {
+  const now = Date.now();
+  const sceneDur = vDur * 1000;
+  const elapsed = now - vSceneStart;
 
-  if(elapsed>=sceneDur){
+  if (elapsed >= sceneDur) {
     vSceneIdx++;
-    if(vSceneIdx>=vScenes.length){ vStop(); return; }
-    vSceneStart=now;
+    if (vSceneIdx >= vScenes.length) {
+      vStop();
+      return;
+    }
+    vSceneStart = now;
   }
 
-  const progress=Math.min(elapsed/sceneDur,1);
-  let alpha=1;
-  if(progress<0.2) alpha=progress/0.2;
-  else if(progress>0.8) alpha=(1-progress)/0.2;
+  const progress = Math.min(elapsed / sceneDur, 1);
+  let alpha = 1;
+  if (progress < 0.12) alpha = progress / 0.12;
+  else if (progress > 0.88) alpha = (1 - progress) / 0.12;
 
-  vDraw(vScenes[vSceneIdx], progress, alpha);
-  vAnim=requestAnimationFrame(vAnimate);
+  vDrawScene(vImages[vSceneIdx], vScenes[vSceneIdx], progress, alpha, vSceneIdx, vScenes.length);
+  vAnim = requestAnimationFrame(vAnimate);
 }
 
-async function vStart(){
-  const t=T[LANG];
-  const text=document.getElementById('vtext').value.trim();
-  if(!text){ alert(t.vNoText); return; }
+async function vStart() {
+  const t = T[LANG];
+  const text = document.getElementById('vtext').value.trim();
+  if (!text) { alert(t.vNoText); return; }
 
-  vScenes=text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
-  if(!vScenes.length){ alert(t.vNoScenes); return; }
+  vScenes = text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+  if (!vScenes.length) { alert(t.vNoScenes); return; }
 
-  vTheme=V_THEMES[document.getElementById('vtheme').value]||V_THEMES.dark;
-  vDur=parseInt(document.getElementById('vdur').value)||3;
+  vDur = parseInt(document.getElementById('vdur').value) || 3;
   vSetSize(document.getElementById('vsize').value);
 
-  document.getElementById('vstart').disabled=true;
-  document.getElementById('vdownload').style.display='none';
-  document.getElementById('vstatus').style.display='block';
-  document.getElementById('vstatus').innerHTML=t.vRecording+'<span class="dots"></span>';
+  document.getElementById('vstart').disabled = true;
+  document.getElementById('vdownload').style.display = 'none';
+  document.getElementById('vstatus').style.display = 'block';
 
-  const stream=vCanvas.captureStream(30);
-  vChunks=[];
+  // 1. Har sahnaga AI rasm yasash
+  vImages = [];
+  for (let i = 0; i < vScenes.length; i++) {
+    document.getElementById('vstatus').innerHTML = '🎨 AI rasm ' + (i+1) + '/' + vScenes.length + '<span class="dots"></span>';
+    const prompt = vScenes[i] + ", cinematic, dramatic lighting, warm colors, high quality, 4k, detailed";
+    const url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt) + "?width=" + vW + "&height=" + vH + "&nologo=true&seed=" + (Date.now() + i * 1000);
+    const img = await vLoadImage(url);
+    vImages.push(img);
+  }
 
-  let mime='video/webm;codecs=vp9';
-  if(!MediaRecorder.isTypeSupported(mime)) mime='video/webm';
-  if(!MediaRecorder.isTypeSupported(mime)) mime='video/mp4';
+  // 2. Ovoz tayyorlash
+  document.getElementById('vstatus').innerHTML = '🎵 Ovoz tayyorlanmoqda...';
+  const audioStream = vCreateAudio();
 
-  try{ vRecorder=new MediaRecorder(stream,{mimeType:mime}); }
-  catch(e){ vRecorder=new MediaRecorder(stream); }
+  // 3. Yozishni boshlash
+  document.getElementById('vstatus').innerHTML = t.vRecording + '<span class="dots"></span>';
 
-  vRecorder.ondataavailable=e=>{ if(e.data.size>0) vChunks.push(e.data); };
-  vRecorder.onstop=()=>{
-    document.getElementById('vstatus').innerHTML=t.vReady;
-    document.getElementById('vdownload').style.display='block';
-    document.getElementById('vstart').disabled=false;
+  const videoStream = vCanvas.captureStream(30);
+  vChunks = [];
+
+  // Ovozni videoga qo'shish
+  let finalStream = videoStream;
+  if (audioStream) {
+    finalStream = new MediaStream();
+    videoStream.getVideoTracks().forEach(tr => finalStream.addTrack(tr));
+    audioStream.getAudioTracks().forEach(tr => finalStream.addTrack(tr));
+  }
+
+  let mime = 'video/webm;codecs=vp9,opus';
+  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm;codecs=vp8,opus';
+  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm';
+  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/mp4';
+
+  try {
+    vRecorder = new MediaRecorder(finalStream, { mimeType: mime });
+  } catch(e) {
+    try { vRecorder = new MediaRecorder(finalStream); }
+    catch(e2) { alert('❌ Videoni yozib bo\'lmaydi: ' + e2.message); return; }
+  }
+
+  vRecorder.ondataavailable = e => { if (e.data.size > 0) vChunks.push(e.data); };
+  vRecorder.onstop = () => {
+    document.getElementById('vstatus').innerHTML = t.vReady;
+    document.getElementById('vdownload').style.display = 'block';
+    document.getElementById('vstart').disabled = false;
+    // Ovozni to'xtatish
+    if (vAudioCtx) { vAudioCtx.close(); vAudioCtx = null; }
   };
-  vRecorder.start();
+  vRecorder.start(1000);
 
-  vSceneIdx=0;
-  vSceneStart=Date.now();
-  if(vAnim) cancelAnimationFrame(vAnim);
+  vSceneIdx = 0;
+  vSceneStart = Date.now();
+  if (vAnim) cancelAnimationFrame(vAnim);
   vAnimate();
 }
 
-function vStop(){
-  if(vRecorder && vRecorder.state!=='inactive') vRecorder.stop();
-  if(vAnim){ cancelAnimationFrame(vAnim); vAnim=null; }
+function vStop() {
+  if (vRecorder && vRecorder.state !== 'inactive') vRecorder.stop();
+  if (vAnim) { cancelAnimationFrame(vAnim); vAnim = null; }
 }
 
-function vDownload(){
-  if(!vChunks.length){ alert('Video tayyor emas!'); return; }
-  const blob=new Blob(vChunks,{type:'video/webm'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='blip-video-'+Date.now()+'.webm';
+function vDownload() {
+  if (!vChunks.length) { alert('Video tayyor emas!'); return; }
+  const blob = new Blob(vChunks, { type: 'video/webm' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'blip-video-' + Date.now() + '.webm';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+    }
 // ============================================================
 // INIT
 // ============================================================
