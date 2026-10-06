@@ -33,15 +33,17 @@ h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855
 .gc p{font-size:13px;color:var(--muted);line-height:1.6}
 .tag{display:inline-block;margin-top:10px;font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(236,72,153,.2);color:var(--pnk);border:1px solid var(--pnk)}
 .tag.new{background:rgba(16,185,129,.15);color:var(--grn);border-color:var(--grn)}
-textarea,input[type="text"],input[type="number"]{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
+.tag.voice{background:rgba(6,182,212,.15);color:var(--cyan);border-color:var(--cyan)}
+textarea,input[type="text"],input[type="number"],select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
 textarea{resize:vertical;min-height:90px}
-textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
+textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
 .btn{padding:12px 20px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:14px;transition:all .25s}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-full{width:100%}
 .btn-sec{background:var(--card);border:1px solid var(--brd);color:var(--text)}
 .btn-sec:hover{background:#15152d;border-color:var(--acc)}
+.btn-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a1a}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .btn-row .btn{flex:1;min-width:120px}
 .mic{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:12px 16px;border-radius:10px;cursor:pointer;font-size:18px}
@@ -82,6 +84,8 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 .prosecutor-card{background:rgba(239,68,68,.08);border:1.5px solid var(--red);border-radius:14px;padding:14px;margin-bottom:10px}
 .judge-card{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:14px}
 .speech-active{background:var(--grn) !important;color:#fff !important}
+.canvas-wrap{background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;text-align:center}
+#vcanvas{max-width:100%;height:auto;display:block;margin:auto}
 @media(max-width:600px){h1{font-size:24px}.answers{grid-template-columns:1fr}.c{padding:6px}body{padding:8px}}
 </style>
 </head>
@@ -90,7 +94,7 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
 
 <header>
   <h1>🌌 BLIP MULTIVERSE</h1>
-  <p class="sub" id="subTitle">5 ta AI o'yin · 24/7 bepul</p>
+  <p class="sub" id="subTitle">6 ta AI o'yin · 24/7 bepul</p>
 </header>
 
 <div class="lang-switch">
@@ -107,6 +111,7 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
   <div class="tab" id="tab-time" onclick="sw('time',this)">⏰ <span class="t-time"></span></div>
   <div class="tab" id="tab-world" onclick="sw('world',this)">🎲 <span class="t-world"></span></div>
   <div class="tab" id="tab-debate" onclick="sw('debate',this)">⚔️ <span class="t-debate"></span></div>
+  <div class="tab" id="tab-video" onclick="sw('video',this)">🎬 <span class="t-video"></span></div>
 </div>
 
 <div class="tc active" id="t-home">
@@ -115,6 +120,7 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
   <div class="gc" onclick="sw('time')"><span class="i">⏰</span><h3 id="gc3-h"></h3><p id="gc3-p"></p><span class="tag" id="gc3-t"></span></div>
   <div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3 id="gc4-h"></h3><p id="gc4-p"></p><span class="tag" id="gc4-t"></span></div>
   <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3 id="gc5-h"></h3><p id="gc5-p"></p><span class="tag new" id="gc5-t"></span></div>
+  <div class="gc" onclick="sw('video')"><span class="i">🎬</span><h3 id="gc7-h"></h3><p id="gc7-p"></p><span class="tag voice" id="gc7-t"></span></div>
   <div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3 id="gc6-h"></h3><p id="gc6-p"></p><span class="tag" id="gc6-t"></span></div>
 </div>
 
@@ -167,9 +173,41 @@ textarea:focus,input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,
   <div id="dbres"></div>
 </div>
 
+<div class="tc" id="t-video">
+  <div class="info" id="video-info"></div>
+  <div class="card">
+    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-text"></label>
+    <textarea id="vtext" placeholder="..."></textarea>
+    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-theme"></label>
+    <select id="vtheme">
+      <option value="dark">🌙 Dark</option>
+      <option value="gold">✨ Gold</option>
+      <option value="blue">💙 Blue</option>
+      <option value="purple">💜 Purple</option>
+      <option value="sunset">🌅 Sunset</option>
+    </select>
+    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-dur"></label>
+    <input type="number" id="vdur" value="3" min="1" max="10">
+    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-size"></label>
+    <select id="vsize">
+      <option value="1280x720">Landscape (1280x720)</option>
+      <option value="720x1280">Portrait (720x1280)</option>
+      <option value="1080x1080">Square (1080x1080)</option>
+    </select>
+    <button class="btn btn-full" id="vstart" onclick="vStart()"></button>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="vcanvas" width="1280" height="720"></canvas>
+  </div>
+  <div id="vstatus" class="loading" style="display:none"></div>
+  <div id="vdownload" style="display:none">
+    <button class="btn btn-full btn-gold" onclick="vDownload()" id="vdlbtn"></button>
+  </div>
+</div>
+
 <div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
-    </div>
-    <script>
+  </div>
+  <script>
 const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
 const P="Blipzor921324";
 let rec=null,isR=false;
@@ -179,14 +217,15 @@ let rec=null,isR=false;
 // ============================================================
 const T={
   uz:{
-    sub:"5 ta AI o'yin · 24/7 bepul",
-    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate"},
+    sub:"6 ta AI o'yin · 24/7 bepul",
+    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video"},
     gc1:{h:"Reverse Turing Test",p:"Sen AI bo'lib o'yna, AI odam bo'lib o'yna.",t:"TAYYOR"},
     gc2:{h:"Dream Journal",p:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.",t:"TAYYOR"},
     gc3:{h:"Time Machine",p:"Istalgan yilga sayohat qiling.",t:"YANGI"},
     gc4:{h:"One-Button World",p:"Bitta tugma. Har bosganda yangi dunyo.",t:"YANGI"},
     gc5:{h:"AI Sud Majlisi",p:"Advokat, Prokuror, Hakam. Ovozli!",t:"🔊 YANGI"},
     gc6:{h:"AI Kengash",p:"5 ta AI javob — 1 ta xulosa.",t:"MAVJUD"},
+    gc7:{h:"Video Maker",p:"Matndan video yasa. Bepul!",t:"🎬 YANGI"},
     turingInfo:"💡 Hakam qaysi biri odam ekanini topadi.",
     topic:"Mavzu",tansPh:"AI bo'lib javob yozing...",tbtn:"Yuborish",
     dreamInfo:"💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.",
@@ -197,19 +236,30 @@ const T={
     dtpPh:"Mavzu (AI bilan do'stlashish kerakmi?)",dbb:"⚔️ Sud majlisini boshlash",
     adv:"ADVOKAT (FOR)",pros:"PROKUROR (AGAINST)",judge:"HAKAM QARORI",
     listen:"🔊 Eshitish",listening:"🔊 O'qilmoqda...",listenAll:"🎙️ Sud majlisini to'liq eshitish",stop:"⏹ To'xtatish",
+    videoInfo:"🎬 Sahnani yozing — video shu matnni ko'rsatadi. Har bir qator alohida sahna.",
+    vTextLbl:"📝 Matn (har bir qator — yangi sahna)",
+    vTextPh:"Salom, Ustoz! 👋\n\nSizga rahmat aytmoqchiman 🙏\n\nRahmat, Ustoz! 💛",
+    vThemeLbl:"🎨 Rang uslubi",
+    vDurLbl:"⏱ Har bir sahna (soniya)",
+    vSizeLbl:"📐 O'lcham",
+    vStart:"🎬 Videoni yasash",
+    vDownload:"📥 Videoni yuklab olish",
+    vRecording:"🎬 Video yozilmoqda",vReady:"✅ Video tayyor!",
+    vNoText:"Matn kiriting!",vNoScenes:"Sahnalar bo'sh!",
     loading:"Yuklanmoqda...",thinking:"Hakam o'ylayapti",dreaming:"Tush tahlil qilinmoqda",traveling:"Vaqt mashinasi ishga tushdi",creating:"Yangi olam tug'ilmoqda",court:"Sud majlisi boshlanmoqda",
     newRound:"🔄 Yangi raund",youWin:"🎉 SEN G'OLIB!",aiWin:"😅 AI G'OLIB!",
     human:"Odam",mood:"Kayfiyat"
   },
   ru:{
-    sub:"5 AI-игр · 24/7 бесплатно",
-    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд"},
+    sub:"6 AI-игр · 24/7 бесплатно",
+    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд",video:"Видео"},
     gc1:{h:"Reverse Turing Test",p:"Играй как AI, AI играет как человек.",t:"ГОТОВО"},
     gc2:{h:"Dream Journal",p:"Напиши сон. AI нарисует и проанализирует.",t:"ГОТОВО"},
     gc3:{h:"Time Machine",p:"Путешествие в любой год.",t:"НОВОЕ"},
     gc4:{h:"One-Button World",p:"Одна кнопка. Новый мир каждый раз.",t:"НОВОЕ"},
     gc5:{h:"AI Суд",p:"Адвокат, Прокурор, Судья. Голосовой!",t:"🔊 НОВОЕ"},
     gc6:{h:"AI Совет",p:"5 AI ответов — 1 вывод.",t:"ЕСТЬ"},
+    gc7:{h:"Video Maker",p:"Создай видео из текста. Бесплатно!",t:"🎬 НОВОЕ"},
     turingInfo:"💡 Судья определяет, кто человек.",
     topic:"Тема",tansPh:"Напиши ответ как AI...",tbtn:"Отправить",
     dreamInfo:"💡 Опиши сон. AI проанализирует и нарисует.",
@@ -220,19 +270,30 @@ const T={
     dtpPh:"Тема (Стоит ли дружить с AI?)",dbb:"⚔️ Начать суд",
     adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"РЕШЕНИЕ СУДЬИ",
     listen:"🔊 Слушать",listening:"🔊 Читается...",listenAll:"🎙️ Слушать весь суд",stop:"⏹ Стоп",
+    videoInfo:"🎬 Напиши сцену — видео покажет этот текст. Каждая строка — новая сцена.",
+    vTextLbl:"📝 Текст (каждая строка — новая сцена)",
+    vTextPh:"Привет, Учитель! 👋\n\nСпасибо вам 🙏\n\nСпасибо, Учитель! 💛",
+    vThemeLbl:"🎨 Стиль цвета",
+    vDurLbl:"⏱ Каждая сцена (секунд)",
+    vSizeLbl:"📐 Размер",
+    vStart:"🎬 Создать видео",
+    vDownload:"📥 Скачать видео",
+    vRecording:"🎬 Запись видео",vReady:"✅ Видео готово!",
+    vNoText:"Введите текст!",vNoScenes:"Сцены пусты!",
     loading:"Загрузка...",thinking:"Судья думает",dreaming:"Анализ сна",traveling:"Машина времени работает",creating:"Новый мир создаётся",court:"Суд начинается",
     newRound:"🔄 Новый раунд",youWin:"🎉 ТЫ ПОБЕДИЛ!",aiWin:"😅 AI ПОБЕДИЛ!",
     human:"Человек",mood:"Настроение"
   },
   en:{
-    sub:"5 AI games · 24/7 free",
-    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate"},
+    sub:"6 AI games · 24/7 free",
+    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video"},
     gc1:{h:"Reverse Turing Test",p:"You play as AI, AI plays as human.",t:"READY"},
     gc2:{h:"Dream Journal",p:"Write your dream. AI draws and analyzes it.",t:"READY"},
     gc3:{h:"Time Machine",p:"Travel to any year.",t:"NEW"},
     gc4:{h:"One-Button World",p:"One button. New world each time.",t:"NEW"},
     gc5:{h:"AI Court",p:"Lawyer, Prosecutor, Judge. Voice!",t:"🔊 NEW"},
     gc6:{h:"AI Council",p:"5 AI answers — 1 conclusion.",t:"EXISTS"},
+    gc7:{h:"Video Maker",p:"Create video from text. Free!",t:"🎬 NEW"},
     turingInfo:"💡 The judge decides who is human.",
     topic:"Topic",tansPh:"Write answer as AI...",tbtn:"Send",
     dreamInfo:"💡 Describe your dream. AI analyzes and draws.",
@@ -243,19 +304,30 @@ const T={
     dtpPh:"Topic (Should we befriend AI?)",dbb:"⚔️ Start court",
     adv:"LAWYER (FOR)",pros:"PROSECUTOR (AGAINST)",judge:"JUDGE DECISION",
     listen:"🔊 Listen",listening:"🔊 Reading...",listenAll:"🎙️ Listen to full court",stop:"⏹ Stop",
+    videoInfo:"🎬 Write a scene — video shows this text. Each line is a new scene.",
+    vTextLbl:"📝 Text (each line — new scene)",
+    vTextPh:"Hello, Teacher! 👋\n\nThank you 🙏\n\nThank you, Teacher! 💛",
+    vThemeLbl:"🎨 Color style",
+    vDurLbl:"⏱ Each scene (seconds)",
+    vSizeLbl:"📐 Size",
+    vStart:"🎬 Create video",
+    vDownload:"📥 Download video",
+    vRecording:"🎬 Recording video",vReady:"✅ Video ready!",
+    vNoText:"Enter text!",vNoScenes:"Scenes empty!",
     loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",traveling:"Time machine working",creating:"New world being born",court:"Court is starting",
     newRound:"🔄 New round",youWin:"🎉 YOU WIN!",aiWin:"😅 AI WINS!",
     human:"Human",mood:"Mood"
   },
   tj:{
-    sub:"5 бозии AI · 24/7 ройгон",
-    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд"},
+    sub:"6 бозии AI · 24/7 ройгон",
+    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд",video:"Видео"},
     gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун, AI ҳамчун инсон.",t:"ТАЙЁР"},
     gc2:{h:"Dream Journal",p:"Хоби худро нависед. AI расм мекашад.",t:"ТАЙЁР"},
     gc3:{h:"Time Machine",p:"Ба ҳар сол сафар кунед.",t:"НАВ"},
     gc4:{h:"One-Button World",p:"Як тугма. Ҳар дафъа ҷаҳони нав.",t:"НАВ"},
     gc5:{h:"Суди AI",p:"Адвокат, Прокурор, Довар. Овозӣ!",t:"🔊 НАВ"},
     gc6:{h:"Шӯрои AI",p:"5 ҷавоби AI — 1 хулоса.",t:"МАВҶУД"},
+    gc7:{h:"Видео Соз",p:"Аз матн видео созед. Ройгон!",t:"🎬 НАВ"},
     turingInfo:"💡 Довар муайян мекунад, ки кӣ инсон аст.",
     topic:"Мавзӯъ",tansPh:"Ҳамчун AI ҷавоб нависед...",tbtn:"Фиристодан",
     dreamInfo:"💡 Хоби худро тавсиф кунед.",
@@ -266,6 +338,16 @@ const T={
     dtpPh:"Мавзӯъ (Оё бо AI дӯст шудан мумкин?)",dbb:"⚔️ Оғози суд",
     adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"ҚАРОРИ ДОВАР",
     listen:"🔊 Гӯш кардан",listening:"🔊 Хонда мешавад...",listenAll:"🎙️ Тамоми судро гӯш кунед",stop:"⏹ Қатъ",
+    videoInfo:"🎬 Саҳнаро нависед — видео ин матнро нишон медиҳад. Ҳар сатр — саҳнаи нав.",
+    vTextLbl:"📝 Матн (ҳар сатр — саҳнаи нав)",
+    vTextPh:"Салом, Устод! 👋\n\nТашаккур 🙏\n\nТашаккур, Устод! 💛",
+    vThemeLbl:"🎨 Услуби ранг",
+    vDurLbl:"⏱ Ҳар саҳна (сония)",
+    vSizeLbl:"📐 Андоза",
+    vStart:"🎬 Видео созед",
+    vDownload:"📥 Видеоро зеркашӣ кунед",
+    vRecording:"🎬 Сабти видео",vReady:"✅ Видео омода!",
+    vNoText:"Матнро ворид кунед!",vNoScenes:"Саҳнаҳо холӣ!",
     loading:"Боргирӣ...",thinking:"Довар фикр мекунад",dreaming:"Таҳлили хоб",traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
     newRound:"🔄 Даври нав",youWin:"🎉 ШУМО ҒОЛИБ!",aiWin:"😅 AI ҒОЛИБ!",
     human:"Инсон",mood:"Ҳолат"
@@ -298,13 +380,17 @@ function applyLang(){
   document.querySelector('.t-time').textContent=t.tabs.time;
   document.querySelector('.t-world').textContent=t.tabs.world;
   document.querySelector('.t-debate').textContent=t.tabs.debate;
+  document.querySelector('.t-video').textContent=t.tabs.video;
 
   document.getElementById('subTitle').textContent=t.sub;
 
-  for(var i=1;i<=6;i++){
-    document.getElementById('gc'+i+'-h').textContent=t['gc'+i].h;
-    document.getElementById('gc'+i+'-p').textContent=t['gc'+i].p;
-    document.getElementById('gc'+i+'-t').textContent=t['gc'+i].t;
+  for(var i=1;i<=7;i++){
+    const gh=document.getElementById('gc'+i+'-h');
+    if(gh){
+      gh.textContent=t['gc'+i].h;
+      document.getElementById('gc'+i+'-p').textContent=t['gc'+i].p;
+      document.getElementById('gc'+i+'-t').textContent=t['gc'+i].t;
+    }
   }
 
   document.getElementById('turing-info').innerHTML=t.turingInfo;
@@ -325,6 +411,16 @@ function applyLang(){
   document.getElementById('debate-info').innerHTML=t.debateInfo;
   document.getElementById('dtp').placeholder=t.dtpPh;
   document.getElementById('dbb').textContent=t.dbb;
+
+  // Video tab
+  document.getElementById('video-info').innerHTML=t.videoInfo;
+  document.getElementById('v-lbl-text').textContent=t.vTextLbl;
+  document.getElementById('vtext').placeholder=t.vTextPh;
+  document.getElementById('v-lbl-theme').textContent=t.vThemeLbl;
+  document.getElementById('v-lbl-dur').textContent=t.vDurLbl;
+  document.getElementById('v-lbl-size').textContent=t.vSizeLbl;
+  document.getElementById('vstart').textContent=t.vStart;
+  document.getElementById('vdlbtn').textContent=t.vDownload;
 }
 
 // ============================================================
@@ -454,7 +550,7 @@ function speakSeq(text,tur){
     next();
   });
 }
-      // ============================================================
+    // ============================================================
 // 🎭 TURING
 // ============================================================
 async function tNew(){
@@ -572,9 +668,8 @@ async function wSub(){
     document.getElementById('wres').innerHTML=html;
   }catch(e){ document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
   finally{ b.disabled=false; b.textContent=t.wbtn; }
-}
-
-// ============================================================
+    }
+    // ============================================================
 // ⚔️ DEBATE
 // ============================================================
 async function dbSub(){
@@ -671,14 +766,182 @@ function stopSpeak(){
 }
 
 // ============================================================
+// 🎬 VIDEO MAKER
+// ============================================================
+const V_THEMES = {
+  dark:   { bg1:'#050510', bg2:'#1a1a3a', text:'#e6e6f0', accent:'#6366f1' },
+  gold:   { bg1:'#1a1400', bg2:'#3a2800', text:'#ffe4a0', accent:'#fbbf24' },
+  blue:   { bg1:'#001428', bg2:'#002a4d', text:'#cce6ff', accent:'#06b6d4' },
+  purple: { bg1:'#14002a', bg2:'#2a0050', text:'#e6ccff', accent:'#a855f7' },
+  sunset: { bg1:'#1a0800', bg2:'#4d1a00', text:'#ffd9b3', accent:'#ec4899' }
+};
+
+let vCanvas, vCtx;
+let vRecorder, vChunks=[];
+let vScenes=[], vTheme, vDur, vW, vH;
+let vSceneIdx=0, vSceneStart=0, vAnim=null;
+
+function vSetSize(s){
+  const p=s.split('x');
+  vW=parseInt(p[0]);
+  vH=parseInt(p[1]);
+  vCanvas.width=vW;
+  vCanvas.height=vH;
+}
+
+function vDraw(sceneText, progress, alpha){
+  const t=vTheme;
+  const grad=vCtx.createLinearGradient(0,0,vW,vH);
+  grad.addColorStop(0,t.bg1);
+  grad.addColorStop(1,t.bg2);
+  vCtx.fillStyle=grad;
+  vCtx.fillRect(0,0,vW,vH);
+
+  const time=Date.now()/1000;
+  for(let i=0;i<30;i++){
+    const x=((i*137+time*30)%vW);
+    const y=((i*89+time*20)%vH);
+    const r=2+(i%3);
+    vCtx.beginPath();
+    vCtx.arc(x,y,r,0,Math.PI*2);
+    vCtx.fillStyle=t.accent+'33';
+    vCtx.fill();
+  }
+
+  vCtx.fillStyle=t.accent;
+  vCtx.fillRect(vW*0.35,vH*0.15,vW*0.3*progress,4);
+
+  vCtx.save();
+  vCtx.globalAlpha=alpha;
+  vCtx.fillStyle=t.text;
+  vCtx.textAlign='center';
+  vCtx.textBaseline='middle';
+
+  const fontSize=Math.min(vW,vH)*0.09;
+  vCtx.font='bold '+fontSize+'px system-ui, sans-serif';
+
+  const maxWidth=vW*0.85;
+  const words=sceneText.split(' ');
+  const lines=[];
+  let line='';
+  for(const w of words){
+    const test=line?line+' '+w:w;
+    if(vCtx.measureText(test).width>maxWidth){
+      if(line) lines.push(line);
+      line=w;
+    } else { line=test; }
+  }
+  if(line) lines.push(line);
+
+  const lineHeight=fontSize*1.3;
+  const totalHeight=lines.length*lineHeight;
+  const startY=vH/2-totalHeight/2+lineHeight/2;
+
+  lines.forEach((l,i)=>{ vCtx.fillText(l,vW/2,startY+i*lineHeight); });
+  vCtx.restore();
+
+  vCtx.fillStyle=t.text+'88';
+  vCtx.font='500 '+(fontSize*0.35)+'px system-ui, sans-serif';
+  vCtx.textAlign='center';
+  vCtx.fillText('Blip · 2026', vW/2, vH*0.9);
+}
+
+function vAnimate(){
+  const now=Date.now();
+  const sceneDur=vDur*1000;
+  const elapsed=now-vSceneStart;
+
+  if(elapsed>=sceneDur){
+    vSceneIdx++;
+    if(vSceneIdx>=vScenes.length){ vStop(); return; }
+    vSceneStart=now;
+  }
+
+  const progress=Math.min(elapsed/sceneDur,1);
+  let alpha=1;
+  if(progress<0.2) alpha=progress/0.2;
+  else if(progress>0.8) alpha=(1-progress)/0.2;
+
+  vDraw(vScenes[vSceneIdx], progress, alpha);
+  vAnim=requestAnimationFrame(vAnimate);
+}
+
+async function vStart(){
+  const t=T[LANG];
+  const text=document.getElementById('vtext').value.trim();
+  if(!text){ alert(t.vNoText); return; }
+
+  vScenes=text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
+  if(!vScenes.length){ alert(t.vNoScenes); return; }
+
+  vTheme=V_THEMES[document.getElementById('vtheme').value]||V_THEMES.dark;
+  vDur=parseInt(document.getElementById('vdur').value)||3;
+  vSetSize(document.getElementById('vsize').value);
+
+  document.getElementById('vstart').disabled=true;
+  document.getElementById('vdownload').style.display='none';
+  document.getElementById('vstatus').style.display='block';
+  document.getElementById('vstatus').innerHTML=t.vRecording+'<span class="dots"></span>';
+
+  const stream=vCanvas.captureStream(30);
+  vChunks=[];
+
+  let mime='video/webm;codecs=vp9';
+  if(!MediaRecorder.isTypeSupported(mime)) mime='video/webm';
+  if(!MediaRecorder.isTypeSupported(mime)) mime='video/mp4';
+
+  try{ vRecorder=new MediaRecorder(stream,{mimeType:mime}); }
+  catch(e){ vRecorder=new MediaRecorder(stream); }
+
+  vRecorder.ondataavailable=e=>{ if(e.data.size>0) vChunks.push(e.data); };
+  vRecorder.onstop=()=>{
+    document.getElementById('vstatus').innerHTML=t.vReady;
+    document.getElementById('vdownload').style.display='block';
+    document.getElementById('vstart').disabled=false;
+  };
+  vRecorder.start();
+
+  vSceneIdx=0;
+  vSceneStart=Date.now();
+  if(vAnim) cancelAnimationFrame(vAnim);
+  vAnimate();
+}
+
+function vStop(){
+  if(vRecorder && vRecorder.state!=='inactive') vRecorder.stop();
+  if(vAnim){ cancelAnimationFrame(vAnim); vAnim=null; }
+}
+
+function vDownload(){
+  if(!vChunks.length){ alert('Video tayyor emas!'); return; }
+  const blob=new Blob(vChunks,{type:'video/webm'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='blip-video-'+Date.now()+'.webm';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
 // INIT
 // ============================================================
 window.addEventListener('DOMContentLoaded',()=>{
+  vCanvas=document.getElementById('vcanvas');
+  vCtx=vCanvas.getContext('2d');
+  vTheme=V_THEMES.dark;
+  vW=1280;
+  vH=720;
+
   applyLang();
   tNew();
   loadVoices();
   setTimeout(loadVoices,500);
   setTimeout(loadVoices,1500);
+
+  vDraw('Blip Video Maker',1,1);
 });
 </script>
 </body>
