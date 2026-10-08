@@ -37,12 +37,10 @@ h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855
 textarea,input[type="text"],input[type="number"],select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
 textarea{resize:vertical;min-height:90px}
 textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
-.btn{padding:12px 20px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:14px;transition:all .25s}
+.btn{padding:12px 20px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:14px;transition:all .25s;font-family:inherit}
 .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn-full{width:100%}
-.btn-sec{background:var(--card);border:1px solid var(--brd);color:var(--text)}
-.btn-sec:hover{background:#15152d;border-color:var(--acc)}
 .btn-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a1a}
 .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .btn-row .btn{flex:1;min-width:120px}
@@ -54,39 +52,23 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
 .result img{width:100%;border-radius:12px;margin-top:10px;border:1px solid var(--brd)}
 .result-title{font-size:16px;font-weight:800;color:var(--acc);margin-bottom:10px}
 .result-text{font-size:14px;line-height:1.7;white-space:pre-wrap}
-.symbols{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.symbols span{background:rgba(168,85,247,.2);border:1px solid var(--acc);padding:3px 10px;border-radius:999px;font-size:11px;color:var(--acc2)}
-.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
-.answer{background:var(--bg);border:1.5px solid var(--brd);border-radius:12px;padding:12px}
-.answer-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;font-weight:700}
-.answer-text{font-size:13px;line-height:1.6;white-space:pre-wrap}
-.verdict{text-align:center;padding:16px;border-radius:14px;margin-bottom:14px}
-.verdict.win{background:rgba(16,185,129,.15);border:2px solid var(--grn)}
-.verdict.lose{background:rgba(239,68,68,.15);border:2px solid var(--red)}
-.verdict.gold{background:rgba(251,191,36,.15);border:2px solid var(--gold)}
-.verdict-title{font-size:20px;font-weight:800;margin-bottom:6px}
-.verdict-text{font-size:13px;line-height:1.6}
 .loading{text-align:center;padding:30px;color:var(--muted);font-size:14px}
-.dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
-@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
 .info{background:rgba(99,102,241,.1);border:1px solid var(--acc);border-radius:12px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
 .footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:20px}
 .footer a{color:var(--acc);text-decoration:none}
-.debate-role{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap;padding-bottom:6px;border-bottom:1px solid var(--brd)}
-.debate-role-title{font-size:13px;font-weight:800}
-.debate-text{font-size:13px;line-height:1.7;white-space:pre-wrap}
-.btn-mini{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;transition:all .25s}
-.btn-mini:hover{border-color:var(--acc);color:var(--acc)}
-.btn-mini.red{border-color:var(--red);color:var(--red)}
-.btn-mini.grn{border-color:var(--grn);color:var(--grn)}
-.btn-mini.gold{border-color:var(--gold);color:var(--gold)}
-.advocate-card{background:rgba(16,185,129,.08);border:1.5px solid var(--grn);border-radius:14px;padding:14px;margin-bottom:10px}
-.prosecutor-card{background:rgba(239,68,68,.08);border:1.5px solid var(--red);border-radius:14px;padding:14px;margin-bottom:10px}
-.judge-card{background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(168,85,247,.12));border:2px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:14px}
-.speech-active{background:var(--grn) !important;color:#fff !important}
+.lbl{display:block;font-size:11px;color:var(--muted);margin:10px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+input[type="file"]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:13px;margin-bottom:8px}
+input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;margin-right:10px;font-family:inherit}
+.m-item{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:12px;margin-bottom:10px}
+.m-item audio,.m-item video{width:100%;margin-top:8px;border-radius:8px}
+.m-item .m-name{font-size:13px;font-weight:700;margin-bottom:6px;word-break:break-all}
+.m-item .m-del{background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;float:right}
+.ff-line{font-size:13px;line-height:1.8;padding:6px 0;border-bottom:1px dashed var(--brd)}
+.ff-line b{color:var(--gold)}
+.ff-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(16,185,129,.15);color:var(--grn);border:1px solid var(--grn);margin-left:6px}
 .canvas-wrap{background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;text-align:center}
 #vcanvas{max-width:100%;height:auto;display:block;margin:auto}
-@media(max-width:600px){h1{font-size:24px}.answers{grid-template-columns:1fr}.c{padding:6px}body{padding:8px}}
+@media(max-width:600px){h1{font-size:24px}.c{padding:6px}body{padding:8px}}
 </style>
 </head>
 <body>
@@ -112,8 +94,10 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div class="tab" id="tab-world" onclick="sw('world',this)">🎲 <span class="t-world"></span></div>
   <div class="tab" id="tab-debate" onclick="sw('debate',this)">⚔️ <span class="t-debate"></span></div>
   <div class="tab" id="tab-video" onclick="sw('video',this)">🎬 <span class="t-video"></span></div>
+  <div class="tab" id="tab-media" onclick="sw('media',this)">🎵 <span class="t-media"></span></div>
 </div>
 
+<!-- ================= 🏠 HOME ================= -->
 <div class="tc active" id="t-home">
   <div class="gc" onclick="sw('turing')"><span class="i">🎭</span><h3 id="gc1-h"></h3><p id="gc1-p"></p><span class="tag new" id="gc1-t"></span></div>
   <div class="gc" onclick="sw('dream')"><span class="i">🌙</span><h3 id="gc2-h"></h3><p id="gc2-p"></p><span class="tag new" id="gc2-t"></span></div>
@@ -121,9 +105,11 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3 id="gc4-h"></h3><p id="gc4-p"></p><span class="tag" id="gc4-t"></span></div>
   <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3 id="gc5-h"></h3><p id="gc5-p"></p><span class="tag new" id="gc5-t"></span></div>
   <div class="gc" onclick="sw('video')"><span class="i">🎬</span><h3 id="gc7-h"></h3><p id="gc7-p"></p><span class="tag voice" id="gc7-t"></span></div>
+  <div class="gc" onclick="sw('media')"><span class="i">🎵</span><h3 id="gc8-h"></h3><p id="gc8-p"></p><span class="tag new" id="gc8-t"></span></div>
   <div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3 id="gc6-h"></h3><p id="gc6-p"></p><span class="tag" id="gc6-t"></span></div>
 </div>
 
+<!-- ================= 🎭 TURING ================= -->
 <div class="tc" id="t-turing">
   <div class="info" id="turing-info"></div>
   <div class="card">
@@ -134,6 +120,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div id="tres"></div>
 </div>
 
+<!-- ================= 🌙 DREAM ================= -->
 <div class="tc" id="t-dream">
   <div class="info" id="dream-info"></div>
   <div class="card">
@@ -146,6 +133,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div id="dres"></div>
 </div>
 
+<!-- ================= ⏰ TIME ================= -->
 <div class="tc" id="t-time">
   <div class="info" id="time-info"></div>
   <div class="card">
@@ -156,6 +144,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div id="tmres"></div>
 </div>
 
+<!-- ================= 🎲 WORLD ================= -->
 <div class="tc" id="t-world">
   <div class="info" id="world-info"></div>
   <div class="card" style="text-align:center">
@@ -164,6 +153,7 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div id="wres"></div>
 </div>
 
+<!-- ================= ⚔️ DEBATE ================= -->
 <div class="tc" id="t-debate">
   <div class="info" id="debate-info"></div>
   <div class="card">
@@ -173,12 +163,13 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   <div id="dbres"></div>
 </div>
 
+<!-- ================= 🎬 VIDEO ================= -->
 <div class="tc" id="t-video">
   <div class="info" id="video-info"></div>
   <div class="card">
-    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-text"></label>
+    <label class="lbl" id="v-lbl-text"></label>
     <textarea id="vtext" placeholder="..."></textarea>
-    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-theme"></label>
+    <label class="lbl" id="v-lbl-theme"></label>
     <select id="vtheme">
       <option value="dark">🌙 Dark</option>
       <option value="gold">✨ Gold</option>
@@ -186,9 +177,9 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
       <option value="purple">💜 Purple</option>
       <option value="sunset">🌅 Sunset</option>
     </select>
-    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-dur"></label>
+    <label class="lbl" id="v-lbl-dur"></label>
     <input type="number" id="vdur" value="3" min="1" max="10">
-    <label class="lbl" style="display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px" id="v-lbl-size"></label>
+    <label class="lbl" id="v-lbl-size"></label>
     <select id="vsize">
       <option value="1280x720">Landscape (1280x720)</option>
       <option value="720x1280">Portrait (720x1280)</option>
@@ -205,11 +196,53 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
   </div>
 </div>
 
-<div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
+<!-- ================= 🎵 MEDIA (YANGI) ================= -->
+<div class="tc" id="t-media">
+  <div class="info" id="media-info">🎵 Musiqa va video yuklang · 🔥 Free Fire sozlamalari</div>
+
+  <!-- Musiqa yuklash -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">🎵 Musiqa yuklash</h3>
+    <label class="lbl">Audio fayl (mp3, wav, ogg):</label>
+    <input type="file" id="mAudio" accept="audio/*">
+    <label style="display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px;cursor:pointer">
+      <input type="checkbox" id="mVideoChk" onchange="document.getElementById('mVideo').disabled=!this.checked">
+      🎬 Video ham yuklash (ixtiyoriy)
+    </label>
+    <input type="file" id="mVideo" accept="video/*" disabled>
+    <button class="btn btn-full" onclick="mUpload()">⬆️ Yuklash</button>
   </div>
-  <script>
+
+  <!-- Yuklangan fayllar -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">📂 Yuklangan fayllar</h3>
+    <div id="mList"></div>
+  </div>
+
+  <!-- Free Fire sozlamalari -->
+  <div class="card">
+    <h3 style="margin-bottom:12px">🔥 Free Fire sozlamalari</h3>
+    <label class="lbl">📱 Telefon modeli:</label>
+    <input type="text" id="ffModel" placeholder="Redmi Note 12">
+    <label class="lbl">💾 RAM:</label>
+    <input type="text" id="ffRam" placeholder="8GB">
+    <label class="lbl">⚙️ Protsessor:</label>
+    <input type="text" id="ffChip" placeholder="Snapdragon 685">
+    <label class="lbl">🎯 Headshot rejimi:</label>
+    <select id="ffMode">
+      <option value="fast">⚡ Tez o'yin uchun</option>
+      <option value="sniper">🎯 Uzoq masofa (mergan)</option>
+    </select>
+    <button class="btn btn-full btn-gold" onclick="ffApply()">✅ Sozlamalarni olish</button>
+    <div id="ffResult" style="margin-top:14px"></div>
+  </div>
+</div>
+
+<div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
+      </div>
+      <script>
 const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
-const P="Blipzor921324";
+const P="SALOXIDDINJON UMARJON ENEM ATAM VA OILA";
 let rec=null,isR=false;
 
 // ============================================================
@@ -218,7 +251,7 @@ let rec=null,isR=false;
 const T={
   uz:{
     sub:"6 ta AI o'yin · 24/7 bepul",
-    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video"},
+    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",media:"Media"},
     gc1:{h:"Reverse Turing Test",p:"Sen AI bo'lib o'yna, AI odam bo'lib o'yna.",t:"TAYYOR"},
     gc2:{h:"Dream Journal",p:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.",t:"TAYYOR"},
     gc3:{h:"Time Machine",p:"Istalgan yilga sayohat qiling.",t:"YANGI"},
@@ -226,6 +259,7 @@ const T={
     gc5:{h:"AI Sud Majlisi",p:"Advokat, Prokuror, Hakam. Ovozli!",t:"🔊 YANGI"},
     gc6:{h:"AI Kengash",p:"5 ta AI javob — 1 ta xulosa.",t:"MAVJUD"},
     gc7:{h:"Video Maker",p:"Matndan video yasa. Bepul!",t:"🎬 YANGI"},
+    gc8:{h:"Media & Free Fire",p:"Musiqa yuklash + Free Fire sozlamalari.",t:"🎵 YANGI"},
     turingInfo:"💡 Hakam qaysi biri odam ekanini topadi.",
     topic:"Mavzu",tansPh:"AI bo'lib javob yozing...",tbtn:"Yuborish",
     dreamInfo:"💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.",
@@ -252,7 +286,7 @@ const T={
   },
   ru:{
     sub:"6 AI-игр · 24/7 бесплатно",
-    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд",video:"Видео"},
+    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд",video:"Видео",media:"Медиа"},
     gc1:{h:"Reverse Turing Test",p:"Играй как AI, AI играет как человек.",t:"ГОТОВО"},
     gc2:{h:"Dream Journal",p:"Напиши сон. AI нарисует и проанализирует.",t:"ГОТОВО"},
     gc3:{h:"Time Machine",p:"Путешествие в любой год.",t:"НОВОЕ"},
@@ -260,6 +294,7 @@ const T={
     gc5:{h:"AI Суд",p:"Адвокат, Прокурор, Судья. Голосовой!",t:"🔊 НОВОЕ"},
     gc6:{h:"AI Совет",p:"5 AI ответов — 1 вывод.",t:"ЕСТЬ"},
     gc7:{h:"Video Maker",p:"Создай видео из текста. Бесплатно!",t:"🎬 НОВОЕ"},
+    gc8:{h:"Медиа & Free Fire",p:"Загрузка музыки + настройки Free Fire.",t:"🎵 НОВОЕ"},
     turingInfo:"💡 Судья определяет, кто человек.",
     topic:"Тема",tansPh:"Напиши ответ как AI...",tbtn:"Отправить",
     dreamInfo:"💡 Опиши сон. AI проанализирует и нарисует.",
@@ -270,7 +305,7 @@ const T={
     dtpPh:"Тема (Стоит ли дружить с AI?)",dbb:"⚔️ Начать суд",
     adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"РЕШЕНИЕ СУДЬИ",
     listen:"🔊 Слушать",listening:"🔊 Читается...",listenAll:"🎙️ Слушать весь суд",stop:"⏹ Стоп",
-    videoInfo:"🎬 Напиши сцену — видео покажет этот текст. Каждая строка — новая сцена.",
+    videoInfo:"🎬 Напиши сцену — видео покажет этот текст.",
     vTextLbl:"📝 Текст (каждая строка — новая сцена)",
     vTextPh:"Привет, Учитель! 👋\n\nСпасибо вам 🙏\n\nСпасибо, Учитель! 💛",
     vThemeLbl:"🎨 Стиль цвета",
@@ -286,7 +321,7 @@ const T={
   },
   en:{
     sub:"6 AI games · 24/7 free",
-    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video"},
+    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",media:"Media"},
     gc1:{h:"Reverse Turing Test",p:"You play as AI, AI plays as human.",t:"READY"},
     gc2:{h:"Dream Journal",p:"Write your dream. AI draws and analyzes it.",t:"READY"},
     gc3:{h:"Time Machine",p:"Travel to any year.",t:"NEW"},
@@ -294,6 +329,7 @@ const T={
     gc5:{h:"AI Court",p:"Lawyer, Prosecutor, Judge. Voice!",t:"🔊 NEW"},
     gc6:{h:"AI Council",p:"5 AI answers — 1 conclusion.",t:"EXISTS"},
     gc7:{h:"Video Maker",p:"Create video from text. Free!",t:"🎬 NEW"},
+    gc8:{h:"Media & Free Fire",p:"Upload music + Free Fire settings.",t:"🎵 NEW"},
     turingInfo:"💡 The judge decides who is human.",
     topic:"Topic",tansPh:"Write answer as AI...",tbtn:"Send",
     dreamInfo:"💡 Describe your dream. AI analyzes and draws.",
@@ -304,7 +340,7 @@ const T={
     dtpPh:"Topic (Should we befriend AI?)",dbb:"⚔️ Start court",
     adv:"LAWYER (FOR)",pros:"PROSECUTOR (AGAINST)",judge:"JUDGE DECISION",
     listen:"🔊 Listen",listening:"🔊 Reading...",listenAll:"🎙️ Listen to full court",stop:"⏹ Stop",
-    videoInfo:"🎬 Write a scene — video shows this text. Each line is a new scene.",
+    videoInfo:"🎬 Write a scene — video shows this text.",
     vTextLbl:"📝 Text (each line — new scene)",
     vTextPh:"Hello, Teacher! 👋\n\nThank you 🙏\n\nThank you, Teacher! 💛",
     vThemeLbl:"🎨 Color style",
@@ -313,748 +349,639 @@ const T={
     vStart:"🎬 Create video",
     vDownload:"📥 Download video",
     vRecording:"🎬 Recording video",vReady:"✅ Video ready!",
-    vNoText:"Enter text!",vNoScenes:"Scenes empty!",
-    loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",traveling:"Time machine working",creating:"New world being born",court:"Court is starting",
+    vNoText:"Enter text!",vNoScenes:"Scenes are empty!",
+    loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",traveling:"Time machine works",creating:"New world is born",court:"Court begins",
     newRound:"🔄 New round",youWin:"🎉 YOU WIN!",aiWin:"😅 AI WINS!",
     human:"Human",mood:"Mood"
   },
   tj:{
     sub:"6 бозии AI · 24/7 ройгон",
-    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд",video:"Видео"},
-    gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун, AI ҳамчун инсон.",t:"ТАЙЁР"},
-    gc2:{h:"Dream Journal",p:"Хоби худро нависед. AI расм мекашад.",t:"ТАЙЁР"},
+    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд",video:"Видео",media:"Медиа"},
+    gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун, AI ҳамчун одам.",t:"ТАЙЁР"},
+    gc2:{h:"Dream Journal",p:"Хобатро нависед. AI расм мекашад.",t:"ТАЙЁР"},
     gc3:{h:"Time Machine",p:"Ба ҳар сол сафар кунед.",t:"НАВ"},
     gc4:{h:"One-Button World",p:"Як тугма. Ҳар дафъа ҷаҳони нав.",t:"НАВ"},
-    gc5:{h:"Суди AI",p:"Адвокат, Прокурор, Довар. Овозӣ!",t:"🔊 НАВ"},
-    gc6:{h:"Шӯрои AI",p:"5 ҷавоби AI — 1 хулоса.",t:"МАВҶУД"},
-    gc7:{h:"Видео Соз",p:"Аз матн видео созед. Ройгон!",t:"🎬 НАВ"},
-    turingInfo:"💡 Довар муайян мекунад, ки кӣ инсон аст.",
+    gc5:{h:"Суди AI",p:"Адвокат, Прокурор, Судья. Овозӣ!",t:"🔊 НАВ"},
+    gc6:{h:"Шӯрои AI",p:"5 ҷавоби AI — 1 хулоса.",t:"ҲАСТ"},
+    gc7:{h:"Video Maker",p:"Аз матн видео созед. Ройгон!",t:"🎬 НАВ"},
+    gc8:{h:"Медиа & Free Fire",p:"Боргирии мусиқӣ + танзими Free Fire.",t:"🎵 НАВ"},
+    turingInfo:"💡 Судья муайян мекунад, ки кӣ одам аст.",
     topic:"Мавзӯъ",tansPh:"Ҳамчун AI ҷавоб нависед...",tbtn:"Фиристодан",
-    dreamInfo:"💡 Хоби худро тавсиф кунед.",
-    dinPh:"Хоби худро нависед...",dbtn:"🌙 Таҳлил",
+    dreamInfo:"💡 Хобатро нависед. AI таҳлил мекунад.",
+    dinPh:"Хобатро нависед...",dbtn:"🌙 Таҳлил",
     timeInfo:"💡 Сол ва ҷойро ворид кунед.",tmb:"⏰ Сафар",
-    worldInfo:"💡 Як тугма. Ҳар дафъа ҷаҳони нав.",wbtn:"🎲 ҶАҲОНИ НАВ",
-    debateInfo:"💡 Адвокат ҳимоя мекунад, Прокурор айбдор мекунад, Довар ҳал мекунад.",
-    dtpPh:"Мавзӯъ (Оё бо AI дӯст шудан мумкин?)",dbb:"⚔️ Оғози суд",
-    adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"ҚАРОРИ ДОВАР",
-    listen:"🔊 Гӯш кардан",listening:"🔊 Хонда мешавад...",listenAll:"🎙️ Тамоми судро гӯш кунед",stop:"⏹ Қатъ",
-    videoInfo:"🎬 Саҳнаро нависед — видео ин матнро нишон медиҳад. Ҳар сатр — саҳнаи нав.",
+    worldInfo:"💡 Як тугма. Ҷаҳони нав.",wbtn:"🎲 ҶАҲОНИ НАВ",
+    debateInfo:"💡 Адвокат ҳимоя мекунад, Прокурор айбдор мекунад.",
+    dtpPh:"Мавзӯъ (Бо AI дӯстӣ кунем?)",dbb:"⚔️ Оғози суд",
+    adv:"АДВОКАТ (FOR)",pros:"ПРОКУРОР (AGAINST)",judge:"ҚАРОРИ СУДЬЯ",
+    listen:"🔊 Шунидан",listening:"🔊 Хонда мешавад...",listenAll:"🎙️ Тамоми судро шунидан",stop:"⏹ Қатъ",
+    videoInfo:"🎬 Саҳнаро нависед — видео матнро нишон медиҳад.",
     vTextLbl:"📝 Матн (ҳар сатр — саҳнаи нав)",
     vTextPh:"Салом, Устод! 👋\n\nТашаккур 🙏\n\nТашаккур, Устод! 💛",
     vThemeLbl:"🎨 Услуби ранг",
     vDurLbl:"⏱ Ҳар саҳна (сония)",
     vSizeLbl:"📐 Андоза",
-    vStart:"🎬 Видео созед",
-    vDownload:"📥 Видеоро зеркашӣ кунед",
+    vStart:"🎬 Сохтани видео",
+    vDownload:"📥 Боргирии видео",
     vRecording:"🎬 Сабти видео",vReady:"✅ Видео омода!",
-    vNoText:"Матнро ворид кунед!",vNoScenes:"Саҳнаҳо холӣ!",
-    loading:"Боргирӣ...",thinking:"Довар фикр мекунад",dreaming:"Таҳлили хоб",traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
-    newRound:"🔄 Даври нав",youWin:"🎉 ШУМО ҒОЛИБ!",aiWin:"😅 AI ҒОЛИБ!",
-    human:"Инсон",mood:"Ҳолат"
+    vNoText:"Матн ворид кунед!",vNoScenes:"Саҳнаҳо холӣ!",
+    loading:"Боргирӣ...",thinking:"Судья фикр мекунад",dreaming:"Таҳлили хоб",traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
+    newRound:"🔄 Даври нав",youWin:"🎉 ТУ ҒОЛИБ!",aiWin:"😅 AI ҒОЛИБ!",
+    human:"Одам",mood:"Кайфият"
   }
 };
 
-let LANG=localStorage.getItem('ai_lang')||'uz';
+let lang='uz';
 
-// ============================================================
-// 🌐 TILNI QO'LLASH
-// ============================================================
 function setLang(l){
-  LANG=l;
-  localStorage.setItem('ai_lang',l);
-  applyLang();
-}
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('lang'+l.toUpperCase()).classList.add('on');
+  const t=T[l];
 
-function applyLang(){
-  const t=T[LANG];
-  document.documentElement.lang=LANG==='tj'?'tg':LANG;
-
-  ['uz','ru','en','tj'].forEach(l=>{
-    const btn=document.getElementById('lang'+l.toUpperCase());
-    if(btn) btn.classList.toggle('on',l===LANG);
-  });
-
-  document.querySelector('.t-home').textContent=t.tabs.home;
-  document.querySelector('.t-turing').textContent=t.tabs.turing;
-  document.querySelector('.t-dream').textContent=t.tabs.dream;
-  document.querySelector('.t-time').textContent=t.tabs.time;
-  document.querySelector('.t-world').textContent=t.tabs.world;
-  document.querySelector('.t-debate').textContent=t.tabs.debate;
-  document.querySelector('.t-video').textContent=t.tabs.video;
-
+  // Subtitle
   document.getElementById('subTitle').textContent=t.sub;
 
-  for(var i=1;i<=7;i++){
-    const gh=document.getElementById('gc'+i+'-h');
-    if(gh){
-      gh.textContent=t['gc'+i].h;
-      document.getElementById('gc'+i+'-p').textContent=t['gc'+i].p;
-      document.getElementById('gc'+i+'-t').textContent=t['gc'+i].t;
-    }
-  }
-
-  document.getElementById('turing-info').innerHTML=t.turingInfo;
-  document.querySelector('.t-topic').textContent=t.topic;
-  document.getElementById('tans').placeholder=t.tansPh;
-  document.getElementById('tbtn').textContent=t.tbtn;
-
-  document.getElementById('dream-info').innerHTML=t.dreamInfo;
-  document.getElementById('din').placeholder=t.dinPh;
-  document.getElementById('dbtn').textContent=t.dbtn;
-
-  document.getElementById('time-info').innerHTML=t.timeInfo;
-  document.getElementById('tmb').textContent=t.tmb;
-
-  document.getElementById('world-info').innerHTML=t.worldInfo;
-  document.getElementById('wbtn').textContent=t.wbtn;
-
-  document.getElementById('debate-info').innerHTML=t.debateInfo;
-  document.getElementById('dtp').placeholder=t.dtpPh;
-  document.getElementById('dbb').textContent=t.dbb;
-
-  // Video tab
-  document.getElementById('video-info').innerHTML=t.videoInfo;
-  document.getElementById('v-lbl-text').textContent=t.vTextLbl;
-  document.getElementById('vtext').placeholder=t.vTextPh;
-  document.getElementById('v-lbl-theme').textContent=t.vThemeLbl;
-  document.getElementById('v-lbl-dur').textContent=t.vDurLbl;
-  document.getElementById('v-lbl-size').textContent=t.vSizeLbl;
-  document.getElementById('vstart').textContent=t.vStart;
-  document.getElementById('vdlbtn').textContent=t.vDownload;
-}
-
-// ============================================================
-// TAB
-// ============================================================
-function sw(n,el){
-  document.querySelectorAll('.tc').forEach(x=>x.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  const t=document.getElementById('t-'+n);
-  if(t)t.classList.add('active');
-  if(el)el.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(window.speechSynthesis) window.speechSynthesis.cancel();
-}
-
-// ============================================================
-// HELPERS
-// ============================================================
-function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function ld(t){return '<div class="loading">'+t+'<span class="dots"></span></div>';}
-function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// ============================================================
-// MIC
-// ============================================================
-function mic(inputId,btnId){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi');return;}
-  if(!rec){rec=new SR();rec.lang=LANG==='ru'?'ru-RU':LANG==='en'?'en-US':'uz-UZ';rec.continuous=false;rec.interimResults=false;}
-  const btn=document.getElementById(btnId);
-  const inp=document.getElementById(inputId);
-  if(isR){try{rec.stop()}catch(e){}return;}
-  rec.onresult=e=>{
-    const t=e.results[0][0].transcript;
-    inp.value+=(inp.value?' ':'')+t;
-    inp.focus();
-  };
-  rec.onend=()=>{isR=false;btn.classList.remove('rec');};
-  rec.onerror=()=>{isR=false;btn.classList.remove('rec');};
-  try{rec.start();isR=true;btn.classList.add('rec');}catch(e){}
-}
-
-// ============================================================
-// POST
-// ============================================================
-async function post(ep,body){
-  const r=await fetch(API+ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(Object.assign({},body,{parol:P}))});
-  return await r.json();
-}
-
-// ============================================================
-// 🔊 OVOZ
-// ============================================================
-let voices=[];
-function loadVoices(){ if(!window.speechSynthesis)return; const v=window.speechSynthesis.getVoices(); if(v&&v.length) voices=v; }
-loadVoices();
-if(window.speechSynthesis){
-  window.speechSynthesis.onvoiceschanged=loadVoices;
-  setTimeout(loadVoices,100);
-  setTimeout(loadVoices,500);
-  setTimeout(loadVoices,1000);
-  setTimeout(loadVoices,2000);
-}
-
-function tanlaOvoz(tur){
-  if(!voices.length) loadVoices();
-  const all=voices;
-  if(!all.length) return null;
-  const byLang=l=>all.filter(v=>v.lang.toLowerCase().startsWith(l));
-  const uz=byLang('uz'),tr=byLang('tr'),ru=byLang('ru'),en=byLang('en');
-  if(tur==='advocate') return uz[0]||tr[0]||en[0]||all[0];
-  if(tur==='prosecutor') return ru[0]||en[1]||en[0]||all[1]||all[0];
-  if(tur==='judge') return en[2]||ru[1]||en[0]||all[2]||all[0];
-  return all[0];
-}
-
-function splitText(text,max){
-  max=max||180;
-  const parts=[]; let current='';
-  const sentences=text.split(/(?<=[.!?])\s+/);
-  for(const s of sentences){
-    if((current+' '+s).length>max){ if(current) parts.push(current.trim()); current=s; }
-    else current+=' '+s;
-  }
-  if(current) parts.push(current.trim());
-  return parts.length?parts:[text];
-}
-
-function makeUtter(text,tur){
-  const u=new SpeechSynthesisUtterance(text);
-  const v=tanlaOvoz(tur);
-  if(v) u.voice=v;
-  u.lang=v?v.lang:'en-US';
-  u.rate=tur==='judge'?0.95:1.0;
-  u.pitch=tur==='advocate'?1.2:tur==='prosecutor'?0.8:1.0;
-  u.volume=1;
-  return u;
-}
-
-function speak(text,tur){
-  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
-  window.speechSynthesis.cancel();
-  const parts=splitText(text);
-  let i=0;
-  function next(){
-    if(i>=parts.length) return;
-    const u=makeUtter(parts[i],tur);
-    u.onend=()=>{i++;next();};
-    u.onerror=()=>{i++;next();};
-    window.speechSynthesis.speak(u);
-  }
-  next();
-}
-
-function speakSeq(text,tur){
-  return new Promise(resolve=>{
-    if(!window.speechSynthesis){ resolve(); return; }
-    const parts=splitText(text);
-    let i=0;
-    function next(){
-      if(i>=parts.length){ resolve(); return; }
-      const u=makeUtter(parts[i],tur);
-      u.onend=()=>{i++;next();};
-      u.onerror=()=>{i++;next();};
-      window.speechSynthesis.speak(u);
-    }
-    next();
+  // Tabs
+  document.querySelectorAll('.tabs .tab span').forEach(s=>{
+    const key=s.className.replace('t-','');
+    if(t.tabs[key]) s.textContent=t.tabs[key];
   });
+
+  // Home cards
+  for(let i=1;i<=8;i++){
+    const h=document.getElementById('gc'+i+'-h');
+    const p=document.getElementById('gc'+i+'-p');
+    const tg=document.getElementById('gc'+i+'-t');
+    if(h && t['gc'+i]){
+      h.textContent=t['gc'+i].h;
+      p.textContent=t['gc'+i].p;
+      tg.textContent=t['gc'+i].t;
+    }
+  }
+
+  // Info bloklar
+  const map={
+    'turing-info':'turingInfo','dream-info':'dreamInfo','time-info':'timeInfo',
+    'world-info':'worldInfo','debate-info':'debateInfo','video-info':'videoInfo'
+  };
+  for(const id in map){
+    const el=document.getElementById(id);
+    if(el) el.textContent=t[map[id]];
+  }
+
+  // Placeholder'lar
+  const ph={
+    'tans':'tansPh','din':'dinPh','dtp':'dtpPh','vtext':'vTextPh'
+  };
+  for(const id in ph){
+    const el=document.getElementById(id);
+    if(el) el.placeholder=t[ph[id]];
+  }
+
+  // Tugmalar
+  const btn={
+    'tbtn':'tbtn','dbtn':'dbtn','tmb':'tmb','wbtn':'wbtn','dbb':'dbb',
+    'vstart':'vStart','vdlbtn':'vDownload'
+  };
+  for(const id in btn){
+    const el=document.getElementById(id);
+    if(el) el.textContent=t[btn[id]];
+  }
+
+  // Label'lar
+  const lbls={
+    'v-lbl-text':'vTextLbl','v-lbl-theme':'vThemeLbl',
+    'v-lbl-dur':'vDurLbl','v-lbl-size':'vSizeLbl'
+  };
+  for(const id in lbls){
+    const el=document.getElementById(id);
+    if(el) el.textContent=t[lbls[id]];
+  }
+
+  // Topic label
+  const tpc=document.querySelector('.t-topic');
+  if(tpc) tpc.textContent=t.topic;
 }
-    // ============================================================
-// 🎭 TURING
+
 // ============================================================
-async function tNew(){
-  const t=T[LANG];
-  document.getElementById('ttopic').textContent=t.loading;
-  document.getElementById('tans').value='';
-  document.getElementById('tres').innerHTML='';
-  document.getElementById('tbtn').disabled=true;
-  try{
-    const d=await post('/turing',{action:'topic'});
-    if(d.topic){ document.getElementById('ttopic').textContent=d.topic; document.getElementById('tbtn').disabled=false; }
-    else document.getElementById('ttopic').textContent='❌ '+(d.error||'Xato');
-  }catch(e){ document.getElementById('ttopic').textContent='❌ '+e.message; }
+// 🔄 TAB ALMASHTIRISH
+// ============================================================
+function sw(id, el){
+  document.querySelectorAll('.tc').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  const c=document.getElementById('t-'+id);
+  if(c) c.classList.add('active');
+  if(el) el.classList.add('active');
+  else{
+    const tab=document.getElementById('tab-'+id);
+    if(tab) tab.classList.add('active');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
 }
+        // ============================================================
+// 🎤 MIKROFON (ovozli kiritish)
+// ============================================================
+function mic(inputId, btnId){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi'); return; }
+
+  const btn = document.getElementById(btnId);
+  const inp = document.getElementById(inputId);
+
+  if(isR){
+    isR = false;
+    if(rec) rec.stop();
+    btn.classList.remove('rec');
+    return;
+  }
+
+  rec = new SR();
+  rec.lang = lang === 'uz' ? 'uz-UZ' : lang === 'ru' ? 'ru-RU' : lang === 'tj' ? 'tg-TJ' : 'en-US';
+  rec.continuous = false;
+  rec.interimResults = false;
+
+  rec.onstart = () => { isR = true; btn.classList.add('rec'); };
+  rec.onend   = () => { isR = false; btn.classList.remove('rec'); };
+  rec.onerror = () => { isR = false; btn.classList.remove('rec'); };
+  rec.onresult = e => {
+    const txt = e.results[0][0].transcript;
+    inp.value = (inp.value ? inp.value + ' ' : '') + txt;
+  };
+
+  rec.start();
+}
+
+// ============================================================
+// 🎵 MEDIA — Musiqa/Video yuklash
+// ============================================================
+let mFiles = [];
+
+function mUpload(){
+  const aIn = document.getElementById('mAudio');
+  const vIn = document.getElementById('mVideo');
+  const audio = aIn.files[0];
+  if(!audio){ alert('Audio fayl tanlang!'); return; }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const item = {
+      id: Date.now(),
+      name: audio.name,
+      type: 'audio',
+      data: e.target.result,
+      video: null
+    };
+    mFiles.push(item);
+    renderMedia();
+    aIn.value = '';
+  };
+  reader.readAsDataURL(audio);
+
+  if(vIn.files[0]){
+    const vr = new FileReader();
+    vr.onload = e => {
+      if(mFiles.length){
+        mFiles[mFiles.length-1].video = { name: vIn.files[0].name, data: e.target.result };
+        renderMedia();
+        vIn.value = '';
+      }
+    };
+    vr.readAsDataURL(vIn.files[0]);
+  }
+}
+
+function renderMedia(){
+  const box = document.getElementById('mList');
+  if(!mFiles.length){
+    box.innerHTML = '<p style="color:var(--muted);font-size:13px">Hozircha fayl yo\'q</p>';
+    return;
+  }
+  box.innerHTML = mFiles.map(f => `
+    <div class="m-item">
+      <button class="m-del" onclick="mDel(${f.id})">🗑</button>
+      <div class="m-name">🎵 ${f.name}</div>
+      <audio controls src="${f.data}"></audio>
+      ${f.video ? `<div class="m-name" style="margin-top:8px">🎬 ${f.video.name}</div><video controls src="${f.video.data}"></video>` : ''}
+    </div>
+  `).join('');
+}
+
+function mDel(id){
+  mFiles = mFiles.filter(f => f.id !== id);
+  renderMedia();
+}
+
+// ============================================================
+// 🔥 FREE FIRE SOZLAMALARI
+// ============================================================
+function ffApply(){
+  const model = document.getElementById('ffModel').value.trim();
+  const ram   = document.getElementById('ffRam').value.trim();
+  const chip  = document.getElementById('ffChip').value.trim();
+  const mode  = document.getElementById('ffMode').value;
+
+  if(!model){ alert('Telefon modelini kiriting!'); return; }
+
+  const ramNum = parseInt(ram.replace(/\D/g,'')) || 0;
+  const hiSpec  = ramNum >= 8;
+  const midSpec = ramNum >= 6 && ramNum < 8;
+  const lowSpec = ramNum < 6;
+
+  let gfx = hiSpec ? 'Ultra + 90 FPS' : midSpec ? 'High + 60 FPS' : 'Smooth + 30 FPS';
+  let dpi = hiSpec ? 720 : midSpec ? 600 : 480;
+
+  const sens = mode === 'fast'
+    ? { general:'95', red:'90', scope:'85', sniper:'70' }
+    : { general:'80', red:'85', scope:'95', sniper:'100' };
+
+  const headshot = mode === 'fast'
+    ? '⚡ Tez o‘yin uchun: yon-yon otish, drag past, scope tez.'
+    : '🎯 Uzoq masofa (mergan) uchun: SNIPER sens 100%, sekin nishon.';
+
+  document.getElementById('ffResult').innerHTML = `
+    <div class="ff-line"><b>📱 Model:</b> ${model}</div>
+    <div class="ff-line"><b>💾 RAM:</b> ${ram || '—'}</div>
+    <div class="ff-line"><b>⚙️ Chip:</b> ${chip || '—'}</div>
+    <div class="ff-line"><b>🎮 Grafika:</b> ${gfx} <span class="ff-badge">Tavsiya</span></div>
+    <div class="ff-line"><b>🖱 DPI:</b> ${dpi}</div>
+    <div class="ff-line"><b>🎯 General:</b> ${sens.general}</div>
+    <div class="ff-line"><b>🔴 Red Dot:</b> ${sens.red}</div>
+    <div class="ff-line"><b>🔭 2x/4x Scope:</b> ${sens.scope}</div>
+    <div class="ff-line"><b>🎯 Sniper:</b> ${sens.sniper}</div>
+    <div class="ff-line" style="border:none;color:var(--grn)"><b>💡 Rejim:</b> ${headshot}</div>
+  `;
+}
+
+// ============================================================
+// 🤖 AI CHAQIRISH (Cloudflare Worker orqali)
+// ============================================================
+async function aiCall(prompt, sys){
+  try{
+    const r = await fetch(API + '/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt, sys, password: P })
+    });
+    if(!r.ok) throw new Error('API xato: ' + r.status);
+    const d = await r.json();
+    return d.reply || d.text || d.message || '—';
+  }catch(e){
+    return '⚠️ Xatolik: ' + e.message;
+  }
+}
+
+// ============================================================
+// 🖼 YORDAMCHI: natija blokini chiqarish
+// ============================================================
+function showResult(boxId, title, text, img){
+  const box = document.getElementById(boxId);
+  box.innerHTML = `
+    <div class="result">
+      <div class="result-title">${title}</div>
+      <div class="result-text">${text || ''}</div>
+      ${img ? `<img src="${img}" alt="">` : ''}
+    </div>
+  `;
+}
+
+function showLoading(boxId, msg){
+  const box = document.getElementById(boxId);
+  box.innerHTML = `<div class="loading"><span class="dots">${msg}</span></div>`;
+        }
+        // ============================================================
+// 🎭 TURING TEST
+// ============================================================
+const TOPICS = [
+  "Eng yaxshi taom nima?",
+  "Yoz yaxshimi yoki qish?",
+  "Telefon yaxshi yoki kitob?",
+  "Ertalab turish foydalimi?",
+  "AI insonni almashtira oladimi?"
+];
 
 async function tSub(){
-  const t=T[LANG];
-  const a=document.getElementById('tans').value.trim();
-  if(!a){alert('Javob yozing!');return;}
-  const tp=document.getElementById('ttopic').textContent;
-  const b=document.getElementById('tbtn');
-  b.disabled=true; b.textContent='⏳...';
-  document.getElementById('tres').innerHTML=ld(t.thinking);
+  const inp = document.getElementById('tans');
+  const val = inp.value.trim();
+  if(!val){ alert('Javob yozing!'); return; }
+
+  const t = T[lang];
+  showLoading('tres', t.thinking);
+
+  const topic = document.getElementById('ttopic').textContent;
+  const sys = `Sen hakamsan. Foydalanuvchi AI rolida javob berdi. Mavzu: "${topic}". Javob: "${val}". Ikkita javobni solishtiring: biri foydalanuvchi (AI rolida), ikkinchisi sen (odam rolida). Qaysi biri ko'proq odamga o'xshaydi? JSON formatida javob ber: {"verdict":"win" yoki "lose", "human":"foydalanuvchi yoki AI", "text":"qisqa tahlil", "ai_answer":"sen odam sifatida javob"}`;
+
+  const res = await aiCall(sys, 'Sen adolatli hakamsan.');
+
+  let data;
   try{
-    const d=await post('/turing',{action:'judge',topic:tp,userAnswer:a});
-    if(d.error){ document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
-    const cl=d.userWins?'win':'lose';
-    const ti=d.userWins?t.youWin:t.aiWin;
-    var html='';
-    html+='<div class="answers">';
-    html+='<div class="answer"><div class="answer-label">🅰️ Javob 1</div><div class="answer-text">'+esc(d.answer1)+'</div></div>';
-    html+='<div class="answer"><div class="answer-label">🅱️ Javob 2</div><div class="answer-text">'+esc(d.answer2)+'</div></div>';
-    html+='</div>';
-    html+='<div class="verdict '+cl+'">';
-    html+='<div class="verdict-title">'+ti+'</div>';
-    html+='<div class="verdict-text">🤖 '+esc(d.judgeVerdict)+'<br><br>✅ '+t.human+': '+(d.humanIsUser?'Sen':'AI')+'<br>'+esc(d.reasoning||'')+'</div>';
-    html+='</div>';
-    html+='<button class="btn btn-full btn-sec" onclick="tNew()">'+t.newRound+'</button>';
-    document.getElementById('tres').innerHTML=html;
-  }catch(e){ document.getElementById('tres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
-  finally{ b.disabled=false; b.textContent=t.tbtn; }
+    const m = res.match(/\{[\s\S]*\}/);
+    data = JSON.parse(m[0]);
+  }catch(e){
+    data = {verdict:'lose', human:'AI', text:res, ai_answer:'—'};
+  }
+
+  const verdict = data.verdict === 'win' ? 'win' : 'lose';
+  const title = verdict === 'win' ? t.youWin : t.aiWin;
+
+  const box = document.getElementById('tres');
+  box.innerHTML = `
+    <div class="verdict ${verdict}">
+      <div class="verdict-title">${title}</div>
+      <div class="verdict-text">${data.text || ''}</div>
+    </div>
+    <div class="result">
+      <div class="result-title">👤 AI (odam rolida):</div>
+      <div class="result-text">${data.ai_answer || '—'}</div>
+    </div>
+  `;
+
+  // Yangi mavzu
+  const newTopic = TOPICS[Math.floor(Math.random()*TOPICS.length)];
+  document.getElementById('ttopic').textContent = newTopic;
+  inp.value = '';
 }
 
 // ============================================================
-// 🌙 DREAM
+// 🌙 DREAM JOURNAL
 // ============================================================
 async function dSub(){
-  const t=T[LANG];
-  const dr=document.getElementById('din').value.trim();
-  if(!dr){alert('Tushingizni yozing!');return;}
-  const b=document.getElementById('dbtn');
-  b.disabled=true; b.textContent='⏳...';
-  document.getElementById('dres').innerHTML=ld(t.dreaming);
-  try{
-    const d=await post('/dream',{dream:dr});
-    if(d.error){ document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
-    const em={'xursand':'😊',"qo'rqinchli":'😨',"g'alati":'🤔','sokin':'😌','xafa':'😢','hayajonli':'😲'};
-    const sy=(d.symbols||[]).map(s=>'<span>🔮 '+esc(s)+'</span>').join('');
-    var html='';
-    html+='<div class="result">';
-    html+='<div class="result-title">🌙 '+t.mood+': '+(em[d.mood]||'🌙')+' '+esc(d.mood||'')+'</div>';
-    html+='<div class="result-text">'+esc(d.analysis||'')+'</div>';
-    if(sy) html+='<div class="symbols">'+sy+'</div>';
-    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
-    html+='</div>';
-    document.getElementById('dres').innerHTML=html;
-  }catch(e){ document.getElementById('dres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
-  finally{ b.disabled=false; b.textContent=t.dbtn; }
+  const inp = document.getElementById('din');
+  const val = inp.value.trim();
+  if(!val){ alert('Tushingizni yozing!'); return; }
+
+  const t = T[lang];
+  showLoading('dres', t.dreaming);
+
+  const sys = `Foydalanuvchi tushini yozdi: "${val}". Uni tahlil qil: ma'nosi, kayfiyati, ramzlari. O'zbek tilida qisqa va chiroyli tahlil yoz.`;
+
+  const res = await aiCall(sys, 'Sen tush psixologisan.');
+
+  // Rasm uchun prompt
+  const imgPrompt = encodeURIComponent(`dream, surreal, ${val.slice(0,80)}, digital art, purple blue colors`);
+  const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true`;
+
+  showResult('dres', '🌙 ' + (t.mood || 'Tahlil'), res, imgUrl);
 }
 
 // ============================================================
-// ⏰ TIME
+// ⏰ TIME MACHINE
 // ============================================================
 async function tmSub(){
-  const t=T[LANG];
-  const yr=document.getElementById('tyr').value.trim();
-  const pl=document.getElementById('tpl').value.trim();
-  if(!yr){alert('Yilni kiriting!');return;}
-  const b=document.getElementById('tmb');
-  b.disabled=true; b.textContent='⏳...';
-  document.getElementById('tmres').innerHTML=ld(t.traveling);
-  try{
-    const d=await post('/time',{year:yr,place:pl});
-    if(d.error){ document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
-    var html='';
-    html+='<div class="result">';
-    html+='<div class="result-title">⏰ '+esc(yr)+(pl?' · '+esc(pl):'')+'</div>';
-    html+='<div class="result-text">'+esc(d.story||'')+'</div>';
-    if(d.fact) html+='<div class="info" style="margin-top:12px"><b>💡:</b> '+esc(d.fact)+'</div>';
-    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
-    html+='</div>';
-    document.getElementById('tmres').innerHTML=html;
-  }catch(e){ document.getElementById('tmres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
-  finally{ b.disabled=false; b.textContent=t.tmb; }
+  const yr = document.getElementById('tyr').value.trim();
+  const pl = document.getElementById('tpl').value.trim();
+  if(!yr){ alert('Yilni kiriting!'); return; }
+
+  const t = T[lang];
+  showLoading('tmres', t.traveling);
+
+  const sys = `Sen vaqt mashinasisan. Foydalanuvchi ${yr}-yilga, ${pl || 'noma\'lum joyga'} sayohat qilmoqchi. O'sha yil va joy haqida qisqa, qiziqarli hikoya yoz. Nima ko'radi, nima eshitadi, kim bilan uchrashadi. O'zbek tilida.`;
+
+  const res = await aiCall(sys, 'Sen tarixchisan.');
+
+  const imgPrompt = encodeURIComponent(`${yr} year ${pl || 'city'}, historical, vintage, cinematic`);
+  const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true`;
+
+  showResult('tmres', `⏰ ${yr} · ${pl || ''}`, res, imgUrl);
 }
 
 // ============================================================
-// 🎲 WORLD
+// 🎲 ONE-BUTTON WORLD
 // ============================================================
 async function wSub(){
-  const t=T[LANG];
-  const b=document.getElementById('wbtn');
-  b.disabled=true; b.textContent='⏳...';
-  document.getElementById('wres').innerHTML=ld(t.creating);
-  try{
-    const d=await post('/world',{});
-    if(d.error){ document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
-    var html='';
-    html+='<div class="result">';
-    html+='<div class="result-title">🎲 '+esc(d.name||'?')+'</div>';
-    html+='<div class="result-text">'+esc(d.story||'')+'</div>';
-    if(d.fact) html+='<div class="info" style="margin-top:12px"><b>💡:</b> '+esc(d.fact)+'</div>';
-    if(d.imageUrl) html+='<img src="'+d.imageUrl+'" onerror="this.style.display=\'none\'">';
-    html+='</div>';
-    document.getElementById('wres').innerHTML=html;
-  }catch(e){ document.getElementById('wres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
-  finally{ b.disabled=false; b.textContent=t.wbtn; }
-    }
-    // ============================================================
-// ⚔️ DEBATE
+  const t = T[lang];
+  showLoading('wres', t.creating);
+
+  const sys = `Yangi fantastik dunyo yarat. Unda: nomi, geografiyasi, aholisi, qonunlari, madaniyati. O'zbek tilida qisqa va jonli yoz.`;
+
+  const res = await aiCall(sys, 'Sen dunyo yaratuvchisisan.');
+
+  const imgPrompt = encodeURIComponent(`fantasy world, epic landscape, surreal, digital art`);
+  const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true&seed=${Date.now()}`;
+
+  showResult('wres', '🎲 Yangi dunyo', res, imgUrl);
+}
+
 // ============================================================
+// ⚔️ AI SUD MAJLISI
+// ============================================================
+let courtData = null;
+
 async function dbSub(){
-  const t=T[LANG];
-  const tp=document.getElementById('dtp').value.trim();
-  if(!tp){alert('Mavzuni kiriting!');return;}
-  const b=document.getElementById('dbb');
-  b.disabled=true; b.textContent='⏳...';
-  document.getElementById('dbres').innerHTML=ld(t.court);
-  try{
-    const d=await post('/debate',{topic:tp});
-    if(d.error){ document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(d.error)+'</div>'; return; }
+  const inp = document.getElementById('dtp');
+  const topic = inp.value.trim() || 'AI bilan do\'stlashish kerakmi?';
 
-    window._debate={adv:d.forArg||'',pros:d.againstArg||'',judge:d.verdict||''};
+  const t = T[lang];
+  showLoading('dbres', t.court);
 
-    var html='';
-    html+='<div class="advocate-card">';
-    html+='<div class="debate-role">';
-    html+='<div class="debate-role-title" style="color:var(--grn)">👨‍💼 '+t.adv+'</div>';
-    html+='<button class="btn-mini grn" id="btn-adv" onclick="playOne(\'adv\')">'+t.listen+'</button>';
-    html+='</div>';
-    html+='<div class="debate-text">'+esc(d.forArg||'')+'</div>';
-    html+='</div>';
+  const sysAdv = `Sen advokatsan. Mavzu: "${topic}". Bu mavzuni HIMOYA qil. 3-4 jumla. O'zbek tilida.`;
+  const sysPros = `Sen prokurorsan. Mavzu: "${topic}". Bu mavzuga QARSHI chiq. 3-4 jumla. O'zbek tilida.`;
 
-    html+='<div class="prosecutor-card">';
-    html+='<div class="debate-role">';
-    html+='<div class="debate-role-title" style="color:var(--red)">👨‍⚖️ '+t.pros+'</div>';
-    html+='<button class="btn-mini red" id="btn-pros" onclick="playOne(\'pros\')">'+t.listen+'</button>';
-    html+='</div>';
-    html+='<div class="debate-text">'+esc(d.againstArg||'')+'</div>';
-    html+='</div>';
+  const [adv, pros] = await Promise.all([
+    aiCall(sysAdv, 'Sen advokatsan.'),
+    aiCall(sysPros, 'Sen prokurorsan.')
+  ]);
 
-    html+='<div class="judge-card">';
-    html+='<div class="debate-role" style="border-bottom-color:var(--gold)">';
-    html+='<div class="debate-role-title" style="color:var(--gold)">⚖️ '+t.judge+'</div>';
-    html+='<button class="btn-mini gold" id="btn-judge" onclick="playOne(\'judge\')">'+t.listen+'</button>';
-    html+='</div>';
-    html+='<div class="debate-text">'+esc(d.verdict||'')+'</div>';
-    html+='</div>';
+  const sysJudge = `Sen hakamsan. Advokat: "${adv}". Prokuror: "${pros}". Mavzu: "${topic}". Adolatli qaror chiqar. 3-5 jumla. O'zbek tilida.`;
+  const judge = await aiCall(sysJudge, 'Sen adolatli hakamsan.');
 
-    html+='<button class="btn btn-full" style="background:linear-gradient(135deg,#10b981,#06b6d4)" id="playAllBtn" onclick="playAll()">'+t.listenAll+'</button>';
-    html+='<button class="btn btn-full btn-sec" style="margin-top:8px" onclick="stopSpeak()">'+t.stop+'</button>';
+  courtData = {adv, pros, judge};
 
-    document.getElementById('dbres').innerHTML=html;
-  }catch(e){ document.getElementById('dbres').innerHTML='<div class="loading">❌ '+esc(e.message)+'</div>'; }
-  finally{ b.disabled=false; b.textContent=t.dbb; }
+  const box = document.getElementById('dbres');
+  box.innerHTML = `
+    <div class="advocate-card">
+      <div class="debate-role">
+        <span class="debate-role-title" style="color:var(--grn)">🛡 ${t.adv}</span>
+        <button class="btn-mini grn" onclick="speak('${encodeURIComponent(adv)}')">${t.listen}</button>
+      </div>
+      <div class="debate-text">${adv}</div>
+    </div>
+    <div class="prosecutor-card">
+      <div class="debate-role">
+        <span class="debate-role-title" style="color:var(--red)">⚔ ${t.pros}</span>
+        <button class="btn-mini red" onclick="speak('${encodeURIComponent(pros)}')">${t.listen}</button>
+      </div>
+      <div class="debate-text">${pros}</div>
+    </div>
+    <div class="judge-card">
+      <div class="debate-role">
+        <span class="debate-role-title" style="color:var(--gold)">⚖ ${t.judge}</span>
+        <button class="btn-mini gold" onclick="speak('${encodeURIComponent(judge)}')">${t.listen}</button>
+      </div>
+      <div class="debate-text">${judge}</div>
+    </div>
+    <button class="btn btn-full" onclick="speakAll()">${t.listenAll}</button>
+  `;
 }
 
-function playOne(tur){
-  const t=T[LANG];
-  if(!window._debate) return;
-  const map={adv:{text:window._debate.adv,voice:'advocate',btn:'btn-adv'},pros:{text:window._debate.pros,voice:'prosecutor',btn:'btn-pros'},judge:{text:window._debate.judge,voice:'judge',btn:'btn-judge'}};
-  const item=map[tur];
-  if(!item||!item.text) return;
-  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
+function speak(encoded){
+  const txt = decodeURIComponent(encoded);
+  if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  const btn=document.getElementById(item.btn);
-  if(btn){ btn.classList.add('speech-active'); btn.textContent=t.listening; }
-  speak(item.text,item.voice);
-  const timer=setInterval(()=>{
-    if(!window.speechSynthesis.speaking){
-      if(btn){ btn.classList.remove('speech-active'); btn.textContent=t.listen; }
-      clearInterval(timer);
-    }
-  },500);
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = lang === 'uz' ? 'uz-UZ' : lang === 'ru' ? 'ru-RU' : lang === 'tj' ? 'tg-TJ' : 'en-US';
+  u.rate = 0.95;
+  window.speechSynthesis.speak(u);
 }
 
-async function playAll(){
-  const t=T[LANG];
-  if(!window._debate) return;
-  if(!window.speechSynthesis){ alert('❌ Ovoz qo\'llab-quvvatlanmaydi'); return; }
-  const allBtn=document.getElementById('playAllBtn');
-  if(allBtn){ allBtn.disabled=true; allBtn.textContent=t.listening; }
-  const adv=window._debate.adv, pros=window._debate.pros, judge=window._debate.judge;
-  function setBtn(id){ const b=document.getElementById(id); if(b){ b.classList.add('speech-active'); b.textContent=t.listening; } }
-  function resetBtn(id){ const b=document.getElementById(id); if(b){ b.classList.remove('speech-active'); b.textContent=t.listen; } }
-
-  setBtn('btn-adv'); await speakSeq(adv,'advocate'); resetBtn('btn-adv'); await sleep(700);
-  setBtn('btn-pros'); await speakSeq(pros,'prosecutor'); resetBtn('btn-pros'); await sleep(700);
-  setBtn('btn-judge'); await speakSeq(judge,'judge'); resetBtn('btn-judge');
-
-  if(allBtn){ allBtn.disabled=false; allBtn.textContent=t.listenAll; }
-}
-
-function stopSpeak(){
-  const t=T[LANG];
-  if(window.speechSynthesis) window.speechSynthesis.cancel();
-  ['btn-adv','btn-pros','btn-judge'].forEach(id=>{
-    const b=document.getElementById(id);
-    if(b){ b.classList.remove('speech-active'); b.textContent=t.listen; }
-  });
-  const allBtn=document.getElementById('playAllBtn');
-  if(allBtn){ allBtn.disabled=false; allBtn.textContent=t.listenAll; }
+function speakAll(){
+  if(!courtData) return;
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const all = courtData.adv + '. ' + courtData.pros + '. ' + courtData.judge;
+  const u = new SpeechSynthesisUtterance(all);
+  u.lang = lang === 'uz' ? 'uz-UZ' : lang === 'ru' ? 'ru-RU' : lang === 'tj' ? 'tg-TJ' : 'en-US';
+  u.rate = 0.95;
+  window.speechSynthesis.speak(u);
 }
 
 // ============================================================
-// 🎬 VIDEO MAKER v3.0 — AI rasm + Ken Burns + Ovoz
+// 🎬 VIDEO MAKER
 // ============================================================
-let vCanvas, vCtx;
-let vRecorder, vChunks = [];
-let vScenes = [], vDur, vW, vH;
-let vSceneIdx = 0, vSceneStart = 0, vAnim = null;
-let vImages = [];
-let vAudioCtx = null;
-let vAudioStream = null;
+let vRecorder = null, vChunks = [], vBlob = null;
 
-function vSetSize(s) {
-  const p = s.split('x');
-  vW = parseInt(p[0]);
-  vH = parseInt(p[1]);
-  vCanvas.width = vW;
-  vCanvas.height = vH;
-}
+const THEMES = {
+  dark:   {bg:'#050510', fg:'#e6e6f0', acc:'#6366f1'},
+  gold:   {bg:'#1a1208', fg:'#fde68a', acc:'#fbbf24'},
+  blue:   {bg:'#041428', fg:'#dbeafe', acc:'#3b82f6'},
+  purple: {bg:'#150528', fg:'#e9d5ff', acc:'#a855f7'},
+  sunset: {bg:'#2a0e0e', fg:'#fed7aa', acc:'#f97316'}
+};
 
-// AI rasm yuklash
-function vLoadImage(url) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    let done = false;
-    img.onload = () => { if (!done) { done = true; resolve(img); } };
-    img.onerror = () => { if (!done) { done = true; resolve(null); } };
-    img.src = url;
-    setTimeout(() => { if (!done) { done = true; resolve(null); } }, 20000);
-  });
-}
-
-// Ovoz — yumshoq fon musiqa (Web Audio API)
-function vCreateAudio() {
-  try {
-    vAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const dest = vAudioCtx.createMediaStreamDestination();
-    vAudioStream = dest.stream;
-
-    // 3 ta yumshoq ton (chord)
-    const notes = [261.63, 329.63, 392.00]; // C, E, G
-    notes.forEach((freq, i) => {
-      const osc = vAudioCtx.createOscillator();
-      const gain = vAudioCtx.createGain();
-      osc.type = 'sine';
-      osc.frequency.value = freq;
-      gain.gain.value = 0.04;
-      osc.connect(gain);
-      gain.connect(dest);
-      osc.start();
-      // Yumshoq tebranish (vibrato)
-      const lfo = vAudioCtx.createOscillator();
-      const lfoGain = vAudioCtx.createGain();
-      lfo.frequency.value = 0.5 + i * 0.2;
-      lfoGain.gain.value = 1;
-      lfo.connect(lfoGain);
-      lfoGain.connect(osc.frequency);
-      lfo.start();
-    });
-    return vAudioStream;
-  } catch(e) {
-    console.log('Audio xato:', e);
-    return null;
-  }
-}
-
-// Ken Burns effekt bilan sahna chizish
-function vDrawScene(img, text, progress, alpha, idx, total) {
-  // Fon
-  vCtx.fillStyle = "#000";
-  vCtx.fillRect(0, 0, vW, vH);
-
-  if (img) {
-    // Ken Burns: sekin zoom + pan
-    const zoom = 1 + progress * 0.20;
-    const iw = vW * zoom;
-    const ih = vH * zoom;
-    const panX = Math.sin(progress * Math.PI) * vW * 0.04;
-    const panY = Math.cos(progress * Math.PI) * vH * 0.02;
-    const ix = (vW - iw) / 2 + panX;
-    const iy = (vH - ih) / 2 + panY;
-
-    vCtx.save();
-    vCtx.globalAlpha = alpha;
-    vCtx.drawImage(img, ix, iy, iw, ih);
-    vCtx.restore();
-
-    // Qoraytiruvchi gradient
-    const grad = vCtx.createLinearGradient(0, 0, 0, vH);
-    grad.addColorStop(0, 'rgba(0,0,0,0.3)');
-    grad.addColorStop(0.5, 'rgba(0,0,0,0.5)');
-    grad.addColorStop(1, 'rgba(0,0,0,0.75)');
-    vCtx.fillStyle = grad;
-    vCtx.fillRect(0, 0, vW, vH);
-  } else {
-    // Rasm yo'q — gradient
-    const grad = vCtx.createLinearGradient(0, 0, vW, vH);
-    grad.addColorStop(0, "#050510");
-    grad.addColorStop(1, "#2a1a4a");
-    vCtx.fillStyle = grad;
-    vCtx.fillRect(0, 0, vW, vH);
-  }
-
-  // Yuqorida progress bar
-  vCtx.fillStyle = 'rgba(255,255,255,0.2)';
-  vCtx.fillRect(vW * 0.3, vH * 0.06, vW * 0.4, 4);
-  vCtx.fillStyle = '#fbbf24';
-  const totalProgress = (idx + progress) / total;
-  vCtx.fillRect(vW * 0.3, vH * 0.06, vW * 0.4 * totalProgress, 4);
-
-  // Matn — animatsiya bilan
-  vCtx.save();
-  // Fade + slide up
-  const textProgress = Math.min(progress * 3, 1);
-  const yOffset = (1 - textProgress) * 30;
-
-  vCtx.globalAlpha = alpha * textProgress;
-  vCtx.fillStyle = "#fff";
-  vCtx.textAlign = "center";
-  vCtx.textBaseline = "middle";
-
-  const fontSize = Math.min(vW, vH) * 0.085;
-  vCtx.font = "bold " + fontSize + "px system-ui, -apple-system, sans-serif";
-  vCtx.shadowColor = "rgba(0,0,0,0.9)";
-  vCtx.shadowBlur = 20;
-  vCtx.shadowOffsetY = 4;
-
-  const maxWidth = vW * 0.85;
-  const words = text.split(" ");
-  const lines = [];
-  let line = "";
-  for (const w of words) {
-    const test = line ? line + " " + w : w;
-    if (vCtx.measureText(test).width > maxWidth) {
-      if (line) lines.push(line);
-      line = w;
-    } else {
-      line = test;
-    }
-  }
-  if (line) lines.push(line);
-
-  const lineHeight = fontSize * 1.3;
-  const totalHeight = lines.length * lineHeight;
-  const startY = vH / 2 - totalHeight / 2 + lineHeight / 2;
-
-  lines.forEach((l, i) => {
-    vCtx.fillText(l, vW / 2, startY + i * lineHeight + yOffset);
-  });
-  vCtx.restore();
-
-  // Pastda imzo
-  vCtx.save();
-  vCtx.globalAlpha = alpha * 0.8;
-  vCtx.fillStyle = 'rgba(255,255,255,0.5)';
-  vCtx.font = '500 ' + (fontSize * 0.32) + 'px system-ui, sans-serif';
-  vCtx.textAlign = "center";
-  vCtx.shadowBlur = 0;
-  vCtx.fillText('Blip AI · 2026', vW / 2, vH * 0.92);
-  vCtx.restore();
-}
-
-function vAnimate() {
-  const now = Date.now();
-  const sceneDur = vDur * 1000;
-  const elapsed = now - vSceneStart;
-
-  if (elapsed >= sceneDur) {
-    vSceneIdx++;
-    if (vSceneIdx >= vScenes.length) {
-      vStop();
-      return;
-    }
-    vSceneStart = now;
-  }
-
-  const progress = Math.min(elapsed / sceneDur, 1);
-  let alpha = 1;
-  if (progress < 0.12) alpha = progress / 0.12;
-  else if (progress > 0.88) alpha = (1 - progress) / 0.12;
-
-  vDrawScene(vImages[vSceneIdx], vScenes[vSceneIdx], progress, alpha, vSceneIdx, vScenes.length);
-  vAnim = requestAnimationFrame(vAnimate);
-}
-
-async function vStart() {
-  const t = T[LANG];
+async function vStart(){
+  const t = T[lang];
   const text = document.getElementById('vtext').value.trim();
-  if (!text) { alert(t.vNoText); return; }
+  if(!text){ alert(t.vNoText); return; }
 
-  vScenes = text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
-  if (!vScenes.length) { alert(t.vNoScenes); return; }
+  const lines = text.split('\n').map(l => l.trim()).filter(l => l);
+  if(!lines.length){ alert(t.vNoScenes); return; }
 
-  vDur = parseInt(document.getElementById('vdur').value) || 3;
-  vSetSize(document.getElementById('vsize').value);
+  const theme = document.getElementById('vtheme').value;
+  const dur = parseInt(document.getElementById('vdur').value) || 3;
+  const size = document.getElementById('vsize').value;
+  const [w, h] = size.split('x').map(Number);
 
-  document.getElementById('vstart').disabled = true;
-  document.getElementById('vdownload').style.display = 'none';
-  document.getElementById('vstatus').style.display = 'block';
+  const canvas = document.getElementById('vcanvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  const col = THEMES[theme] || THEMES.dark;
 
-  // 1. Har sahnaga AI rasm yasash
-  vImages = [];
-  for (let i = 0; i < vScenes.length; i++) {
-    document.getElementById('vstatus').innerHTML = '🎨 AI rasm ' + (i+1) + '/' + vScenes.length + '<span class="dots"></span>';
-    const prompt = vScenes[i] + ", cinematic, dramatic lighting, warm colors, high quality, 4k, detailed";
-    const url = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt) + "?width=" + vW + "&height=" + vH + "&nologo=true&seed=" + (Date.now() + i * 1000);
-    const img = await vLoadImage(url);
-    vImages.push(img);
-  }
-
-  // 2. Ovoz tayyorlash
-  document.getElementById('vstatus').innerHTML = '🎵 Ovoz tayyorlanmoqda...';
-  const audioStream = vCreateAudio();
-
-  // 3. Yozishni boshlash
-  document.getElementById('vstatus').innerHTML = t.vRecording + '<span class="dots"></span>';
-
-  const videoStream = vCanvas.captureStream(30);
+  // Recorder
+  const stream = canvas.captureStream(30);
   vChunks = [];
-
-  // Ovozni videoga qo'shish
-  let finalStream = videoStream;
-  if (audioStream) {
-    finalStream = new MediaStream();
-    videoStream.getVideoTracks().forEach(tr => finalStream.addTrack(tr));
-    audioStream.getAudioTracks().forEach(tr => finalStream.addTrack(tr));
-  }
-
-  let mime = 'video/webm;codecs=vp9,opus';
-  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm;codecs=vp8,opus';
-  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/webm';
-  if (!MediaRecorder.isTypeSupported(mime)) mime = 'video/mp4';
-
-  try {
-    vRecorder = new MediaRecorder(finalStream, { mimeType: mime });
-  } catch(e) {
-    try { vRecorder = new MediaRecorder(finalStream); }
-    catch(e2) { alert('❌ Videoni yozib bo\'lmaydi: ' + e2.message); return; }
-  }
-
-  vRecorder.ondataavailable = e => { if (e.data.size > 0) vChunks.push(e.data); };
+  vRecorder = new MediaRecorder(stream, {mimeType:'video/webm;codecs=vp9'});
+  vRecorder.ondataavailable = e => { if(e.data.size) vChunks.push(e.data); };
   vRecorder.onstop = () => {
-    document.getElementById('vstatus').innerHTML = t.vReady;
+    vBlob = new Blob(vChunks, {type:'video/webm'});
     document.getElementById('vdownload').style.display = 'block';
-    document.getElementById('vstart').disabled = false;
-    // Ovozni to'xtatish
-    if (vAudioCtx) { vAudioCtx.close(); vAudioCtx = null; }
+    document.getElementById('vstatus').style.display = 'none';
   };
-  vRecorder.start(1000);
+  vRecorder.start();
 
-  vSceneIdx = 0;
-  vSceneStart = Date.now();
-  if (vAnim) cancelAnimationFrame(vAnim);
-  vAnimate();
+  document.getElementById('vstatus').style.display = 'block';
+  document.getElementById('vstatus').innerHTML = `<span class="dots">${t.vRecording}</span>`;
+  document.getElementById('vdownload').style.display = 'none';
+
+  // Har bir sahna
+  const fps = 30;
+  const frames = dur * fps;
+
+  for(let i = 0; i < lines.length; i++){
+    const line = lines[i];
+    for(let f = 0; f < frames; f++){
+      const prog = f / frames;
+
+      // Background
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, col.bg);
+      grad.addColorStop(1, col.acc);
+      ctx.fillStyle = col.bg;
+      ctx.fillRect(0, 0, w, h);
+
+      // Fon nur
+      ctx.globalAlpha = 0.15 + Math.sin(prog * Math.PI) * 0.15;
+      ctx.fillStyle = col.acc;
+      ctx.beginPath();
+      ctx.arc(w * (0.2 + prog * 0.6), h * (0.3 + Math.sin(prog * Math.PI * 2) * 0.2), w * 0.3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Matn
+      const fontSize = Math.floor(Math.min(w, h) * 0.07);
+      ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
+      ctx.fillStyle = col.fg;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Matnni o'rash
+      const maxW = w * 0.85;
+      const words = line.split(' ');
+      const rows = [];
+      let cur = '';
+      for(const word of words){
+        const test = cur ? cur + ' ' + word : word;
+        if(ctx.measureText(test).width > maxW){
+          if(cur) rows.push(cur);
+          cur = word;
+        } else cur = test;
+      }
+      if(cur) rows.push(cur);
+
+      const lineH = fontSize * 1.3;
+      const startY = h / 2 - (rows.length - 1) * lineH / 2;
+
+      // Fade in/out
+      const alpha = prog < 0.15 ? prog / 0.15 : prog > 0.85 ? (1 - prog) / 0.15 : 1;
+      ctx.globalAlpha = alpha;
+
+      rows.forEach((row, idx) => {
+        ctx.fillText(row, w / 2, startY + idx * lineH);
+      });
+      ctx.globalAlpha = 1;
+
+      // Sahna raqami
+      ctx.font = `${Math.floor(fontSize * 0.35)}px system-ui`;
+      ctx.fillStyle = col.acc;
+      ctx.globalAlpha = 0.6;
+      ctx.fillText(`${i+1}/${lines.length}`, w - 60, h - 40);
+      ctx.globalAlpha = 1;
+
+      await new Promise(r => setTimeout(r, 1000 / fps));
+    }
+  }
+
+  // Tugatish
+  await new Promise(r => setTimeout(r, 500));
+  if(vRecorder && vRecorder.state !== 'inactive') vRecorder.stop();
+
+  document.getElementById('vstatus').innerHTML = t.vReady;
+  setTimeout(() => { document.getElementById('vstatus').style.display = 'none'; }, 2000);
 }
 
-function vStop() {
-  if (vRecorder && vRecorder.state !== 'inactive') vRecorder.stop();
-  if (vAnim) { cancelAnimationFrame(vAnim); vAnim = null; }
-}
-
-function vDownload() {
-  if (!vChunks.length) { alert('Video tayyor emas!'); return; }
-  const blob = new Blob(vChunks, { type: 'video/webm' });
-  const url = URL.createObjectURL(blob);
+function vDownload(){
+  if(!vBlob) return;
+  const url = URL.createObjectURL(vBlob);
   const a = document.createElement('a');
   a.href = url;
   a.download = 'blip-video-' + Date.now() + '.webm';
-  document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
-  setTimeout(() => URL.revokeObjectURL(url), 5000);
-    }
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded',()=>{
-  vCanvas=document.getElementById('vcanvas');
-  vCtx=vCanvas.getContext('2d');
-  vTheme=V_THEMES.dark;
-  vW=1280;
-  vH=720;
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+}
 
-  applyLang();
-  tNew();
-  loadVoices();
-  setTimeout(loadVoices,500);
-  setTimeout(loadVoices,1500);
+// ============================================================
+// 🚀 INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  setLang('uz');
+  renderMedia();
 
-  vDraw('Blip Video Maker',1,1);
+  // Birinchi mavzu
+  const t0 = TOPICS[Math.floor(Math.random() * TOPICS.length)];
+  const tt = document.getElementById('ttopic');
+  if(tt) tt.textContent = t0;
+
+  console.log('🌌 Blip Multiverse ishga tushdi!');
 });
 </script>
 </body>
