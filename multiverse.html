@@ -34,6 +34,7 @@ h1{font-size:32px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855
 .tag{display:inline-block;margin-top:10px;font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(236,72,153,.2);color:var(--pnk);border:1px solid var(--pnk)}
 .tag.new{background:rgba(16,185,129,.15);color:var(--grn);border-color:var(--grn)}
 .tag.voice{background:rgba(6,182,212,.15);color:var(--cyan);border-color:var(--cyan)}
+.tag.ai{background:rgba(251,191,36,.15);color:var(--gold);border-color:var(--gold)}
 textarea,input[type="text"],input[type="number"],select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px}
 textarea{resize:vertical;min-height:90px}
 textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
@@ -53,21 +54,30 @@ textarea:focus,input:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0
 .result-title{font-size:16px;font-weight:800;color:var(--acc);margin-bottom:10px}
 .result-text{font-size:14px;line-height:1.7;white-space:pre-wrap}
 .loading{text-align:center;padding:30px;color:var(--muted);font-size:14px}
+.dots::after{content:'...';animation:dots 1.5s steps(4) infinite}
+@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
 .info{background:rgba(99,102,241,.1);border:1px solid var(--acc);border-radius:12px;padding:12px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
 .footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:20px}
 .footer a{color:var(--acc);text-decoration:none}
 .lbl{display:block;font-size:11px;color:var(--muted);margin:10px 0 6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.lbl .req{color:var(--red)}
 input[type="file"]{width:100%;padding:10px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);font-size:13px;margin-bottom:8px}
 input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border:none;padding:8px 14px;border-radius:8px;cursor:pointer;font-weight:700;margin-right:10px;font-family:inherit}
-.m-item{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:12px;margin-bottom:10px}
+input[type="file"]::file-selector-button:hover{opacity:.9}
+.m-item{background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:14px;margin-bottom:12px;position:relative}
 .m-item audio,.m-item video{width:100%;margin-top:8px;border-radius:8px}
-.m-item .m-name{font-size:13px;font-weight:700;margin-bottom:6px;word-break:break-all}
-.m-item .m-del{background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700;float:right}
-.ff-line{font-size:13px;line-height:1.8;padding:6px 0;border-bottom:1px dashed var(--brd)}
+.m-item .m-artist{font-size:15px;font-weight:800;margin-bottom:4px;padding-right:40px;word-break:break-word}
+.m-item .m-song{font-size:13px;color:var(--acc2);margin-bottom:6px;word-break:break-word}
+.m-item .m-del{position:absolute;top:12px;right:12px;background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:700}
+.m-item .m-yt{display:inline-block;margin-top:8px;text-decoration:none;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700}
+.ff-line{font-size:13px;line-height:1.8;padding:8px 0;border-bottom:1px dashed var(--brd)}
 .ff-line b{color:var(--gold)}
+.ff-line:last-child{border:none}
 .ff-badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;background:rgba(16,185,129,.15);color:var(--grn);border:1px solid var(--grn);margin-left:6px}
+.ff-tips{margin:8px 0 0 18px;font-size:12px;line-height:1.8;color:var(--muted)}
 .canvas-wrap{background:#000;border-radius:12px;overflow:hidden;margin-bottom:12px;text-align:center}
 #vcanvas{max-width:100%;height:auto;display:block;margin:auto}
+.auto-note{margin-top:6px!important;animation:fade .3s ease}
 @media(max-width:600px){h1{font-size:24px}.c{padding:6px}body{padding:8px}}
 </style>
 </head>
@@ -76,7 +86,7 @@ input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(-
 
 <header>
   <h1>🌌 BLIP MULTIVERSE</h1>
-  <p class="sub" id="subTitle">6 ta AI o'yin · 24/7 bepul</p>
+  <p class="sub" id="subTitle">7 ta AI o'yin · 24/7 bepul</p>
 </header>
 
 <div class="lang-switch">
@@ -94,7 +104,8 @@ input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(-
   <div class="tab" id="tab-world" onclick="sw('world',this)">🎲 <span class="t-world"></span></div>
   <div class="tab" id="tab-debate" onclick="sw('debate',this)">⚔️ <span class="t-debate"></span></div>
   <div class="tab" id="tab-video" onclick="sw('video',this)">🎬 <span class="t-video"></span></div>
-  <div class="tab" id="tab-media" onclick="sw('media',this)">🎵 <span class="t-media"></span></div>
+  <div class="tab" id="tab-music" onclick="sw('music',this)">🎵 <span class="t-music"></span></div>
+  <div class="tab" id="tab-ff" onclick="sw('ff',this)">🔥 <span class="t-ff"></span></div>
 </div>
 
 <!-- ================= 🏠 HOME ================= -->
@@ -105,7 +116,8 @@ input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(-
   <div class="gc" onclick="sw('world')"><span class="i">🎲</span><h3 id="gc4-h"></h3><p id="gc4-p"></p><span class="tag" id="gc4-t"></span></div>
   <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3 id="gc5-h"></h3><p id="gc5-p"></p><span class="tag new" id="gc5-t"></span></div>
   <div class="gc" onclick="sw('video')"><span class="i">🎬</span><h3 id="gc7-h"></h3><p id="gc7-p"></p><span class="tag voice" id="gc7-t"></span></div>
-  <div class="gc" onclick="sw('media')"><span class="i">🎵</span><h3 id="gc8-h"></h3><p id="gc8-p"></p><span class="tag new" id="gc8-t"></span></div>
+  <div class="gc" onclick="sw('music')"><span class="i">🎵</span><h3 id="gc8-h"></h3><p id="gc8-p"></p><span class="tag ai" id="gc8-t"></span></div>
+  <div class="gc" onclick="sw('ff')"><span class="i">🔥</span><h3 id="gc9-h"></h3><p id="gc9-p"></p><span class="tag ai" id="gc9-t"></span></div>
   <div class="gc" onclick="location.href='council.html'"><span class="i">🏛</span><h3 id="gc6-h"></h3><p id="gc6-p"></p><span class="tag" id="gc6-t"></span></div>
 </div>
 
@@ -196,70 +208,100 @@ input[type="file"]::file-selector-button{background:linear-gradient(135deg,var(-
   </div>
 </div>
 
-<!-- ================= 🎵 MEDIA (YANGI) ================= -->
-<div class="tc" id="t-media">
-  <div class="info" id="media-info">🎵 Musiqa va video yuklang · 🔥 Free Fire sozlamalari</div>
+<!-- ================= 🎵 MUSIQA ================= -->
+<div class="tc" id="t-music">
+  <div class="info" id="music-info"></div>
 
-  <!-- Musiqa yuklash -->
   <div class="card">
-    <h3 style="margin-bottom:12px">🎵 Musiqa yuklash</h3>
-    <label class="lbl">Audio fayl (mp3, wav, ogg):</label>
+    <h3 style="margin-bottom:12px">🎵 Yangi musiqa qo'shish</h3>
+
+    <label class="lbl"><span id="m-lbl-artist"></span> <span class="req">*</span></label>
+    <input type="text" id="mArtist" placeholder="Ozoda">
+
+    <label class="lbl" id="m-lbl-surname"></label>
+    <input type="text" id="mSurname" placeholder="Nazarova (ixtiyoriy)">
+
+    <label class="lbl" id="m-lbl-song"></label>
+    <input type="text" id="mSong" placeholder="Bahor keldi">
+
+    <label class="lbl" id="m-lbl-yt"></label>
+    <input type="text" id="mYt" placeholder="https://youtube.com/watch?v=...">
+
+    <label class="lbl" id="m-lbl-file"></label>
     <input type="file" id="mAudio" accept="audio/*">
+
     <label style="display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px;cursor:pointer">
       <input type="checkbox" id="mVideoChk" onchange="document.getElementById('mVideo').disabled=!this.checked">
-      🎬 Video ham yuklash (ixtiyoriy)
+      <span id="m-lbl-video"></span>
     </label>
     <input type="file" id="mVideo" accept="video/*" disabled>
-    <button class="btn btn-full" onclick="mUpload()">⬆️ Yuklash</button>
+
+    <button class="btn btn-full" onclick="mUpload()" id="m-btn-upload"></button>
   </div>
 
-  <!-- Yuklangan fayllar -->
   <div class="card">
-    <h3 style="margin-bottom:12px">📂 Yuklangan fayllar</h3>
+    <h3 style="margin-bottom:12px" id="m-lbl-list"></h3>
     <div id="mList"></div>
   </div>
+</div>
 
-  <!-- Free Fire sozlamalari -->
+<!-- ================= 🔥 FREE FIRE ================= -->
+<div class="tc" id="t-ff">
+  <div class="info" id="ff-info"></div>
+
   <div class="card">
-    <h3 style="margin-bottom:12px">🔥 Free Fire sozlamalari</h3>
-    <label class="lbl">📱 Telefon modeli:</label>
+    <h3 style="margin-bottom:12px">📱 <span id="ff-lbl-phone"></span></h3>
+
+    <button class="btn btn-full btn-gold" onclick="autoDetectPhone()" style="margin-bottom:14px" id="ff-btn-auto"></button>
+
+    <div class="info" style="font-size:11px" id="ff-hint"></div>
+
+    <label class="lbl" id="ff-lbl-model"></label>
     <input type="text" id="ffModel" placeholder="Redmi Note 12">
-    <label class="lbl">💾 RAM:</label>
-    <input type="text" id="ffRam" placeholder="8GB">
-    <label class="lbl">⚙️ Protsessor:</label>
+
+    <label class="lbl" id="ff-lbl-ram"></label>
+    <input type="text" id="ffRam" placeholder="8">
+
+    <label class="lbl" id="ff-lbl-chip"></label>
     <input type="text" id="ffChip" placeholder="Snapdragon 685">
-    <label class="lbl">🎯 Headshot rejimi:</label>
+
+    <label class="lbl" id="ff-lbl-mode"></label>
     <select id="ffMode">
-      <option value="fast">⚡ Tez o'yin uchun</option>
+      <option value="fast">⚡ Tez o'yin (yon-yon otish)</option>
       <option value="sniper">🎯 Uzoq masofa (mergan)</option>
+      <option value="balanced">⚖️ Balanslangan</option>
     </select>
-    <button class="btn btn-full btn-gold" onclick="ffApply()">✅ Sozlamalarni olish</button>
+
+    <button class="btn btn-full btn-gold" onclick="ffApply()" id="ff-btn-apply"></button>
+
     <div id="ffResult" style="margin-top:14px"></div>
   </div>
 </div>
 
 <div class="footer">⚡ <a href="index.html">Blip</a> · 2026 · Tojikiston 🇹🇯</div>
-      </div>
-      <script>
-const API="https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
-const P="SALOXIDDINJON UMARJON ENEM ATAM VA OILA";
-let rec=null,isR=false;
+  </div>
+  <script>
+const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+const P = "SALOXIDDINJON UMARJON ENEM VA OILA";
+let rec = null, isR = false;
+let lang = 'uz';
 
 // ============================================================
 // 🌐 TILLAR
 // ============================================================
-const T={
-  uz:{
-    sub:"6 ta AI o'yin · 24/7 bepul",
-    tabs:{home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",media:"Media"},
+const T = {
+  uz: {
+    sub: "9 ta AI o'yin · 24/7 bepul",
+    tabs: {home:"Bosh",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",music:"Musiqa",ff:"Free Fire"},
     gc1:{h:"Reverse Turing Test",p:"Sen AI bo'lib o'yna, AI odam bo'lib o'yna.",t:"TAYYOR"},
-    gc2:{h:"Dream Journal",p:"Tushingizni yozing. AI rasm chizadi va tahlil qiladi.",t:"TAYYOR"},
+    gc2:{h:"Dream Journal",p:"Tushingizni yozing. AI rasm chizadi.",t:"TAYYOR"},
     gc3:{h:"Time Machine",p:"Istalgan yilga sayohat qiling.",t:"YANGI"},
     gc4:{h:"One-Button World",p:"Bitta tugma. Har bosganda yangi dunyo.",t:"YANGI"},
     gc5:{h:"AI Sud Majlisi",p:"Advokat, Prokuror, Hakam. Ovozli!",t:"🔊 YANGI"},
     gc6:{h:"AI Kengash",p:"5 ta AI javob — 1 ta xulosa.",t:"MAVJUD"},
     gc7:{h:"Video Maker",p:"Matndan video yasa. Bepul!",t:"🎬 YANGI"},
-    gc8:{h:"Media & Free Fire",p:"Musiqa yuklash + Free Fire sozlamalari.",t:"🎵 YANGI"},
+    gc8:{h:"Musiqa yuklash",p:"Artist, qo'shiq va YouTube link bilan.",t:"🎵 AI"},
+    gc9:{h:"Free Fire sozlamalari",p:"AI telefon uchun optimal sozlama beradi.",t:"🤖 AI"},
     turingInfo:"💡 Hakam qaysi biri odam ekanini topadi.",
     topic:"Mavzu",tansPh:"AI bo'lib javob yozing...",tbtn:"Yuborish",
     dreamInfo:"💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.",
@@ -280,21 +322,52 @@ const T={
     vDownload:"📥 Videoni yuklab olish",
     vRecording:"🎬 Video yozilmoqda",vReady:"✅ Video tayyor!",
     vNoText:"Matn kiriting!",vNoScenes:"Sahnalar bo'sh!",
-    loading:"Yuklanmoqda...",thinking:"Hakam o'ylayapti",dreaming:"Tush tahlil qilinmoqda",traveling:"Vaqt mashinasi ishga tushdi",creating:"Yangi olam tug'ilmoqda",court:"Sud majlisi boshlanmoqda",
+    loading:"Yuklanmoqda...",thinking:"Hakam o'ylayapti",dreaming:"Tush tahlil qilinmoqda",
+    traveling:"Vaqt mashinasi ishga tushdi",creating:"Yangi olam tug'ilmoqda",court:"Sud majlisi boshlanmoqda",
     newRound:"🔄 Yangi raund",youWin:"🎉 SEN G'OLIB!",aiWin:"😅 AI G'OLIB!",
-    human:"Odam",mood:"Kayfiyat"
+    human:"Odam",mood:"Kayfiyat",
+    // Musiqa
+    musicInfo:"🎵 Musiqa yuklang · Artist ismi, qo'shiq nomi va YouTube link bilan",
+    mArtistLbl:"🎤 Artist ismi",
+    mSurnameLbl:"👤 Familiyasi (ixtiyoriy)",
+    mSongLbl:"🎵 Qo'shiq nomi (ixtiyoriy)",
+    mYtLbl:"📺 YouTube link (ixtiyoriy)",
+    mFileLbl:"🎧 Audio fayl (mp3, wav, ogg)",
+    mVideoLbl:"🎬 Video ham yuklash (ixtiyoriy)",
+    mUploadBtn:"⬆️ Yuklash",
+    mListTitle:"📂 Yuklangan musiqalar",
+    mEmpty:"Hozircha musiqa yo'q",
+    mYtBtn:"📺 YouTube'da ko'rish",
+    mErrNoFile:"Audio fayl tanlang!",
+    mErrNoArtist:"Artist ismini kiriting!",
+    // Free Fire
+    ffInfo:"🔥 Telefoningizga mos Free Fire sozlamalarini AI orqali oling",
+    ffPhoneTitle:"Telefon haqida ma'lumot",
+    ffAutoBtn:"🔍 Telefonimni avtomatik aniqlash",
+    ffHint:"Agar avtomatik aniqlanmasa — qo'lda kiriting",
+    ffModelLbl:"📱 Telefon modeli",
+    ffRamLbl:"💾 RAM (GB)",
+    ffChipLbl:"⚙️ Protsessor (ixtiyoriy)",
+    ffModeLbl:"🎯 O'yin uslubi",
+    ffApplyBtn:"🤖 AI orqali sozlamalarni olish",
+    ffAnalyzing:"🤖 AI telefoningizni tahlil qilmoqda",
+    ffErrNoInput:"Telefon modelini kiriting!",
+    ffDetected:"✅ Aniqlandi: ",
+    ffNotFound:"Telefon avtomatik aniqlanmadi. Iltimos, qo'lda kiriting.",
+    ffAiError:"⚠️ AI javob bermadi. Internetni tekshiring."
   },
-  ru:{
-    sub:"6 AI-игр · 24/7 бесплатно",
-    tabs:{home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд",video:"Видео",media:"Медиа"},
+  ru: {
+    sub: "9 AI-игр · 24/7 бесплатно",
+    tabs: {home:"Главная",turing:"Turing",dream:"Сон",time:"Время",world:"Мир",debate:"Суд",video:"Видео",music:"Музыка",ff:"Free Fire"},
     gc1:{h:"Reverse Turing Test",p:"Играй как AI, AI играет как человек.",t:"ГОТОВО"},
-    gc2:{h:"Dream Journal",p:"Напиши сон. AI нарисует и проанализирует.",t:"ГОТОВО"},
+    gc2:{h:"Dream Journal",p:"Напиши сон. AI нарисует.",t:"ГОТОВО"},
     gc3:{h:"Time Machine",p:"Путешествие в любой год.",t:"НОВОЕ"},
-    gc4:{h:"One-Button World",p:"Одна кнопка. Новый мир каждый раз.",t:"НОВОЕ"},
-    gc5:{h:"AI Суд",p:"Адвокат, Прокурор, Судья. Голосовой!",t:"🔊 НОВОЕ"},
+    gc4:{h:"One-Button World",p:"Одна кнопка. Новый мир.",t:"НОВОЕ"},
+    gc5:{h:"AI Суд",p:"Адвокат, Прокурор, Судья. Голос!",t:"🔊 НОВОЕ"},
     gc6:{h:"AI Совет",p:"5 AI ответов — 1 вывод.",t:"ЕСТЬ"},
-    gc7:{h:"Video Maker",p:"Создай видео из текста. Бесплатно!",t:"🎬 НОВОЕ"},
-    gc8:{h:"Медиа & Free Fire",p:"Загрузка музыки + настройки Free Fire.",t:"🎵 НОВОЕ"},
+    gc7:{h:"Video Maker",p:"Создай видео из текста!",t:"🎬 НОВОЕ"},
+    gc8:{h:"Загрузка музыки",p:"Артист, песня и ссылка YouTube.",t:"🎵 AI"},
+    gc9:{h:"Настройки Free Fire",p:"AI даёт оптимальные настройки.",t:"🤖 AI"},
     turingInfo:"💡 Судья определяет, кто человек.",
     topic:"Тема",tansPh:"Напиши ответ как AI...",tbtn:"Отправить",
     dreamInfo:"💡 Опиши сон. AI проанализирует и нарисует.",
@@ -315,21 +388,50 @@ const T={
     vDownload:"📥 Скачать видео",
     vRecording:"🎬 Запись видео",vReady:"✅ Видео готово!",
     vNoText:"Введите текст!",vNoScenes:"Сцены пусты!",
-    loading:"Загрузка...",thinking:"Судья думает",dreaming:"Анализ сна",traveling:"Машина времени работает",creating:"Новый мир создаётся",court:"Суд начинается",
+    loading:"Загрузка...",thinking:"Судья думает",dreaming:"Анализ сна",
+    traveling:"Машина времени работает",creating:"Новый мир создаётся",court:"Суд начинается",
     newRound:"🔄 Новый раунд",youWin:"🎉 ТЫ ПОБЕДИЛ!",aiWin:"😅 AI ПОБЕДИЛ!",
-    human:"Человек",mood:"Настроение"
+    human:"Человек",mood:"Настроение",
+    musicInfo:"🎵 Загрузите музыку · Артист, песня и YouTube",
+    mArtistLbl:"🎤 Имя артиста",
+    mSurnameLbl:"👤 Фамилия (необязательно)",
+    mSongLbl:"🎵 Название песни (необязательно)",
+    mYtLbl:"📺 Ссылка YouTube (необязательно)",
+    mFileLbl:"🎧 Аудио файл (mp3, wav, ogg)",
+    mVideoLbl:"🎬 Загрузить видео (необязательно)",
+    mUploadBtn:"⬆️ Загрузить",
+    mListTitle:"📂 Загруженная музыка",
+    mEmpty:"Пока музыки нет",
+    mYtBtn:"📺 Смотреть на YouTube",
+    mErrNoFile:"Выберите аудио файл!",
+    mErrNoArtist:"Введите имя артиста!",
+    ffInfo:"🔥 Настройки Free Fire для вашего телефона через AI",
+    ffPhoneTitle:"О телефоне",
+    ffAutoBtn:"🔍 Определить автоматически",
+    ffHint:"Если не определилось — введите вручную",
+    ffModelLbl:"📱 Модель телефона",
+    ffRamLbl:"💾 RAM (ГБ)",
+    ffChipLbl:"⚙️ Процессор (необязательно)",
+    ffModeLbl:"🎯 Стиль игры",
+    ffApplyBtn:"🤖 Получить настройки через AI",
+    ffAnalyzing:"🤖 AI анализирует ваш телефон",
+    ffErrNoInput:"Введите модель телефона!",
+    ffDetected:"✅ Определено: ",
+    ffNotFound:"Не удалось определить. Введите вручную.",
+    ffAiError:"⚠️ AI не ответил. Проверьте интернет."
   },
-  en:{
-    sub:"6 AI games · 24/7 free",
-    tabs:{home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",media:"Media"},
-    gc1:{h:"Reverse Turing Test",p:"You play as AI, AI plays as human.",t:"READY"},
-    gc2:{h:"Dream Journal",p:"Write your dream. AI draws and analyzes it.",t:"READY"},
+  en: {
+    sub: "9 AI games · 24/7 free",
+    tabs: {home:"Home",turing:"Turing",dream:"Dream",time:"Time",world:"World",debate:"Debate",video:"Video",music:"Music",ff:"Free Fire"},
+    gc1:{h:"Reverse Turing Test",p:"Play as AI, AI plays as human.",t:"READY"},
+    gc2:{h:"Dream Journal",p:"Write your dream. AI draws it.",t:"READY"},
     gc3:{h:"Time Machine",p:"Travel to any year.",t:"NEW"},
-    gc4:{h:"One-Button World",p:"One button. New world each time.",t:"NEW"},
+    gc4:{h:"One-Button World",p:"One button. New world.",t:"NEW"},
     gc5:{h:"AI Court",p:"Lawyer, Prosecutor, Judge. Voice!",t:"🔊 NEW"},
     gc6:{h:"AI Council",p:"5 AI answers — 1 conclusion.",t:"EXISTS"},
-    gc7:{h:"Video Maker",p:"Create video from text. Free!",t:"🎬 NEW"},
-    gc8:{h:"Media & Free Fire",p:"Upload music + Free Fire settings.",t:"🎵 NEW"},
+    gc7:{h:"Video Maker",p:"Create video from text!",t:"🎬 NEW"},
+    gc8:{h:"Music Upload",p:"Artist, song and YouTube link.",t:"🎵 AI"},
+    gc9:{h:"Free Fire Settings",p:"AI gives optimal settings.",t:"🤖 AI"},
     turingInfo:"💡 The judge decides who is human.",
     topic:"Topic",tansPh:"Write answer as AI...",tbtn:"Send",
     dreamInfo:"💡 Describe your dream. AI analyzes and draws.",
@@ -350,21 +452,50 @@ const T={
     vDownload:"📥 Download video",
     vRecording:"🎬 Recording video",vReady:"✅ Video ready!",
     vNoText:"Enter text!",vNoScenes:"Scenes are empty!",
-    loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",traveling:"Time machine works",creating:"New world is born",court:"Court begins",
+    loading:"Loading...",thinking:"Judge is thinking",dreaming:"Analyzing dream",
+    traveling:"Time machine works",creating:"New world is born",court:"Court begins",
     newRound:"🔄 New round",youWin:"🎉 YOU WIN!",aiWin:"😅 AI WINS!",
-    human:"Human",mood:"Mood"
+    human:"Human",mood:"Mood",
+    musicInfo:"🎵 Upload music · Artist, song and YouTube link",
+    mArtistLbl:"🎤 Artist name",
+    mSurnameLbl:"👤 Surname (optional)",
+    mSongLbl:"🎵 Song name (optional)",
+    mYtLbl:"📺 YouTube link (optional)",
+    mFileLbl:"🎧 Audio file (mp3, wav, ogg)",
+    mVideoLbl:"🎬 Upload video (optional)",
+    mUploadBtn:"⬆️ Upload",
+    mListTitle:"📂 Uploaded music",
+    mEmpty:"No music yet",
+    mYtBtn:"📺 Watch on YouTube",
+    mErrNoFile:"Select audio file!",
+    mErrNoArtist:"Enter artist name!",
+    ffInfo:"🔥 Free Fire settings for your phone via AI",
+    ffPhoneTitle:"About your phone",
+    ffAutoBtn:"🔍 Auto-detect my phone",
+    ffHint:"If not detected — enter manually",
+    ffModelLbl:"📱 Phone model",
+    ffRamLbl:"💾 RAM (GB)",
+    ffChipLbl:"⚙️ Processor (optional)",
+    ffModeLbl:"🎯 Play style",
+    ffApplyBtn:"🤖 Get settings via AI",
+    ffAnalyzing:"🤖 AI is analyzing your phone",
+    ffErrNoInput:"Enter phone model!",
+    ffDetected:"✅ Detected: ",
+    ffNotFound:"Auto-detect failed. Enter manually.",
+    ffAiError:"⚠️ AI didn't respond. Check internet."
   },
-  tj:{
-    sub:"6 бозии AI · 24/7 ройгон",
-    tabs:{home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд",video:"Видео",media:"Медиа"},
-    gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун, AI ҳамчун одам.",t:"ТАЙЁР"},
+  tj: {
+    sub: "9 бозии AI · 24/7 ройгон",
+    tabs: {home:"Асосӣ",turing:"Turing",dream:"Хоб",time:"Вақт",world:"Ҷаҳон",debate:"Суд",video:"Видео",music:"Мусиқӣ",ff:"Free Fire"},
+    gc1:{h:"Reverse Turing Test",p:"Ҳамчун AI бозӣ кун.",t:"ТАЙЁР"},
     gc2:{h:"Dream Journal",p:"Хобатро нависед. AI расм мекашад.",t:"ТАЙЁР"},
     gc3:{h:"Time Machine",p:"Ба ҳар сол сафар кунед.",t:"НАВ"},
-    gc4:{h:"One-Button World",p:"Як тугма. Ҳар дафъа ҷаҳони нав.",t:"НАВ"},
+    gc4:{h:"One-Button World",p:"Як тугма. Ҷаҳони нав.",t:"НАВ"},
     gc5:{h:"Суди AI",p:"Адвокат, Прокурор, Судья. Овозӣ!",t:"🔊 НАВ"},
     gc6:{h:"Шӯрои AI",p:"5 ҷавоби AI — 1 хулоса.",t:"ҲАСТ"},
-    gc7:{h:"Video Maker",p:"Аз матн видео созед. Ройгон!",t:"🎬 НАВ"},
-    gc8:{h:"Медиа & Free Fire",p:"Боргирии мусиқӣ + танзими Free Fire.",t:"🎵 НАВ"},
+    gc7:{h:"Video Maker",p:"Аз матн видео созед!",t:"🎬 НАВ"},
+    gc8:{h:"Боргирии мусиқӣ",p:"Артист, суруд ва YouTube.",t:"🎵 AI"},
+    gc9:{h:"Танзими Free Fire",p:"AI танзими беҳтарин медиҳад.",t:"🤖 AI"},
     turingInfo:"💡 Судья муайян мекунад, ки кӣ одам аст.",
     topic:"Мавзӯъ",tansPh:"Ҳамчун AI ҷавоб нависед...",tbtn:"Фиристодан",
     dreamInfo:"💡 Хобатро нависед. AI таҳлил мекунад.",
@@ -385,106 +516,171 @@ const T={
     vDownload:"📥 Боргирии видео",
     vRecording:"🎬 Сабти видео",vReady:"✅ Видео омода!",
     vNoText:"Матн ворид кунед!",vNoScenes:"Саҳнаҳо холӣ!",
-    loading:"Боргирӣ...",thinking:"Судья фикр мекунад",dreaming:"Таҳлили хоб",traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
+    loading:"Боргирӣ...",thinking:"Судья фикр мекунад",dreaming:"Таҳлили хоб",
+    traveling:"Мошини вақт кор мекунад",creating:"Ҷаҳони нав таваллуд мешавад",court:"Суд оғоз мешавад",
     newRound:"🔄 Даври нав",youWin:"🎉 ТУ ҒОЛИБ!",aiWin:"😅 AI ҒОЛИБ!",
-    human:"Одам",mood:"Кайфият"
+    human:"Одам",mood:"Кайфият",
+    musicInfo:"🎵 Мусиқӣ боргиред · Артист, суруд ва YouTube",
+    mArtistLbl:"🎤 Номи артист",
+    mSurnameLbl:"👤 Насаб (ихтиёрӣ)",
+    mSongLbl:"🎵 Номи суруд (ихтиёрӣ)",
+    mYtLbl:"📺 Линки YouTube (ихтиёрӣ)",
+    mFileLbl:"🎧 Файли аудио (mp3, wav, ogg)",
+    mVideoLbl:"🎬 Боргирии видео (ихтиёрӣ)",
+    mUploadBtn:"⬆️ Боргирӣ",
+    mListTitle:"📂 Мусиқии боргирӣшуда",
+    mEmpty:"Ҳоло мусиқӣ нест",
+    mYtBtn:"📺 Дар YouTube тамошо",
+    mErrNoFile:"Файли аудиоро интихоб кунед!",
+    mErrNoArtist:"Номи артистро ворид кунед!",
+    ffInfo:"🔥 Танзими Free Fire барои телефони шумо тавассути AI",
+    ffPhoneTitle:"Дар бораи телефон",
+    ffAutoBtn:"🔍 Муайян кардани телефон",
+    ffHint:"Агар муайян нашавад — дастӣ ворид кунед",
+    ffModelLbl:"📱 Модели телефон",
+    ffRamLbl:"💾 RAM (ГБ)",
+    ffChipLbl:"⚙️ Процессор (ихтиёрӣ)",
+    ffModeLbl:"🎯 Услуби бозӣ",
+    ffApplyBtn:"🤖 Танзим тавассути AI",
+    ffAnalyzing:"🤖 AI телефони шуморо таҳлил мекунад",
+    ffErrNoInput:"Модели телефонро ворид кунед!",
+    ffDetected:"✅ Муайян шуд: ",
+    ffNotFound:"Муайян нашуд. Дастӣ ворид кунед.",
+    ffAiError:"⚠️ AI ҷавоб надод. Интернетро тафтиш кунед."
   }
 };
 
-let lang='uz';
-
+// ============================================================
+// 🔄 TILNI O'RNATISH
+// ============================================================
 function setLang(l){
-  lang=l;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('on'));
-  document.getElementById('lang'+l.toUpperCase()).classList.add('on');
-  const t=T[l];
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('on'));
+  const btn = document.getElementById('lang' + l.toUpperCase());
+  if(btn) btn.classList.add('on');
+
+  const t = T[l];
+  if(!t) return;
 
   // Subtitle
-  document.getElementById('subTitle').textContent=t.sub;
+  const st = document.getElementById('subTitle');
+  if(st) st.textContent = t.sub;
 
-  // Tabs
-  document.querySelectorAll('.tabs .tab span').forEach(s=>{
-    const key=s.className.replace('t-','');
-    if(t.tabs[key]) s.textContent=t.tabs[key];
+  // Tab nomlari
+  document.querySelectorAll('.tabs .tab span').forEach(s => {
+    const key = s.className.replace('t-','');
+    if(t.tabs[key]) s.textContent = t.tabs[key];
   });
 
-  // Home cards
-  for(let i=1;i<=8;i++){
-    const h=document.getElementById('gc'+i+'-h');
-    const p=document.getElementById('gc'+i+'-p');
-    const tg=document.getElementById('gc'+i+'-t');
+  // Home kartochkalar
+  for(let i = 1; i <= 9; i++){
+    const h = document.getElementById('gc'+i+'-h');
+    const p = document.getElementById('gc'+i+'-p');
+    const tg = document.getElementById('gc'+i+'-t');
     if(h && t['gc'+i]){
-      h.textContent=t['gc'+i].h;
-      p.textContent=t['gc'+i].p;
-      tg.textContent=t['gc'+i].t;
+      h.textContent = t['gc'+i].h;
+      p.textContent = t['gc'+i].p;
+      tg.textContent = t['gc'+i].t;
     }
   }
 
   // Info bloklar
-  const map={
+  const infos = {
     'turing-info':'turingInfo','dream-info':'dreamInfo','time-info':'timeInfo',
-    'world-info':'worldInfo','debate-info':'debateInfo','video-info':'videoInfo'
+    'world-info':'worldInfo','debate-info':'debateInfo','video-info':'videoInfo',
+    'music-info':'musicInfo','ff-info':'ffInfo'
   };
-  for(const id in map){
-    const el=document.getElementById(id);
-    if(el) el.textContent=t[map[id]];
+  for(const id in infos){
+    const el = document.getElementById(id);
+    if(el) el.textContent = t[infos[id]];
   }
 
   // Placeholder'lar
-  const ph={
+  const ph = {
     'tans':'tansPh','din':'dinPh','dtp':'dtpPh','vtext':'vTextPh'
   };
   for(const id in ph){
-    const el=document.getElementById(id);
-    if(el) el.placeholder=t[ph[id]];
+    const el = document.getElementById(id);
+    if(el) el.placeholder = t[ph[id]];
   }
 
   // Tugmalar
-  const btn={
+  const btns = {
     'tbtn':'tbtn','dbtn':'dbtn','tmb':'tmb','wbtn':'wbtn','dbb':'dbb',
     'vstart':'vStart','vdlbtn':'vDownload'
   };
-  for(const id in btn){
-    const el=document.getElementById(id);
-    if(el) el.textContent=t[btn[id]];
+  for(const id in btns){
+    const el = document.getElementById(id);
+    if(el) el.textContent = t[btns[id]];
   }
 
-  // Label'lar
-  const lbls={
+  // Video label'lar
+  const vlbls = {
     'v-lbl-text':'vTextLbl','v-lbl-theme':'vThemeLbl',
     'v-lbl-dur':'vDurLbl','v-lbl-size':'vSizeLbl'
   };
-  for(const id in lbls){
-    const el=document.getElementById(id);
-    if(el) el.textContent=t[lbls[id]];
+  for(const id in vlbls){
+    const el = document.getElementById(id);
+    if(el) el.textContent = t[vlbls[id]];
   }
 
   // Topic label
-  const tpc=document.querySelector('.t-topic');
-  if(tpc) tpc.textContent=t.topic;
+  document.querySelectorAll('.t-topic').forEach(el => el.textContent = t.topic);
+
+  // ============ MUSIQA LABEL'LAR ============
+  const ml = {
+    'm-lbl-artist':'mArtistLbl','m-lbl-surname':'mSurnameLbl','m-lbl-song':'mSongLbl',
+    'm-lbl-yt':'mYtLbl','m-lbl-file':'mFileLbl','m-lbl-video':'mVideoLbl',
+    'm-lbl-list':'mListTitle','m-btn-upload':'mUploadBtn'
+  };
+  for(const id in ml){
+    const el = document.getElementById(id);
+    if(el) el.textContent = t[ml[id]];
+  }
+
+  // ============ FREE FIRE LABEL'LAR ============
+  const fl = {
+    'ff-lbl-phone':'ffPhoneTitle','ff-lbl-model':'ffModelLbl','ff-lbl-ram':'ffRamLbl',
+    'ff-lbl-chip':'ffChipLbl','ff-lbl-mode':'ffModeLbl','ff-btn-auto':'ffAutoBtn',
+    'ff-btn-apply':'ffApplyBtn'
+  };
+  for(const id in fl){
+    const el = document.getElementById(id);
+    if(el) el.textContent = t[fl[id]];
+  }
+
+  // FF hint
+  const fh = document.getElementById('ff-hint');
+  if(fh) fh.textContent = t.ffHint;
+
+  // Musiqa ro'yxatini qayta chizish
+  if(typeof renderMedia === 'function') renderMedia();
 }
 
 // ============================================================
-// 🔄 TAB ALMASHTIRISH
+// 🔀 TAB ALMASHTIRISH
 // ============================================================
 function sw(id, el){
-  document.querySelectorAll('.tc').forEach(c=>c.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  const c=document.getElementById('t-'+id);
+  document.querySelectorAll('.tc').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+  const c = document.getElementById('t-' + id);
   if(c) c.classList.add('active');
+
   if(el) el.classList.add('active');
-  else{
-    const tab=document.getElementById('tab-'+id);
+  else {
+    const tab = document.getElementById('tab-' + id);
     if(tab) tab.classList.add('active');
   }
-  window.scrollTo({top:0,behavior:'smooth'});
+
+  window.scrollTo({top:0, behavior:'smooth'});
 }
-        // ============================================================
-// 🎤 MIKROFON (ovozli kiritish)
+    // ============================================================
+// 🎤 MIKROFON
 // ============================================================
 function mic(inputId, btnId){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ alert('Brauzeringiz ovozni qo\'llab-quvvatlamaydi'); return; }
+  if(!SR){ alert('Brauzer ovozni qo\'llab-quvvatlamaydi'); return; }
 
   const btn = document.getElementById(btnId);
   const inp = document.getElementById(inputId);
@@ -513,108 +709,7 @@ function mic(inputId, btnId){
 }
 
 // ============================================================
-// 🎵 MEDIA — Musiqa/Video yuklash
-// ============================================================
-let mFiles = [];
-
-function mUpload(){
-  const aIn = document.getElementById('mAudio');
-  const vIn = document.getElementById('mVideo');
-  const audio = aIn.files[0];
-  if(!audio){ alert('Audio fayl tanlang!'); return; }
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    const item = {
-      id: Date.now(),
-      name: audio.name,
-      type: 'audio',
-      data: e.target.result,
-      video: null
-    };
-    mFiles.push(item);
-    renderMedia();
-    aIn.value = '';
-  };
-  reader.readAsDataURL(audio);
-
-  if(vIn.files[0]){
-    const vr = new FileReader();
-    vr.onload = e => {
-      if(mFiles.length){
-        mFiles[mFiles.length-1].video = { name: vIn.files[0].name, data: e.target.result };
-        renderMedia();
-        vIn.value = '';
-      }
-    };
-    vr.readAsDataURL(vIn.files[0]);
-  }
-}
-
-function renderMedia(){
-  const box = document.getElementById('mList');
-  if(!mFiles.length){
-    box.innerHTML = '<p style="color:var(--muted);font-size:13px">Hozircha fayl yo\'q</p>';
-    return;
-  }
-  box.innerHTML = mFiles.map(f => `
-    <div class="m-item">
-      <button class="m-del" onclick="mDel(${f.id})">🗑</button>
-      <div class="m-name">🎵 ${f.name}</div>
-      <audio controls src="${f.data}"></audio>
-      ${f.video ? `<div class="m-name" style="margin-top:8px">🎬 ${f.video.name}</div><video controls src="${f.video.data}"></video>` : ''}
-    </div>
-  `).join('');
-}
-
-function mDel(id){
-  mFiles = mFiles.filter(f => f.id !== id);
-  renderMedia();
-}
-
-// ============================================================
-// 🔥 FREE FIRE SOZLAMALARI
-// ============================================================
-function ffApply(){
-  const model = document.getElementById('ffModel').value.trim();
-  const ram   = document.getElementById('ffRam').value.trim();
-  const chip  = document.getElementById('ffChip').value.trim();
-  const mode  = document.getElementById('ffMode').value;
-
-  if(!model){ alert('Telefon modelini kiriting!'); return; }
-
-  const ramNum = parseInt(ram.replace(/\D/g,'')) || 0;
-  const hiSpec  = ramNum >= 8;
-  const midSpec = ramNum >= 6 && ramNum < 8;
-  const lowSpec = ramNum < 6;
-
-  let gfx = hiSpec ? 'Ultra + 90 FPS' : midSpec ? 'High + 60 FPS' : 'Smooth + 30 FPS';
-  let dpi = hiSpec ? 720 : midSpec ? 600 : 480;
-
-  const sens = mode === 'fast'
-    ? { general:'95', red:'90', scope:'85', sniper:'70' }
-    : { general:'80', red:'85', scope:'95', sniper:'100' };
-
-  const headshot = mode === 'fast'
-    ? '⚡ Tez o‘yin uchun: yon-yon otish, drag past, scope tez.'
-    : '🎯 Uzoq masofa (mergan) uchun: SNIPER sens 100%, sekin nishon.';
-
-  document.getElementById('ffResult').innerHTML = `
-    <div class="ff-line"><b>📱 Model:</b> ${model}</div>
-    <div class="ff-line"><b>💾 RAM:</b> ${ram || '—'}</div>
-    <div class="ff-line"><b>⚙️ Chip:</b> ${chip || '—'}</div>
-    <div class="ff-line"><b>🎮 Grafika:</b> ${gfx} <span class="ff-badge">Tavsiya</span></div>
-    <div class="ff-line"><b>🖱 DPI:</b> ${dpi}</div>
-    <div class="ff-line"><b>🎯 General:</b> ${sens.general}</div>
-    <div class="ff-line"><b>🔴 Red Dot:</b> ${sens.red}</div>
-    <div class="ff-line"><b>🔭 2x/4x Scope:</b> ${sens.scope}</div>
-    <div class="ff-line"><b>🎯 Sniper:</b> ${sens.sniper}</div>
-    <div class="ff-line" style="border:none;color:var(--grn)"><b>💡 Rejim:</b> ${headshot}</div>
-  `;
-}
-
-// ============================================================
-// 🤖 AI CHAQIRISH (Cloudflare Worker orqali)
+// 🤖 AI CHAQIRISH
 // ============================================================
 async function aiCall(prompt, sys){
   try{
@@ -623,33 +718,33 @@ async function aiCall(prompt, sys){
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ prompt, sys, password: P })
     });
-    if(!r.ok) throw new Error('API xato: ' + r.status);
+    if(!r.ok) throw new Error('API ' + r.status);
     const d = await r.json();
-    return d.reply || d.text || d.message || '—';
+    return d.reply || d.text || d.message || d.response || '—';
   }catch(e){
     return '⚠️ Xatolik: ' + e.message;
   }
 }
 
-// ============================================================
-// 🖼 YORDAMCHI: natija blokini chiqarish
-// ============================================================
 function showResult(boxId, title, text, img){
   const box = document.getElementById(boxId);
+  if(!box) return;
   box.innerHTML = `
     <div class="result">
       <div class="result-title">${title}</div>
       <div class="result-text">${text || ''}</div>
-      ${img ? `<img src="${img}" alt="">` : ''}
+      ${img ? `<img src="${img}" alt="" loading="lazy">` : ''}
     </div>
   `;
 }
 
 function showLoading(boxId, msg){
   const box = document.getElementById(boxId);
+  if(!box) return;
   box.innerHTML = `<div class="loading"><span class="dots">${msg}</span></div>`;
-        }
-        // ============================================================
+}
+
+// ============================================================
 // 🎭 TURING TEST
 // ============================================================
 const TOPICS = [
@@ -657,7 +752,9 @@ const TOPICS = [
   "Yoz yaxshimi yoki qish?",
   "Telefon yaxshi yoki kitob?",
   "Ertalab turish foydalimi?",
-  "AI insonni almashtira oladimi?"
+  "AI insonni almashtira oladimi?",
+  "Pul baxt keltiradimi?",
+  "Kosmosda hayot bormi?"
 ];
 
 async function tSub(){
@@ -669,7 +766,7 @@ async function tSub(){
   showLoading('tres', t.thinking);
 
   const topic = document.getElementById('ttopic').textContent;
-  const sys = `Sen hakamsan. Foydalanuvchi AI rolida javob berdi. Mavzu: "${topic}". Javob: "${val}". Ikkita javobni solishtiring: biri foydalanuvchi (AI rolida), ikkinchisi sen (odam rolida). Qaysi biri ko'proq odamga o'xshaydi? JSON formatida javob ber: {"verdict":"win" yoki "lose", "human":"foydalanuvchi yoki AI", "text":"qisqa tahlil", "ai_answer":"sen odam sifatida javob"}`;
+  const sys = `Sen hakamsan. Foydalanuvchi AI rolida javob berdi. Mavzu: "${topic}". Javob: "${val}". Ikkita javobni solishtir: foydalanuvchi (AI rolida) va sen (odam rolida). Qaysi biri ko'proq odamga o'xshaydi? JSON qaytar: {"verdict":"win" yoki "lose", "human":"foydalanuvchi yoki AI", "text":"qisqa tahlil", "ai_answer":"sen odam sifatida javob"}`;
 
   const res = await aiCall(sys, 'Sen adolatli hakamsan.');
 
@@ -684,11 +781,10 @@ async function tSub(){
   const verdict = data.verdict === 'win' ? 'win' : 'lose';
   const title = verdict === 'win' ? t.youWin : t.aiWin;
 
-  const box = document.getElementById('tres');
-  box.innerHTML = `
-    <div class="verdict ${verdict}">
-      <div class="verdict-title">${title}</div>
-      <div class="verdict-text">${data.text || ''}</div>
+  document.getElementById('tres').innerHTML = `
+    <div class="result" style="border-left-color:${verdict === 'win' ? 'var(--grn)' : 'var(--red)'}">
+      <div class="result-title">${title}</div>
+      <div class="result-text">${data.text || ''}</div>
     </div>
     <div class="result">
       <div class="result-title">👤 AI (odam rolida):</div>
@@ -696,14 +792,13 @@ async function tSub(){
     </div>
   `;
 
-  // Yangi mavzu
-  const newTopic = TOPICS[Math.floor(Math.random()*TOPICS.length)];
+  const newTopic = TOPICS[Math.floor(Math.random() * TOPICS.length)];
   document.getElementById('ttopic').textContent = newTopic;
   inp.value = '';
 }
 
 // ============================================================
-// 🌙 DREAM JOURNAL
+// 🌙 DREAM
 // ============================================================
 async function dSub(){
   const inp = document.getElementById('din');
@@ -714,11 +809,9 @@ async function dSub(){
   showLoading('dres', t.dreaming);
 
   const sys = `Foydalanuvchi tushini yozdi: "${val}". Uni tahlil qil: ma'nosi, kayfiyati, ramzlari. O'zbek tilida qisqa va chiroyli tahlil yoz.`;
-
   const res = await aiCall(sys, 'Sen tush psixologisan.');
 
-  // Rasm uchun prompt
-  const imgPrompt = encodeURIComponent(`dream, surreal, ${val.slice(0,80)}, digital art, purple blue colors`);
+  const imgPrompt = encodeURIComponent(`dream, surreal, ${val.slice(0,80)}, digital art, purple blue`);
   const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true`;
 
   showResult('dres', '🌙 ' + (t.mood || 'Tahlil'), res, imgUrl);
@@ -735,43 +828,40 @@ async function tmSub(){
   const t = T[lang];
   showLoading('tmres', t.traveling);
 
-  const sys = `Sen vaqt mashinasisan. Foydalanuvchi ${yr}-yilga, ${pl || 'noma\'lum joyga'} sayohat qilmoqchi. O'sha yil va joy haqida qisqa, qiziqarli hikoya yoz. Nima ko'radi, nima eshitadi, kim bilan uchrashadi. O'zbek tilida.`;
-
+  const sys = `Sen vaqt mashinasisan. Foydalanuvchi ${yr}-yilga, ${pl || 'noma\'lum joyga'} sayohat qilmoqchi. O'sha yil va joy haqida qisqa, qiziqarli hikoya yoz. O'zbek tilida.`;
   const res = await aiCall(sys, 'Sen tarixchisan.');
 
-  const imgPrompt = encodeURIComponent(`${yr} year ${pl || 'city'}, historical, vintage, cinematic`);
+  const imgPrompt = encodeURIComponent(`${yr} year ${pl || 'city'}, historical, vintage`);
   const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true`;
 
   showResult('tmres', `⏰ ${yr} · ${pl || ''}`, res, imgUrl);
 }
 
 // ============================================================
-// 🎲 ONE-BUTTON WORLD
+// 🎲 WORLD
 // ============================================================
 async function wSub(){
   const t = T[lang];
   showLoading('wres', t.creating);
 
   const sys = `Yangi fantastik dunyo yarat. Unda: nomi, geografiyasi, aholisi, qonunlari, madaniyati. O'zbek tilida qisqa va jonli yoz.`;
-
   const res = await aiCall(sys, 'Sen dunyo yaratuvchisisan.');
 
-  const imgPrompt = encodeURIComponent(`fantasy world, epic landscape, surreal, digital art`);
+  const imgPrompt = encodeURIComponent(`fantasy world, epic landscape, surreal`);
   const imgUrl = `https://image.pollinations.ai/prompt/${imgPrompt}?width=800&height=500&nologo=true&seed=${Date.now()}`;
 
   showResult('wres', '🎲 Yangi dunyo', res, imgUrl);
-}
-
-// ============================================================
-// ⚔️ AI SUD MAJLISI
+    }
+    // ============================================================
+// ⚔️ DEBATE
 // ============================================================
 let courtData = null;
 
 async function dbSub(){
   const inp = document.getElementById('dtp');
   const topic = inp.value.trim() || 'AI bilan do\'stlashish kerakmi?';
-
   const t = T[lang];
+
   showLoading('dbres', t.court);
 
   const sysAdv = `Sen advokatsan. Mavzu: "${topic}". Bu mavzuni HIMOYA qil. 3-4 jumla. O'zbek tilida.`;
@@ -787,35 +877,31 @@ async function dbSub(){
 
   courtData = {adv, pros, judge};
 
-  const box = document.getElementById('dbres');
-  box.innerHTML = `
-    <div class="advocate-card">
-      <div class="debate-role">
-        <span class="debate-role-title" style="color:var(--grn)">🛡 ${t.adv}</span>
-        <button class="btn-mini grn" onclick="speak('${encodeURIComponent(adv)}')">${t.listen}</button>
-      </div>
-      <div class="debate-text">${adv}</div>
+  const advEnc = encodeURIComponent(adv);
+  const prosEnc = encodeURIComponent(pros);
+  const judgeEnc = encodeURIComponent(judge);
+
+  document.getElementById('dbres').innerHTML = `
+    <div class="result" style="border-left-color:var(--grn)">
+      <div class="result-title" style="color:var(--grn)">🛡 ${t.adv}</div>
+      <div class="result-text">${adv}</div>
+      <button class="btn btn-full" style="margin-top:10px" onclick="speak(decodeURIComponent('${advEnc}'))">${t.listen}</button>
     </div>
-    <div class="prosecutor-card">
-      <div class="debate-role">
-        <span class="debate-role-title" style="color:var(--red)">⚔ ${t.pros}</span>
-        <button class="btn-mini red" onclick="speak('${encodeURIComponent(pros)}')">${t.listen}</button>
-      </div>
-      <div class="debate-text">${pros}</div>
+    <div class="result" style="border-left-color:var(--red)">
+      <div class="result-title" style="color:var(--red)">⚔ ${t.pros}</div>
+      <div class="result-text">${pros}</div>
+      <button class="btn btn-full" style="margin-top:10px" onclick="speak(decodeURIComponent('${prosEnc}'))">${t.listen}</button>
     </div>
-    <div class="judge-card">
-      <div class="debate-role">
-        <span class="debate-role-title" style="color:var(--gold)">⚖ ${t.judge}</span>
-        <button class="btn-mini gold" onclick="speak('${encodeURIComponent(judge)}')">${t.listen}</button>
-      </div>
-      <div class="debate-text">${judge}</div>
+    <div class="result" style="border-left-color:var(--gold)">
+      <div class="result-title" style="color:var(--gold)">⚖ ${t.judge}</div>
+      <div class="result-text">${judge}</div>
+      <button class="btn btn-full" style="margin-top:10px" onclick="speak(decodeURIComponent('${judgeEnc}'))">${t.listen}</button>
     </div>
     <button class="btn btn-full" onclick="speakAll()">${t.listenAll}</button>
   `;
 }
 
-function speak(encoded){
-  const txt = decodeURIComponent(encoded);
+function speak(txt){
   if(!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(txt);
@@ -826,13 +912,222 @@ function speak(encoded){
 
 function speakAll(){
   if(!courtData) return;
-  if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const all = courtData.adv + '. ' + courtData.pros + '. ' + courtData.judge;
-  const u = new SpeechSynthesisUtterance(all);
-  u.lang = lang === 'uz' ? 'uz-UZ' : lang === 'ru' ? 'ru-RU' : lang === 'tj' ? 'tg-TJ' : 'en-US';
-  u.rate = 0.95;
-  window.speechSynthesis.speak(u);
+  speak(courtData.adv + '. ' + courtData.pros + '. ' + courtData.judge);
+}
+
+// ============================================================
+// 🎵 MUSIQA YUKLASH
+// ============================================================
+let mFiles = [];
+
+function mUpload(){
+  const t = T[lang];
+  const aIn = document.getElementById('mAudio');
+  const vIn = document.getElementById('mVideo');
+  const audio = aIn.files[0];
+
+  if(!audio){ alert(t.mErrNoFile); return; }
+
+  const artist  = (document.getElementById('mArtist').value || '').trim();
+  const surname = (document.getElementById('mSurname').value || '').trim();
+  const song    = (document.getElementById('mSong').value || '').trim();
+  const yt      = (document.getElementById('mYt').value || '').trim();
+
+  if(!artist){ alert(t.mErrNoArtist); return; }
+
+  // YouTube link normalizatsiya
+  let ytLink = '';
+  if(yt){
+    if(/youtube\.com|youtu\.be/.test(yt)) ytLink = yt;
+    else if(/^[\w-]{11}$/.test(yt)) ytLink = 'https://youtube.com/watch?v=' + yt;
+    else ytLink = yt;
+  }
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    mFiles.push({
+      id: Date.now(),
+      artist, surname, song,
+      yt: ytLink,
+      name: audio.name,
+      data: e.target.result,
+      video: null
+    });
+    renderMedia();
+    ['mArtist','mSurname','mSong','mYt'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.value = '';
+    });
+    aIn.value = '';
+  };
+  reader.readAsDataURL(audio);
+
+  if(vIn && vIn.files[0]){
+    const vr = new FileReader();
+    vr.onload = e => {
+      if(mFiles.length){
+        mFiles[mFiles.length-1].video = { name: vIn.files[0].name, data: e.target.result };
+        renderMedia();
+        vIn.value = '';
+        document.getElementById('mVideoChk').checked = false;
+        vIn.disabled = true;
+      }
+    };
+    vr.readAsDataURL(vIn.files[0]);
+  }
+}
+
+function renderMedia(){
+  const t = T[lang];
+  const box = document.getElementById('mList');
+  if(!box) return;
+
+  if(!mFiles.length){
+    box.innerHTML = `<p style="color:var(--muted);font-size:13px">${t.mEmpty}</p>`;
+    return;
+  }
+
+  box.innerHTML = mFiles.map(f => {
+    const fullName = f.surname ? `${f.artist} ${f.surname}` : f.artist;
+    return `
+      <div class="m-item">
+        <button class="m-del" onclick="mDel(${f.id})">🗑</button>
+        <div class="m-artist">🎤 ${escapeHtml(fullName)}</div>
+        ${f.song ? `<div class="m-song">🎵 ${escapeHtml(f.song)}</div>` : ''}
+        <audio controls src="${f.data}"></audio>
+        ${f.yt ? `<a href="${f.yt}" target="_blank" rel="noopener" class="m-yt">${t.mYtBtn}</a>` : ''}
+        ${f.video ? `<div class="m-song" style="margin-top:8px">🎬 ${escapeHtml(f.video.name)}</div><video controls src="${f.video.data}"></video>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function mDel(id){
+  mFiles = mFiles.filter(f => f.id !== id);
+  renderMedia();
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ============================================================
+// 🔥 FREE FIRE — AVTOMATIK ANIQLASH
+// ============================================================
+function autoDetectPhone(){
+  const t = T[lang];
+  const ua = navigator.userAgent;
+  let model = '', ram = '', chip = '';
+
+  const androidMatch = ua.match(/Android[^;]*;\s*([^)]+?)(?:\s+Build|\))/i);
+  if(androidMatch){
+    model = androidMatch[1].replace(/;.*/, '').trim();
+    model = model.replace(/\b(wv|Mobile|Build)\b/gi, '').trim();
+  }
+  if(/iPhone/.test(ua)) model = 'iPhone';
+  else if(/iPad/.test(ua)) model = 'iPad';
+  else if(/Macintosh/.test(ua)) model = 'Mac';
+
+  if(navigator.deviceMemory) ram = navigator.deviceMemory + 'GB';
+  if(navigator.hardwareConcurrency) chip = navigator.hardwareConcurrency + ' yadro';
+
+  if(model) document.getElementById('ffModel').value = model;
+  if(ram)   document.getElementById('ffRam').value = ram;
+  if(chip && !document.getElementById('ffChip').value) document.getElementById('ffChip').value = chip;
+
+  if(!model && !ram){
+    alert(t.ffNotFound);
+    return;
+  }
+
+  const note = document.createElement('div');
+  note.className = 'info auto-note';
+  note.textContent = t.ffDetected + [model, ram].filter(Boolean).join(' · ');
+  const parent = document.getElementById('ffModel').parentElement;
+  const old = parent.querySelector('.auto-note');
+  if(old) old.remove();
+  parent.appendChild(note);
+  setTimeout(() => note.remove(), 5000);
+}
+
+// ============================================================
+// 🔥 FREE FIRE — AI ORQALI SOZLAMA
+// ============================================================
+async function ffApply(){
+  const t = T[lang];
+  const model = (document.getElementById('ffModel').value || '').trim();
+  const ram   = (document.getElementById('ffRam').value || '').trim();
+  const chip  = (document.getElementById('ffChip').value || '').trim();
+  const mode  = document.getElementById('ffMode').value;
+
+  if(!model && !ram){ alert(t.ffErrNoInput); return; }
+
+  showLoading('ffResult', t.ffAnalyzing);
+
+  const modeText = mode === 'fast'
+    ? 'Tez o\'yin (yon-yon otish uchun)'
+    : mode === 'sniper'
+      ? 'Uzoq masofa (mergan)'
+      : 'Balanslangan';
+
+  const prompt = `Foydalanuvchi telefon: ${model || 'noma\'lum'}. RAM: ${ram || 'noma\'lum'}. Protsessor: ${chip || 'noma\'lum'}. O'yin uslubi: ${modeText}.
+
+Free Fire uchun optimal sozlamalar bering. FAQAT JSON qaytaring (boshqa matn yo'q):
+{
+  "graphics": "grafiya darajasi (Smooth/HD/HDR/Ultra)",
+  "fps": "FPS (30/60/90)",
+  "dpi": "DPI raqam",
+  "general": "0-100",
+  "red_dot": "0-100",
+  "scope_2x": "0-100",
+  "scope_4x": "0-100",
+  "sniper": "0-100",
+  "fire_button": "0-100",
+  "tips": ["maslahat 1", "maslahat 2", "maslahat 3"]
+}`;
+
+  const res = await aiCall(prompt, 'Sen Free Fire bo\'yicha mutaxassissan. Faqat JSON qaytar.');
+
+  let d;
+  try{
+    const m = res.match(/\{[\s\S]*\}/);
+    d = JSON.parse(m[0]);
+  }catch(e){
+    document.getElementById('ffResult').innerHTML = `
+      <div class="result" style="border-left-color:var(--red)">
+        <div class="result-text">${t.ffAiError}<br><br>${res}</div>
+      </div>
+    `;
+    return;
+  }
+
+  const tips = Array.isArray(d.tips) ? d.tips : [];
+
+  document.getElementById('ffResult').innerHTML = `
+    <div class="result" style="border-left-color:var(--gold)">
+      <div class="result-title" style="color:var(--gold)">🤖 AI tavsiyasi</div>
+      <div class="ff-line"><b>📱 Model:</b> ${escapeHtml(model)}</div>
+      <div class="ff-line"><b>💾 RAM:</b> ${escapeHtml(ram)}</div>
+      ${chip ? `<div class="ff-line"><b>⚙️ Chip:</b> ${escapeHtml(chip)}</div>` : ''}
+      <div class="ff-line"><b>🎮 Grafika:</b> ${d.graphics || '—'} <span class="ff-badge">AI</span></div>
+      <div class="ff-line"><b>📊 FPS:</b> ${d.fps || '—'}</div>
+      <div class="ff-line"><b>🖱 DPI:</b> ${d.dpi || '—'}</div>
+      <div class="ff-line"><b>🎯 General:</b> ${d.general || '—'}</div>
+      <div class="ff-line"><b>🔴 Red Dot:</b> ${d.red_dot || '—'}</div>
+      <div class="ff-line"><b>🔭 2x Scope:</b> ${d.scope_2x || '—'}</div>
+      <div class="ff-line"><b>🔭 4x Scope:</b> ${d.scope_4x || '—'}</div>
+      <div class="ff-line"><b>🎯 Sniper:</b> ${d.sniper || '—'}</div>
+      <div class="ff-line"><b>🔥 Fire Button:</b> ${d.fire_button || '—'}</div>
+      ${tips.length ? `
+        <div class="ff-line" style="padding-top:10px">
+          <b>💡 Maslahatlar:</b>
+          <ul class="ff-tips">
+            ${tips.map(x => `<li>${escapeHtml(x)}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+    </div>
+  `;
 }
 
 // ============================================================
@@ -867,7 +1162,6 @@ async function vStart(){
   const ctx = canvas.getContext('2d');
   const col = THEMES[theme] || THEMES.dark;
 
-  // Recorder
   const stream = canvas.captureStream(30);
   vChunks = [];
   vRecorder = new MediaRecorder(stream, {mimeType:'video/webm;codecs=vp9'});
@@ -883,7 +1177,6 @@ async function vStart(){
   document.getElementById('vstatus').innerHTML = `<span class="dots">${t.vRecording}</span>`;
   document.getElementById('vdownload').style.display = 'none';
 
-  // Har bir sahna
   const fps = 30;
   const frames = dur * fps;
 
@@ -892,14 +1185,9 @@ async function vStart(){
     for(let f = 0; f < frames; f++){
       const prog = f / frames;
 
-      // Background
-      const grad = ctx.createLinearGradient(0, 0, w, h);
-      grad.addColorStop(0, col.bg);
-      grad.addColorStop(1, col.acc);
       ctx.fillStyle = col.bg;
       ctx.fillRect(0, 0, w, h);
 
-      // Fon nur
       ctx.globalAlpha = 0.15 + Math.sin(prog * Math.PI) * 0.15;
       ctx.fillStyle = col.acc;
       ctx.beginPath();
@@ -907,14 +1195,12 @@ async function vStart(){
       ctx.fill();
       ctx.globalAlpha = 1;
 
-      // Matn
       const fontSize = Math.floor(Math.min(w, h) * 0.07);
       ctx.font = `bold ${fontSize}px system-ui, sans-serif`;
       ctx.fillStyle = col.fg;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      // Matnni o'rash
       const maxW = w * 0.85;
       const words = line.split(' ');
       const rows = [];
@@ -931,16 +1217,11 @@ async function vStart(){
       const lineH = fontSize * 1.3;
       const startY = h / 2 - (rows.length - 1) * lineH / 2;
 
-      // Fade in/out
       const alpha = prog < 0.15 ? prog / 0.15 : prog > 0.85 ? (1 - prog) / 0.15 : 1;
       ctx.globalAlpha = alpha;
-
-      rows.forEach((row, idx) => {
-        ctx.fillText(row, w / 2, startY + idx * lineH);
-      });
+      rows.forEach((row, idx) => ctx.fillText(row, w / 2, startY + idx * lineH));
       ctx.globalAlpha = 1;
 
-      // Sahna raqami
       ctx.font = `${Math.floor(fontSize * 0.35)}px system-ui`;
       ctx.fillStyle = col.acc;
       ctx.globalAlpha = 0.6;
@@ -951,7 +1232,6 @@ async function vStart(){
     }
   }
 
-  // Tugatish
   await new Promise(r => setTimeout(r, 500));
   if(vRecorder && vRecorder.state !== 'inactive') vRecorder.stop();
 
@@ -967,22 +1247,61 @@ function vDownload(){
   a.download = 'blip-video-' + Date.now() + '.webm';
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 3000);
-}
-
-// ============================================================
-// 🚀 INIT
+    }
+    // ============================================================
+// 🚀 INIT — SAHIFA YUKLANGANDA
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  setLang('uz');
+  // Tilni o'rnatish (localStorage'dan yoki 'uz')
+  const savedLang = localStorage.getItem('blip_lang') || 'uz';
+  setLang(savedLang);
+
+  // Media ro'yxatini chizish
   renderMedia();
 
-  // Birinchi mavzu
-  const t0 = TOPICS[Math.floor(Math.random() * TOPICS.length)];
+  // Turing mavzusini tanlash
   const tt = document.getElementById('ttopic');
-  if(tt) tt.textContent = t0;
+  if(tt) tt.textContent = TOPICS[Math.floor(Math.random() * TOPICS.length)];
 
-  console.log('🌌 Blip Multiverse ishga tushdi!');
+  // Video checkbox holati
+  const vChk = document.getElementById('mVideoChk');
+  if(vChk) vChk.checked = false;
+
+  // Enter tugmasi bilan yuborish
+  const tans = document.getElementById('tans');
+  if(tans) tans.addEventListener('keydown', e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); tSub(); }
+  });
+
+  const dtp = document.getElementById('dtp');
+  if(dtp) dtp.addEventListener('keydown', e => {
+    if(e.key === 'Enter'){ e.preventDefault(); dbSub(); }
+  });
+
+  console.log('%c🌌 Blip Multiverse', 'color:#a855f7;font-size:20px;font-weight:900');
+  console.log('%cVersion 3.0 · Media + Free Fire AI', 'color:#6366f1');
+  console.log('%cAPI:', 'color:#888', API);
 });
+
+// ============================================================
+// 🛡️ XATO USHLASH
+// ============================================================
+window.addEventListener('error', e => {
+  console.error('❌ Xatolik:', e.message, '| Fayl:', e.filename, '| Qator:', e.lineno);
+});
+
+window.addEventListener('unhandledrejection', e => {
+  console.error('❌ Promise xatoligi:', e.reason);
+});
+
+// ============================================================
+// 📌 TILNI ESLAB QOLISH (setLang'ni yangilash)
+// ============================================================
+const _origSetLang = setLang;
+setLang = function(l){
+  _origSetLang(l);
+  localStorage.setItem('blip_lang', l);
+};
 </script>
 </body>
 </html>
