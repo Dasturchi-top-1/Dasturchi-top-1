@@ -1,29 +1,63 @@
-# 🚀 Dasturchi top 1
+# 🚀 Dasturchi-top-1
 
-Ushbu loyiha turli xildagi loyihalar uchun ularning nomiga mos, chiroyli va tushunarli README.md faylini tayyorlashga yordam beradi.
-
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
-![Status](https://img.shields.io/badge/Status-Active-success)
+Bu loyiha dasturchilar orasida eng yaxshi va eng samarali bo'lganlarni aniqlash va rag'batlantirish maqsadida yaratilgan. Uning yordamida siz o'z mahoratingizni namoyish etishingiz va boshqalar bilan raqobatlashishingiz mumkin.
 
 ## ✨ Xususiyatlar
 
-- 🎯 Loyiha nomiga mos professional README
-- 📝 Tushunarli tavsif, texnologiyalar va foydalanish bo'limlari
-- 🎨 Chiroyli Markdown bezaklari va emojilar
-- 🔧 Turli loyihalar uchun moslashuvchan tuzilma
-- 📜 MIT litsenziyasi
+*   Dasturchilarni reytinglash tizimi 🏆
+*   Har bir dasturchi uchun profil sahifasi 🧑‍💻
+*   Loyihalarni baholash va sharh qoldirish imkoniyati ⭐
+*   Faoliyatni kuzatish va statistika 📊
+*   Do'stlar ro'yxatini shakllantirish va ularning natijalarini ko'rish 🤝
 
 ## 🛠 Texnologiyalar
 
-- **Markdown** — hujjat formati
-- **Python** — asosiy til
-- **GitHub API** — avtomatik yuklash
-- **OpenRouter AI** — README yaratish
+*   **Til:** Python 🐍
+*   **Framework:** Django/Flask (aniqlashtirilishi kerak)
+*   **Database:** PostgreSQL/SQLite (aniqlashtirilishi kerak)
+*   **Frontend:** HTML, CSS, JavaScript
 
 ## 🚀 O'rnatish
 
-1. Loyihani GitHub'dan klonlang:
+Agar siz ushbu loyihani o'z kompyuteringizda ishga tushirishni istasangiz, quyidagi qadamlarni bajaring:
 
 ```bash
-git clone https://github.com/Dasturchi-top-1/Dasturchi-top-1.git
+# Loyiha omborini klonlash
+git clone https://github.com/salohiddin-blip/dasturchi-top-1.git
+
+# Loyiha papkasiga o'tish
+cd dasturchi-top-1
+
+# Virtual muhit yaratish (tavsiya etiladi)
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+# venv\Scripts\activate  # Windows
+
+# Zarur kutubxonalarni o'rnatish
+pip install -r requirements.txt
+
+# Ma'lumotlar bazasini yaratish va migratsiyalarni qo'llash
+python manage.py migrate
+
+# Loyihani ishga tushirish
+python manage.py runserver
+```
+
+## 🎯 Foydalanish
+
+Loyiha ishga tushirilgach, siz quyidagilarni amalga oshirishingiz mumkin:
+
+1.  Yangi hisob qaydnomasi yarating yoki mavjud hisobingizga kiring.
+2.  O'z profilingizni to'ldiring va loyihalaringizni qo'shing.
+3.  Boshqa dasturchilarning reytinglarini ko'ring va ularning loyihalari bilan tanishing.
+4.  Reyting tizimida yuqori o'rinlarni egallash uchun faol harakat qiling.
+
+## 👤 Muallif — Salohiddin (Blip)
+
+*   **Yosh:** 13
+*   **Mamlakat:** Tojikiston 🇹🇯
+*   **GitHub:** [salohiddin-blip](https://github.com/salohiddin-blip)
+
+## 📜 Litsenziya
+
+Ushbu loyiha **MIT Litsenziyasi** ostida tarqatiladi. Batafsil ma'lumot uchun `LICENSE` faylini ko'ring.
