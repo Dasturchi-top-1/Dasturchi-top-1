@@ -19,3 +19,5 @@ tugma = Button(text="Hisoblash", command=farq)
 tugma.place(x=90, y=90, width=120, height=40)
 
 oyna.mainloop( )
+
+# Ishlab chiqaruvchi: Blip
