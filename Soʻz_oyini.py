@@ -96,3 +96,5 @@ if __name__ == "__main__":
     root = tk.Tk()
     oyin = SozOyin(root)
     root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
