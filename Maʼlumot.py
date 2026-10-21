@@ -80,3 +80,5 @@ if __name__ == "__main__":
     # Dastur yoqilganda avtomatik eslatmalarni ko'rsatadi
     eslatmalarni_tekshir()
     menyu()
+
+# Ishlab chiqaruvchi: Blip
