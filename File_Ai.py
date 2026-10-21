@@ -150,3 +150,5 @@ tk.Button(tab_monitor, text="🔄 Yangilash", command=refresh_sys_info, bg="#4CA
 refresh_sys_info()
 
 root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
