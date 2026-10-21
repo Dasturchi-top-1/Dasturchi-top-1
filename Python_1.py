@@ -377,3 +377,5 @@ if __name__ == "__main__":
     asosiy = tk.Tk()
     hub = BlipHub(asosiy)
     asosiy.mainloop()
+
+# Ishlab chiqaruvchi: Blip
