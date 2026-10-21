@@ -251,3 +251,5 @@ file_output = scrolledtext.ScrolledText(tab_file, height=15, width=30)
 file_output.pack(padx=10, fill="both", expand=True, pady=5)
 
 root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
