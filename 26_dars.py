@@ -36,3 +36,5 @@ def play( ):
             print("Bunday harf yoʻq")
             usser_latters += latter
             print(f"Tabriklayman! {word} soʻzi-ni {len(usser_latters)} ta urinish-da topdingiz")
+
+# Ishlab chiqaruvchi: Blip
