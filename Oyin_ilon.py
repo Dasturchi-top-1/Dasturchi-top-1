@@ -192,3 +192,5 @@ if __name__ == '__main__':
     root = tk.Tk()
     game = CyberSnakeGame(root)
     root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
