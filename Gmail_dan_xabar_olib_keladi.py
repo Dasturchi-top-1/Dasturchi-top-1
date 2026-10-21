@@ -586,3 +586,5 @@ if __name__ == "__main__":
     print(f"📧 {j} email | 🌐 {t} tarjima")
     input("\n▶️ Enter...")
     tg_mode()
+
+# Ishlab chiqaruvchi: Blip
