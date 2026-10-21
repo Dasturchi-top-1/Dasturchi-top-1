@@ -34,3 +34,5 @@ while True:
         
     else:
         print("Noto'g'ri buyruq! Qaytadan urinib ko'ring.")
+
+# Ishlab chiqaruvchi: Blip
