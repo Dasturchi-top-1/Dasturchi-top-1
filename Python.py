@@ -370,3 +370,5 @@ log_box.insert("1.0", "# === [LOOP-CORE] :: SYSTEM INITIALIZED ===\n# Kalit so'z
 run_search() # Dastur ochilishi bilan 'all' buyrug'ini ishga tushiradi
 
 root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
