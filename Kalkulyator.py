@@ -13,3 +13,5 @@ while True:
         print("Natija:", natija)
     except:
         print("Xato! Masalan: 12+5 yoki 10/2")
+
+# Ishlab chiqaruvchi: Blip
