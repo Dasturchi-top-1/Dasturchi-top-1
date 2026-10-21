@@ -190,3 +190,5 @@ def asosiy():
 
 if __name__ == "__main__":
     asosiy()
+
+# Ishlab chiqaruvchi: Blip
