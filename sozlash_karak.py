@@ -29,3 +29,5 @@ class talaba(Shaxs):
     def get_bosqich(self):
         """Talaba-ning oʻqish bosqichi"""
         return self.bosqich
+
+# Ishlab chiqaruvchi: Blip
