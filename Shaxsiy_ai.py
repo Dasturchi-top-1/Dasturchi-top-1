@@ -304,3 +304,5 @@ if __name__ == "__main__":
         terminal_mode()
     else:
         browser_mode()
+
+# Ishlab chiqaruvchi: Blip
