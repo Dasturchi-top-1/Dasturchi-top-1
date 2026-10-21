@@ -110,3 +110,5 @@ btn_keyingi.grid(row=0, column=1, padx=10)
 # Dasturni ilk bor yangilab ishga tushirish
 yangila_ekran()
 root.mainloop()
+
+# Ishlab chiqaruvchi: Blip
