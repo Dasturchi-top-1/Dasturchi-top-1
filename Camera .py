@@ -51,5 +51,3 @@ while True:
 
 kamera.release()
 cv2.destroyAllWindows()
-
-# Ishlab chiqaruvchi: Blip
