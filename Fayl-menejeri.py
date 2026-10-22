@@ -120,3 +120,5 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print("\nDastur to'xtatildi.")
             break
+
+# Ishlab chiqaruvchi: Blip
