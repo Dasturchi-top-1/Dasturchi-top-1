@@ -16,5 +16,3 @@ if tekshirish.lower() == "ha":
     print(f"- 🌐 Internetdan aktiv foydalanayotganlar: {internetda_otirganlar} ta telefon")
 else:
     print("Tizimdan chiqildi. Aloqa tugadi.")
-
-# Ishlab chiqaruvchi: Blip
