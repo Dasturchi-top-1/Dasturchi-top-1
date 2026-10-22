@@ -205,5 +205,3 @@ class TurnikKundaligi:
 asosiy = tk.Tk()
 ilova = TurnikKundaligi(asosiy)
 asosiy.mainloop()
-
-# Ishlab chiqaruvchi: Blip
