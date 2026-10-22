@@ -324,8 +324,8 @@ def browser_mode():
     watchdog.start_monitoring()
 
     app = Flask(__name__)
-    app.secret_key = "YOUR_SECRET_KEY"
-    PASSWORD = "YOUR_PASSWORD"
+    app.secret_key = "blip-watchdog-maxfiy-kalit-2026"
+    PASSWORD = "YOUR_PASS"
 
     STYLE = """
     <style>
