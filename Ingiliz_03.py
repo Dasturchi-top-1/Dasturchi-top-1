@@ -1959,3 +1959,5 @@ if __name__ == "__main__":
     print(f"{C}💡 Offline ishlaydi — internet shart emas!{RST}")
     input(f"\n{G}▶️  Boshlash uchun Enter bosing...{RST}")
     menyu()
+
+# Ishlab chiqaruvchi: Blip
