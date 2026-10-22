@@ -180,5 +180,3 @@ if target:
   search_global_internet(target)
 else:
   print('❌ Nom kiritilmadi!')
-
-# Ishlab chiqaruvchi: Blip
