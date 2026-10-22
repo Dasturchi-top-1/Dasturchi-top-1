@@ -63,3 +63,5 @@ matematika.add_student(talaba_3)
 
 # def see_methods(klass):
 #     return [method for method in dir(klass) if method.startswith('__')]
+
+# Ishlab chiqaruvchi: Blip
