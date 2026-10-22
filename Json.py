@@ -173,5 +173,3 @@ class VazifaBoshqaruvchisi:
 asosiy = tk.Tk()
 ilova = VazifaBoshqaruvchisi(asosiy)
 asosiy.mainloop()
-
-# Ishlab chiqaruvchi: Blip
