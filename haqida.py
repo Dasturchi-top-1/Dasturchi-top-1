@@ -382,3 +382,5 @@ if __name__ == '__main__':
             sys.exit(0)
         else:
             print(f"{R}Noto'g'ri tanlov. Qayta urinib ko'r.{W}")
+
+# Ishlab chiqaruvchi: Blip
