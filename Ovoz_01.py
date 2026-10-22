@@ -139,5 +139,3 @@ class MatnOvozIlovasi:
 asosiy = tk.Tk()
 ilova = MatnOvozIlovasi(asosiy)
 asosiy.mainloop()
-
-# Ishlab chiqaruvchi: Blip
