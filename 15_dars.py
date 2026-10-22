@@ -60,3 +60,5 @@ for tel in set(telefonlar.values( )):
     
 toys = {"ball", "car", "lamp", "ball"}
 print(toys)
+
+# Ishlab chiqaruvchi: Blip
