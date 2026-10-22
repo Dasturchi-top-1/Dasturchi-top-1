@@ -56,5 +56,3 @@ def kiber_son_topish_oyini():
 
 # Dasturni ishga tushirish
 kiber_son_topish_oyini()
-
-# Ishlab chiqaruvchi: Blip
