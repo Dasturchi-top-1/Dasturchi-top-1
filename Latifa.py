@@ -490,3 +490,5 @@ if __name__ == "__main__":
     if ai_h == "❌": print("\n⚠️  OPENROUTER_KEY ni to'ldiring!")
     input("\n▶️  Enter...")
     menyu()
+
+# Ishlab chiqaruvchi: Blip
