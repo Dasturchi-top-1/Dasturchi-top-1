@@ -20,7 +20,7 @@ except ImportError:
     FLASK_AVAILABLE = False
 
 DB = 'remote_toolkit.db'
-PASSWORD = 'YOUR_PASSWORD'
+PASSWORD = 'YOUR_PASS'
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -242,7 +242,7 @@ def browser_mode():
         print(f"{R}Flask o'rnatilmagan. Brauzer rejimi uchun: pip3 install flask{W}")
         return
     app = Flask(__name__)
-    app.secret_key = 'YOUR_SECRET_KEY'
+    app.secret_key = 'blip_remote_toolkit'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
     HTML_LOGIN = '''
