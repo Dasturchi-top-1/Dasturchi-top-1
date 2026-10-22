@@ -76,5 +76,3 @@ else:
 txtdan_pdf(matn, pdf_yoli, parol)
 print(f"\nPDF tayyor: {pdf_yoli}")
 print("Uni ochishda parol so'raladi.")
-
-# Ishlab chiqaruvchi: Blip
