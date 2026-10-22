@@ -173,5 +173,3 @@ while True:
     elif tanlov == "4":
         print("👋 Seyf yopildi. Xayr!")
         break
-
-# Ishlab chiqaruvchi: Blip
