@@ -49,3 +49,5 @@ natija_label = tk.Label(oyna, text="Kutmoqdaman...", bg="#12141c", fg="white", w
 natija_label.pack(pady=20)
 
 oyna.mainloop()
+
+# Ishlab chiqaruvchi: Blip
