@@ -20,7 +20,7 @@ import requests
 
 OPENROUTER_API_KEY = "YOUR_API_KEY"  # bu yerga openrouter.ai'dan olgan kalitingizni qo'ying
 AI_MODEL = "deepseek/deepseek-v4-flash"
-BROWSER_PASSWORD = "YOUR_PASS"
+BROWSER_PASSWORD = "YOUR_PASSWORD"
 
 # ==========================================================
 # XAVFLI BUYRUQLAR FILTRI
@@ -175,7 +175,7 @@ def browser_mode():
     import hmac
 
     app = Flask(__name__)
-    app.secret_key = "ai-cli-shell-maxfiy-kalit-2026"
+    app.secret_key = "YOUR_SECRET_KEY"
 
     STYLE = """
     <style>
@@ -304,5 +304,3 @@ if __name__ == "__main__":
         terminal_mode()
     else:
         browser_mode()
-
-# Ishlab chiqaruvchi: Blip
