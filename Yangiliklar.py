@@ -116,5 +116,3 @@ class KiberSpyApp(App):
 
 if __name__ == '__main__':
     KiberSpyApp().run()
-
-# Ishlab chiqaruvchi: Blip
