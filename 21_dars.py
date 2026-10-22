@@ -10,5 +10,3 @@ talabalar = ["Jasur", "Akbar", "Mustafo", "Muxlisa", "Sabina"]
 baholar = bahola(talabalar[:])
 print(bahola)
 print(talabalar)
-
-# Ishlab chiqaruvchi: Blip
