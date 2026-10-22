@@ -32,5 +32,3 @@ while True:
         break
     if q:
         print(ask_ai(q))
-
-# Ishlab chiqaruvchi: Blip
