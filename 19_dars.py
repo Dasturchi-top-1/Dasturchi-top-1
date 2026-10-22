@@ -26,5 +26,3 @@ def yosh_hisobla(tugʻilgan_yil, joriy_yil=2026):
     
 yosh_hisobla(1999)
 yosh_hisobla(2013)
-
-# Ishlab chiqaruvchi: Blip
