@@ -37,3 +37,5 @@ toys = list(toys)#type(toys)
 toys.append("YouTube")
 toys = tuple(toys)
 type(toys)
+
+# Ishlab chiqaruvchi: Blip
