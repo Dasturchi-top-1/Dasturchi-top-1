@@ -29,7 +29,7 @@ import qrcode
 # ==========================================================
 # SOZLAMALAR
 # ==========================================================
-APP_PASSWORD = "YOUR_PASSWORD"
+APP_PASSWORD = "YOUR_PASS"
 DB_FOLDER = "/storage/emulated/0/AI"
 DB_PATH = os.path.join(DB_FOLDER, "blip_links.db")
 PORT = 8080
@@ -37,7 +37,7 @@ PORT = 8080
 os.makedirs(DB_FOLDER, exist_ok=True)
 
 app = Flask(__name__)
-app.secret_key = "YOUR_SECRET_KEY"
+app.secret_key = "blip-link-qisqartirgich-maxfiy-kalit-2026"
 
 
 # ==========================================================
