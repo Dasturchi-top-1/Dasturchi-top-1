@@ -160,5 +160,3 @@ if __name__ == '__main__':
         save_to_file(ai_news)
 
     print("\n✅ Tayyor!")
-
-# Ishlab chiqaruvchi: Blip
