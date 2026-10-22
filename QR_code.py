@@ -159,5 +159,3 @@ if __name__ == '__main__':
     root = tk.Tk()
     app = QRGeneratorApp(root)
     root.mainloop()
-
-# Ishlab chiqaruvchi: Blip
