@@ -164,5 +164,3 @@ if __name__ == '__main__':
         scan_for_sqli(target)
     else:
         print("❌ To'g'ri URL kiritilmadi yoki parametr yo'q (?id=1 kabi kerak)")
-
-# Ishlab chiqaruvchi: Blip
