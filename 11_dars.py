@@ -81,3 +81,5 @@ buyurtmalar = [ ]
          print(f"Roʻyxatda (len(buyurrmalar)) ta taom bor")
      else:
          print("Roʻyxat boʻsh")
+
+# Ishlab chiqaruvchi: Blip
