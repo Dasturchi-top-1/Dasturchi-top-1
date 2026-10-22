@@ -17,7 +17,7 @@ import requests
 OPENROUTER_API_KEY = "YOUR_API_KEY"
 AI_MODEL = "deepseek/deepseek-v4-flash"
 
-SAVE_FOLDER = "/storage/emulated/0/Ertaklar"
+SAVE_FOLDER = "/storage/emulated/0/Ai/Ertak"
 
 
 def get_save_folder():
@@ -225,5 +225,3 @@ if __name__ == '__main__':
     root = tk.Tk()
     app = StoryGeneratorApp(root)
     root.mainloop()
-
-# Ishlab chiqaruvchi: Blip
