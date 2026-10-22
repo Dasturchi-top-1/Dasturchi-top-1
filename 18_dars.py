@@ -42,3 +42,5 @@ while talabalar:
     baho = input(f"{talaba.title( )}-ga baho-ni kiriting: ")
     print(f"{talaba.title( )} baholan-di")
     baholangan_talabalar[talaba] = int(baho)
+
+# Ishlab chiqaruvchi: Blip
