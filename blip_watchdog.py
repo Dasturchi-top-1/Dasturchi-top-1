@@ -324,8 +324,8 @@ def browser_mode():
     watchdog.start_monitoring()
 
     app = Flask(__name__)
-    app.secret_key = "blip-watchdog-maxfiy-kalit-2026"
-    PASSWORD = "YOUR_PASS"
+    app.secret_key = "YOUR_SECRET_KEY"
+    PASSWORD = "YOUR_PASSWORD"
 
     STYLE = """
     <style>
@@ -459,5 +459,3 @@ if __name__ == "__main__":
         terminal_mode()
     else:
         browser_mode()
-
-# Ishlab chiqaruvchi: Blip
