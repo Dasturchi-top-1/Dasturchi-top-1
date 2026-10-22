@@ -1281,5 +1281,3 @@ if __name__ == "__main__":
     print(f"👥 {us} | 📚 {ls} | ❓ {qs} | 📊 {rs}")
     input("\n▶️ Enter...")
     menyu()
-
-# Ishlab chiqaruvchi: Blip
