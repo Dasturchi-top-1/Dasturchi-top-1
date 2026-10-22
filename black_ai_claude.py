@@ -1329,5 +1329,3 @@ if __name__ == "__main__":
 
     socketio.run(app, host="0.0.0.0", port=PORT, debug=False,
                  allow_unsafe_werkzeug=True)
-
-# Ishlab chiqaruvchi: Blip
