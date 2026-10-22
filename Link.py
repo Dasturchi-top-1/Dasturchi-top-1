@@ -539,5 +539,3 @@ if __name__ == "__main__":
     print("=" * 55)
 
     app.run(host="0.0.0.0", port=PORT, debug=False)
-
-# Ishlab chiqaruvchi: Blip
