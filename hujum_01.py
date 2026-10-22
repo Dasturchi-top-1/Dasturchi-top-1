@@ -219,3 +219,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+# Ishlab chiqaruvchi: Blip
