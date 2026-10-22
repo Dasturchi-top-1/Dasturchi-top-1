@@ -14,5 +14,3 @@ while True:
     # Tizim 10 soniya (yoki 1 daqiqa) kutadi va kodni butunlay o'zgartiradi
     time.sleep(10) 
     print("🔄 VAQT TUGADI! Superkompyuter kodni avtomatik ravishda o'zgartirdi!\n")
-
-# Ishlab chiqaruvchi: Blip
