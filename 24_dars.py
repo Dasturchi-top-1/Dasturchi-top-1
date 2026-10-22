@@ -54,3 +54,5 @@ mevalar_2 = list(filter(lambda meva:len(meva)<6, mevalar))
 print(mevalar_2)
 
 list(filter(lambda meva: (meva.startswith('a') and meva.endswith("r")),  mevalar))
+
+# Ishlab chiqaruvchi: Blip
