@@ -763,5 +763,3 @@ if __name__ == "__main__":
         log("\n👋 Xayr!")
     except Exception as e:
         log(f"❌ {e}")
-
-# Ishlab chiqaruvchi: Blip
