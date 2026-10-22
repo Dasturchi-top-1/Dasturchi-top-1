@@ -161,5 +161,3 @@ if __name__ == '__main__':
         scan_website(target)
     else:
         print('❌ Manzil kiritilmadi!')
-
-# Ishlab chiqaruvchi: Blip
