@@ -66,5 +66,3 @@ for ism, tillar in dasturchilar.items( ):
     for til in tillar:
 #        print(til.upper( )) 
            print(f"{til.upper( )} ", end= ' ')
-
-# Ishlab chiqaruvchi: Blip
