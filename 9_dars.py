@@ -25,5 +25,3 @@ for n in range(5):
     dostlar.append(input(f"{n+1} -dostingizni ismini kiriting: "))
 print(dostlar)
 
-
-# Ishlab chiqaruvchi: Blip
