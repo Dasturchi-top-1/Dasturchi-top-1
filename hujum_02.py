@@ -178,8 +178,8 @@ def browser_mode():
         print(f"{R}Flask o'rnatilmagan. Brauzer rejimi uchun: pip3 install flask{W}")
         return
     app = Flask(__name__)
-    app.secret_key = 'blip_param_miner'
-    PASSWORD = 'YOUR_PASS'
+    app.secret_key = 'YOUR_SECRET_KEY'
+    PASSWORD = 'YOUR_PASSWORD'
 
     HTML_LOGIN = '''
     <h2>Blip Param Miner Login</h2>
@@ -255,5 +255,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-# Ishlab chiqaruvchi: Blip
