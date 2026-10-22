@@ -96,5 +96,3 @@ if target:
   scan_website(target)
 else:
   print('❌ Manzil kiritilmadi!')
-
-# Ishlab chiqaruvchi: Blip
