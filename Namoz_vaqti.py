@@ -245,5 +245,3 @@ if __name__ == "__main__":
     print(f"{'=' * 60}")
     input(f"\n  ▶️  Boshlash uchun Enter bosing...")
     menyu()
-
-# Ishlab chiqaruvchi: Blip
