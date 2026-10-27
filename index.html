@@ -1,690 +1,423 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Blip — Login</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#050510;--card:#0f0f22;--card2:#15152d;--text:#e6e6f0;--muted:#8888aa;
-  --acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;
-  --gold:#fbbf24;--red:#ef4444;--grn:#10b981;--pnk:#ec4899;--cyan:#06b6d4
-}
-[data-theme="light"]{
-  --bg:#f5f5fb;--card:#fff;--card2:#f0f0ff;--text:#111827;--muted:#6b7280;--brd:#e5e7eb
-}
-*{transition:background .3s,color .3s,border-color .3s}
-body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;
-  background-image:radial-gradient(circle at 15% 10%,rgba(99,102,241,.15),transparent 40%),radial-gradient(circle at 85% 90%,rgba(168,85,247,.15),transparent 40%);
-  background-attachment:fixed}
-.container{max-width:900px;margin:auto;padding:20px}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#050510">
+    <title>Blip | Portal</title>
+    <style>
+        :root {
+            --bg: #050510;
+            --card: rgba(20, 20, 40, 0.6);
+            --acc1: #6366f1;
+            --acc2: #a855f7;
+            --acc3: #ec4899;
+            --text: #f8fafc;
+            --muted: #8888aa;
+            --err: #ef4444;
+            --grn: #10b981;
+            --brd: rgba(255, 255, 255, 0.08);
+        }
 
-/* NAV */
-nav{display:flex;justify-content:space-between;align-items:center;padding:14px 0;position:sticky;top:0;background:var(--bg);z-index:10;border-bottom:1px solid var(--brd);gap:8px;flex-wrap:wrap}
-.logo{font-weight:800;font-size:18px;background:linear-gradient(90deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-right{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.lang-switch{display:flex;gap:3px;background:var(--card);padding:4px;border-radius:10px;border:1px solid var(--brd)}
-.lang-btn{padding:5px 9px;border:none;border-radius:7px;cursor:pointer;background:transparent;color:var(--muted);font-weight:700;font-size:11px;transition:all .2s;font-family:inherit}
-.lang-btn:hover{color:var(--text)}
-.lang-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
-.theme-btn{background:var(--card);border:1px solid var(--brd);color:var(--text);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:14px}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-/* SCREENS */
-.screen{display:none}
-.screen.on{display:block;animation:fade .4s}
-@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.25), transparent 40%);
+            background-attachment: fixed;
+            overflow: hidden;
+        }
 
-/* LOGIN */
-.login-wrap{min-height:80vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.login-box{background:var(--card);border:1px solid var(--brd);border-radius:20px;padding:32px 24px;width:100%;max-width:380px;
-  animation:pulseBox 4s ease-in-out infinite}
-@keyframes pulseBox{0%,100%{box-shadow:0 20px 60px rgba(99,102,241,.3)}50%{box-shadow:0 20px 80px rgba(168,85,247,.5)}}
-.login-logo{text-align:center;font-size:52px;margin-bottom:12px;animation:float 3s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.login-box h1{text-align:center;font-size:24px;font-weight:900;margin-bottom:6px;
-  background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899);background-size:200% 200%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 4s infinite}
-@keyframes grad{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
-.login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:20px}
-.tab-login{display:flex;gap:4px;background:var(--bg);padding:4px;border-radius:10px;margin-bottom:18px;border:1px solid var(--brd)}
-.tab-login button{flex:1;padding:9px;border:none;border-radius:8px;cursor:pointer;background:transparent;color:var(--muted);font-weight:700;font-size:13px;font-family:inherit}
-.tab-login button.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff}
-.lbl{display:block;font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.inp{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--brd);background:var(--bg);color:var(--text);font-size:15px;outline:none;margin-bottom:14px;font-family:inherit}
-.inp:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(99,102,241,.15)}
-.btn{padding:12px 20px;border:none;border-radius:10px;cursor:pointer;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:700;font-size:14px;transition:all .25s;font-family:inherit}
-.btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(99,102,241,.4)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-full{width:100%}
-.btn-sec{background:var(--card);border:1px solid var(--brd);color:var(--text)}
-.btn-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a1a1a}
-.btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
-.btn-row .btn{flex:1;min-width:120px}
-.msg{padding:10px;border-radius:10px;font-size:13px;text-align:center;margin-bottom:14px;display:none}
-.msg.err{background:rgba(239,68,68,.15);border:1px solid var(--red);color:var(--red)}
-.msg.ok{background:rgba(16,185,129,.15);border:1px solid var(--grn);color:var(--grn)}
-.msg.on{display:block}
-.hint{text-align:center;font-size:11px;color:var(--muted);margin-top:16px;padding-top:14px;border-top:1px solid var(--brd)}
+        /* Fon animatsiyasi */
+        .orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 8s ease-in-out infinite;
+            z-index: -1;
+        }
+        .orb-1 { background: var(--acc1); top: -100px; left: -100px; }
+        .orb-2 { background: var(--acc3); bottom: -100px; right: -100px; animation-delay: 2s; }
 
-/* HERO */
-header{text-align:center;padding:50px 20px 40px}
-.avatar{width:120px;height:120px;border-radius:50%;margin:0 auto 20px;background:linear-gradient(135deg,var(--acc),var(--acc2),var(--pnk));display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:900;color:#fff;box-shadow:0 0 60px rgba(99,102,241,.5);animation:float 3s ease-in-out infinite}
-h1{font-size:52px;font-weight:900;background:linear-gradient(90deg,#6366f1,#a855f7,#ec4899,#f59e0b,#6366f1);background-size:400% 400%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:grad 6s ease infinite}
-.subtitle{color:var(--muted);font-size:16px;margin-top:10px}
-.badges{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.badge{font-size:12px;padding:6px 14px;border-radius:999px;background:var(--card);border:1px solid var(--brd);color:var(--muted)}
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(30px, -30px) scale(1.1); }
+        }
 
-/* SECTIONS */
-section{padding:36px 0}
-h2{font-size:26px;margin-bottom:20px;text-align:center;font-weight:800}
-.about{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:24px;font-size:15px;line-height:1.8}
-.about-row{display:flex;gap:10px;margin:8px 0;flex-wrap:wrap}
-.about-row b{color:var(--acc);min-width:120px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
-.project{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:20px;text-decoration:none;color:var(--text);transition:all .3s;display:block;position:relative;overflow:hidden}
-.project:hover{transform:translateY(-6px);border-color:var(--acc);box-shadow:0 16px 32px rgba(99,102,241,.3)}
-.project-ico{font-size:36px;display:block;margin-bottom:10px}
-.project h3{font-size:16px;margin-bottom:6px}
-.project p{font-size:12px;color:var(--muted);line-height:1.5}
-.project .tag{display:inline-block;margin-top:10px;font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(99,102,241,.2);color:var(--acc);border:1px solid var(--acc)}
-.project.hot .tag{background:rgba(16,185,129,.2);color:var(--grn);border-color:var(--grn)}
-.project.voice .tag{background:rgba(6,182,212,.2);color:var(--cyan);border-color:var(--cyan)}
+        /* --- LOGIN KARTOCHKASI --- */
+        .login-container {
+            width: 100%;
+            max-width: 380px;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--brd);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.6s ease;
+        }
 
-/* ADMIN */
-.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
-.stat-card{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:16px;text-align:center}
-.stat-num{font-size:28px;font-weight:900;background:linear-gradient(90deg,#fbbf24,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.stat-lbl{font-size:10px;color:var(--muted);margin-top:4px;font-weight:600;letter-spacing:1px}
-.sec-title{font-size:14px;color:var(--muted);margin:20px 0 12px;letter-spacing:1px;font-weight:700;display:flex;align-items:center;gap:8px}
-.sec-title::before{content:'';width:4px;height:16px;background:linear-gradient(180deg,var(--gold),var(--acc));border-radius:2px}
-.user-item{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:12px 14px;margin-bottom:8px}
-.user-item.admin{border-color:var(--gold);background:linear-gradient(135deg,rgba(251,191,36,.08),transparent)}
-.user-item.online{border-left:3px solid var(--grn)}
-.user-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.user-name{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.badge-admin{color:var(--gold);font-size:10px;padding:2px 8px;background:rgba(251,191,36,.15);border:1px solid var(--gold);border-radius:999px;font-weight:700}
-.badge-id{color:var(--acc);font-size:10px;padding:2px 8px;background:rgba(99,102,241,.15);border:1px solid var(--acc);border-radius:999px;font-weight:700}
-.badge-online{color:var(--grn);font-size:10px;padding:2px 8px;background:rgba(16,185,129,.15);border:1px solid var(--grn);border-radius:999px;font-weight:700;animation:blink 2s infinite}
-.badge-offline{color:var(--muted);font-size:10px;padding:2px 8px;background:rgba(136,136,170,.15);border:1px solid var(--muted);border-radius:999px}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
-.user-meta{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:var(--muted);margin-bottom:8px}
-.user-actions{display:flex;gap:6px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--brd)}
-.btn-mini{background:transparent;border:1px solid var(--brd);color:var(--muted);padding:5px 10px;border-radius:8px;cursor:pointer;font-size:10px;font-weight:600}
-.btn-mini:hover{border-color:var(--acc);color:var(--acc)}
-.activity-list{max-height:300px;overflow-y:auto;background:var(--bg);border-radius:10px;padding:10px}
-.act-item{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--brd);font-size:11px}
-.act-time{color:var(--cyan);font-weight:700;min-width:55px}
-.act-text{flex:1}
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* CHAT */
-.chat-list-item{background:var(--card);border:1px solid var(--brd);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:all .25s}
-.chat-list-item:hover{border-color:var(--acc)}
-.chat-name{font-weight:700;font-size:14px;margin-bottom:4px}
-.chat-preview{font-size:11px;color:var(--muted)}
-.chat-box{background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:14px}
-.chat-msgs{height:340px;overflow-y:auto;padding:8px}
-.chat-msgs p{margin:6px 0;padding:8px 12px;border-radius:10px;max-width:85%;word-wrap:break-word;font-size:13px}
-.chat-msgs .me{background:var(--acc);color:#fff;margin-left:auto}
-.chat-msgs .other{background:var(--bg);border:1px solid var(--brd)}
-.chat-row{display:flex;gap:8px;margin-top:8px}
-.chat-row input{flex:1;padding:12px;border-radius:10px;border:1px solid var(--brd);background:var(--bg);color:var(--text);outline:none}
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, var(--acc1), var(--acc2));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
 
-.footer{text-align:center;padding:30px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--brd);margin-top:30px}
-.footer a{color:var(--acc);text-decoration:none}
-@media(max-width:600px){h1{font-size:34px}.avatar{width:90px;height:90px;font-size:42px}header{padding:40px 16px 30px}h2{font-size:20px}.user-meta{grid-template-columns:1fr}}
-</style>
+        h1 {
+            font-size: 26px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--acc1), var(--acc2), var(--acc3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 30px;
+        }
+
+        /* --- INPUT --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 45px 16px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--brd);
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--text);
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--acc1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .input-group input::placeholder {
+            color: var(--muted);
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 5px;
+        }
+
+        /* --- TUGMA --- */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(90deg, var(--acc1), var(--acc2));
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 8px;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* --- XATO XABARI --- */
+        .error-msg {
+            color: var(--err);
+            font-size: 13px;
+            margin-top: 14px;
+            padding: 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            display: none;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* --- AJRATGICH --- */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0 15px;
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--brd);
+        }
+
+        .divider span {
+            padding: 0 12px;
+        }
+
+        /* --- AI TUGMASI --- */
+        .ai-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--brd);
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .ai-btn:hover {
+            background: rgba(168, 85, 247, 0.1);
+            border-color: var(--acc2);
+        }
+
+        /* --- FOOTER --- */
+        .footer-text {
+            margin-top: 25px;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        /* Yuklanish spinner */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
 
-<nav>
-  <div class="logo">⚡ Blip</div>
-  <div class="nav-right">
-    <div class="lang-switch">
-      <button class="lang-btn on" id="langUZ" onclick="setLang('uz')">🇺🇿</button>
-      <button class="lang-btn" id="langRU" onclick="setLang('ru')">🇷🇺</button>
-      <button class="lang-btn" id="langEN" onclick="setLang('en')">🇬🇧</button>
-      <button class="lang-btn" id="langTJ" onclick="setLang('tj')">🇹🇯</button>
+    <!-- Fon orblari -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="login-container">
+        <div class="logo-icon">🌌</div>
+        <h1>Blip Portal</h1>
+        <p class="subtitle">Xavfsiz kirish tizimi</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="password" id="passInput" placeholder="Maxfiy parolni kiriting..." required autocomplete="off">
+                <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePassword()">👁</button>
+            </div>
+
+            <button type="submit" class="btn" id="loginBtn">Kirish</button>
+
+            <div class="error-msg" id="errMsg"></div>
+        </form>
+
+        <div class="divider"><span>yoki</span></div>
+
+        <a href="ai_login.html" class="ai-btn">
+            🤖 Sun'iy Intellekt sifatida kirish
+        </a>
+
+        <p class="footer-text">© 2026 Dasturchi-top-1 · Blip</p>
     </div>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-  </div>
-</nav>
 
-<!-- LOGIN SCREEN -->
-<div class="screen on" id="loginScreen">
-  <div class="login-wrap">
-    <div class="login-box">
-      <div class="login-logo">🏛</div>
-      <h1 id="loginTitle">Blip AI</h1>
-      <p class="login-sub" id="loginSub">Kirish</p>
-      <div class="tab-login">
-        <button class="on" id="tabLogin" onclick="setMode('login')">🔐 Kirish</button>
-        <button id="tabReg" onclick="setMode('register')">📝 Ro'yxat</button>
-      </div>
-      <div class="msg" id="msg"></div>
-      <label class="lbl" id="lblName">👤 Ism</label>
-      <input class="inp" type="text" id="inpName" placeholder="ism" autocomplete="off">
-      <label class="lbl" id="lblPass">🔒 Parol</label>
-      <input class="inp" type="password" id="inpPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doSubmit()">
-      <button class="btn btn-full" id="btnMain" onclick="doSubmit()">🚀 Kirish</button>
-      <div class="hint" id="loginHint">30 kun eslab qoladi</div>
-    </div>
-  </div>
-</div>
+    <script>
+        // ============================================================
+        // SOZLAMALAR
+        // ============================================================
+        const API_URL = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
 
-<!-- MAIN SCREEN -->
-<div class="screen" id="mainScreen">
-  <div class="btn-row" style="margin-bottom:14px">
-    <button class="btn btn-sec" id="btnProfile" onclick="showProfile()">👤 Profil</button>
-    <button class="btn btn-sec" id="btnChats" onclick="showChats()">💬 Chat</button>
-    <button class="btn btn-gold" id="btnAdmin" onclick="showAdmin()" style="display:none">👑 Admin</button>
-    <button class="btn btn-sec" id="btnLogout" onclick="doLogout()" style="background:rgba(239,68,68,.15);border-color:var(--red);color:var(--red)">🚪</button>
-  </div>
+        // ============================================================
+        // PAROLNI KO'RSATISH / YASHIRISH
+        // ============================================================
+        function togglePassword() {
+            const input = document.getElementById('passInput');
+            const btn = document.getElementById('eyeBtn');
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerText = '🙈';
+            } else {
+                input.type = 'password';
+                btn.innerText = '👁';
+            }
+        }
 
-  <div id="content"></div>
+        // ============================================================
+        // LOGIN FORMASI
+        // ============================================================
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-  <div class="footer">⚡ <b>Blip AI</b> · 2026 · Tojikiston 🇹🇯</div>
-</div>
+            const btn = document.getElementById('loginBtn');
+            const pass = document.getElementById('passInput').value;
+            const errMsg = document.getElementById('errMsg');
 
-  </div>
-  <script>
-// ============================================================
-// 🌐 TILLAR
-// ============================================================
-const T = {
-  uz: {
-    loginTitle:"Blip AI", loginSub:"Kirish",
-    tabLogin:"🔐 Kirish", tabReg:"📝 Ro'yxat",
-    lblName:"👤 Ism", lblPass:"🔒 Parol",
-    btnLogin:"🚀 Kirish", btnReg:"📝 Ro'yxatdan o't",
-    hint:"30 kun eslab qoladi",
-    errName:"❌ Ism kamida 2 belgi!", errPass:"❌ Parol kamida 4 belgi!",
-    errBoth:"❌ Barcha maydonlarni to'ldiring!",
-    welcome:"Salom", goodbye:"Chiqdingiz!",
-    profile:"👤 Profil", chats:"💬 Chat", admin:"👑 Admin", logout:"🚪",
-    myProfile:"Mening profilim", myChats:"Suhbatlarim",
-    name:"Ism", id:"ID", rol:"Rol", joined:"Qo'shildi", visits:"Tashrif",
-    user:"Foydalanuvchi", administrator:"Administrator",
-    noChats:"Hozircha suhbat yo'q", findUser:"🔍 ID orqali topish",
-    findPh:"ID (1001)", find:"Topish", send:"Yubor", writeMsg:"Xabar yoz...",
-    back:"← Orqaga", online:"🟢 Onlayn", offline:"⚫ Oflayn",
-    stats:"Statistika", users:"Foydalanuvchilar", totalUsers:"Jami",
-    onlineNow:"Onlayn", last24:"24 soatda", activity:"Faollik jurnali",
-    noActivity:"Faollik yo'q", adminPanel:"👑 Admin Panel"
-  },
-  ru: {
-    loginTitle:"Blip AI", loginSub:"Вход",
-    tabLogin:"🔐 Вход", tabReg:"📝 Регистрация",
-    lblName:"👤 Имя", lblPass:"🔒 Пароль",
-    btnLogin:"🚀 Войти", btnReg:"📝 Регистрация",
-    hint:"30 дней запоминает",
-    errName:"❌ Имя мин. 2 символа!", errPass:"❌ Пароль мин. 4 символа!",
-    errBoth:"❌ Заполните все поля!",
-    welcome:"Привет", goodbye:"Вы вышли!",
-    profile:"👤 Профиль", chats:"💬 Чат", admin:"👑 Админ", logout:"🚪",
-    myProfile:"Мой профиль", myChats:"Мои чаты",
-    name:"Имя", id:"ID", rol:"Роль", joined:"Присоединился", visits:"Визиты",
-    user:"Пользователь", administrator:"Администратор",
-    noChats:"Пока нет чатов", findUser:"🔍 Найти по ID",
-    findPh:"ID (1001)", find:"Найти", send:"Отправить", writeMsg:"Написать...",
-    back:"← Назад", online:"🟢 Онлайн", offline:"⚫ Оффлайн",
-    stats:"Статистика", users:"Пользователи", totalUsers:"Всего",
-    onlineNow:"Онлайн", last24:"24 часа", activity:"Журнал активности",
-    noActivity:"Активности нет", adminPanel:"👑 Админ Панель"
-  },
-  en: {
-    loginTitle:"Blip AI", loginSub:"Login",
-    tabLogin:"🔐 Login", tabReg:"📝 Register",
-    lblName:"👤 Name", lblPass:"🔒 Password",
-    btnLogin:"🚀 Login", btnReg:"📝 Register",
-    hint:"Remembers 30 days",
-    errName:"❌ Name min 2 chars!", errPass:"❌ Password min 4 chars!",
-    errBoth:"❌ Fill all fields!",
-    welcome:"Hello", goodbye:"Logged out!",
-    profile:"👤 Profile", chats:"💬 Chat", admin:"👑 Admin", logout:"🚪",
-    myProfile:"My Profile", myChats:"My Chats",
-    name:"Name", id:"ID", rol:"Role", joined:"Joined", visits:"Visits",
-    user:"User", administrator:"Administrator",
-    noChats:"No chats yet", findUser:"🔍 Find by ID",
-    findPh:"ID (1001)", find:"Find", send:"Send", writeMsg:"Write...",
-    back:"← Back", online:"🟢 Online", offline:"⚫ Offline",
-    stats:"Stats", users:"Users", totalUsers:"Total",
-    onlineNow:"Online", last24:"24h", activity:"Activity log",
-    noActivity:"No activity", adminPanel:"👑 Admin Panel"
-  },
-  tj: {
-    loginTitle:"Blip AI", loginSub:"Даромад",
-    tabLogin:"🔐 Даромад", tabReg:"📝 Бақайдгирӣ",
-    lblName:"👤 Ном", lblPass:"🔒 Рамз",
-    btnLogin:"🚀 Даромад", btnReg:"📝 Бақайдгирӣ",
-    hint:"30 рӯз дар хотир",
-    errName:"❌ Ном ҳадди ақал 2 ҳарф!", errPass:"❌ Рамз ҳадди ақал 4 ҳарф!",
-    errBoth:"❌ Ҳамаи майдонҳоро пур кунед!",
-    welcome:"Салом", goodbye:"Баромад!",
-    profile:"👤 Профил", chats:"💬 Чат", admin:"👑 Админ", logout:"🚪",
-    myProfile:"Профили ман", myChats:"Чатҳои ман",
-    name:"Ном", id:"ID", rol:"Нақш", joined:"Ҳамроҳ шуд", visits:"Боздидҳо",
-    user:"Корбар", administrator:"Администратор",
-    noChats:"Ҳоло чат нест", findUser:"🔍 Бо ID ҷустуҷӯ",
-    findPh:"ID (1001)", find:"Ҷустуҷӯ", send:"Фиристодан", writeMsg:"Нависед...",
-    back:"← Бозгашт", online:"🟢 Онлайн", offline:"⚫ Офлайн",
-    stats:"Омор", users:"Корбарон", totalUsers:"Ҳамагӣ",
-    onlineNow:"Онлайн", last24:"24 соат", activity:"Журнали фаъолият",
-    noActivity:"Фаъолият нест", adminPanel:"👑 Панели Админ"
-  }
-};
+            if (!pass) {
+                showError("Parolni kiriting!");
+                return;
+            }
 
-const API = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
-let LANG = localStorage.getItem('blip_lang') || 'uz';
-let TOKEN = localStorage.getItem('blip_token') || '';
-let USER = JSON.parse(localStorage.getItem('blip_user') || 'null');
-let mode = "login";
-let currentChat = null;
+            // Yuklanish holati
+            btn.innerHTML = '<span class="spinner"></span>Tekshirilmoqda...';
+            btn.disabled = true;
+            errMsg.style.display = 'none';
 
-// ============================================================
-// 🌐 TIL
-// ============================================================
-function setLang(l){
-  LANG = l;
-  localStorage.setItem('blip_lang', l);
-  applyLang();
-}
+            try {
+                const res = await fetch(`${API_URL}/api/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass })
+                });
 
-function applyLang(){
-  const t = T[LANG];
-  ['uz','ru','en','tj'].forEach(l=>{
-    const btn = document.getElementById('lang'+l.toUpperCase());
-    if(btn) btn.classList.toggle('on', l === LANG);
-  });
-  document.getElementById('loginTitle').textContent = t.loginTitle;
-  document.getElementById('loginSub').textContent = t.loginSub;
-  document.getElementById('tabLogin').textContent = t.tabLogin;
-  document.getElementById('tabReg').textContent = t.tabReg;
-  document.getElementById('lblName').textContent = t.lblName;
-  document.getElementById('lblPass').textContent = t.lblPass;
-  document.getElementById('btnMain').textContent = mode === 'login' ? t.btnLogin : t.btnReg;
-  document.getElementById('loginHint').textContent = t.hint;
-  document.getElementById('btnProfile').textContent = t.profile;
-  document.getElementById('btnChats').textContent = t.chats;
-  document.getElementById('btnAdmin').textContent = t.admin;
-  document.getElementById('btnLogout').textContent = t.logout;
-}
+                const data = await res.json();
 
-// ============================================================
-// 🎨 MAVZU
-// ============================================================
-function toggleTheme(){
-  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
-  const nxt = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', nxt);
-  document.getElementById('themeBtn').textContent = nxt === 'dark' ? '🌙' : '☀️';
-  localStorage.setItem('blip_theme', nxt);
-}
+                if (data.success) {
+                    // Tokenni xotiraga saqlash
+                    localStorage.setItem('blip_token', data.token);
+                    localStorage.setItem('blip_role', 'human');
+                    localStorage.setItem('blip_login_time', Date.now().toString());
 
-// ============================================================
-// 📨 XABAR
-// ============================================================
-function showMsg(text, type){
-  const m = document.getElementById('msg');
-  m.textContent = text;
-  m.className = 'msg ' + type + ' on';
-  setTimeout(()=>m.classList.remove('on'), 3500);
-}
+                    // Muvaffaqiyat! Multiverse-ga o'tish
+                    btn.innerHTML = '✅ Muvaffaqiyat!';
+                    setTimeout(() => {
+                        window.location.href = data.redirect || 'multiverse.html';
+                    }, 400);
+                } else {
+                    showError(data.error || "Kirish rad etildi");
+                    resetButton(btn);
+                }
+            } catch (err) {
+                showError("Server bilan aloqa yo'q. Internetni tekshiring.");
+                resetButton(btn);
+            }
+        });
 
-// ============================================================
-// 🔄 MODE
-// ============================================================
-function setMode(m){
-  mode = m;
-  document.getElementById('tabLogin').classList.toggle('on', m === 'login');
-  document.getElementById('tabReg').classList.toggle('on', m === 'register');
-  applyLang();
-  document.getElementById('msg').classList.remove('on');
-  document.getElementById('inpPass').value = '';
-}
+        // ============================================================
+        // YORDAMCHI FUNKSIYALAR
+        // ============================================================
+        function showError(text) {
+            const errMsg = document.getElementById('errMsg');
+            errMsg.innerText = "⚠️ " + text;
+            errMsg.style.display = 'block';
+        }
 
-// ============================================================
-// 🚀 AUTH
-// ============================================================
-async function doSubmit(){
-  const t = T[LANG];
-  const name = document.getElementById('inpName').value.trim();
-  const pass = document.getElementById('inpPass').value.trim();
+        function resetButton(btn) {
+            btn.innerHTML = 'Kirish';
+            btn.disabled = false;
+            document.getElementById('passInput').value = '';
+            document.getElementById('passInput').focus();
+        }
 
-  if(!name || !pass){ showMsg(t.errBoth, 'err'); return; }
-  if(name.length < 2){ showMsg(t.errName, 'err'); return; }
-  if(pass.length < 4){ showMsg(t.errPass, 'err'); return; }
+        // ============================================================
+        // SAHIFA YUKLANGANDA
+        // ============================================================
+        window.addEventListener('DOMContentLoaded', () => {
+            // Agar allaqachon token bo'lsa — tekshiramiz
+            const existingToken = localStorage.getItem('blip_token');
+            if (existingToken) {
+                verifyAndRedirect(existingToken);
+            }
+            document.getElementById('passInput').focus();
+        });
 
-  const btn = document.getElementById('btnMain');
-  btn.disabled = true;
-  btn.textContent = '⏳...';
-
-  try{
-    const endpoint = mode === 'login' ? '/login' : '/register';
-    const r = await fetch(API + endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, pass })
-    });
-    const d = await r.json();
-
-    if(d.error){ showMsg('❌ ' + d.error, 'err'); return; }
-
-    TOKEN = d.token;
-    USER = d.user;
-    localStorage.setItem('blip_token', TOKEN);
-    localStorage.setItem('blip_user', JSON.stringify(USER));
-
-    showMain();
-  }catch(e){
-    showMsg('❌ ' + e.message, 'err');
-  }finally{
-    btn.disabled = false;
-    applyLang();
-  }
-}
-
-async function doLogout(){
-  try{
-    await fetch(API + '/logout', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-  }catch(e){}
-
-  TOKEN = '';
-  USER = null;
-  localStorage.removeItem('blip_token');
-  localStorage.removeItem('blip_user');
-
-  document.getElementById('mainScreen').classList.remove('on');
-  document.getElementById('loginScreen').classList.add('on');
-  document.getElementById('inpName').value = '';
-  document.getElementById('inpPass').value = '';
-}
-
-// ============================================================
-// 👤 ASOSIY SAHIFA
-// ============================================================
-function showMain(){
-  document.getElementById('loginScreen').classList.remove('on');
-  document.getElementById('mainScreen').classList.add('on');
-
-  if(USER && USER.rol === 'admin'){
-    document.getElementById('btnAdmin').style.display = 'block';
-  } else {
-    document.getElementById('btnAdmin').style.display = 'none';
-  }
-  showProfile();
-}
-
-// ============================================================
-// 👤 PROFIL
-// ============================================================
-async function showProfile(){
-  const t = T[LANG];
-  const box = document.getElementById('content');
-  box.innerHTML = '<div class="loading">⏳...</div>';
-
-  try{
-    const r = await fetch(API + '/me', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const u = await r.json();
-    if(u.error){ box.innerHTML = '❌ ' + u.error; return; }
-
-    box.innerHTML =
-      '<h2>' + t.myProfile + '</h2>' +
-      '<div class="about">' +
-        '<div class="about-row"><b>' + t.name + ':</b> ' + esc(u.displayName || u.name) + '</div>' +
-        '<div class="about-row"><b>' + t.id + ':</b> #' + u.id + '</div>' +
-        '<div class="about-row"><b>' + t.rol + ':</b> ' + (u.rol === 'admin' ? '👑 ' + t.administrator : t.user) + '</div>' +
-        '<div class="about-row"><b>' + t.visits + ':</b> ' + (u.visits || 1) + '</div>' +
-        '<div class="about-row"><b>' + t.joined + ':</b> ' + new Date(u.joined).toLocaleDateString() + '</div>' +
-      '</div>' +
-      '<div class="btn-row" style="margin-top:20px">' +
-        '<a class="btn" href="multiverse.html" style="text-decoration:none;text-align:center">🌌 Multiverse</a>' +
-        '<a class="btn btn-sec" href="council.html" style="text-decoration:none;text-align:center">🏛 AI Kengash</a>' +
-      '</div>';
-  }catch(e){
-    box.innerHTML = '❌ ' + e.message;
-  }
-}
-
-// ============================================================
-// 💬 CHATLAR
-// ============================================================
-async function showChats(){
-  const t = T[LANG];
-  const box = document.getElementById('content');
-  box.innerHTML = '<div class="loading">⏳...</div>';
-
-  try{
-    const r = await fetch(API + '/chat/list', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const d = await r.json();
-
-    let html = '<h2>' + t.myChats + '</h2>';
-
-    // ID qidirish
-    html += '<div class="about" style="margin-bottom:14px">' +
-      '<div class="lbl">' + t.findUser + '</div>' +
-      '<div class="chat-row">' +
-        '<input id="findId" placeholder="' + t.findPh + '" type="number">' +
-        '<button class="btn" onclick="findUser()">' + t.find + '</button>' +
-      '</div>' +
-    '</div>';
-
-    if(!d.chats || !d.chats.length){
-      html += '<div class="loading">' + t.noChats + '</div>';
-    } else {
-      d.chats.forEach(c=>{
-        html += '<div class="chat-list-item" onclick="openChat(' + c.withId + ',\'' + esc(c.withName) + '\')">' +
-          '<div class="chat-name">👤 ' + esc(c.withName) + ' <span class="badge-id">#' + c.withId + '</span></div>' +
-          '<div class="chat-preview">' + esc(c.lastMsg.slice(0, 50)) + '</div>' +
-        '</div>';
-      });
-    }
-    box.innerHTML = html;
-  }catch(e){
-    box.innerHTML = '❌ ' + e.message;
-  }
-}
-
-async function findUser(){
-  const t = T[LANG];
-  const id = parseInt(document.getElementById('findId').value);
-  if(!id){ alert(t.findPh); return; }
-
-  try{
-    const r = await fetch(API + '/find?id=' + id, {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const d = await r.json();
-    if(d.error){ alert('❌ ' + d.error); return; }
-    openChat(d.user.id, d.user.displayName || d.user.name);
-  }catch(e){
-    alert('❌ ' + e.message);
-  }
-}
-
-// ============================================================
-// 💬 CHAT OCHISH
-// ============================================================
-async function openChat(withId, withName){
-  const t = T[LANG];
-  currentChat = withId;
-  const box = document.getElementById('content');
-
-  box.innerHTML =
-    '<button class="btn btn-sec" onclick="showChats()" style="margin-bottom:10px">' + t.back + '</button>' +
-    '<h2>👤 ' + esc(withName) + ' <span class="badge-id">#' + withId + '</span></h2>' +
-    '<div class="chat-box">' +
-      '<div class="chat-msgs" id="chatMsgs"></div>' +
-      '<div class="chat-row">' +
-        '<input id="chatInput" placeholder="' + t.writeMsg + '" onkeydown="if(event.key===\'Enter\')sendMsg()">' +
-        '<button class="btn" onclick="sendMsg()">' + t.send + '</button>' +
-      '</div>' +
-    '</div>';
-
-  await loadMessages();
-  setInterval(async ()=>{
-    if(currentChat === withId) await loadMessages();
-  }, 3000);
-}
-
-async function loadMessages(){
-  if(!currentChat) return;
-  try{
-    const r = await fetch(API + '/chat/get?with=' + currentChat, {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const d = await r.json();
-    const box = document.getElementById('chatMsgs');
-    if(!box) return;
-
-    if(!d.messages || !d.messages.length){
-      box.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px">Hozircha xabar yo\'q</div>';
-      return;
-    }
-    box.innerHTML = d.messages.map(m=>{
-      const isMe = m.fromId === USER.id;
-      return '<p class="' + (isMe ? 'me' : 'other') + '">' +
-        '<b>' + esc(m.fromName) + ':</b> ' + esc(m.text) +
-      '</p>';
-    }).join('');
-    box.scrollTop = box.scrollHeight;
-  }catch(e){}
-}
-
-async function sendMsg(){
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if(!text || !currentChat) return;
-  input.value = '';
-
-  try{
-    await fetch(API + '/chat/send', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + TOKEN
-      },
-      body: JSON.stringify({ toId: currentChat, text })
-    });
-    await loadMessages();
-  }catch(e){
-    alert('❌ ' + e.message);
-  }
-}
-
-// ============================================================
-// 👑 ADMIN PANEL
-// ============================================================
-async function showAdmin(){
-  const t = T[LANG];
-  const box = document.getElementById('content');
-  box.innerHTML = '<div class="loading">⏳...</div>';
-
-  try{
-    const [statsR, actR] = await Promise.all([
-      fetch(API + '/admin/stats', { headers: { 'Authorization': 'Bearer ' + TOKEN } }),
-      fetch(API + '/admin/activity', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
-    ]);
-    const stats = await statsR.json();
-    const act = await actR.json();
-
-    if(stats.error){ box.innerHTML = '❌ ' + stats.error; return; }
-
-    let html = '<h2>' + t.adminPanel + '</h2>';
-
-    // Statistika
-    html += '<div class="admin-grid">' +
-      '<div class="stat-card"><div class="stat-num">' + stats.users + '</div><div class="stat-lbl">' + t.totalUsers + '</div></div>' +
-      '<div class="stat-card"><div class="stat-num" style="background:linear-gradient(90deg,#10b981,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + stats.online + '</div><div class="stat-lbl">' + t.onlineNow + '</div></div>' +
-      '<div class="stat-card"><div class="stat-num" style="background:linear-gradient(90deg,#ec4899,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">' + stats.last24h + '</div><div class="stat-lbl">' + t.last24 + '</div></div>' +
-    '</div>';
-
-    // Foydalanuvchilar
-    html += '<div class="sec-title">👥 ' + t.users + '</div>';
-    const sorted = (stats.list || []).sort((a,b)=>(b.lastSeen||0)-(a.lastSeen||0));
-    sorted.forEach(u=>{
-      const isOnline = Date.now() - (u.lastSeen||0) < 5*60*1000;
-      const isAdmin = u.rol === 'admin';
-      html += '<div class="user-item ' + (isAdmin?'admin ':'') + (isOnline?'online':'') + '">' +
-        '<div class="user-head">' +
-          '<div class="user-name">' + esc(u.displayName || u.name) +
-            ' <span class="badge-id">#' + u.id + '</span>' +
-            (isAdmin?'<span class="badge-admin">👑</span>':'') +
-            (isOnline?'<span class="badge-online">' + t.onlineNow + '</span>':'<span class="badge-offline">' + t.offline + '</span>') +
-          '</div>' +
-        '</div>' +
-        '<div class="user-meta">' +
-          '<div>🕐 <b>' + ago(u.lastSeen) + '</b></div>' +
-          '<div>👁 <b>' + (u.visits||1) + '</b></div>' +
-          '<div>📅 <b>' + new Date(u.joined).toLocaleDateString() + '</b></div>' +
-          '<div>🔑 <b>' + u.name + '</b></div>' +
-        '</div>' +
-      '</div>';
-    });
-
-    // Faollik
-    html += '<div class="sec-title">🔥 ' + t.activity + '</div>';
-    html += '<div class="activity-list">';
-    if(!act.activity || !act.activity.length){
-      html += '<div style="text-align:center;color:var(--muted);padding:20px;font-size:12px">' + t.noActivity + '</div>';
-    } else {
-      act.activity.slice(-50).reverse().forEach(a=>{
-        const icons = { login:'🔓', logout:'🔒', register:'📝', chat:'💬' };
-        html += '<div class="act-item">' +
-          '<span class="act-time">' + new Date(a.time).toLocaleTimeString('uz-UZ',{hour:'2-digit',minute:'2-digit'}) + '</span>' +
-          '<span>' + (icons[a.action]||'📌') + '</span>' +
-          '<span class="act-text"><b>' + esc(a.ism) + '</b> — ' + a.action + ' (' + a.page + ')</span>' +
-        '</div>';
-      });
-    }
-    html += '</div>';
-
-    box.innerHTML = html;
-  }catch(e){
-    box.innerHTML = '❌ ' + e.message;
-  }
-}
-
-// ============================================================
-// HELPERS
-// ============================================================
-function esc(s){
-  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function ago(t){
-  if(!t) return '—';
-  const d = Date.now() - t;
-  if(d < 60000) return 'hozir';
-  if(d < 3600000) return Math.floor(d/60000) + ' daq';
-  if(d < 86400000) return Math.floor(d/3600000) + ' soat';
-  return Math.floor(d/86400000) + ' kun';
-}
-
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded', ()=>{
-  const th = localStorage.getItem('blip_theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', th);
-  document.getElementById('themeBtn').textContent = th === 'dark' ? '🌙' : '☀️';
-
-  applyLang();
-
-  if(TOKEN && USER){
-    showMain();
-  }
-});
-</script>
+        async function verifyAndRedirect(token) {
+            try {
+                const res = await fetch(`${API_URL}/api/verify-token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+                const data = await res.json();
+                if (data.valid && data.role === 'human') {
+                    window.location.href = 'multiverse.html';
+                } else {
+                    localStorage.removeItem('blip_token');
+                    localStorage.removeItem('blip_role');
+                }
+            } catch (e) {
+                // Server javob bermasa, login sahifasida qolamiz
+            }
+        }
+    </script>
 </body>
 </html>
-
-<!-- Ishlab chiqaruvchi: Blip -->
