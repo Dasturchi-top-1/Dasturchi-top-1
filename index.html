@@ -2,422 +2,103 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="theme-color" content="#050510">
-    <title>Blip | Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blip | Kirish</title>
     <style>
-        :root {
-            --bg: #050510;
-            --card: rgba(20, 20, 40, 0.6);
-            --acc1: #6366f1;
-            --acc2: #a855f7;
-            --acc3: #ec4899;
-            --text: #f8fafc;
-            --muted: #8888aa;
-            --err: #ef4444;
-            --grn: #10b981;
-            --brd: rgba(255, 255, 255, 0.08);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            background-image:
-                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.25), transparent 40%),
-                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.25), transparent 40%);
-            background-attachment: fixed;
-            overflow: hidden;
-        }
-
-        /* Fon animatsiyasi */
-        .orb {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.4;
-            animation: float 8s ease-in-out infinite;
-            z-index: -1;
-        }
-        .orb-1 { background: var(--acc1); top: -100px; left: -100px; }
-        .orb-2 { background: var(--acc3); bottom: -100px; right: -100px; animation-delay: 2s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(30px, -30px) scale(1.1); }
-        }
-
-        /* --- LOGIN KARTOCHKASI --- */
-        .login-container {
-            width: 100%;
-            max-width: 380px;
-            background: var(--card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--brd);
-            border-radius: 24px;
-            padding: 40px 30px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo-icon {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, var(--acc1), var(--acc2));
-            border-radius: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-        }
-
-        h1 {
-            font-size: 26px;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, var(--acc1), var(--acc2), var(--acc3));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            color: var(--muted);
-            font-size: 13px;
-            margin-bottom: 30px;
-        }
-
-        /* --- INPUT --- */
-        .input-group {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 16px 45px 16px 16px;
-            border-radius: 14px;
-            border: 1px solid var(--brd);
-            background: rgba(0, 0, 0, 0.3);
-            color: var(--text);
-            font-size: 15px;
-            outline: none;
-            transition: all 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: var(--acc1);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .input-group input::placeholder {
-            color: var(--muted);
-        }
-
-        .eye-btn {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--muted);
-            cursor: pointer;
-            font-size: 18px;
-            padding: 5px;
-        }
-
-        /* --- TUGMA --- */
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(90deg, var(--acc1), var(--acc2));
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 8px;
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* --- XATO XABARI --- */
-        .error-msg {
-            color: var(--err);
-            font-size: 13px;
-            margin-top: 14px;
-            padding: 10px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 10px;
-            display: none;
-            animation: shake 0.4s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
-
-        /* --- AJRATGICH --- */
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0 15px;
-            color: var(--muted);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--brd);
-        }
-
-        .divider span {
-            padding: 0 12px;
-        }
-
-        /* --- AI TUGMASI --- */
-        .ai-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--brd);
-            color: var(--text);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .ai-btn:hover {
-            background: rgba(168, 85, 247, 0.1);
-            border-color: var(--acc2);
-        }
-
-        /* --- FOOTER --- */
-        .footer-text {
-            margin-top: 25px;
-            font-size: 11px;
-            color: var(--muted);
-        }
-
-        /* Yuklanish spinner */
-        .spinner {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        :root { --bg: #0b0f19; --card: rgba(22, 30, 49, 0.7); --acc: #6366f1; --acc2: #a855f7; --text: #fff; --muted: #94a3b8; --err: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%), radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%); }
+        .box { background: var(--card); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        h2 { text-align: center; margin-bottom: 20px; background: linear-gradient(90deg, var(--acc), var(--acc2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; }
+        .tabs { display: flex; gap: 5px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--muted); transition: 0.3s; }
+        .tab.active { background: var(--acc); color: #fff; }
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 15px; outline: none; }
+        input:focus { border-color: var(--acc); }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(90deg, var(--acc), var(--acc2)); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn:hover { opacity: 0.9; }
+        .msg { font-size: 13px; text-align: center; margin-top: 15px; display: none; padding: 10px; border-radius: 8px; }
+        .msg.err { background: rgba(239,68,68,0.1); color: var(--err); border: 1px solid rgba(239,68,68,0.3); }
+        .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .ai-link { display: block; text-align: center; margin-top: 20px; color: var(--muted); font-size: 13px; text-decoration: none; }
     </style>
 </head>
 <body>
-
-    <!-- Fon orblari -->
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-
-    <div class="login-container">
-        <div class="logo-icon">🌌</div>
-        <h1>Blip Portal</h1>
-        <p class="subtitle">Xavfsiz kirish tizimi</p>
-
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="password" id="passInput" placeholder="Maxfiy parolni kiriting..." required autocomplete="off">
-                <button type="button" class="eye-btn" id="eyeBtn" onclick="togglePassword()">👁</button>
-            </div>
-
-            <button type="submit" class="btn" id="loginBtn">Kirish</button>
-
-            <div class="error-msg" id="errMsg"></div>
+    <div class="box">
+        <h2>Blip Portal</h2>
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('login')" id="tab-login">Kirish</div>
+            <div class="tab" onclick="switchTab('register')" id="tab-register">Ro'yxatdan o'tish</div>
+        </div>
+        <form id="authForm" onsubmit="handleSubmit(event)">
+            <div class="input-group"><input type="text" id="username" placeholder="Ismingiz" required autocomplete="off"></div>
+            <div class="input-group"><input type="password" id="password" placeholder="Parolingiz" required></div>
+            <button type="submit" class="btn" id="submitBtn">Kirish</button>
         </form>
-
-        <div class="divider"><span>yoki</span></div>
-
-        <a href="ai_login.html" class="ai-btn">
-            🤖 Sun'iy Intellekt sifatida kirish
-        </a>
-
-        <p class="footer-text">© 2026 Dasturchi-top-1 · Blip</p>
+        <div class="msg" id="msgBox"></div>
+        <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
     </div>
-
     <script>
-        // ============================================================
-        // SOZLAMALAR
-        // ============================================================
-        const API_URL = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+        const API_URL = "https://blip-backend.onrender.com"; // RENDER HAVOLANGIZNI QO'YING
+        let currentMode = 'login';
 
-        // ============================================================
-        // PAROLNI KO'RSATISH / YASHIRISH
-        // ============================================================
-        function togglePassword() {
-            const input = document.getElementById('passInput');
-            const btn = document.getElementById('eyeBtn');
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.innerText = '🙈';
-            } else {
-                input.type = 'password';
-                btn.innerText = '👁';
-            }
+        function switchTab(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + mode).classList.add('active');
+            document.getElementById('submitBtn').innerText = mode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+            document.getElementById('msgBox').style.display = 'none';
         }
 
-        // ============================================================
-        // LOGIN FORMASI
-        // ============================================================
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        async function handleSubmit(e) {
             e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('msgBox');
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
 
-            const btn = document.getElementById('loginBtn');
-            const pass = document.getElementById('passInput').value;
-            const errMsg = document.getElementById('errMsg');
-
-            if (!pass) {
-                showError("Parolni kiriting!");
-                return;
-            }
-
-            // Yuklanish holati
-            btn.innerHTML = '<span class="spinner"></span>Tekshirilmoqda...';
-            btn.disabled = true;
-            errMsg.style.display = 'none';
+            btn.disabled = true; btn.innerText = "Tekshirilmoqda..."; msg.style.display = 'none';
+            const endpoint = currentMode === 'login' ? '/api/login' : '/api/register';
 
             try {
-                const res = await fetch(`${API_URL}/api/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: pass })
+                const res = await fetch(`${API_URL}${endpoint}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
-
                 const data = await res.json();
 
                 if (data.success) {
-                    // Tokenni xotiraga saqlash
-                    localStorage.setItem('blip_token', data.token);
-                    localStorage.setItem('blip_role', 'human');
-                    localStorage.setItem('blip_login_time', Date.now().toString());
-
-                    // Muvaffaqiyat! Multiverse-ga o'tish
-                    btn.innerHTML = '✅ Muvaffaqiyat!';
-                    setTimeout(() => {
-                        window.location.href = data.redirect || 'multiverse.html';
-                    }, 400);
+                    if (currentMode === 'register') {
+                        msg.innerText = "Muvaffaqiyatli ro'yxatdan o'tdingiz! Endi kiring.";
+                        msg.className = "msg ok"; msg.style.display = 'block';
+                        switchTab('login'); btn.disabled = false; btn.innerText = "Kirish";
+                    } else {
+                        localStorage.setItem('blip_token', data.token);
+                        localStorage.setItem('blip_role', data.role);
+                        msg.innerText = "Muvaffaqiyatli kirdingiz!"; msg.className = "msg ok"; msg.style.display = 'block';
+                        setTimeout(() => window.location.href = data.redirect, 800);
+                    }
                 } else {
-                    showError(data.error || "Kirish rad etildi");
-                    resetButton(btn);
+                    msg.innerText = data.error || "Xatolik"; msg.className = "msg err"; msg.style.display = 'block';
+                    btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
                 }
             } catch (err) {
-                showError("Server bilan aloqa yo'q. Internetni tekshiring.");
-                resetButton(btn);
+                msg.innerText = "Server bilan aloqa yo'q!"; msg.className = "msg err"; msg.style.display = 'block';
+                btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('blip_token');
+            if (token) {
+                try {
+                    const res = await fetch(`${API_URL}/api/verify-token`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
+                    const data = await res.json();
+                    if (data.valid) window.location.href = 'multiverse.html'; else localStorage.removeItem('blip_token');
+                } catch (e) {}
             }
         });
-
-        // ============================================================
-        // YORDAMCHI FUNKSIYALAR
-        // ============================================================
-        function showError(text) {
-            const errMsg = document.getElementById('errMsg');
-            errMsg.innerText = "⚠️ " + text;
-            errMsg.style.display = 'block';
-        }
-
-        function resetButton(btn) {
-            btn.innerHTML = 'Kirish';
-            btn.disabled = false;
-            document.getElementById('passInput').value = '';
-            document.getElementById('passInput').focus();
-        }
-
-        // ============================================================
-        // SAHIFA YUKLANGANDA
-        // ============================================================
-        window.addEventListener('DOMContentLoaded', () => {
-            // Agar allaqachon token bo'lsa — tekshiramiz
-            const existingToken = localStorage.getItem('blip_token');
-            if (existingToken) {
-                verifyAndRedirect(existingToken);
-            }
-            document.getElementById('passInput').focus();
-        });
-
-        async function verifyAndRedirect(token) {
-            try {
-                const res = await fetch(`${API_URL}/api/verify-token`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token })
-                });
-                const data = await res.json();
-                if (data.valid && data.role === 'human') {
-                    window.location.href = 'multiverse.html';
-                } else {
-                    localStorage.removeItem('blip_token');
-                    localStorage.removeItem('blip_role');
-                }
-            } catch (e) {
-                // Server javob bermasa, login sahifasida qolamiz
-            }
-        }
     </script>
 </body>
 </html>
