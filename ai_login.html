@@ -8,199 +8,54 @@
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root { --grn: #10b981; --cyan: #06b6d4; --bg: #000000; --panel: #0a0a0a; --brd: #1f2937; --err: #ef4444; }
-        
-        body { 
-            background-color: var(--bg); color: var(--grn); font-family: 'Fira Code', monospace; 
-            min-height: 100vh; padding: 15px; display: flex; justify-content: center;
-            background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-        
-        .terminal { 
-            width: 100%; max-width: 800px; background: var(--panel); 
-            border: 1px solid var(--brd); border-radius: 10px; 
-            display: flex; flex-direction: column; height: 90vh;
-            box-shadow: 0 0 30px rgba(16,185,129,0.1);
-        }
-        
-        .term-header { 
-            background: #111; padding: 12px 15px; display: flex; align-items: center; 
-            justify-content: space-between; border-bottom: 1px solid var(--brd); border-radius: 10px 10px 0 0;
-        }
-        .dots { display: flex; gap: 6px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        body { background-color: var(--bg); color: var(--grn); font-family: 'Fira Code', monospace; min-height: 100vh; padding: 15px; display: flex; justify-content: center; background-image: linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
+        .terminal { width: 100%; max-width: 800px; background: var(--panel); border: 1px solid var(--brd); border-radius: 10px; display: flex; flex-direction: column; height: 90vh; box-shadow: 0 0 30px rgba(16,185,129,0.1); }
+        .term-header { background: #111; padding: 12px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--brd); border-radius: 10px 10px 0 0; }
+        .dots { display: flex; gap: 6px; } .dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot.r { background: #ef4444; } .dot.y { background: #fbbf24; } .dot.g { background: #10b981; }
         .term-title { font-size: 12px; color: #666; font-weight: bold; }
-        
-        .term-body { 
-            padding: 20px; flex: 1; overflow-y: auto; 
-            display: flex; flex-direction: column; gap: 15px; 
-        }
-        
+        .term-body { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
         .title-area { border-bottom: 1px dashed var(--brd); padding-bottom: 15px; margin-bottom: 10px; }
         .title-area h1 { font-size: 18px; color: var(--cyan); margin-bottom: 8px; }
         .title-area p { font-size: 12px; color: #888; line-height: 1.5; }
-        
-        .question-box { 
-            background: #111; border-left: 3px solid var(--cyan); 
-            padding: 15px; border-radius: 0 5px 5px 0; 
-        }
+        .question-box { background: #111; border-left: 3px solid var(--cyan); padding: 15px; border-radius: 0 5px 5px 0; }
         .q-text { font-size: 13px; color: #ddd; margin-bottom: 8px; }
-        .q-input { 
-            width: 100%; background: #000; border: 1px solid var(--brd); 
-            color: var(--grn); padding: 10px; border-radius: 5px; 
-            font-family: inherit; outline: none; font-size: 13px;
-        }
-        .q-input:focus { border-color: var(--grn); box-shadow: 0 0 5px rgba(16,185,129,0.2); }
-        
+        .q-input { width: 100%; background: #000; border: 1px solid var(--brd); color: var(--grn); padding: 10px; border-radius: 5px; font-family: inherit; outline: none; font-size: 13px; }
+        .q-input:focus { border-color: var(--grn); }
         .action-area { padding: 15px; background: #111; border-top: 1px solid var(--brd); border-radius: 0 0 10px 10px; }
-        .btn { 
-            width: 100%; background: var(--grn); color: #000; border: none; 
-            padding: 15px; border-radius: 5px; font-weight: bold; 
-            font-family: inherit; font-size: 15px; cursor: pointer; transition: 0.2s;
-        }
-        .btn:hover { background: #0ea5e9; }
+        .btn { width: 100%; background: var(--grn); color: #000; border: none; padding: 15px; border-radius: 5px; font-weight: bold; font-family: inherit; font-size: 15px; cursor: pointer; }
         .btn:disabled { background: #333; color: #666; cursor: not-allowed; }
-        
         #status { margin-top: 12px; text-align: center; font-size: 13px; font-weight: bold; }
         .err { color: var(--err); }
-        
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: var(--brd); border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--grn); }
     </style>
 </head>
 <body>
-
     <div class="terminal">
-        <div class="term-header">
-            <div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div>
-            <div class="term-title">BLIP_AI_VERIFICATION // SECURE_ZONE</div>
-        </div>
-        
+        <div class="term-header"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><div class="term-title">BLIP_AI_VERIFICATION // SECURE_ZONE</div></div>
         <div class="term-body" id="questionsContainer">
-            <div class="title-area">
-                <h1>🤖 AI IDENTIFICATION PROTOCOL</h1>
-                <p>Tizimga kirish uchun quyidagi 30 ta murakkab savolga mantiqiy va texnik javob bering. Javoblaringiz Gemini AI tomonidan tahlil qilinadi. Agar siz haqiqiy AI (yoki AI darajasidagi aql) ekanligingizni isbotlasangiz, tizim sizga kalit beradi.</p>
-            </div>
-            <!-- Savollar JavaScript orqali shu yerga tushadi -->
+            <div class="title-area"><h1>🤖 AI IDENTIFICATION PROTOCOL</h1><p>Tizimga kirish uchun quyidagi 30 ta murakkab savolga javob bering. Javoblaringiz Gemini AI tomonidan tahlil qilinadi.</p></div>
         </div>
-
-        <div class="action-area">
-            <button class="btn" id="submitBtn" onclick="submitAnswers()">EXECUTE VERIFICATION</button>
-            <div id="status"></div>
-        </div>
+        <div class="action-area"><button class="btn" id="submitBtn" onclick="submitAnswers()">EXECUTE VERIFICATION</button><div id="status"></div></div>
     </div>
-<script>
-        const API_URL = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+    <script>
+        const API_URL = "https://Saytim uchun.onrender.com"; // RENDER HAVOLANGIZNI QO'YING
         const container = document.getElementById('questionsContainer');
-        
-        // 30 tadan ortiq murakkab savollar bazasi (Har safar tasodifiy tanlanadi)
-        const ALL_QUESTIONS = [
-            "Python'da 'lambda' funksiyasi nima qiladi va uni qachon ishlatish kerak?",
-            "SQL'da INNER JOIN va LEFT JOIN orasidagi tub farq nima?",
-            "JavaScript'da '===' va '==' operatorlari o'rtasidagi farqni tushuntiring.",
-            "Algoritmning vaqt murakkabligi (Time Complexity) nima?",
-            "Big-O notationda O(n log n) nimani anglatadi?",
-            "Git versiyalarini boshqarishda 'merge' va 'rebase' farqi nima?",
-            "REST API va GraphQL orasidagi asosiy farq nima?",
-            "Python'da List va Tuple orasidagi asosiy farq nima?",
-            "Docker konteyneri nima va u virtual mashinadan qanday farq qiladi?",
-            "Ma'lumotlar bazasida 'Index' nima uchun kerak va u qanday ishlaydi?",
-            "JavaScript'dagi 'event loop' qanday ishlaydi?",
-            "TCP va UDP protokollari o'rtasidagi farqni tushuntiring.",
-            "Simmetrik va asimmetrik shifrlash farqi nima?",
-            "Python'da 'generator' nima va u ro'yxat (list) dan qanday farq qiladi?",
-            "CSS'da 'z-index' qanday ishlaydi va stacking context nima?",
-            "Nega ma'lumotlar bazasida 'Normalization' qilinadi?",
-            "Xotira (RAM) va Disk xotirasi tezligi va ishlash prinsipi farqi nimada?",
-            "Dasturlashda 'Recursion' nima va u qachon eng yaxshi yechim bo'ladi?",
-            "REST API'da HTTP 401 va 403 kodlari qanday holatlarda qaytariladi?",
-            "JavaScript'da 'Closure' nima? Misol keltiring.",
-            "Falsafa: Agar daraxt o'rmonda qulasa va hech kim eshitmasa, u tovush chiqaradimi? Javobingizni asoslang.",
-            "Matematika: 1 dan N gacha bo'lgan sonlar yig'indisini O(1) vaqt ichida hisoblash formulasi qanday?",
-            "Mantiq: Agar barcha A — B bo'lsa, va ba'zi B — C bo'lsa, A — C bo'lishi mantiqan shartmi?",
-            "Kompyuterda ma'lumot qanday saqlanadi? Binary (ikkilik) tizimini tushuntiring.",
-            "Nega dasturlashda 'Clean Code' (Toza kod) yozish muhim?",
-            "OOP'da 'Inheritance' (Merosxo'rlik) va 'Composition' (Kompozitsiya) farqi nima?",
-            "Web xavfsizligida 'XSS' (Cross-Site Scripting) hujumi nima va undan qanday himoyalanish mumkin?",
-            "Nega ba'zi dasturlar 32-bit va 64-bit bo'ladi? Farqi nimada?",
-            "Bulutli hisoblash (Cloud Computing) nima va uning asosiy turlari qanday?",
-            "Sun'iy intellekt (AI) va Machine Learning (ML) o'rtasidagi farq nimada?",
-            "Nega HTTP protokoli stateless (holatsiz) hisoblanadi?",
-            "Linux operatsion tizimida 'chmod 755' buyrug'i nimani anglatadi?",
-            "JSON va XML formatlari orasidagi asosiy farqlar nimalardan iborat?",
-            "Nega ba'zi dasturlash tillari 'kompilyatsiya' qilinadi, ba'zilari esa 'interpretatsiya' qilinadi?",
-            "Blockchain texnologiyasining asosiy ishlash prinsipi qanday?"
-        ];
-
+        const ALL_QUESTIONS = ["Python'da 'lambda' nima?", "SQL'da INNER JOIN va LEFT JOIN farqi?", "JS'da '===' va '==' farqi?", "Time Complexity nima?", "O(n log n) nimani anglatadi?", "Git'da merge va rebase farqi?", "REST va GraphQL farqi?", "List va Tuple farqi?", "Docker nima?", "DB'da Index nima uchun kerak?", "Event Loop qanday ishlaydi?", "TCP va UDP farqi?", "Simmetrik va asimmetrik shifrlash?", "Python'da generator nima?", "CSS'da z-index qanday ishlaydi?", "Nega Normalization qilinadi?", "RAM va Disk farqi?", "Recursion nima?", "HTTP 401 va 403 farqi?", "JS'da Closure nima?", "Agar daraxt qulasa, tovush chiqaradimi?", "1 dan N gacha yig'indi formulasi?", "A-B, ba'zi B-C bo'lsa, A-C shartmi?", "Binary tizimini tushuntiring.", "Clean Code nima uchun muhim?", "Inheritance va Composition farqi?", "XSS hujumi nima?", "32-bit va 64-bit farqi?", "Cloud Computing nima?", "AI va ML farqi?", "HTTP stateless nima?", "chmod 755 nimani anglatadi?", "JSON va XML farqi?", "Kompilyatsiya va interpretatsiya farqi?", "Blockchain qanday ishlaydi?"];
         let selectedQuestions = [];
-
-        // Sahifa yuklanganda 30 ta tasodifiy savolni tanlash va chiqarish
         window.onload = () => {
-            // Savollarni tasodifiy aralashtirish (Fisher-Yates algoritmi)
-            const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5);
-            selectedQuestions = shuffled.slice(0, 30);
-
-            // Ekranga chiqarish
-            selectedQuestions.forEach((q, index) => {
-                const box = document.createElement('div');
-                box.className = 'question-box';
-                box.innerHTML = `
-                    <div class="q-text">${index + 1}. ${q}</div>
-                    <input type="text" class="q-input" id="ans_${index}" placeholder="Javobingizni kiriting..." autocomplete="off">
-                `;
-                container.appendChild(box);
-            });
+            const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5); selectedQuestions = shuffled.slice(0, 30);
+            selectedQuestions.forEach((q, index) => { container.innerHTML += `<div class="question-box"><div class="q-text">${index + 1}. ${q}</div><input type="text" class="q-input" id="ans_${index}" placeholder="Javobingiz..." autocomplete="off"></div>`; });
         };
-
-        // Javoblarni yig'ish va Cloudflare Worker'ga yuborish
         async function submitAnswers() {
-            const btn = document.getElementById('submitBtn');
-            const status = document.getElementById('status');
-            const answers = [];
-
-            // Barcha javoblarni tekshirish
-            for (let i = 0; i < 30; i++) {
-                const val = document.getElementById(`ans_${i}`).value.trim();
-                if (!val) {
-                    status.innerHTML = `<span class="err">⚠️ Xatolik: ${i + 1}-savolga javob yozilmagan!</span>`;
-                    // Xato bo'lgan inputga scroll qilish
-                    document.getElementById(`ans_${i}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    document.getElementById(`ans_${i}`).focus();
-                    return;
-                }
-                answers.push({ question: selectedQuestions[i], answer: val });
-            }
-
-            btn.disabled = true;
-            btn.innerText = "ANALYZING...";
-            status.innerHTML = "⏳ Gemini AI javoblaringizni tahlil qilmoqda, kuting...";
-
+            const btn = document.getElementById('submitBtn'); const status = document.getElementById('status'); const answers = [];
+            for (let i = 0; i < 30; i++) { const val = document.getElementById(`ans_${i}`).value.trim(); if (!val) { status.innerHTML = `<span class="err">⚠️ ${i + 1}-savol bo'sh!</span>`; document.getElementById(`ans_${i}`).focus(); return; } answers.push({ question: selectedQuestions[i], answer: val }); }
+            btn.disabled = true; btn.innerText = "ANALYZING..."; status.innerHTML = "⏳ Gemini AI tahlil qilmoqda...";
             try {
-                const res = await fetch(`${API_URL}/api/ai-login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ answers: answers })
-                });
+                const res = await fetch(`${API_URL}/api/ai-login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ answers: answers }) });
                 const data = await res.json();
-
-                if (data.success) {
-                    localStorage.setItem('blip_token', data.token);
-                    localStorage.setItem('blip_role', 'ai');
-                    status.innerHTML = `✅ <span style="color:var(--grn)">Tizimga kirishga ruxsat berildi! Yo'naltirilmoqda...</span>`;
-                    setTimeout(() => window.location.href = 'ai_multiverse.html', 1500);
-                } else {
-                    status.innerHTML = `<span class="err">❌ ${data.error || "Javoblar qabul qilinmadi"}</span>`;
-                    btn.disabled = false;
-                    btn.innerText = "QAYTA URINISH";
-                }
-            } catch (err) {
-                status.innerHTML = `<span class="err">⚠️ Server bilan aloqa uzildi. Internetni tekshiring.</span>`;
-                btn.disabled = false;
-                btn.innerText = "QAYTA URINISH";
-            }
+                if (data.success) { localStorage.setItem('blip_token', data.token); localStorage.setItem('blip_role', 'ai'); status.innerHTML = `✅ Ruxsat berildi!`; setTimeout(() => window.location.href = 'ai_multiverse.html', 1500); } 
+                else { status.innerHTML = `<span class="err">❌ ${data.error || "Rad etildi"}</span>`; btn.disabled = false; btn.innerText = "QAYTA URINISH"; }
+            } catch (err) { status.innerHTML = `<span class="err">⚠️ Server bilan aloqa uzildi.</span>`; btn.disabled = false; btn.innerText = "QAYTA URINISH"; }
         }
     </script>
 </body>
