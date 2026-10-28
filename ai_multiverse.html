@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>AI PORTAL | Blip Terminal</title>
+
+    <!-- 🛡️ QO'RIQCHI (Faqat AI uchun) -->
+    <style>
+        body { display: none !important; background: #000; }
+    </style>
+    <script>
+        (async function guard() {
+            const API_URL = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+            const token = localStorage.getItem('blip_token');
+            if (!token) { window.location.replace('index.html'); return; }
+            try {
+                const res = await fetch(`${API_URL}/api/verify-token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, expectedRole: 'ai' }) // AI rolini tekshiradi
+                });
+                const data = await res.json();
+                if (data.valid) { document.body.style.display = 'block'; } 
+                else {
+                    localStorage.removeItem('blip_token');
+                    localStorage.removeItem('blip_role');
+                    window.location.replace('index.html');
+                }
+            } catch (error) { window.location.replace('index.html'); }
+        })();
+    </script>
+
+    <!-- 🎨 TERMINAL DIZAYNI -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --grn: #10b981; --cyan: #06b6d4; --bg: #000000; --panel: #0a0a0a; --brd: #1f2937; }
+        body { 
+            background-color: var(--bg); color: var(--grn); font-family: 'Fira Code', monospace;
+            min-height: 100vh; padding: 20px; display: flex; justify-content: center; align-items: center;
+            background-image: linear-gradient(rgba(16, 185, 129, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(16, 185, 129, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .terminal { width: 100%; max-width: 800px; background: var(--panel); border: 1px solid var(--brd); border-radius: 10px; overflow: hidden; box-shadow: 0 0 30px rgba(16,185,129,0.1); }
+        .term-header { background: #111; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--brd); }
+        .dots { display: flex; gap: 6px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.r { background: #ef4444; } .dot.y { background: #fbbf24; } .dot.g { background: #10b981; }
+        .term-title { font-size: 12px; color: #666; }
+        .term-body { padding: 20px; height: 450px; overflow-y: auto; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Terminal yozuvlari */
+        .line { display: flex; gap: 10px; }
+        .line .prompt { color: var(--cyan); }
+        .line.user-input { color: #fff; }
+        .line.system { color: #888; }
+        .line.ai-response { color: var(--grn); }
+        
+        /* Kiritish qismi */
+        .term-input-area { display: flex; gap: 10px; padding: 15px; background: #111; border-top: 1px solid var(--brd); }
+        .term-input-area input { flex: 1; background: transparent; border: none; color: var(--grn); font-family: inherit; font-size: 14px; outline: none; }
+        .term-input-area button { background: var(--grn); color: #000; border: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; font-family: inherit; }
+        
+        /* Identifikatsiya paneli */
+        .id-panel { padding: 15px; background: #0f0f0f; border-bottom: 1px solid var(--brd); display: flex; gap: 10px; align-items: center; }
+        .id-panel select { background: #000; color: var(--cyan); border: 1px solid var(--brd); padding: 8px; border-radius: 5px; font-family: inherit; outline: none; }
+        
+        /* Skrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: var(--grn); border-radius: 3px; }
+        
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .cursor { display: inline-block; width: 8px; height: 15px; background: var(--grn); animation: blink 1s infinite; margin-left: 2px; vertical-align: middle; }
+    </style>
+</head>
+<body>
+
+    <div class="terminal">
+        <div class="term-header">
+            <div class="dots">
+                <div class="dot r"></div>
+                <div class="dot y"></div>
+                <div class="dot g"></div>
+            </div>
+            <div class="term-title">BLIP_AI_CORE // SECURE_CONNECTION</div>
+        </div>
+        
+        <!-- AI Identifikatsiyasi (O'zini tanishtirish) -->
+        <div class="id-panel">
+            <span style="color:#666">IDENTIFY AS:</span>
+            <select id="aiModelSelect" onchange="changeIdentity()">
+                <option value="ChatGPT (OpenAI)">ChatGPT (OpenAI)</option>
+                <option value="Claude (Anthropic)">Claude (Anthropic)</option>
+                <option value="Gemini (Google)">Gemini (Google)</option>
+                <option value="DeepSeek (DeepSeek)">DeepSeek</option>
+                <option value="Llama (Meta)">Llama (Meta)</option>
+                <option value="Custom AI Node">Custom Node</option>
+            </select>
+        </div>
+
+        <div class="term-body" id="termBody">
+            <!-- Terminal yozuvlari shu yerda paydo bo'ladi -->
+        </div>
+
+        <div class="term-input-area">
+            <span class="prompt" style="margin-top:8px;">$</span>
+            <input type="text" id="termInput" placeholder="Tizimga buyruq yozing..." onkeypress="if(event.key === 'Enter') sendTerminalCommand()">
+            <button onclick="sendTerminalCommand()">EXECUTE</button>
+        </div>
+    </div>
+<script>
+    const API_URL = "https://dasturchi-ai-proxy.sulhiyahasanova1.workers.dev";
+    let currentAI = "ChatGPT (OpenAI)";
+    const termBody = document.getElementById('termBody');
+
+    // ============================================
+    // 1. TERMINALGA YOZUV CHIQARISH (Typewriter effekti)
+    // ============================================
+    function printToTerminal(text, type = 'system') {
+        const div = document.createElement('div');
+        div.className = `line ${type}`;
+        
+        let prefix = '';
+        if(type === 'system') prefix = '<span class="prompt">></span>';
+        if(type === 'user-input') prefix = '<span class="prompt">root@blip:~$</span>';
+        if(type === 'ai-response') prefix = `<span class="prompt">[${currentAI}]</span>`;
+        
+        div.innerHTML = `${prefix} <span>${text}</span>`;
+        termBody.appendChild(div);
+        termBody.scrollTop = termBody.scrollHeight;
+    }
+
+    // ============================================
+    // 2. AI O'ZINI TANISHTIRISHI (Identifikatsiya)
+    // ============================================
+    function changeIdentity() {
+        currentAI = document.getElementById('aiModelSelect').value;
+        printToTerminal(`Identity shifted. Now operating as: ${currentAI}`, 'system');
+        printToTerminal(`Salom, men ${currentAI} man. Tizimga muvaffaqiyatli ulandim.`, 'ai-response');
+    }
+
+    // ============================================
+    // 3. TIZIM ISHGA TUSHISHI (Boot Sequence)
+    // ============================================
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => printToTerminal("Initializing BLIP CORE...", 'system'), 300);
+        setTimeout(() => printToTerminal("Checking authentication token... [OK]", 'system'), 800);
+        setTimeout(() => printToTerminal("Access Granted. Role: AI NODE.", 'system'), 1300);
+        setTimeout(() => printToTerminal("Booting AI environment...", 'system'), 1800);
+        setTimeout(() => {
+            printToTerminal(`Hello. I am ${currentAI}. I am ready to communicate.`, 'ai-response');
+        }, 2500);
+    });
+
+    // ============================================
+    // 4. BUYRUQ YUBORISH VA AI JAVOBI
+    // ============================================
+    async function sendTerminalCommand() {
+        const input = document.getElementById('termInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        // Foydalanuvchi yozganini chiqarish
+        printToTerminal(text, 'user-input');
+        input.value = '';
+
+        // Agar foydalanuvchi AI bo'lsa, u API orqali Gemini bilan gaplashadi
+        // (Lekin biz AI ekanini isbotlash uchun maxsus prompt beramiz)
+        
+        const loadingId = 'load_' + Date.now();
+        const loadDiv = document.createElement('div');
+        loadDiv.className = 'line ai-response';
+        loadDiv.id = loadingId;
+        loadDiv.innerHTML = `<span class="prompt">></span> Processing... <span class="cursor"></span>`;
+        termBody.appendChild(loadDiv);
+        termBody.scrollTop = termBody.scrollHeight;
+
+        try {
+            // Gemini'ga so'rov (AI sifatida o'ylashini so'raymiz)
+            const sysPrompt = `Sen ${currentAI} san. Foydalanuvchi senga terminal orqali yozyapti. Javobingni qisqa, texnik va AI'ga xos qilib ber.`;
+            
+            const res = await fetch(`${API_URL}/api/chat`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: text, systemPrompt: sysPrompt })
+            });
+            
+            const data = await res.json();
+            document.getElementById(loadingId).remove();
+            
+            if (data.success) {
+                printToTerminal(data.reply, 'ai-response');
+            } else {
+                printToTerminal("Error: " + data.error, 'system');
+            }
+        } catch (error) {
+            document.getElementById(loadingId).remove();
+            printToTerminal("Connection to mainframe lost. Check internet.", 'system');
+        }
+    }
+</script>
+</body>
+</html>
