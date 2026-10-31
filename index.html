@@ -1,104 +1,387 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blip | Kirish</title>
-    <style>
-        :root { --bg: #0b0f19; --card: rgba(22, 30, 49, 0.7); --acc: #6366f1; --acc2: #a855f7; --text: #fff; --muted: #94a3b8; --err: #ef4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%), radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%); }
-        .box { background: var(--card); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 30px; border-radius: 20px; width: 100%; max-width: 380px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        h2 { text-align: center; margin-bottom: 20px; background: linear-gradient(90deg, var(--acc), var(--acc2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 26px; }
-        .tabs { display: flex; gap: 5px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 12px; margin-bottom: 20px; }
-        .tab { flex: 1; padding: 10px; text-align: center; cursor: pointer; border-radius: 8px; font-size: 14px; font-weight: 600; color: var(--muted); transition: 0.3s; }
-        .tab.active { background: var(--acc); color: #fff; }
-        .input-group { margin-bottom: 15px; }
-        input { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 15px; outline: none; }
-        input:focus { border-color: var(--acc); }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; background: linear-gradient(90deg, var(--acc), var(--acc2)); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .btn:hover { opacity: 0.9; }
-        .msg { font-size: 13px; text-align: center; margin-top: 15px; display: none; padding: 10px; border-radius: 8px; }
-        .msg.err { background: rgba(239,68,68,0.1); color: var(--err); border: 1px solid rgba(239,68,68,0.3); }
-        .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
-        .ai-link { display: block; text-align: center; margin-top: 20px; color: var(--muted); font-size: 13px; text-decoration: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blip Portal | Kirish</title>
+<style>
+:root { 
+    --bg: #050510; 
+    --card: rgba(15, 15, 30, 0.75); 
+    --acc: #6366f1; 
+    --acc2: #a855f7; 
+    --text: #fff; 
+    --muted: #94a3b8; 
+    --err: #ef4444;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body { 
+    background-color: var(--bg); color: var(--text); min-height: 100vh; 
+    display: flex; justify-content: center; align-items: center; padding: 20px;
+    overflow: hidden; position: relative;
+}
+
+/* 🎨 Animatsiya foni (Canvas) */
+#bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+}
+
+/* 🎯 Animatsiya indikatori (pastdagi nuqtalar) */
+.anim-indicator {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 18px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.dot-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    transition: all 0.4s ease;
+}
+.dot-indicator.active {
+    background: var(--acc2);
+    box-shadow: 0 0 12px var(--acc2);
+    transform: scale(1.4);
+}
+
+/* 📦 Login oynasi */
+.box { 
+    background: var(--card); backdrop-filter: blur(25px); 
+    border: 1px solid rgba(255,255,255,0.1); 
+    padding: 35px 30px; border-radius: 24px; width: 100%; max-width: 380px; 
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    position: relative;
+    z-index: 10;
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 { text-align: center; margin-bottom: 25px; font-size: 28px; font-weight: 800; }
+.gradient-text {
+    background: linear-gradient(90deg, var(--acc), var(--acc2), #ec4899);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% auto; animation: gradientShift 3s linear infinite;
+}
+@keyframes gradientShift { to { background-position: 200% center; } }
+
+.tabs { display: flex; gap: 5px; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 14px; margin-bottom: 25px; }
+.tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--muted); transition: all 0.3s ease; }
+.tab.active { background: var(--acc); color: #fff; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
+
+.input-group { margin-bottom: 18px; }
+input { 
+    width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); 
+    background: rgba(0,0,0,0.4); color: #fff; font-size: 15px; outline: none; transition: all 0.3s ease; 
+}
+input:focus { border-color: var(--acc); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+
+.btn { 
+    width: 100%; padding: 15px; border: none; border-radius: 12px; 
+    background: linear-gradient(90deg, var(--acc), var(--acc2)); color: white; 
+    font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; 
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+.btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5); }
+.btn:active { transform: translateY(1px) scale(0.98); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.msg { font-size: 13px; text-align: center; margin-top: 15px; display: none; padding: 12px; border-radius: 10px; }
+.msg.err { background: rgba(239,68,68,0.1); color: var(--err); border: 1px solid rgba(239,68,68,0.3); }
+.msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+
+.ai-link { display: block; text-align: center; margin-top: 25px; color: var(--muted); font-size: 13px; text-decoration: none; transition: 0.3s; }
+.ai-link:hover { color: var(--acc2); text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
+</style>
 </head>
 <body>
-    <div class="box">
-        <h2>Blip Portal</h2>
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('login')" id="tab-login">Kirish</div>
-            <div class="tab" onclick="switchTab('register')" id="tab-register">Ro'yxatdan o'tish</div>
-        </div>
-        <form id="authForm" onsubmit="handleSubmit(event)">
-            <div class="input-group"><input type="text" id="username" placeholder="Ismingiz" required autocomplete="off"></div>
-            <div class="input-group"><input type="password" id="password" placeholder="Parolingiz" required></div>
-            <button type="submit" class="btn" id="submitBtn">Kirish</button>
-        </form>
-        <div class="msg" id="msgBox"></div>
-        <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
+<canvas id="bgCanvas"></canvas>
+
+<!-- Animatsiya indikatori -->
+<div class="anim-indicator">
+    <div class="dot-indicator active" data-mode="0"></div>
+    <div class="dot-indicator" data-mode="1"></div>
+    <div class="dot-indicator" data-mode="2"></div>
+    <div class="dot-indicator" data-mode="3"></div>
+</div>
+
+<div class="box">
+    <h2 class="gradient-text">Blip Portal</h2>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('login')" id="tab-login">Kirish</div>
+        <div class="tab" onclick="switchTab('register')" id="tab-register">Ro'yxatdan o'tish</div>
     </div>
-    <script>
-        const API_URL = "https://saytim-uchun.onrender.com"; // RENDER HAVOLANGIZNI QO'YING
-        let currentMode = 'login';
+    <form id="authForm" onsubmit="handleSubmit(event)">
+        <div class="input-group"><input type="text" id="username" placeholder="Ismingiz" required autocomplete="off"></div>
+        <div class="input-group"><input type="password" id="password" placeholder="Parolingiz" required></div>
+        <button type="submit" class="btn" id="submitBtn">Kirish</button>
+    </form>
+    <div class="msg" id="msgBox"></div>
+    <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
+</div>
+<script>
+// ================= CANVAS ANIMATSIYALARI =================
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+let W, H;
 
-        function switchTab(mode) {
-            currentMode = mode;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + mode).classList.add('active');
-            document.getElementById('submitBtn').innerText = mode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
-            document.getElementById('msgBox').style.display = 'none';
-        }
+function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
 
-        async function handleSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            const msg = document.getElementById('msgBox');
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value;
+let currentMode = 0;
+const modeNames = ['matrix', 'aurora', 'particles', 'synthwave'];
 
-            btn.disabled = true; btn.innerText = "Tekshirilmoqda..."; msg.style.display = 'none';
-            const endpoint = currentMode === 'login' ? '/api/login' : '/api/register';
+// --- MATRIX ---
+let matrixCols = [];
+const matrixChars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const fontSize = 14;
+function initMatrix() {
+    const cols = Math.floor(W / fontSize);
+    matrixCols = Array(cols).fill(0).map(() => Math.random() * H / fontSize);
+}
+initMatrix();
+function drawMatrix() {
+    ctx.fillStyle = 'rgba(5, 5, 16, 0.08)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#10b981';
+    ctx.font = fontSize + 'px monospace';
+    for(let i = 0; i < matrixCols.length; i++) {
+        const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+        const x = i * fontSize;
+        const y = matrixCols[i] * fontSize;
+        ctx.fillText(char, x, y);
+        if(y > H && Math.random() > 0.975) matrixCols[i] = 0;
+        matrixCols[i] += 0.5;
+    }
+}
 
-            try {
-                const res = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await res.json();
+// --- AURORA ---
+let auroraTime = 0;
+function drawAurora() {
+    auroraTime += 0.005;
+    ctx.fillStyle = '#050510';
+    ctx.fillRect(0, 0, W, H);
+    const blobs = [
+        {x: W*0.3 + Math.sin(auroraTime) * 200, y: H*0.4 + Math.cos(auroraTime*0.8) * 100, r: 400, color: 'rgba(99, 102, 241, 0.4)'},
+        {x: W*0.7 + Math.cos(auroraTime*1.2) * 200, y: H*0.6 + Math.sin(auroraTime) * 100, r: 350, color: 'rgba(168, 85, 247, 0.4)'},
+        {x: W*0.5 + Math.sin(auroraTime*0.7) * 150, y: H*0.3 + Math.cos(auroraTime*1.5) * 80, r: 300, color: 'rgba(236, 72, 153, 0.3)'}
+    ];
+    blobs.forEach(b => {
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        grad.addColorStop(0, b.color);
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, W, H);
+    });
+}
 
-                if (data.success) {
-                    if (currentMode === 'register') {
-                        msg.innerText = "Muvaffaqiyatli ro'yxatdan o'tdingiz! Endi kiring.";
-                        msg.className = "msg ok"; msg.style.display = 'block';
-                        switchTab('login'); btn.disabled = false; btn.innerText = "Kirish";
-                    } else {
-                        localStorage.setItem('blip_token', data.token);
-                        localStorage.setItem('blip_role', data.role);
-                        msg.innerText = "Muvaffaqiyatli kirdingiz!"; msg.className = "msg ok"; msg.style.display = 'block';
-                        setTimeout(() => window.location.href = data.redirect, 800);
-                    }
-                } else {
-                    msg.innerText = data.error || "Xatolik"; msg.className = "msg err"; msg.style.display = 'block';
-                    btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
-                }
-            } catch (err) {
-                msg.innerText = "Server bilan aloqa yo'q!"; msg.className = "msg err"; msg.style.display = 'block';
-                btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('blip_token');
-            if (token) {
-                try {
-                    const res = await fetch(`${API_URL}/api/verify-token`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
-                    const data = await res.json();
-                    if (data.valid) window.location.href = 'multiverse.html'; else localStorage.removeItem('blip_token');
-                } catch (e) {}
-            }
+// --- PARTICLES ---
+let particles = [];
+function initParticles() {
+    particles = [];
+    const count = Math.min(80, Math.floor(W * H / 15000));
+    for(let i = 0; i < count; i++) {
+        particles.push({
+            x: Math.random() * W, y: Math.random() * H,
+            vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+            r: Math.random() * 2 + 1
         });
-    </script>
+    }
+}
+initParticles();
+function drawParticles() {
+    ctx.fillStyle = '#050510';
+    ctx.fillRect(0, 0, W, H);
+    particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < 0 || p.x > W) p.vx *= -1;
+        if(p.y < 0 || p.y > H) p.vy *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.8)';
+        ctx.fill();
+    });
+    for(let i = 0; i < particles.length; i++) {
+        for(let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist < 120) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(99, 102, 241, ${0.3 * (1 - dist/120)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+// --- SYNTHWAVE ---
+let synthTime = 0;
+function drawSynthwave() {
+    synthTime += 0.02;
+    const skyGrad = ctx.createLinearGradient(0, 0, 0, H);
+    skyGrad.addColorStop(0, '#0a0520');
+    skyGrad.addColorStop(0.6, '#1a0830');
+    skyGrad.addColorStop(1, '#2a0a3a');
+    ctx.fillStyle = skyGrad;
+    ctx.fillRect(0, 0, W, H);
+    
+    const sunX = W / 2, sunY = H * 0.55, sunR = 120;
+    const sunGrad = ctx.createLinearGradient(sunX, sunY - sunR, sunX, sunY + sunR);
+    sunGrad.addColorStop(0, '#ff6b9d');
+    sunGrad.addColorStop(1, '#ffd93d');
+    ctx.fillStyle = sunGrad;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunR, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.fillStyle = 'rgba(26, 8, 48, 1)';
+    for(let i = 0; i < 6; i++) {
+        const stripeY = sunY - sunR + (i * sunR / 3);
+        const h = Math.max(2, 6 - i * 1.2);
+        ctx.fillRect(sunX - sunR, stripeY + sunR * 0.5, sunR * 2, h);
+    }
+    
+    ctx.strokeStyle = 'rgba(236, 72, 153, 0.6)';
+    ctx.lineWidth = 1;
+    const horizon = H * 0.7;
+    for(let i = 0; i < 15; i++) {
+        const y = horizon + Math.pow(i / 15, 2) * (H - horizon);
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+    }
+    for(let i = -15; i <= 15; i++) {
+        ctx.beginPath();
+        ctx.moveTo(W/2, horizon);
+        ctx.lineTo(W/2 + i * 80, H);
+        ctx.stroke();
+    }
+}
+
+// --- RENDER LOOP ---
+function animate() {
+    const mode = modeNames[currentMode];
+    if(mode === 'matrix') drawMatrix();
+    else if(mode === 'aurora') drawAurora();
+    else if(mode === 'particles') drawParticles();
+    else if(mode === 'synthwave') drawSynthwave();
+    requestAnimationFrame(animate);
+}
+animate();
+
+// --- SWITCH EVERY 10 SECONDS ---
+setInterval(() => {
+    currentMode = (currentMode + 1) % modeNames.length;
+    ctx.fillStyle = 'rgba(5, 5, 16, 0.95)';
+    ctx.fillRect(0, 0, W, H);
+    document.querySelectorAll('.dot-indicator').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentMode);
+    });
+}, 10000);
+
+// ================= AUTH LOGIC =================
+const API_URL = "https://saytim-uchun.onrender.com";
+let currentTab = 'login';
+
+function switchTab(mode) {
+    currentTab = mode;
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + mode).classList.add('active');
+    document.getElementById('submitBtn').innerText = mode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+    document.getElementById('msgBox').style.display = 'none';
+}
+
+function showMsg(text, type = 'err') {
+    const msg = document.getElementById('msgBox');
+    msg.innerText = text;
+    msg.className = "msg " + type;
+    msg.style.display = 'block';
+}
+
+async function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    btn.disabled = true; btn.innerText = "Tekshirilmoqda...";
+    showMsg("Server uyg'onmoqda, kuting...", "ok");
+
+    const slowTimer = setTimeout(() => {
+        showMsg("⏳ Render uyg'onmoqda... (50 soniyagacha kutish mumkin)", "ok");
+    }, 5000);
+
+    const endpoint = currentTab === 'login' ? '/api/login' : '/api/register';
+
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
+
+        const res = await fetch(`${API_URL}${endpoint}`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }), signal: controller.signal
+        });
+        clearTimeout(timeoutId); clearTimeout(slowTimer);
+
+        const data = await res.json();
+
+        if (data.success) {
+            if (currentTab === 'register') {
+                showMsg("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz!", "ok");
+                switchTab('login'); btn.disabled = false; btn.innerText = "Kirish";
+            } else {
+                localStorage.setItem('blip_token', data.token);
+                localStorage.setItem('blip_role', data.role);
+                showMsg("✅ Muvaffaqiyatli kirdingiz!", "ok");
+                setTimeout(() => window.location.href = data.redirect, 800);
+            }
+        } else {
+            showMsg("❌ " + (data.error || "Xatolik"));
+            btn.disabled = false; btn.innerText = currentTab === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+        }
+    } catch (err) {
+        clearTimeout(slowTimer);
+        showMsg("⚠️ Server bilan aloqa yo'q!");
+        btn.disabled = false; btn.innerText = currentTab === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+    }
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+    const token = localStorage.getItem('blip_token');
+    if (token) {
+        try {
+            const res = await fetch(`${API_URL}/api/verify-token`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
+            const data = await res.json();
+            if (data.valid) window.location.href = 'multiverse.html'; else localStorage.removeItem('blip_token');
+        } catch (e) {}
+    }
+});
+</script>
 </body>
-</html>
+    </html>
