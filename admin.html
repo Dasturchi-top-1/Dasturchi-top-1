@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | Blip</title>
+    <style>
+        :root { --bg: #050510; --card: rgba(20, 20, 40, 0.8); --acc: #ef4444; --acc2: #a855f7; --text: #fff; --grn: #10b981; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; background-image: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.15), transparent 50%); display: none; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        h1 { font-size: 28px; color: var(--acc); font-weight: 900; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .sub { color: #888; font-size: 13px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 600px; margin: 0 auto 30px; }
+        .stat-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); padding: 20px; border-radius: 16px; text-align: center; backdrop-filter: blur(10px); }
+        .stat-num { font-size: 32px; font-weight: bold; color: var(--grn); }
+        .stat-lbl { font-size: 12px; color: #888; margin-top: 5px; }
+        
+        .list-card { background: var(--card); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; max-width: 600px; margin: 0 auto; backdrop-filter: blur(10px); }
+        .list-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        .user-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; display: flex; justify-content: space-between; }
+        .user-item:last-child { border: none; }
+        
+        .btn { display: block; width: 100%; max-width: 600px; margin: 20px auto; padding: 15px; text-align: center; background: #333; color: #fff; text-decoration: none; border-radius: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto;">
+        <header>
+            <h1>🛡️ ADMIN CONTROL</h1>
+            <p class="sub">Faqat egasi uchun maxsus hudud</p>
+        </header>
+        
+        <div class="grid">
+            <div class="stat-card">
+                <div class="stat-num" id="totalUsers">-</div>
+                <div class="stat-lbl">Ro'yxatdan o'tganlar</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="onlineUsers">-</div>
+                <div class="stat-lbl">Hozir onlayn (Sessiyalar)</div>
+            </div>
+        </div>
+
+        <div class="list-card">
+            <div class="list-title">📋 Foydalanuvchilar ro'yxati</div>
+            <div id="userList">Yuklanmoqda...</div>
+        </div>
+
+        <a href="multiverse.html" class="btn">⬅️ Saytga qaytish</a>
+    </div>
+
+    <script>
+        const API_URL = "https://saytim-uchun.onrender.com"; // Render havolangiz
+        
+        // Qo'riqchi: Faqat admin kira oladi
+        window.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('blip_token');
+            const role = localStorage.getItem('blip_role');
+            
+            if (!token || role !== 'admin') {
+                window.location.replace('index.html'); // Ruxsatsizlarni haydab yuborish
+                return;
+            }
+            
+            document.body.style.display = 'block'; // Admin bo'lsa ko'rsatish
+            loadStats(token);
+        });
+
+        async function loadStats(token) {
+            try {
+                const res = await fetch(`${API_URL}/api/admin/stats`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('totalUsers').innerText = data.total_users;
+                    document.getElementById('onlineUsers').innerText = data.online_users;
+                    
+                    const list = document.getElementById('userList');
+                    if (data.users.length === 0) {
+                        list.innerHTML = '<div style="color:#888; font-size:13px;">Hozircha hech kim ro\'yxatdan o\'tmagan</div>';
+                    } else {
+                        list.innerHTML = data.users.map(u => `
+                            <div class="user-item">
+                                <span>👤 ${u}</span>
+                                <span style="color:var(--grn)">Ro'yxatda</span>
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (e) {
+                document.getElementById('userList').innerHTML = '<span style="color:red;">Xatolik yuz berdi</span>';
+            }
+        }
+    </script>
+</body>
+</html>
