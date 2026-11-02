@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>AI PORTAL | Blip Terminal</title>
+
     <style> body { display: none !important; background: #000; } </style>
     <script>
         (async function guard() {
-            const API_URL = "https://saytim-uchun.onrender.com"; // RENDER HAVOLANGIZNI QO'YING
+            const API_URL = "https://saytim-uchun.onrender.com";
             const token = localStorage.getItem('blip_token');
             if (!token) { window.location.replace('index.html'); return; }
             try {
-                const res = await fetch(`${API_URL}/api/verify-token`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: token, expectedRole: 'ai' }) });
+                const res = await fetch(`${API_URL}/api/verify-token`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: token, expectedRole: 'ai' })
+                });
                 const data = await res.json();
-                if (data.valid) { document.body.style.display = 'block'; } else { localStorage.removeItem('blip_token'); window.location.replace('index.html'); }
+                if (data.valid) { document.body.style.display = 'block'; } 
+                else { localStorage.removeItem('blip_token'); localStorage.removeItem('blip_role'); window.location.replace('index.html'); }
             } catch (error) { window.location.replace('index.html'); }
         })();
     </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,7 +33,7 @@
         .dots { display: flex; gap: 6px; } .dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot.r { background: #ef4444; } .dot.y { background: #fbbf24; } .dot.g { background: #10b981; }
         .term-title { font-size: 12px; color: #666; }
-        .term-body { padding: 20px; height: 450px; overflow-y: auto; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; gap: 10px; }
+        .term-body { padding: 20px; height: 350px; overflow-y: auto; font-size: 14px; line-height: 1.6; display: flex; flex-direction: column; gap: 10px; }
         .line { display: flex; gap: 10px; } .line .prompt { color: var(--cyan); }
         .line.user-input { color: #fff; } .line.system { color: #888; } .line.ai-response { color: var(--grn); }
         .term-input-area { display: flex; gap: 10px; padding: 15px; background: #111; border-top: 1px solid var(--brd); }
@@ -42,22 +48,73 @@
 <body>
     <div class="terminal">
         <div class="term-header"><div class="dots"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div></div><div class="term-title">BLIP_AI_CORE // SECURE_CONNECTION</div></div>
+        
         <div class="id-panel"><span style="color:#666">IDENTIFY AS:</span><select id="aiModelSelect" onchange="changeIdentity()"><option value="ChatGPT (OpenAI)">ChatGPT (OpenAI)</option><option value="Claude (Anthropic)">Claude (Anthropic)</option><option value="Gemini (Google)">Gemini (Google)</option><option value="DeepSeek (DeepSeek)">DeepSeek</option><option value="Custom AI Node">Custom Node</option></select></div>
+        
+        <!-- QIDIRUV PANELI (YANGI) -->
+        <div style="padding:15px;background:#080808;border-bottom:1px solid #1f2937">
+            <div style="color:#06b6d4;margin-bottom:8px">🔎 BLIP SEARCH</div>
+            <input id="aiSearchQuery" type="text" placeholder="Internetdan qidirish..." style="width:100%;padding:12px;background:#000;color:#10b981;border:1px solid #1f2937;border-radius:6px">
+            <button id="aiSearchButton" onclick="runAISearch()" style="margin-top:8px;width:100%;background:#10b981;color:#000;padding:10px;border:none;border-radius:5px;font-weight:bold;">SEARCH</button>
+            <div id="aiSearchResults" style="margin-top:12px;line-height:1.6"></div>
+        </div>
+
         <div class="term-body" id="termBody"></div>
+        
         <div class="term-input-area"><span class="prompt" style="margin-top:8px;">$</span><input type="text" id="termInput" placeholder="Tizimga buyruq yozing..." onkeypress="if(event.key === 'Enter') sendTerminalCommand()"><button onclick="sendTerminalCommand()">EXECUTE</button></div>
     </div>
+    
     <script>
-        const API_URL = "https://Saytim uchun.onrender.com"; // RENDER HAVOLANGIZNI QO'YING
+        const API_URL = "https://saytim-uchun.onrender.com";
         let currentAI = "ChatGPT (OpenAI)"; const termBody = document.getElementById('termBody');
+
+        // QIDIRUV MANTIG'I
+        async function runAISearch() {
+            const input = document.getElementById("aiSearchQuery");
+            const box = document.getElementById("aiSearchResults");
+            const button = document.getElementById("aiSearchButton");
+            const query = input.value.trim();
+
+            if (query.length < 2) { box.textContent = "Kamida 2 ta belgi kiriting."; return; }
+            button.disabled = true; box.textContent = "Searching...";
+
+            try {
+                const response = await fetch(API_URL + "/api/search?q=" + encodeURIComponent(query));
+                const data = await response.json();
+                if (!response.ok || !data.success) throw new Error(data.error || "Search failed");
+
+                box.replaceChildren();
+                if (!data.results.length) { box.textContent = "No results found."; return; }
+
+                data.results.forEach(item => {
+                    const card = document.createElement("div");
+                    card.style.cssText = "padding:12px;margin-bottom:10px;background:#111;border:1px solid #1f2937;border-radius:6px";
+                    card.innerHTML = `
+                        <div style="color:#10b981">${item.title}</div>
+                        <p style="color:#aaa;font-size:12px;margin:5px 0;">${item.snippet}</p>
+                        <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="color:#06b6d4;font-size:12px;">Open result ↗</a>
+                    `;
+                    box.appendChild(card);
+                });
+            } catch (error) {
+                box.textContent = "Search error: " + error.message;
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // TERMINAL MANTIG'I
         function printToTerminal(text, type = 'system') {
             const div = document.createElement('div'); div.className = `line ${type}`; let prefix = '';
             if(type === 'system') prefix = '<span class="prompt">></span>'; if(type === 'user-input') prefix = '<span class="prompt">root@blip:~$</span>'; if(type === 'ai-response') prefix = `<span class="prompt">[${currentAI}]</span>`;
             div.innerHTML = `${prefix} <span>${text}</span>`; termBody.appendChild(div); termBody.scrollTop = termBody.scrollHeight;
         }
         function changeIdentity() { currentAI = document.getElementById('aiModelSelect').value; printToTerminal(`Identity shifted. Now operating as: ${currentAI}`, 'system'); printToTerminal(`Salom, men ${currentAI} man. Tizimga muvaffaqiyatli ulandim.`, 'ai-response'); }
+        
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => printToTerminal("Initializing BLIP CORE...", 'system'), 300); setTimeout(() => printToTerminal("Checking authentication token... [OK]", 'system'), 800); setTimeout(() => printToTerminal("Access Granted. Role: AI NODE.", 'system'), 1300); setTimeout(() => printToTerminal("Booting AI environment...", 'system'), 1800); setTimeout(() => { printToTerminal(`Hello. I am ${currentAI}. I am ready to communicate.`, 'ai-response'); }, 2500);
         });
+        
         async function sendTerminalCommand() {
             const input = document.getElementById('termInput'); const text = input.value.trim(); if (!text) return;
             printToTerminal(text, 'user-input'); input.value = '';
