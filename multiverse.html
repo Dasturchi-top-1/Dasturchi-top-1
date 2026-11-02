@@ -5,24 +5,55 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Blip Multiverse</title>
 
-    <style> body { display: none !important; } </style>
+    <style>
+        /* QO'RIQCHI: Sahifani yashirmaymiz, o'rniga yuklanish ekranini ko'rsatamiz */
+        body { background-color: #050510; color: #fff; font-family: sans-serif; margin: 0; }
+        #loadingScreen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            display: flex; justify-content: center; align-items: center; 
+            background: #050510; z-index: 9999; flex-direction: column; gap: 20px;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-size: 15px; color: #8888aa; text-align: center; padding: 0 20px; }
+        
+        /* Asosiy kontentni vaqtincha yashiramiz */
+        .c { display: none; }
+    </style>
     <script>
         (async function guard() {
             const API_URL = "https://saytim-uchun.onrender.com";
             const token = localStorage.getItem('blip_token');
+            
             if (!token) { window.location.replace('index.html'); return; }
+
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 50000); // 50 soniya kutish
+
                 const res = await fetch(`${API_URL}/api/verify-token`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: token, expectedRole: 'human' })
+                    body: JSON.stringify({ token: token, expectedRole: 'human' }), signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
                 const data = await res.json();
-                if (data.valid) { document.body.style.display = 'block'; } 
-                else { localStorage.removeItem('blip_token'); localStorage.removeItem('blip_role'); window.location.replace('index.html'); }
-            } catch (error) { window.location.replace('index.html'); }
+
+                if (data.valid) {
+                    // Ruxsat berildi: yuklanish ekranini o'chirib, asosiy qismni ko'rsatamiz
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.querySelector('.c').style.display = 'block';
+                } else {
+                    localStorage.removeItem('blip_token'); localStorage.removeItem('blip_role'); window.location.replace('index.html');
+                }
+            } catch (error) {
+                console.error("Server xatosi:", error);
+                window.location.replace('index.html');
+            }
         })();
     </script>
 
+    <!-- QOLGAN CSS DIZAYNLAR -->
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
         :root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--gold:#fbbf24;--red:#ef4444;--grn:#10b981}
@@ -62,8 +93,14 @@
     </style>
 </head>
 <body>
-<div class="c">
-    <header><h1>🌌 BLIP MULTIVERSE</h1><p class="sub">AI o'yinlar va qidiruv tizimi</p></header>
+    <!-- Yuklanish ekrani -->
+    <div id="loadingScreen">
+        <div class="spinner"></div>
+        <div class="loading-text">Server uyg'onmoqda, iltimos kuting...<br><small>(50 soniyagacha vaqt olishi mumkin)</small></div>
+    </div>
+
+    <div class="c">
+            <header><h1>🌌 BLIP MULTIVERSE</h1><p class="sub">AI o'yinlar va qidiruv tizimi</p></header>
     
     <div class="tabs">
         <div class="tab active" id="tab-home" onclick="sw('home',this)">🏠 Bosh</div>
@@ -90,7 +127,7 @@
         <div class="gc" onclick="sw('ff')"><span class="i">🔥</span><h3>Free Fire sozlamalari</h3><p>AI telefon uchun optimal sozlama beradi.</p></div>
     </div>
 
-    <!-- QIDIRUV (YANGI) -->
+    <!-- QIDIRUV -->
     <div class="tc" id="t-search">
         <div class="card">
             <div class="result-title">🔎 Blip Search</div>
@@ -99,8 +136,9 @@
             <button class="btn" id="searchButton" onclick="runSearch()">🔍 Qidirish</button>
         </div>
         <div id="searchResults"></div>
-            </div>
-                <!-- TURING -->
+    </div>
+
+    <!-- TURING -->
     <div class="tc" id="t-turing">
         <div class="info">💡 Hakam qaysi biri odam ekanini topadi.</div>
         <div class="card"><div class="info" style="margin-bottom:8px"><b>📌 Mavzu:</b> <span id="ttopic">...</span></div><textarea id="tans" placeholder="AI bo'lib javob yozing..."></textarea><button class="btn" onclick="tSub()">Yuborish</button></div>
@@ -158,51 +196,35 @@
     </div>
 
     <div class="footer">⚡ <a href="index.html" style="color:var(--acc)">Blip</a> · 2026</div>
-</div>
+    </div> <!-- .c ni yopish -->
 
 <script>
 const API = "https://saytim-uchun.onrender.com";
 
-// QIDIRUV FUNKSIYASI
 async function runSearch() {
     const input = document.getElementById("searchQuery");
     const box = document.getElementById("searchResults");
     const button = document.getElementById("searchButton");
     const query = input.value.trim();
-
     if (query.length < 2) { box.textContent = "Kamida 2 ta belgi kiriting."; return; }
     button.disabled = true; box.textContent = "⏳ Qidirilmoqda...";
-
     try {
         const response = await fetch(API + "/api/search?q=" + encodeURIComponent(query));
         const data = await response.json();
         if (!response.ok || !data.success) throw new Error(data.error || "Xatolik");
-
         box.replaceChildren();
         if (!data.results.length) { box.textContent = "Natijalar topilmadi."; return; }
-
         data.results.forEach(item => {
             const card = document.createElement("div");
             card.className = "result";
-            card.innerHTML = `
-                <div class="result-title">${item.title}</div>
-                <p class="result-text">${item.snippet}</p>
-                <a href="${item.url}" target="_blank" rel="noopener noreferrer" style="color:var(--acc); font-size:13px; font-weight:bold; text-decoration:none;">Saytni ochish ↗</a>
-            `;
+            card.innerHTML = `<div class="result-title">${item.title}</div><p class="result-text">${item.snippet}</p><a href="${item.url}" target="_blank" rel="noopener noreferrer" style="color:var(--acc); font-size:13px; font-weight:bold; text-decoration:none;">Saytni ochish ↗</a>`;
             box.appendChild(card);
         });
-    } catch (error) {
-        box.textContent = "❌ " + error.message;
-    } finally {
-        button.disabled = false;
-    }
+    } catch (error) { box.textContent = "❌ " + error.message; } finally { button.disabled = false; }
 }
 
 async function aiCall(prompt, sys) {
-    try {
-        const r = await fetch(API + '/api/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: prompt, systemPrompt: sys }) });
-        const d = await r.json(); return d.reply || '⚠️ AI javob bera olmadi.';
-    } catch(e) { return '⚠️ Xatolik: ' + e.message; }
+    try { const r = await fetch(API + '/api/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: prompt, systemPrompt: sys }) }); const d = await r.json(); return d.reply || '⚠️ AI javob bera olmadi.'; } catch(e) { return '⚠️ Xatolik: ' + e.message; }
 }
 function showLoading(id, msg) { document.getElementById(id).innerHTML = `<div class="loading">⏳ ${msg}...</div>`; }
 
@@ -277,4 +299,4 @@ function sw(id, el) { document.querySelectorAll('.tc').forEach(c => c.classList.
 document.addEventListener('DOMContentLoaded', () => { document.getElementById('ttopic').textContent = TOPICS[Math.floor(Math.random()*TOPICS.length)]; });
 </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                             </html>
+    </html>
