@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d18">
+<title>Blip Video Studio</title>
+
+<style>
+:root {
+  --bg:#080d18;
+  --panel:#111b2c;
+  --panel2:#17243a;
+  --text:#edf5ff;
+  --muted:#91a2bb;
+  --accent:#38d9ff;
+  --border:#293a54;
+  --green:#50e3a4;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+  width:245px;
+  padding:24px 16px;
+  background:#0c1423;
+  border-right:1px solid var(--border);
+  flex-shrink:0;
+}
+.logo{
+  font-size:25px;
+  font-weight:900;
+  margin-bottom:35px;
+}
+.logo span{color:var(--accent)}
+.nav-label{
+  color:var(--muted);
+  font-size:11px;
+  margin:25px 10px 10px;
+}
+.nav-item{
+  display:block;
+  width:100%;
+  padding:13px;
+  margin:5px 0;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:var(--muted);
+  text-decoration:none;
+  text-align:left;
+}
+.nav-item:hover,.nav-item.active{
+  background:#172a40;
+  color:var(--accent);
+}
+.main{
+  flex:1;
+  min-width:0;
+  padding:28px;
+}
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+  margin-bottom:28px;
+}
+h1{font-size:28px;margin:0 0 8px}
+.subtitle{color:var(--muted);font-size:14px}
+.demo{
+  color:#ffdc86;
+  background:#302817;
+  border:1px solid #80652d;
+  border-radius:20px;
+  padding:9px 14px;
+  font-size:12px;
+}
+.hero{
+  padding:28px;
+  border-radius:18px;
+  border:1px solid #294968;
+  background:linear-gradient(120deg,#142e4b,#17203b,#29264a);
+  margin-bottom:25px;
+}
+.hero h2{margin:0 0 10px;font-size:25px}
+.hero p{
+  color:#c0d0e5;
+  line-height:1.7;
+  margin:0;
+}
+.section-title{
+  font-size:19px;
+  margin:28px 0 15px;
+}
+.modes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+.mode{
+  padding:20px;
+  border-radius:15px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  cursor:pointer;
+}
+.mode.selected{
+  border-color:var(--accent);
+  background:#12263a;
+}
+.mode h3{margin:0 0 9px}
+.mode p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin:0;
+}
+.form-panel{
+  margin-top:18px;
+  padding:22px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+}
+label{
+  display:block;
+  margin:16px 0 8px;
+  color:#c6d5e8;
+  font-size:13px;
+}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#0b1423;
+  color:var(--text);
+  outline:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent);
+}
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+.primary{
+  width:100%;
+  padding:14px;
+  margin-top:20px;
+  border:0;
+  border-radius:10px;
+  background:var(--accent);
+  color:#06111c;
+  font-weight:800;
+}
+.primary:hover{filter:brightness(1.1)}
+.secondary{
+  padding:10px 14px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--panel2);
+  color:var(--text);
+}
+.status{
+  display:none;
+  padding:14px;
+  margin-top:16px;
+  border-radius:10px;
+  background:#132b35;
+  border:1px solid #245469;
+  color:#9deaff;
+  font-size:13px;
+  line-height:1.6;
+}
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:13px;
+}
+.feature{
+  padding:18px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:var(--panel);
+}
+.feature b{
+  display:block;
+  margin-bottom:8px;
+}
+.feature span{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+.hidden{display:none!important}
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:35px;
+}
+@media(max-width:800px){
+  .sidebar{width:65px;padding:18px 7px}
+  .logo{font-size:17px;text-align:center}
+  .nav-item{font-size:0;text-align:center;padding:14px 4px}
+  .nav-label{display:none}
+  .main{padding:18px 12px}
+  .features{grid-template-columns:1fr 1fr}
+}
+@media(max-width:500px){
+  .modes,.grid,.features{grid-template-columns:1fr}
+  h1{font-size:23px}
+  .hero{padding:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+<aside class="sidebar">
+  <div class="logo">BLIP<span>.</span></div>
+
+  <div class="nav-label">VIDEO STUDIO</div>
+  <a class="nav-item active" href="#creator">🎬 Creator</a>
+  <a class="nav-item" href="#director">🎥 AI Director</a>
+  <a class="nav-item" href="#library">📁 Projects</a>
+  <a class="nav-item" href="#features">✨ Features</a>
+
+  <div class="nav-label">PLATFORM</div>
+  <a class="nav-item" href="multiverse.html">🌌 Multiverse</a>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div>
+    <h1>Blip Video Studio</h1>
+    <div class="subtitle">AI Video Creation Platform</div>
+  </div>
+  <div class="demo">● DEMO MODE</div>
+</header>
+
+<section class="hero">
+  <h2>G‘oyangizni videoga aylantiring.</h2>
+  <p>
+    Ssenariy, storyboard, ovoz, montaj va thumbnail.
+    Barchasini bitta studiyada boshqaring.
+  </p>
+</section>
+
+<section id="creator">
+<h2 class="section-title">Yaratish usulini tanlang</h2>
+
+<div class="modes">
+  <div class="mode selected" id="autoMode"
+       onclick="setMode('auto')">
+    <h3>⚡ Automatic Mode</h3>
+    <p>G‘oyangizni kiriting. AI ish rejasini tayyorlaydi.</p>
+  </div>
+
+  <div class="mode" id="manualMode"
+       onclick="setMode('manual')">
+    <h3>🎛 Manual Mode</h3>
+    <p>Video sozlamalarini o‘zingiz boshqaring.</p>
+  </div>
+</div>
+
+<div class="form-panel">
+  <h2 id="formTitle">⚡ Smart Video Creator</h2>
+
+  <label for="topic">Video mavzusi</label>
+  <textarea id="topic"
+    placeholder="Masalan: Python dasturlash haqida qiziqarli video..."></textarea>
+
+  <div class="grid">
+    <div>
+      <label for="format">Video formati</label>
+      <select id="format">
+        <option value="9:16">9:16 — Shorts / Reels</option>
+        <option value="16:9">16:9 — YouTube</option>
+        <option value="1:1">1:1 — Square</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="language">Video tili</label>
+      <select id="language">
+        <option>O‘zbekcha</option>
+        <option>English</option>
+        <option>Русский</option>
+        <option>Tojikcha</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="duration">Davomiyligi</label>
+      <select id="duration">
+        <option value="15">15 soniya</option>
+        <option value="30" selected>30 soniya</option>
+        <option value="60">60 soniya</option>
+        <option value="120">2 daqiqa</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="style">Video uslubi</label>
+      <select id="style">
+        <option>Cinematic</option>
+        <option>Realistic</option>
+        <option>Animation</option>
+        <option>Technology</option>
+        <option>Documentary</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="manualSettings" class="hidden">
+    <label for="provider">AI provayder</label>
+    <select id="provider">
+      <option value="auto">Automatic</option>
+      <option value="google">Google</option>
+      <option value="openrouter">OpenRouter</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label for="voice">Ovoz sozlamasi</label>
+    <select id="voice">
+      <option value="ai">AI ovozi</option>
+      <option value="none">Ovozsiz video</option>
+    </select>
+  </div>
+
+  <button class="primary" onclick="createProject()">
+    ✨ Video loyihasini yaratish
+  </button>
+
+  <div class="status" id="status"
+       role="status" aria-live="polite"></div>
+</div>
+</section>
+
+<section id="director">
+<h2 class="section-title">🎥 AI Director</h2>
+
+<div class="features">
+  <div class="feature">
+    <b>📝 Script Writer</b>
+    <span>Video ssenariysini rejalashtirish.</span>
+  </div>
+  <div class="feature">
+    <b>🎞 Storyboard</b>
+    <span>Sahnalar ketma-ketligini yaratish.</span>
+  </div>
+  <div class="feature">
+    <b>📷 Camera Planner</b>
+    <span>Kamera va kadr g‘oyalarini belgilash.</span>
+  </div>
+</div>
+</section>
+
+<section id="features">
+<h2 class="section-title">Studio imkoniyatlari</h2>
+
+<div class="features">
+  <div class="feature"><b>🎙 Voice Studio</b><span>Ovoz va audio boshqaruvi.</span></div>
+  <div class="feature"><b>✂️ Auto Editor</b><span>Subtitr va montaj vositalari.</span></div>
+  <div class="feature"><b>🧠 Multi-AI Engine</b><span>AI provayderlarini boshqarish.</span></div>
+  <div class="feature"><b>🛡 Blip Review</b><span>Eksportdan oldin tekshirish.</span></div>
+  <div class="feature"><b>🖼 Thumbnail Maker</b><span>Video muqovasi yaratish.</span></div>
+  <div class="feature"><b>🌍 Translator</b><span>Videolarni tarjima qilish.</span></div>
+  <div class="feature"><b>🎨 Brand Kit</b><span>Brend uslubini saqlash.</span></div>
+  <div class="feature"><b>💰 Cost Manager</b><span>AI xarajatlarini kuzatish.</span></div>
+  <div class="feature"><b>🤖 AI Debate</b><span>AI agentlar fikr almashuvi.</span></div>
+</div>
+</section>
+
+<section id="library">
+<h2 class="section-title">📁 Project Library</h2>
+<div class="form-panel">
+  <p style="color:var(--muted);font-size:14px">
+    Loyihalarni saqlash tizimi backend integratsiyasidan
+    keyin ishga tushadi.
+  </p>
+</div>
+</section>
+
+<footer>BLIP VIDEO STUDIO · v0.1 · DEMO</footer>
+</main>
+</div>
+
+<script>
+"use strict";
+
+let currentMode = "auto";
+
+function setMode(mode) {
+  currentMode = mode;
+
+  document.getElementById("autoMode")
+    .classList.toggle("selected", mode === "auto");
+
+  document.getElementById("manualMode")
+    .classList.toggle("selected", mode === "manual");
+
+  document.getElementById("manualSettings")
+    .classList.toggle("hidden", mode !== "manual");
+
+  document.getElementById("formTitle").textContent =
+    mode === "auto"
+      ? "⚡ Smart Video Creator"
+      : "🎛 Manual Video Creator";
+}
+
+function createProject() {
+  const topic =
+    document.getElementById("topic").value.trim();
+
+  const status = document.getElementById("status");
+
+  if (!topic) {
+    status.style.display = "block";
+    status.textContent =
+      "⚠️ Avval video mavzusini kiriting.";
+    return;
+  }
+
+  const project = {
+    topic: topic,
+    mode: currentMode,
+    format: document.getElementById("format").value,
+    language: document.getElementById("language").value,
+    duration: document.getElementById("duration").value,
+    style: document.getElementById("style").value,
+    provider: currentMode === "manual"
+      ? document.getElementById("provider").value
+      : "auto"
+  };
+
+  console.log("Blip Video Studio:", project);
+
+  status.style.display = "block";
+  status.textContent =
+    "✅ Demo loyiha sozlamalari tayyor! " +
+    "Haqiqiy video generatsiyasi uchun backend " +
+    "va AI provayderlari ulanishi kerak.";
+}
+</script>
+
+</body>
+</html>
