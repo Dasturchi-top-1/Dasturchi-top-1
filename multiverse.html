@@ -4,56 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
     <title>Blip Multiverse</title>
-
     <style>
-        /* QO'RIQCHI: Sahifani yashirmaymiz, o'rniga yuklanish ekranini ko'rsatamiz */
         body { background-color: #050510; color: #fff; font-family: sans-serif; margin: 0; }
-        #loadingScreen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            display: flex; justify-content: center; align-items: center; 
-            background: #050510; z-index: 9999; flex-direction: column; gap: 20px;
-        }
+        #loadingScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; background: #050510; z-index: 9999; flex-direction: column; gap: 20px; }
         .spinner { width: 50px; height: 50px; border: 5px solid rgba(99, 102, 241, 0.2); border-top-color: #6366f1; border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-text { font-size: 15px; color: #8888aa; text-align: center; padding: 0 20px; }
-        
-        /* Asosiy kontentni vaqtincha yashiramiz */
         .c { display: none; }
     </style>
     <script>
         (async function guard() {
             const API_URL = "https://saytim-uchun.onrender.com";
             const token = localStorage.getItem('blip_token');
-            
             if (!token) { window.location.replace('index.html'); return; }
-
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 50000); // 50 soniya kutish
-
+                const timeoutId = setTimeout(() => controller.abort(), 50000);
                 const res = await fetch(`${API_URL}/api/verify-token`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: token, expectedRole: 'human' }), signal: controller.signal
                 });
-                
                 clearTimeout(timeoutId);
                 const data = await res.json();
-
                 if (data.valid) {
-                    // Ruxsat berildi: yuklanish ekranini o'chirib, asosiy qismni ko'rsatamiz
                     document.getElementById('loadingScreen').style.display = 'none';
                     document.querySelector('.c').style.display = 'block';
                 } else {
                     localStorage.removeItem('blip_token'); localStorage.removeItem('blip_role'); window.location.replace('index.html');
                 }
-            } catch (error) {
-                console.error("Server xatosi:", error);
-                window.location.replace('index.html');
-            }
+            } catch (error) { window.location.replace('index.html'); }
         })();
     </script>
-
-    <!-- QOLGAN CSS DIZAYNLAR -->
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
         :root{--bg:#050510;--card:#0f0f22;--text:#e6e6f0;--muted:#8888aa;--acc:#6366f1;--acc2:#a855f7;--brd:#1f1f3a;--gold:#fbbf24;--red:#ef4444;--grn:#10b981}
@@ -93,7 +74,6 @@
     </style>
 </head>
 <body>
-    <!-- Yuklanish ekrani -->
     <div id="loadingScreen">
         <div class="spinner"></div>
         <div class="loading-text">Server uyg'onmoqda, iltimos kuting...<br><small>(50 soniyagacha vaqt olishi mumkin)</small></div>
@@ -115,7 +95,6 @@
         <div class="tab" id="tab-ff" onclick="sw('ff',this)">🔥 Free Fire</div>
     </div>
 
-    <!-- HOME -->
     <div class="tc active" id="t-home">
         <div class="gc" onclick="location.href='video_studio.html'"><span class="i">🎬</span><h3>Blip Video Studio</h3><p>AI yordamida professional videolar yarating.</p></div>
         <div class="gc" onclick="sw('turing')"><span class="i">🎭</span><h3>Reverse Turing Test</h3><p>Sen AI bo'lib o'yna, AI odam bo'lib o'yna.</p></div>
@@ -127,7 +106,6 @@
         <div class="gc" onclick="sw('ff')"><span class="i">🔥</span><h3>Free Fire sozlamalari</h3><p>AI telefon uchun optimal sozlama beradi.</p></div>
     </div>
 
-    <!-- QIDIRUV -->
     <div class="tc" id="t-search">
         <div class="card">
             <div class="result-title">🔎 Blip Search</div>
@@ -138,42 +116,36 @@
         <div id="searchResults"></div>
     </div>
 
-    <!-- TURING -->
     <div class="tc" id="t-turing">
         <div class="info">💡 Hakam qaysi biri odam ekanini topadi.</div>
         <div class="card"><div class="info" style="margin-bottom:8px"><b>📌 Mavzu:</b> <span id="ttopic">...</span></div><textarea id="tans" placeholder="AI bo'lib javob yozing..."></textarea><button class="btn" onclick="tSub()">Yuborish</button></div>
         <div id="tres"></div>
     </div>
 
-    <!-- DREAM -->
     <div class="tc" id="t-dream">
         <div class="info">💡 Tushingizni yozing. AI tahlil qiladi va rasm chizadi.</div>
         <div class="card"><textarea id="din" placeholder="Tushingizni yozing..."></textarea><button class="btn" onclick="dSub()">🌙 Tahlil qilish</button></div>
         <div id="dres"></div>
     </div>
 
-    <!-- TIME -->
     <div class="tc" id="t-time">
         <div class="info">💡 Yil va joyni kiriting.</div>
         <div class="card"><input type="number" id="tyr" placeholder="1900"><input type="text" id="tpl" placeholder="Dushanbe"><button class="btn" onclick="tmSub()">⏰ Sayohat</button></div>
         <div id="tmres"></div>
     </div>
 
-    <!-- WORLD -->
     <div class="tc" id="t-world">
         <div class="info">💡 Bitta tugma. Har bosganda yangi dunyo.</div>
         <div class="card" style="text-align:center"><button class="btn" onclick="wSub()" style="font-size:16px;padding:22px">🎲 YANGI DUNYO</button></div>
         <div id="wres"></div>
     </div>
 
-    <!-- DEBATE -->
     <div class="tc" id="t-debate">
         <div class="info">💡 Advokat himoya qiladi, Prokuror qarshi chiqadi, Hakam qaror chiqaradi.</div>
         <div class="card"><input type="text" id="dtp" placeholder="Mavzu (AI bilan do'stlashish kerakmi?)"><button class="btn" onclick="dbSub()">⚔️ Sud majlisini boshlash</button></div>
         <div id="dbres"></div>
     </div>
 
-    <!-- VIDEO -->
     <div class="tc" id="t-video">
         <div class="info">🎬 Sahnani yozing. Har bir qator alohida sahna.</div>
         <div class="card"><textarea id="vtext" placeholder="Salom, Ustoz! 👋&#10;&#10;Rahmat! 💛"></textarea><label class="lbl">🎨 Rang uslubi</label><select id="vtheme"><option value="dark">🌙 Dark</option><option value="gold">✨ Gold</option><option value="blue">💙 Blue</option></select><label class="lbl">⏱ Har bir sahna (soniya)</label><input type="number" id="vdur" value="3" min="1" max="10"><button class="btn" onclick="vStart()">🎬 Videoni yasash</button></div>
@@ -182,14 +154,12 @@
         <div id="vdownload" style="display:none"><button class="btn btn-gold" onclick="vDownload()">📥 Videoni yuklab olish</button></div>
     </div>
 
-    <!-- MUSIQA -->
     <div class="tc" id="t-music">
         <div class="info">🎵 Artist ismi + qo'shiq nomi. YouTube link avtomatik topiladi!</div>
         <div class="card"><label class="lbl">🎤 Artist ismi *</label><input type="text" id="mArtist" placeholder="Ozoda"><label class="lbl">👤 Familiyasi (ixtiyoriy)</label><input type="text" id="mSurname" placeholder="Nazarova"><label class="lbl">🎵 Qo'shiq nomi (ixtiyoriy)</label><input type="text" id="mSong" placeholder="Bahor keldi"><label class="lbl">🎧 Audio fayl *</label><input type="file" id="mAudio" accept="audio/*"><button class="btn" onclick="mUpload()">⬆️ Yuklash va YouTube qidirish</button></div>
         <div class="card"><div id="mList"></div></div>
     </div>
 
-    <!-- FREE FIRE -->
     <div class="tc" id="t-ff">
         <div class="info">🔥 Telefoningizga mos Free Fire sozlamalarini AI orqali oling</div>
         <div class="card"><button class="btn btn-gold" onclick="autoDetectPhone()" style="margin-bottom:14px">🔍 Telefonimni avtomatik aniqlash</button><label class="lbl">📱 Telefon modeli</label><input type="text" id="ffModel" placeholder="Redmi Note 12"><label class="lbl">💾 RAM (GB)</label><input type="text" id="ffRam" placeholder="8"><label class="lbl">🎯 O'yin uslubi</label><select id="ffMode"><option value="fast">⚡ Tez o'yin</option><option value="sniper">🎯 Mergan</option><option value="balanced">⚖️ Balans</option></select><button class="btn btn-gold" onclick="ffApply()">🤖 AI orqali sozlamalarni olish</button><div id="ffResult" style="margin-top:14px"></div></div>
@@ -224,7 +194,16 @@ async function runSearch() {
 }
 
 async function aiCall(prompt, sys) {
-    try { const r = await fetch(API + '/api/chat', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ message: prompt, systemPrompt: sys }) }); const d = await r.json(); return d.reply || '⚠️ AI javob bera olmadi.'; } catch(e) { return '⚠️ Xatolik: ' + e.message; }
+    try {
+        const r = await fetch(API + '/api/chat', { 
+            method: 'POST', 
+            headers: {'Content-Type':'application/json'}, 
+            body: JSON.stringify({ message: prompt, systemPrompt: sys }) 
+        });
+        const d = await r.json(); 
+        if (d.success && d.reply) return d.reply;
+        return `⚠️ AI Xatosi: ${d.error || "Noma'lum xatolik"}`;
+    } catch(e) { return '⚠️ Tarmoq xatosi: ' + e.message; }
 }
 function showLoading(id, msg) { document.getElementById(id).innerHTML = `<div class="loading">⏳ ${msg}...</div>`; }
 
