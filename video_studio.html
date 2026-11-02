@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -402,9 +401,11 @@ footer{
 <footer>BLIP VIDEO STUDIO · v0.1 · DEMO</footer>
 </main>
 </div>
-
 <script>
 "use strict";
+
+// Backend manzili
+const API_BASE = "https://saytim-uchun.onrender.com";
 
 let currentMode = "auto";
 
@@ -426,21 +427,44 @@ function setMode(mode) {
       : "🎛 Manual Video Creator";
 }
 
-function createProject() {
-  const topic =
-    document.getElementById("topic").value.trim();
-
+function showStatus(message) {
   const status = document.getElementById("status");
+  status.style.display = "block";
+  status.textContent = message;
+}
+
+async function askAI(message, systemPrompt) {
+  const response = await fetch(API_BASE + "/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: message,
+      systemPrompt: systemPrompt
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok || !data.success) {
+    throw new Error(data.error || "AI javob bera olmadi.");
+  }
+
+  return data;
+}
+
+// Video loyihasi va AI ssenariysi
+async function createProject() {
+  const topic = document.getElementById("topic").value.trim();
 
   if (!topic) {
-    status.style.display = "block";
-    status.textContent =
-      "⚠️ Avval video mavzusini kiriting.";
+    showStatus("⚠️ Avval video mavzusini kiriting.");
     return;
   }
 
   const project = {
-    topic: topic,
+    topic,
     mode: currentMode,
     format: document.getElementById("format").value,
     language: document.getElementById("language").value,
@@ -451,15 +475,77 @@ function createProject() {
       : "auto"
   };
 
-  console.log("Blip Video Studio:", project);
+  const button = document.querySelector(
+    'button[onclick="createProject()"]'
+  );
 
-  status.style.display = "block";
-  status.textContent =
-    "✅ Demo loyiha sozlamalari tayyor! " +
-    "Haqiqiy video generatsiyasi uchun backend " +
-    "va AI provayderlari ulanishi kerak.";
+  button.disabled = true;
+  button.textContent = "⏳ AI ssenariy tayyorlamoqda...";
+
+  showStatus("AI Director mavzuni tahlil qilmoqda...");
+
+  const prompt = `
+Video mavzusi: ${project.topic}
+Format: ${project.format}
+Til: ${project.language}
+Davomiyligi: ${project.duration} soniya
+Uslub: ${project.style}
+Rejim: ${project.mode}
+AI provayder tanlovi: ${project.provider}
+
+Shu ma'lumotlar asosida professional video ssenariysi yarat.
+Ssenariyni quyidagi tartibda yoz:
+1. Video g'oyasi
+2. Kuchli boshlanish (Hook)
+3. Sahnalar ketma-ketligi va har birining davomiyligi
+4. Har bir sahna uchun tasvir tavsifi
+5. Diktor matni
+6. Yakuniy chaqiriq (CTA)
+Javobni ${project.language} tilida yoz.
+`;
+
+  const systemPrompt = `
+Sen Blip Video Studio AI Director yordamchisisan.
+Professional video rejissyor va ssenariy muallifi kabi ishlaysan.
+Aniq, ijodiy va amaliy video reja tuz.
+Foydalanuvchi bergan format va davomiylikka amal qil.
+`;
+
+  try {
+    const data = await askAI(prompt, systemPrompt);
+
+    const directorOutput = document.getElementById("directorOutput");
+    directorOutput.style.display = "block";
+    directorOutput.textContent =
+      "✅ AI ssenariysi tayyor!\n\n" +
+      data.reply +
+      "\n\nAI provayder: " + (data.provider || "Noma'lum");
+
+    showStatus("✅ Ssenariy tayyor! Natijani AI Director bo‘limidan ko‘rishingiz mumkin.");
+
+    console.log("Blip Video Studio:", project);
+
+  } catch (error) {
+    showStatus("❌ Xatolik: " + error.message);
+  } finally {
+    button.disabled = false;
+    button.textContent = "✨ Video loyihasini yaratish";
+  }
 }
-</script>
 
-</body>
-</html>
+// AI Director uchun alohida tugma va natija maydoni
+const directorSection = document.getElementById("director");
+
+const directorButton = document.createElement("button");
+directorButton.className = "primary";
+directorButton.textContent = "🎬 AI Director orqali ssenariy yaratish";
+directorButton.onclick = createProject;
+directorSection.appendChild(directorButton);
+
+const directorOutput = document.createElement("pre");
+directorOutput.id = "directorOutput";
+directorOutput.className = "status";
+directorOutput.style.whiteSpace = "pre-wrap";
+directorOutput.style.overflowWrap = "anywhere";
+directorSection.appendChild(directorOutput);
+    </script>
