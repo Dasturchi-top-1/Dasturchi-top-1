@@ -21,33 +21,50 @@
 
         .box { 
             background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); 
-            padding: 35px 30px; border-radius: 24px; width: 100%; max-width: 380px; 
+            padding: 30px 25px; border-radius: 24px; width: 100%; max-width: 380px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(99, 102, 241, 0.1);
             animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; position: relative;
+            max-height: 95vh; overflow-y: auto;
         }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
-        h2 { text-align: center; margin-bottom: 25px; font-size: 28px; font-weight: 800; }
+        h2 { text-align: center; margin-bottom: 20px; font-size: 26px; font-weight: 800; }
         .gradient-text { background: linear-gradient(90deg, var(--acc), var(--acc2), #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% auto; animation: gradientShift 3s linear infinite; }
         @keyframes gradientShift { to { background-position: 200% center; } }
 
-        .tabs { display: flex; gap: 5px; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 14px; margin-bottom: 25px; }
-        .tab { flex: 1; padding: 12px; text-align: center; cursor: pointer; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--muted); transition: all 0.3s ease; }
+        .tabs { display: flex; gap: 5px; background: rgba(0,0,0,0.4); padding: 5px; border-radius: 14px; margin-bottom: 20px; }
+        .tab { flex: 1; padding: 11px; text-align: center; cursor: pointer; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--muted); transition: all 0.3s ease; }
         .tab.active { background: var(--acc); color: #fff; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
         
-        .input-group { margin-bottom: 18px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 15px; outline: none; transition: all 0.3s ease; }
+        .input-group { margin-bottom: 14px; }
+        input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: #fff; font-size: 15px; outline: none; transition: all 0.3s ease; }
         input:focus { border-color: var(--acc); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
         
-        .btn { width: 100%; padding: 15px; border: none; border-radius: 12px; background: linear-gradient(90deg, var(--acc), var(--acc2)); color: white; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: all 0.3s; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(90deg, var(--acc), var(--acc2)); color: white; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 5px; transition: all 0.3s; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3); }
         .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5); }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        .msg { font-size: 13px; text-align: center; margin-top: 15px; display: none; padding: 12px; border-radius: 10px; }
+        .msg { font-size: 13px; text-align: center; margin-top: 12px; display: none; padding: 12px; border-radius: 10px; }
         .msg.err { background: rgba(239,68,68,0.1); color: var(--err); border: 1px solid rgba(239,68,68,0.3); }
         .msg.ok { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
         
-        .ai-link { display: block; text-align: center; margin-top: 25px; color: var(--muted); font-size: 13px; text-decoration: none; transition: 0.3s; }
+        /* OAuth tugmalari dizayni */
+        .oauth-container { margin-top: 18px; }
+        .oauth-divider { display: flex; align-items: center; color: var(--muted); font-size: 12px; margin-bottom: 14px; }
+        .oauth-divider::before, .oauth-divider::after { content: ''; flex: 1; height: 1px; background: rgba(255, 255, 255, 0.1); }
+        .oauth-divider span { padding: 0 10px; }
+        
+        .oauth-btn { 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 12px; border-radius: 12px;
+            text-decoration: none; font-weight: 600; font-size: 14px;
+            margin-bottom: 10px; transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        .oauth-btn:hover { transform: translateY(-2px); opacity: 0.9; }
+        .google-btn { background: #ffffff; color: #333333; }
+        .github-btn { background: #24292e; color: #ffffff; border: 1px solid #444; }
+        
+        .ai-link { display: block; text-align: center; margin-top: 18px; color: var(--muted); font-size: 13px; text-decoration: none; transition: 0.3s; }
         .ai-link:hover { color: var(--acc2); text-shadow: 0 0 10px rgba(168, 85, 247, 0.5); }
     </style>
 </head>
@@ -67,11 +84,24 @@
             <button type="submit" class="btn" id="submitBtn">Kirish</button>
         </form>
         <div class="msg" id="msgBox"></div>
+        
+        <!-- OAuth tugmalari (YANGI) -->
+        <div class="oauth-container">
+            <div class="oauth-divider"><span>yoki hisob bilan kiring</span></div>
+            <a href="https://saytim-uchun.onrender.com/api/auth/google" class="oauth-btn google-btn">
+                <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="G">
+                <span>Google bilan kirish</span>
+            </a>
+            <a href="https://saytim-uchun.onrender.com/api/auth/github" class="oauth-btn github-btn">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span>GitHub bilan kirish</span>
+            </a>
+        </div>
+        
         <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
     </div>
-
-    <script>
-        const API_URL = "https://saytim-uchun.onrender.com"; // Manzilingiz
+        <script>
+        const API_URL = "https://saytim-uchun.onrender.com";
         let currentMode = 'login';
 
         function switchTab(mode) {
@@ -106,8 +136,11 @@
                 const timeoutId = setTimeout(() => controller.abort(), 60000);
 
                 const res = await fetch(`${API_URL}${endpoint}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password }), signal: controller.signal
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password }), 
+                    credentials: 'include',
+                    signal: controller.signal
                 });
                 clearTimeout(timeoutId); clearTimeout(slowTimer);
                 const data = await res.json();
@@ -117,32 +150,43 @@
                         showMsg("✅ Muvaffaqiyatli ro'yxatdan o'tdingiz! Endi kiring.", "ok");
                         switchTab('login'); btn.disabled = false; btn.innerText = "Kirish";
                     } else {
-                        localStorage.setItem('blip_token', data.token);
-                        localStorage.setItem('blip_role', data.role);
                         showMsg("✅ Muvaffaqiyatli kirdingiz!", "ok");
-                        setTimeout(() => window.location.href = data.redirect, 800);
+                        setTimeout(() => window.location.href = data.redirect || 'multiverse.html', 800);
                     }
                 } else {
                     showMsg("❌ " + (data.error || "Xatolik"));
-                    btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+                    btn.disabled = false; 
+                    btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
                 }
             } catch (err) {
                 clearTimeout(slowTimer);
-                showMsg("⚠️ Server bilan aloqa yo'q!");
-                btn.disabled = false; btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
+                if (err.name === 'AbortError') {
+                    showMsg("⏰ Server juda sekin javob berdi. Qaytadan urinib ko'ring.");
+                } else {
+                    showMsg("⚠️ Server bilan aloqa yo'q!");
+                }
+                btn.disabled = false; 
+                btn.innerText = currentMode === 'login' ? "Kirish" : "Ro'yxatdan o'tish";
             }
         }
 
+        // Sahifa yuklanganda sessiyani tekshirish (OAuth yoki oddiy login)
         window.addEventListener('DOMContentLoaded', async () => {
-            const token = localStorage.getItem('blip_token');
-            if (token) {
-                try {
-                    const res = await fetch(`${API_URL}/api/verify-token`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) });
+            try {
+                const res = await fetch(`${API_URL}/api/me`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (res.ok) {
                     const data = await res.json();
-                    if (data.valid) window.location.href = 'multiverse.html'; else localStorage.removeItem('blip_token');
-                } catch (e) {}
+                    if (data.authenticated) {
+                        window.location.href = 'multiverse.html';
+                    }
+                }
+            } catch (e) {
+                console.log("Sessiya tekshirilmadi:", e.message);
             }
         });
     </script>
 </body>
-                                         </html>
+</html>
