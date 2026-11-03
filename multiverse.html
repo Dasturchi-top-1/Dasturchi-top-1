@@ -166,7 +166,7 @@
     </div>
 
     <div class="footer">⚡ <a href="index.html" style="color:var(--acc)">Blip</a> · 2026</div>
-    </div> <!-- .c ni yopish -->
+    </div>
 
 <script>
 const API = "https://saytim-uchun.onrender.com";
@@ -195,15 +195,22 @@ async function runSearch() {
 
 async function aiCall(prompt, sys) {
     try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
         const r = await fetch(API + '/api/chat', { 
             method: 'POST', 
             headers: {'Content-Type':'application/json'}, 
-            body: JSON.stringify({ message: prompt, systemPrompt: sys }) 
+            body: JSON.stringify({ message: prompt, systemPrompt: sys }),
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
         const d = await r.json(); 
         if (d.success && d.reply) return d.reply;
         return `⚠️ AI Xatosi: ${d.error || "Noma'lum xatolik"}`;
-    } catch(e) { return '⚠️ Tarmoq xatosi: ' + e.message; }
+    } catch(e) { 
+        if (e.name === 'AbortError') return '⏰ Server juda sekin javob berdi (60 soniya). Qaytadan urinib ko\'ring.';
+        return '⚠️ Tarmoq xatosi: ' + e.message; 
+    }
 }
 function showLoading(id, msg) { document.getElementById(id).innerHTML = `<div class="loading">⏳ ${msg}...</div>`; }
 
@@ -234,12 +241,38 @@ async function wSub() {
     const img = `https://image.pollinations.ai/prompt/fantasy+world+epic+landscape?width=800&height=500&nologo=true&seed=${Date.now()}`;
     document.getElementById('wres').innerHTML = `<div class="result"><div class="result-title">🎲 Yangi dunyo</div><div class="result-text">${res}</div><img src="${img}"></div>`;
 }
+
+// ==========================================
+// SUD MAJLISI (KETMA-KET SO'ROVLAR)
+// ==========================================
 async function dbSub() {
-    const topic = document.getElementById('dtp').value.trim() || "AI bilan do'stlashish kerakmi?"; showLoading('dbres', "Sud majlisi boshlanmoqda");
-    const [adv, pros] = await Promise.all([ aiCall(`Sen advokatsan. "${topic}" ni himoya qil.`, 'Sen advokatsan.'), aiCall(`Sen prokurorsan. "${topic}" ga qarshi chiq.`, 'Sen prokurorsan.') ]);
+    const topic = document.getElementById('dtp').value.trim() || "AI bilan do'stlashish kerakmi?"; 
+    
+    showLoading('dbres', "Advokat himoya nutqini tayyorlamoqda...");
+    const adv = await aiCall(`Sen advokatsan. "${topic}" ni himoya qil.`, 'Sen advokatsan.');
+    
+    showLoading('dbres', "Prokuror ayblov nutqini tayyorlamoqda...");
+    const pros = await aiCall(`Sen prokurorsan. "${topic}" ga qarshi chiq.`, 'Sen prokurorsan.');
+    
+    showLoading('dbres', "Hakam qaror chiqarmoqda...");
     const judge = await aiCall(`Hakam sifatida qaror chiqar. Advokat: ${adv}. Prokuror: ${pros}.`, 'Sen hakamsan.');
-    document.getElementById('dbres').innerHTML = `<div class="result" style="border-left-color:var(--grn)"><div class="result-title">🛡 Advokat</div><div class="result-text">${adv}</div></div><div class="result" style="border-left-color:var(--red)"><div class="result-title">⚔ Prokuror</div><div class="result-text">${pros}</div></div><div class="result" style="border-left-color:var(--gold)"><div class="result-title">⚖ Hakam</div><div class="result-text">${judge}</div></div>`;
+
+    document.getElementById('dbres').innerHTML = `
+        <div class="result" style="border-left-color:var(--grn)">
+            <div class="result-title">🛡 Advokat</div>
+            <div class="result-text">${adv}</div>
+        </div>
+        <div class="result" style="border-left-color:var(--red)">
+            <div class="result-title">⚔ Prokuror</div>
+            <div class="result-text">${pros}</div>
+        </div>
+        <div class="result" style="border-left-color:var(--gold)">
+            <div class="result-title">⚖ Hakam</div>
+            <div class="result-text">${judge}</div>
+        </div>
+    `;
 }
+
 let vRecorder, vChunks = [], vBlob;
 async function vStart() {
     const text = document.getElementById('vtext').value.trim(); if(!text) return alert("Matn kiriting!");
