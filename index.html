@@ -5,89 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blip Portal | Kirish</title>
     <style>
-        :root { --bg:#050510; --card:rgba(20,20,40,.6); --acc:#6366f1; --acc2:#a855f7; --text:#fff; --muted:#94a3b8; --err:#ef4444; --ok:#10b981; --glow:#ffe9a8; }
+        :root { --bg:#050510; --acc:#6366f1; --acc2:#a855f7; --text:#fff; --muted:#94a3b8; --err:#ef4444; --ok:#10b981; --glow:#ffe9a8; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
         [hidden] { display:none !important; }
-        body { background:var(--bg); color:var(--text); min-height:100vh; min-height:100dvh; overflow-x:hidden; position:relative; transition:background 1.2s; }
-        body.lit { background:radial-gradient(ellipse at 50% 0%, #1d1d44 0%, var(--bg) 62%); }
+        body { background:var(--bg); color:var(--text); min-height:100vh; min-height:100dvh; overflow-x:hidden; }
 
-        /* Fon yorug'lari: chiroq o'chiq bo'lsa xira */
-        .orb { position:fixed; border-radius:50%; filter:blur(80px); z-index:-1; opacity:.1; transition:opacity 1.4s; animation:floatOrb 10s infinite alternate ease-in-out; }
-        .orb-1 { width:300px; height:300px; background:rgba(99,102,241,.4); top:-50px; left:-50px; }
-        .orb-2 { width:250px; height:250px; background:rgba(168,85,247,.3); bottom:-50px; right:-50px; animation-delay:-5s; }
-        body.lit .orb { opacity:1; }
-        @keyframes floatOrb { to { transform:translate(50px,50px) scale(1.2); } }
+        /* Fon: yengil, harakatsiz gradientlar (telefon qotmasligi uchun filtr va blur yo'q) */
+        .bg { position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.15; transition:opacity 1.2s;
+              background: radial-gradient(circle at 12% 8%, rgba(99,102,241,.45), transparent 42%),
+                          radial-gradient(circle at 90% 95%, rgba(168,85,247,.38), transparent 40%),
+                          radial-gradient(ellipse at 50% 0%, #1d1d44, transparent 62%); }
+        body.lit .bg { opacity:1; }
 
         .scene { min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; padding:0 16px 36px; }
 
         /* ===== CHIROQ ===== */
-        .lamp-wrap { position:relative; width:200px; height:222px; flex:none; }
-        .swing { position:absolute; inset:0; transform-origin:50% 0; animation:swing 5s ease-in-out infinite; }
-        body.lit .swing { animation:settle 2.6s ease-out forwards; }
+        .lamp-wrap { position:relative; width:200px; height:230px; flex:none; }
+        .swing { position:absolute; inset:0; transform-origin:50% 0; will-change:transform; animation:swing 5s ease-in-out infinite; }
+        body.lit .swing { animation:settle 2.4s ease-out forwards; }
         @keyframes swing { 0%,100% { transform:rotate(-2.2deg); } 50% { transform:rotate(2.2deg); } }
         @keyframes settle { from { transform:rotate(7deg); } 30% { transform:rotate(-4deg); } 60% { transform:rotate(2deg); } to { transform:rotate(0); } }
         .wire { position:absolute; left:50%; top:0; width:2px; height:46px; background:#3b3b55; transform:translateX(-50%); }
-        .lamp { position:absolute; left:0; top:44px; width:200px; height:140px; overflow:visible; }
-        .shade { fill:url(#shadeGrad); }
+        .lamp { position:absolute; left:0; top:44px; width:200px; height:140px; }
         .bulb { fill:#2c2c40; transition:fill .25s; }
-        body.lit .bulb { fill:#fff6cf; filter:drop-shadow(0 0 12px #ffe9a8) drop-shadow(0 0 34px #ffd86b); animation:flick .8s linear 1; }
-        @keyframes flick { 0% { opacity:.15; } 12% { opacity:1; } 22% { opacity:.25; } 38% { opacity:1; } 48% { opacity:.45; } 62%,100% { opacity:1; } }
+        body.lit .bulb { fill:#fff6cf; }
+        /* Yorug'lik "nuri": filtr o'rniga oddiy gradient doira */
+        .glow { position:absolute; left:50%; top:138px; width:170px; height:170px; margin:-85px 0 0 -85px; border-radius:50%; opacity:0; pointer-events:none; transition:opacity .35s;
+                background:radial-gradient(circle, rgba(255,233,168,.6), rgba(255,233,168,0) 66%); }
+        body.lit .glow { opacity:1; animation:flick .8s linear 1; }
+        @keyframes flick { 0% { opacity:.1; } 12% { opacity:1; } 22% { opacity:.2; } 38% { opacity:1; } 48% { opacity:.4; } 62%,100% { opacity:1; } }
 
-        .cord { position:absolute; left:134px; top:122px; width:32px; height:96px; background:none; border:0; cursor:grab; touch-action:none; display:flex; flex-direction:column; align-items:center; transform:translateY(var(--pull,0px)); transition:transform .3s cubic-bezier(.3,1.6,.5,1); border-radius:10px; }
-        .cord.drag { transition:none; cursor:grabbing; }
-        .cord.pulled { animation:tug .4s; }
-        @keyframes tug { 40% { transform:translateY(26px); } }
+        /* IP: yuqori uchi chiroqqa mahkam bog'langan, pastga CHO'ZILADI */
+        .cord { position:absolute; left:134px; top:122px; width:32px; height:104px; background:none; border:0; padding:0; cursor:grab; border-radius:10px;
+                display:flex; flex-direction:column; align-items:center;
+                touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent; }
         .cord:focus-visible { outline:2px solid var(--acc2); outline-offset:3px; }
-        .cord-line { width:2px; height:64px; background:#6b6b8c; }
-        .cord-knob { width:16px; height:16px; border-radius:50%; background:var(--glow); box-shadow:0 0 12px rgba(255,233,168,.7); }
+        .cord-line { width:2px; height:64px; background:#7a7a9c; transform-origin:50% 0; transform:scaleY(var(--k,1)); transition:transform .3s cubic-bezier(.3,1.6,.5,1); }
+        .cord-knob { width:16px; height:16px; border-radius:50%; background:var(--glow); box-shadow:0 0 8px rgba(255,233,168,.7); transform:translateY(var(--pull,0px)); transition:transform .3s cubic-bezier(.3,1.6,.5,1); }
+        .cord.drag { cursor:grabbing; }
+        .cord.drag .cord-line, .cord.drag .cord-knob { transition:none; }
+        .cord.pulled .cord-line { animation:tugLine .4s; }
+        .cord.pulled .cord-knob { animation:tugKnob .4s; }
+        @keyframes tugLine { 40% { transform:scaleY(1.4); } }
+        @keyframes tugKnob { 40% { transform:translateY(26px); } }
 
-        .cone { position:absolute; left:50%; top:128px; width:min(94vw,540px); height:min(72vh,600px); transform:translateX(-50%); pointer-events:none; opacity:0; transition:opacity .9s .15s; background:linear-gradient(to bottom, rgba(255,233,168,.3), rgba(255,233,168,0) 88%); clip-path:polygon(41% 0, 59% 0, 100% 100%, 0 100%); }
+        /* Yorug'lik konusi: bitta statik SVG, faqat opacity o'zgaradi */
+        .cone { position:absolute; left:50%; top:128px; width:min(94vw,540px); height:360px; transform:translateX(-50%); pointer-events:none; opacity:0; transition:opacity .9s .15s; }
         body.lit .cone { opacity:1; }
 
-        .hint { color:var(--muted); font-size:14px; text-align:center; margin:2px 0 8px; animation:pulse 2.2s ease-in-out infinite; }
+        .hint { color:var(--muted); font-size:14px; text-align:center; margin:2px 0 8px; }
         body.lit .hint { display:none; }
-        @keyframes pulse { 50% { opacity:.4; } }
 
         /* ===== KARTA ===== */
-        .box { position:relative; z-index:1; width:100%; max-width:380px; background:var(--card); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.08); padding:28px 24px; border-radius:24px; box-shadow:0 20px 50px rgba(0,0,0,.5); opacity:0; transform:translateY(26px) scale(.98); pointer-events:none; transition:opacity .8s .35s, transform .8s .35s cubic-bezier(.2,.8,.2,1), box-shadow 1s; }
-        body.lit .box { opacity:1; transform:none; pointer-events:auto; box-shadow:0 20px 50px rgba(0,0,0,.5), 0 -8px 70px rgba(255,233,168,.14); }
-        h2 { text-align:center; margin-bottom:12px; font-size:26px; font-weight:800; }
-        .gradient-text { background:linear-gradient(90deg,var(--acc),var(--acc2),#ec4899); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; background-size:200% auto; animation:gradientShift 4s linear infinite; }
-        @keyframes gradientShift { to { background-position:200% center; } }
-        .sub { color:var(--muted); font-size:14px; line-height:1.5; text-align:center; margin-bottom:16px; }
-        .sub b { color:#c7d2fe; word-break:break-all; }
+        .box { position:relative; z-index:1; width:100%; max-width:380px; background:rgba(18,18,38,.94); border:1px solid rgba(255,255,255,.08); padding:28px 24px; border-radius:24px; box-shadow:0 14px 36px rgba(0,0,0,.5);
+               opacity:0; transform:translateY(22px); pointer-events:none; transition:opacity .6s .3s, transform .6s .3s cubic-bezier(.2,.8,.2,1); }
+        body.lit .box { opacity:1; transform:none; pointer-events:auto; }
+        h2 { text-align:center; margin-bottom:10px; font-size:26px; font-weight:800; }
+        .gradient-text { background:linear-gradient(90deg,var(--acc),var(--acc2),#ec4899); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        .sub { color:var(--muted); font-size:14px; line-height:1.5; text-align:center; margin-bottom:18px; }
+        .note { color:var(--muted); font-size:12px; line-height:1.5; text-align:center; margin-top:4px; }
         .sr { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
-        .input-group { margin-bottom:14px; }
-        input { width:100%; padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.3); color:#fff; font-size:16px; outline:none; transition:.3s; }
-        input:focus { border-color:var(--acc); box-shadow:0 0 15px rgba(99,102,241,.25); }
-        .code-input { text-align:center; font-size:28px; letter-spacing:10px; font-weight:800; margin-bottom:14px; padding-left:24px; }
-        .btn { width:100%; padding:14px; border:0; border-radius:12px; background:linear-gradient(90deg,var(--acc),var(--acc2)); color:#fff; font-size:15px; font-weight:700; cursor:pointer; transition:.3s; }
-        .btn:hover { transform:translateY(-2px); box-shadow:0 12px 25px rgba(99,102,241,.5); }
-        .btn:disabled { opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
-        .row { display:flex; justify-content:space-between; gap:8px; margin-top:12px; }
-        .link { background:none; border:0; color:#a5b4fc; font-size:13px; cursor:pointer; padding:6px 2px; }
-        .link:disabled { color:var(--muted); cursor:default; }
-        .msg { font-size:13px; text-align:center; margin-top:12px; display:none; padding:12px; border-radius:10px; }
+        .msg { font-size:13px; text-align:center; margin-bottom:12px; display:none; padding:12px; border-radius:10px; }
         .msg.err { display:block; background:rgba(239,68,68,.1); color:var(--err); border:1px solid rgba(239,68,68,.3); }
         .msg.ok { display:block; background:rgba(16,185,129,.1); color:var(--ok); border:1px solid rgba(16,185,129,.3); }
-
-        .oauth-container { margin-top:18px; }
-        .oauth-divider { display:flex; align-items:center; color:var(--muted); font-size:12px; margin-bottom:14px; }
-        .oauth-divider::before, .oauth-divider::after { content:''; flex:1; height:1px; background:rgba(255,255,255,.1); }
-        .oauth-divider span { padding:0 10px; }
-        .oauth-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:12px; border-radius:12px; text-decoration:none; font-weight:600; font-size:14px; margin-bottom:10px; transition:.3s; border:1px solid transparent; }
-        .oauth-btn:hover { transform:translateY(-2px); opacity:.9; }
+        .oauth-btn { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:15px; border-radius:12px; text-decoration:none; font-weight:700; font-size:15px; margin-bottom:12px; border:1px solid transparent; -webkit-tap-highlight-color:transparent; }
+        .oauth-btn:active { transform:scale(.98); }
         .google-btn { background:#fff; color:#333; }
         .github-btn { background:#24292e; color:#fff; border-color:#444; }
-        .legacy { margin-top:8px; color:var(--muted); font-size:13px; }
-        .legacy summary { cursor:pointer; padding:6px 0; text-align:center; }
-        .legacy form { margin-top:10px; }
-        .ai-link { display:block; text-align:center; margin-top:16px; color:var(--muted); font-size:13px; text-decoration:none; transition:.3s; }
-        .ai-link:hover { color:var(--acc2); text-shadow:0 0 10px rgba(168,85,247,.5); }
+        .ai-link { display:block; text-align:center; margin-top:16px; color:var(--muted); font-size:13px; text-decoration:none; }
+        .ai-link:hover { color:var(--acc2); }
+
+        /* Admin (faqat saytmanzil oxirida #admin bo'lsa ko'rinadi) */
+        .admin { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); }
+        .admin input { width:100%; padding:13px; margin-bottom:10px; border-radius:12px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.3); color:#fff; font-size:16px; outline:none; }
+        .admin button { width:100%; padding:13px; border:0; border-radius:12px; background:linear-gradient(90deg,var(--acc),var(--acc2)); color:#fff; font-weight:700; font-size:15px; }
+        .admin button:disabled { opacity:.6; }
 
         /* Muvaffaqiyatli kirishda yorug'lik chaqnashi */
         .flash-layer { position:fixed; inset:0; z-index:9; pointer-events:none; opacity:0; background:radial-gradient(circle at 50% 18%, #fff 0%, rgba(255,233,168,.85) 25%, rgba(255,233,168,0) 70%); }
-        body.flash .flash-layer { animation:flashIn .9s ease-out forwards; }
+        body.flash .flash-layer { animation:flashIn .8s ease-out forwards; }
         @keyframes flashIn { 0% { opacity:0; } 45% { opacity:1; } 100% { opacity:.9; } }
 
         @media (prefers-reduced-motion: reduce) {
@@ -96,21 +92,24 @@
     </style>
 </head>
 <body>
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
+    <div class="bg"></div>
     <div class="flash-layer"></div>
 
     <main class="scene">
         <div class="lamp-wrap">
-            <div class="cone"></div>
+            <svg class="cone" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <defs><linearGradient id="coneGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".30"/><stop offset=".88" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient></defs>
+                <polygon points="41,0 59,0 100,100 0,100" fill="url(#coneGrad)"/>
+            </svg>
             <div class="swing">
                 <div class="wire"></div>
                 <svg class="lamp" viewBox="0 0 200 140" aria-hidden="true">
                     <defs><linearGradient id="shadeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b4b73"/><stop offset="1" stop-color="#242440"/></linearGradient></defs>
-                    <path class="shade" d="M38 78 L70 6 H130 L162 78 Z"/>
+                    <path d="M38 78 L70 6 H130 L162 78 Z" fill="url(#shadeGrad)"/>
                     <rect x="36" y="76" width="128" height="7" rx="3.5" fill="#34345a"/>
                     <circle class="bulb" cx="100" cy="94" r="12"/>
                 </svg>
+                <div class="glow"></div>
                 <button class="cord" id="cord" type="button" aria-pressed="false" aria-label="Chiroqni yoqish (torting yoki bosing)">
                     <span class="cord-line"></span><span class="cord-knob"></span>
                 </button>
@@ -120,72 +119,44 @@
 
         <section class="box" id="box" inert aria-hidden="true">
             <h2 class="gradient-text">Blip Portal</h2>
-
-            <div id="step-email">
-                <p class="sub">Emailingizni kiriting, biz sizga 6 xonali kod yuboramiz. Parol shart emas.</p>
-                <form id="emailForm" novalidate>
-                    <div class="input-group">
-                        <label class="sr" for="email">Email</label>
-                        <input type="email" id="email" placeholder="email@gmail.com" autocomplete="email" inputmode="email" maxlength="254">
-                    </div>
-                    <button class="btn" id="sendBtn" type="submit">Kod yuborish</button>
-                </form>
-            </div>
-
-            <div id="step-code" hidden>
-                <p class="sub">Kod <b id="sentTo"></b> manziliga yuborildi. U 10 daqiqa amal qiladi.</p>
-                <form id="codeForm" novalidate>
-                    <input type="text" id="code" class="code-input" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="······" aria-label="6 xonali kod">
-                    <button class="btn" id="verifyBtn" type="submit">Tasdiqlash va kirish</button>
-                </form>
-                <div class="row">
-                    <button class="link" id="resendBtn" type="button" disabled>Qayta yuborish</button>
-                    <button class="link" id="changeBtn" type="button">Emailni o'zgartirish</button>
-                </div>
-            </div>
+            <p class="sub">Google yoki GitHub hisobingiz bilan kiring. Ism va parol kerak emas.</p>
 
             <div class="msg" id="msgBox" role="status" aria-live="polite"></div>
 
-            <div class="oauth-container">
-                <div class="oauth-divider"><span>yoki hisob bilan kiring</span></div>
-                <a href="https://saytim-uchun.onrender.com/api/auth/google" class="oauth-btn google-btn">
-                    <img src="https://www.google.com/favicon.ico" width="16" height="16" alt="">
-                    <span>Google bilan kirish</span>
-                </a>
-                <a href="https://saytim-uchun.onrender.com/api/auth/github" class="oauth-btn github-btn">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-                    <span>GitHub bilan kirish</span>
-                </a>
-            </div>
-
-            <details class="legacy">
-                <summary>Parol bilan kirish (eski hisoblar)</summary>
-                <form id="legacyForm" novalidate>
-                    <div class="input-group"><label class="sr" for="username">Ism</label><input type="text" id="username" placeholder="Ismingiz" autocomplete="username" maxlength="64"></div>
-                    <div class="input-group"><label class="sr" for="password">Parol</label><input type="password" id="password" placeholder="Parolingiz" autocomplete="current-password" maxlength="200"></div>
-                    <button class="btn" id="legacyBtn" type="submit">Kirish</button>
-                </form>
-            </details>
+            <a href="https://saytim-uchun.onrender.com/api/auth/google" class="oauth-btn google-btn" id="googleBtn">
+                <img src="https://www.google.com/favicon.ico" width="18" height="18" alt="">
+                <span>Google bilan kirish</span>
+            </a>
+            <a href="https://saytim-uchun.onrender.com/api/auth/github" class="oauth-btn github-btn" id="githubBtn">
+                <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                <span>GitHub bilan kirish</span>
+            </a>
+            <p class="note">Faqat ismingiz va emailingiz o'qiladi. Parolingiz bizga ko'rinmaydi.</p>
 
             <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
+
+            <form class="admin" id="adminForm" hidden novalidate>
+                <label class="sr" for="adminUser">Admin ismi</label>
+                <input type="text" id="adminUser" placeholder="Admin ismi" autocomplete="username" maxlength="64">
+                <label class="sr" for="adminPass">Admin paroli</label>
+                <input type="password" id="adminPass" placeholder="Admin paroli" autocomplete="current-password" maxlength="200">
+                <button type="submit" id="adminBtn">Admin kirishi</button>
+            </form>
         </section>
         <noscript><p class="hint">Kirish uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
     </main>
+
     <script>
         const API_URL = "https://saytim-uchun.onrender.com";
         const $ = id => document.getElementById(id);
         const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
+        let lit = false, busy = false;
 
-        let lit = false, busy = false, pendingEmail = "", resendTimer = null;
-
-        // ===== Xabarlar (faqat textContent: XSS xavfi yo'q) =====
         function showMsg(text, type = 'err') {
             const m = $('msgBox');
-            m.textContent = text;
+            m.textContent = text;           // faqat textContent: XSS xavfi yo'q
             m.className = 'msg ' + type;
         }
-        function clearMsg() { $('msgBox').className = 'msg'; $('msgBox').textContent = ''; }
 
         // ===== Chiroq =====
         function setLamp(on) {
@@ -195,12 +166,6 @@
             $('box').setAttribute('aria-hidden', String(!on));
             $('cord').setAttribute('aria-pressed', String(on));
             $('cord').setAttribute('aria-label', on ? "Chiroqni o'chirish" : "Chiroqni yoqish (torting yoki bosing)");
-            if (on && !window.matchMedia('(pointer: coarse)').matches) {
-                setTimeout(() => {
-                    const t = !$('step-code').hidden ? $('code') : $('email');
-                    t.focus({ preventScroll: true });
-                }, REDUCED ? 50 : 900);
-            }
         }
         function toggleLamp() {
             const c = $('cord');
@@ -208,154 +173,74 @@
             setLamp(!lit);
         }
 
-        // Ipni sudrab tortish (sichqoncha/barmoq) va klaviatura (Enter/Space)
+        // Ip: sudrash (sichqoncha/barmoq) va klaviatura. Yuqori uchi qotib turadi, ip cho'ziladi.
         (function initCord() {
             const c = $('cord');
-            let startY = null;
+            const LINE = 64, MAX = 40;
+            let startY = null, pending = 0, raf = 0;
+            const paint = () => {
+                raf = 0;
+                c.style.setProperty('--pull', pending + 'px');
+                c.style.setProperty('--k', String(1 + pending / LINE));
+            };
+            const reset = () => {
+                startY = null; pending = 0;
+                if (raf) { cancelAnimationFrame(raf); raf = 0; }
+                c.classList.remove('drag');
+                c.style.removeProperty('--pull'); c.style.removeProperty('--k');
+            };
             c.addEventListener('pointerdown', e => {
-                startY = e.clientY;
-                c.setPointerCapture(e.pointerId);
+                startY = e.clientY; pending = 0;
                 c.classList.add('drag');
+                try { c.setPointerCapture(e.pointerId); } catch (_) {}
             });
             c.addEventListener('pointermove', e => {
                 if (startY === null) return;
-                const d = Math.max(0, Math.min(40, e.clientY - startY));
-                c.style.setProperty('--pull', d + 'px');
+                pending = Math.max(0, Math.min(MAX, e.clientY - startY));
+                if (!raf) raf = requestAnimationFrame(paint);
             });
-            const end = (e, fire) => {
-                if (startY === null) return;
-                startY = null;
-                c.classList.remove('drag');
-                c.style.removeProperty('--pull');
-                if (fire) toggleLamp();
-            };
-            c.addEventListener('pointerup', e => end(e, true));
-            c.addEventListener('pointercancel', e => end(e, false));
-            c.addEventListener('click', e => { if (e.detail === 0) toggleLamp(); }); // klaviatura
+            c.addEventListener('pointerup', () => { if (startY === null) return; reset(); toggleLamp(); });
+            c.addEventListener('pointercancel', reset);
+            c.addEventListener('lostpointercapture', reset);
+            c.addEventListener('contextmenu', e => e.preventDefault());   // uzoq bosishda menyu chiqmasin
+            c.addEventListener('click', e => { if (e.detail === 0) toggleLamp(); });   // klaviatura
         })();
 
-        // ===== Server bilan aloqa =====
-        async function api(path, body) {
-            const ctl = new AbortController();
-            const timer = setTimeout(() => ctl.abort(), 60000); // Render uyg'onishi uchun
-            try {
-                const res = await fetch(API_URL + path, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body), signal: ctl.signal
-                });
-                let data = {};
-                try { data = await res.json(); } catch (_) {}
-                return { status: res.status, data };
-            } catch (e) {
-                const error = e.name === 'AbortError'
-                    ? "Server juda sekin javob berdi. Qayta urinib ko'ring."
-                    : "Server bilan aloqa yo'q!";
-                return { status: 0, data: { error } };
-            } finally { clearTimeout(timer); }
+        // ===== Google / GitHub tugmalari =====
+        function oauthClick(name) {
+            showMsg(name + "'ga o'tilmoqda... Server uyg'onayotgan bo'lsa, 50 soniyagacha kuting.", 'ok');
         }
-        function setBusy(on, btn, text) {
-            busy = on; btn.disabled = on;
-            if (text) btn.dataset.t = btn.dataset.t || btn.textContent;
-            btn.textContent = on ? text : (btn.dataset.t || btn.textContent);
-        }
+        $('googleBtn').addEventListener('click', () => oauthClick('Google'));
+        $('githubBtn').addEventListener('click', () => oauthClick('GitHub'));
+
+        // ===== Admin kirishi (faqat #admin bilan ochiladi) =====
         function safeRedirect(r) { return /^[A-Za-z0-9_\-]+\.html$/.test(String(r)) ? r : 'multiverse.html'; }
-
-        // Muvaffaqiyat: yorug'lik chaqnaydi va portalga o'tamiz
-        function success(token, role, redirect) {
-            sessionStorage.setItem('blip_jwt', token);
-            sessionStorage.setItem('blip_role', role || 'human');
-            showMsg("✅ Xush kelibsiz! O'tilmoqda...", 'ok');
-            document.body.classList.add('flash');
-            setTimeout(() => { window.location.href = safeRedirect(redirect); }, REDUCED ? 300 : 950);
-        }
-
-        // ===== 1-qadam: email =====
-        function startResend(sec) {
-            clearInterval(resendTimer);
-            const b = $('resendBtn');
-            let left = Math.max(1, Math.floor(sec));
-            b.disabled = true; b.textContent = `Qayta yuborish (${left}s)`;
-            resendTimer = setInterval(() => {
-                left--;
-                if (left <= 0) { clearInterval(resendTimer); b.disabled = false; b.textContent = "Qayta yuborish"; }
-                else b.textContent = `Qayta yuborish (${left}s)`;
-            }, 1000);
-        }
-        function goCode(email, resendIn) {
-            pendingEmail = email;
-            $('sentTo').textContent = email;
-            $('step-email').hidden = true; $('step-code').hidden = false;
-            $('code').value = '';
-            startResend(resendIn);
-            if (!window.matchMedia('(pointer: coarse)').matches) $('code').focus();
-        }
-        async function requestCode(email, fromResend) {
-            if (busy) return;
-            const btn = fromResend ? $('resendBtn') : $('sendBtn');
-            setBusy(true, btn, fromResend ? "Yuborilmoqda..." : "Yuborilmoqda...");
-            showMsg("Kod yuborilmoqda... (server uyg'onishi uchun 50 soniyagacha kutish mumkin)", 'ok');
-            const { status, data } = await api('/api/auth/email/request', { email });
-            setBusy(false, btn);
-            if (data.success) {
-                goCode(email, data.resend_in || 60);
-                showMsg("✅ Kod yuborildi. Gmail'ning \"Spam\" papkasini ham tekshiring.", 'ok');
-            } else if (status === 429 && data.retry_after) {
-                goCode(email, data.retry_after);
-                showMsg("Kod allaqachon yuborilgan. Pochtangizni tekshiring.", 'ok');
-            } else {
-                showMsg("❌ " + (data.error || "Xatolik"));
-                if (fromResend) startResend(data.retry_after || 30);
-            }
-        }
-        $('emailForm').addEventListener('submit', e => {
-            e.preventDefault();
-            const email = $('email').value.trim().toLowerCase();
-            if (email.length > 254 || !EMAIL_RE.test(email)) { showMsg("❌ Email manzilini to'g'ri kiriting"); return; }
-            requestCode(email, false);
-        });
-        $('resendBtn').addEventListener('click', () => requestCode(pendingEmail, true));
-        $('changeBtn').addEventListener('click', () => {
-            clearInterval(resendTimer); clearMsg();
-            $('step-code').hidden = true; $('step-email').hidden = false;
-            $('email').focus();
-        });
-
-        // ===== 2-qadam: kodni tasdiqlash =====
-        $('code').addEventListener('input', e => {
-            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-            if (e.target.value.length === 6) $('codeForm').requestSubmit();
-        });
-        $('codeForm').addEventListener('submit', async e => {
+        if (location.hash === '#admin') $('adminForm').hidden = false;
+        $('adminForm').addEventListener('submit', async e => {
             e.preventDefault();
             if (busy) return;
-            const code = $('code').value.trim();
-            if (!/^\d{6}$/.test(code)) { showMsg("❌ 6 xonali kodni kiriting"); return; }
-            setBusy(true, $('verifyBtn'), "Tekshirilmoqda...");
-            const { data } = await api('/api/auth/email/verify', { email: pendingEmail, code });
-            if (data.success && data.token) { success(data.token, data.role, data.redirect); return; }
-            setBusy(false, $('verifyBtn'));
-            showMsg("❌ " + (data.error || "Xatolik"));
-            $('code').value = ''; $('code').focus();
-        });
-
-        // ===== Eski hisoblar (parol bilan) =====
-        $('legacyForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            if (busy) return;
-            const username = $('username').value.trim(), password = $('password').value;
-            if (!username || !password) { showMsg("❌ Ism va parolni kiriting"); return; }
-            setBusy(true, $('legacyBtn'), "Tekshirilmoqda...");
-            showMsg("Server uyg'onmoqda, kuting...", 'ok');
-            const { data } = await api('/api/login', { username, password });
-            if (data.success && data.token) { success(data.token, data.role, data.redirect); return; }
-            setBusy(false, $('legacyBtn'));
-            showMsg("❌ " + (data.error || "Xatolik"));
+            const username = $('adminUser').value.trim(), password = $('adminPass').value;
+            if (!username || !password) { showMsg("Ism va parolni kiriting"); return; }
+            busy = true; $('adminBtn').disabled = true;
+            showMsg("Tekshirilmoqda...", 'ok');
+            try {
+                const res = await fetch(API_URL + '/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) });
+                const data = await res.json().catch(() => ({}));
+                if (data.success && data.token && data.role === 'admin') {
+                    sessionStorage.setItem('blip_jwt', data.token);
+                    sessionStorage.setItem('blip_role', 'admin');
+                    document.body.classList.add('flash');
+                    setTimeout(() => { location.href = safeRedirect(data.redirect); }, REDUCED ? 300 : 800);
+                    return;
+                }
+                showMsg(data.error || "Kirish rad etildi");
+            } catch (_) { showMsg("Server bilan aloqa yo'q!"); }
+            busy = false; $('adminBtn').disabled = false;
         });
 
         // ===== Boshlanish =====
         window.addEventListener('DOMContentLoaded', async () => {
-            if (REDUCED) setLamp(true); // harakatni o'chirgan foydalanuvchi uchun chiroq darhol yonadi
-
+            if (REDUCED) setLamp(true);
             // Mavjud sessiyani tekshirish (avvalgi mantiq saqlangan)
             const token = sessionStorage.getItem('blip_jwt');
             const headers = {};
@@ -375,4 +260,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
