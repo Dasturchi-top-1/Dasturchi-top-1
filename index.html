@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blip Portal | Kirish</title>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://saytim-uchun.onrender.com; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#050510">
+    <script>
+        /* Boshqa sayt bu sahifani ramka ichiga solib aldamasligi uchun */
+        if (window.top !== window.self) {
+            document.documentElement.style.display = 'none';
+            try { window.top.location.href = window.self.location.href; } catch (_) {}
+        }
+    </script>
     <style>
         :root { --bg:#050510; --acc:#6366f1; --acc2:#a855f7; --text:#fff; --muted:#94a3b8; --err:#ef4444; --ok:#10b981; --glow:#ffe9a8; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',system-ui,sans-serif; }
@@ -86,6 +96,26 @@
         body.flash .flash-layer { animation:flashIn .8s ease-out forwards; }
         @keyframes flashIn { 0% { opacity:0; } 45% { opacity:1; } 100% { opacity:.9; } }
 
+        .g-mark { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:#4285f4; color:#fff; font-weight:800; font-size:12px; }
+        .desk { display:none; }
+        .srv { position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:5; font-size:12px; color:var(--muted); background:rgba(18,18,38,.9); border:1px solid rgba(255,255,255,.08); padding:6px 12px; border-radius:999px; pointer-events:none; }
+
+        /* ===== Kompyuter rejimi ===== */
+        @media (min-width: 900px) {
+            .scene { padding-top: 28px; }
+            .lamp-wrap { transform: scale(1.25); transform-origin: 50% 0; margin-bottom: 58px; }
+            .hint { font-size: 15px; }
+            .box { max-width: 440px; padding: 34px 32px; }
+            h2 { font-size: 30px; }
+            .oauth-btn { padding: 16px; font-size: 16px; transition: transform .15s, filter .15s; }
+            .oauth-btn:hover { transform: translateY(-1px); filter: brightness(.95); }
+        }
+        @media (hover: hover) and (pointer: fine) { .desk { display: inline; } }
+        /* Past va keng ekran (telefon yotiq holatda) */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .lamp-wrap { transform: scale(.7); transform-origin: 50% 0; margin-bottom: -69px; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation:none !important; transition-duration:.01ms !important; transition-delay:0s !important; }
         }
@@ -115,7 +145,7 @@
                 </button>
             </div>
         </div>
-        <p class="hint" id="hint">💡 Kirish uchun chiroq ipini torting</p>
+        <p class="hint" id="hint">💡 Kirish uchun chiroq ipini torting<span class="desk"> (yoki ip ustida Enter bosing)</span></p>
 
         <section class="box" id="box" inert aria-hidden="true">
             <h2 class="gradient-text">Blip Portal</h2>
@@ -124,7 +154,7 @@
             <div class="msg" id="msgBox" role="status" aria-live="polite"></div>
 
             <a href="https://saytim-uchun.onrender.com/api/auth/google" class="oauth-btn google-btn" id="googleBtn">
-                <img src="https://www.google.com/favicon.ico" width="18" height="18" alt="">
+                <span class="g-mark" aria-hidden="true">G</span>
                 <span>Google bilan kirish</span>
             </a>
             <a href="https://saytim-uchun.onrender.com/api/auth/github" class="oauth-btn github-btn" id="githubBtn">
@@ -143,9 +173,9 @@
                 <button type="submit" id="adminBtn">Admin kirishi</button>
             </form>
         </section>
+        <div class="srv" id="srv" role="status" aria-live="polite" hidden></div>
         <noscript><p class="hint">Kirish uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
     </main>
-
     <script>
         const API_URL = "https://saytim-uchun.onrender.com";
         const $ = id => document.getElementById(id);
@@ -177,7 +207,7 @@
         (function initCord() {
             const c = $('cord');
             const LINE = 64, MAX = 40;
-            let startY = null, pending = 0, raf = 0;
+            let startY = null, pending = 0, raf = 0, scale = 1;
             const paint = () => {
                 raf = 0;
                 c.style.setProperty('--pull', pending + 'px');
@@ -191,12 +221,14 @@
             };
             c.addEventListener('pointerdown', e => {
                 startY = e.clientY; pending = 0;
+                // Kompyuter rejimida chiroq kattalashgan: ekran pikseli -> ichki piksel
+                scale = (c.offsetHeight && c.getBoundingClientRect().height / c.offsetHeight) || 1;
                 c.classList.add('drag');
                 try { c.setPointerCapture(e.pointerId); } catch (_) {}
             });
             c.addEventListener('pointermove', e => {
                 if (startY === null) return;
-                pending = Math.max(0, Math.min(MAX, e.clientY - startY));
+                pending = Math.max(0, Math.min(MAX, (e.clientY - startY) / scale));
                 if (!raf) raf = requestAnimationFrame(paint);
             });
             c.addEventListener('pointerup', () => { if (startY === null) return; reset(); toggleLamp(); });
@@ -213,9 +245,21 @@
         $('googleBtn').addEventListener('click', () => oauthClick('Google'));
         $('githubBtn').addEventListener('click', () => oauthClick('GitHub'));
 
-        // ===== Admin kirishi (faqat #admin bilan ochiladi) =====
+        // ===== Admin kirishi =====
+        // Admin formasi ochiladi: manzil oxirida #admin bo'lsa YOKI admin.html dan qaytarilgan bo'lsa.
         function safeRedirect(r) { return /^[A-Za-z0-9_\-]+\.html$/.test(String(r)) ? r : 'multiverse.html'; }
-        if (location.hash === '#admin') $('adminForm').hidden = false;
+        function cameFromAdmin() {
+            try {
+                const u = new URL(document.referrer);
+                return u.origin === location.origin && /\/admin\.html$/.test(u.pathname);
+            } catch (_) { return false; }
+        }
+        const bounced = cameFromAdmin();
+        const wantAdmin = location.hash === '#admin' || bounced;
+        if (wantAdmin) { $('adminForm').hidden = false; setLamp(true); }
+
+        // Brauzer tomonidagi yordamchi to'siq (haqiqiy limit serverda bo'lishi kerak)
+        let fails = 0;
         $('adminForm').addEventListener('submit', async e => {
             e.preventDefault();
             if (busy) return;
@@ -230,10 +274,17 @@
                     sessionStorage.setItem('blip_jwt', data.token);
                     sessionStorage.setItem('blip_role', 'admin');
                     document.body.classList.add('flash');
-                    setTimeout(() => { location.href = safeRedirect(data.redirect); }, REDUCED ? 300 : 800);
+                    // Admin to'g'ridan-to'g'ri admin panelga o'tadi (shu varaqda: sessionStorage saqlanadi)
+                    setTimeout(() => { location.href = 'admin.html'; }, REDUCED ? 300 : 800);
                     return;
                 }
+                fails++;
                 showMsg(data.error || "Kirish rad etildi");
+                if (fails >= 5) {
+                    showMsg("Juda ko'p xato urinish. 60 soniya kuting.");
+                    setTimeout(() => { fails = 0; $('adminBtn').disabled = false; busy = false; }, 60000);
+                    return;
+                }
             } catch (_) { showMsg("Server bilan aloqa yo'q!"); }
             busy = false; $('adminBtn').disabled = false;
         });
@@ -241,23 +292,38 @@
         // ===== Boshlanish =====
         window.addEventListener('DOMContentLoaded', async () => {
             if (REDUCED) setLamp(true);
+
+            // Server uyg'onish ko'rsatkichi (Render bepul rejasida birinchi so'rov sekin)
+            const srv = $('srv');
+            const slowTimer = setTimeout(() => { srv.textContent = "⏳ Server uyg'onmoqda..."; srv.hidden = false; }, 3000);
+            const serverReady = () => {
+                clearTimeout(slowTimer);
+                if (!srv.hidden) { srv.textContent = "🟢 Server tayyor"; setTimeout(() => { srv.hidden = true; }, 2000); }
+            };
+
             // Mavjud sessiyani tekshirish (avvalgi mantiq saqlangan)
             const token = sessionStorage.getItem('blip_jwt');
             const headers = {};
             if (token) headers['Authorization'] = `Bearer ${token}`;
             try {
                 const res = await fetch(`${API_URL}/api/me`, { method: 'GET', headers, credentials: 'include' });
+                serverReady();
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.authenticated) window.location.href = 'multiverse.html';
+                    if (data.authenticated) {
+                        // Admin panel uchun kelgan admin -> admin.html; qaytarib yuborilgan bo'lsa takrorlamaymiz
+                        if (wantAdmin && data.role === 'admin' && !bounced) window.location.href = 'admin.html';
+                        else if (!wantAdmin || data.role !== 'admin') window.location.href = 'multiverse.html';
+                    }
                 } else if (res.status === 401 && token) {
                     sessionStorage.removeItem('blip_jwt');
                     sessionStorage.removeItem('blip_role');
                 }
             } catch (e) {
+                serverReady();
                 console.log("Sessiya tekshiruvi:", e.message);
             }
         });
     </script>
 </body>
-    </html>
+</html>
