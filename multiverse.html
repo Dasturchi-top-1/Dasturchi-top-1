@@ -11,17 +11,24 @@
     (async function guard() {
         const API_URL = "https://saytim-uchun.onrender.com";
         const token = sessionStorage.getItem("blip_jwt");
-        const headers = {};
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        // JWT bo'lmasa, sahifani umuman yuklatmaymiz.
+        // Cookie orqali eski sessiya bilan chetlab o'tish ham taqiqlanadi.
+        if (!token) {
+            sessionStorage.removeItem("blip_role");
+            window.location.replace("./index.html");
+            return;
+        }
 
         try {
             const res = await fetch(`${API_URL}/api/me`, {
                 method: "GET",
-                headers: headers,
-                credentials: 'include'
+                headers: { Authorization: `Bearer ${token}` },
+                credentials: "omit",
+                cache: "no-store"
             });
 
-            if (res.status === 401) {
+            if (res.status === 401 || res.status === 403) {
                 sessionStorage.removeItem("blip_jwt");
                 sessionStorage.removeItem("blip_role");
                 window.location.replace("./index.html");
@@ -31,19 +38,16 @@
 
             const data = await res.json();
             if (!data.authenticated) {
+                sessionStorage.removeItem("blip_jwt");
+                sessionStorage.removeItem("blip_role");
                 window.location.replace("./index.html");
                 return;
             }
 
             document.documentElement.style.visibility = "visible";
         } catch (e) {
-            document.documentElement.style.visibility = "visible";
-            document.body.innerHTML = `
-                <div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#050510;color:#fff;padding:24px;text-align:center;font-family:sans-serif;">
-                    <h2>Ulanish xatosi</h2>
-                    <p style="color:#888;margin:12px 0;">${e.message}</p>
-                    <button onclick="location.reload()" style="padding:12px 24px;background:#6366f1;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:bold;">Qayta urinish</button>
-                </div>`;
+            // Tekshiruv bajarilmasa, Multiverse yopiq qoladi.
+            window.location.replace("./index.html?auth_error=unavailable");
         }
     })();
     </script>
