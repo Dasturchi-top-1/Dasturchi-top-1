@@ -11,20 +11,15 @@
     (async function guard() {
         const API_URL = "https://saytim-uchun.onrender.com";
         const token = sessionStorage.getItem("blip_jwt");
-
-        // JWT bo'lmasa, sahifani umuman yuklatmaymiz.
-        // Cookie orqali eski sessiya bilan chetlab o'tish ham taqiqlanadi.
-        if (!token) {
-            sessionStorage.removeItem("blip_role");
-            window.location.replace("./index.html");
-            return;
-        }
+        const headers = {};
+        if (token) headers.Authorization = `Bearer ${token}`;
 
         try {
+            // JWT yoki OAuth sessiyasi orqali serverda haqiqiy kirishni tekshiramiz.
             const res = await fetch(`${API_URL}/api/me`, {
                 method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
-                credentials: "omit",
+                headers,
+                credentials: "include",
                 cache: "no-store"
             });
 
@@ -46,7 +41,7 @@
 
             document.documentElement.style.visibility = "visible";
         } catch (e) {
-            // Tekshiruv bajarilmasa, Multiverse yopiq qoladi.
+            // Server tekshiruvi ishlamasa, sahifani ochmaymiz.
             window.location.replace("./index.html?auth_error=unavailable");
         }
     })();
