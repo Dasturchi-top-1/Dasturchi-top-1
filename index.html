@@ -310,11 +310,12 @@
                 serverReady();
                 if (res.ok) {
                     const data = await res.json();
-                    if (data.authenticated) {
-                        // Admin panel uchun kelgan admin -> admin.html; qaytarib yuborilgan bo'lsa takrorlamaymiz
-                        if (wantAdmin && data.role === 'admin' && !bounced) window.location.href = 'admin.html';
-                        else if (!wantAdmin || data.role !== 'admin') window.location.href = 'multiverse.html';
+                    if (data.authenticated && wantAdmin && data.role === 'admin' && !bounced) {
+                        // Admin panel uchun maxsus kirish oqimi saqlanadi.
+                        window.location.href = 'admin.html';
                     }
+                    // Oddiy foydalanuvchi index.html sahifasida qoladi.
+                    // Multiverse'ga faqat foydalanuvchi login/OAuth oqimini tugatgandan keyin o'tadi.
                 } else if (res.status === 401 && token) {
                     sessionStorage.removeItem('blip_jwt');
                     sessionStorage.removeItem('blip_role');
