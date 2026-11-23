@@ -29,42 +29,27 @@
 
         .scene { min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; padding:0 16px 36px; }
 
-        /* ===== CHIROQ ===== */
-        .lamp-wrap { position:relative; width:200px; height:230px; flex:none; }
-        .swing { position:absolute; inset:0; transform-origin:50% 0; will-change:transform; animation:swing 5s ease-in-out infinite; }
-        body.lit .swing { animation:settle 2.4s ease-out forwards; }
-        @keyframes swing { 0%,100% { transform:rotate(-2.2deg); } 50% { transform:rotate(2.2deg); } }
-        @keyframes settle { from { transform:rotate(7deg); } 30% { transform:rotate(-4deg); } 60% { transform:rotate(2deg); } to { transform:rotate(0); } }
-        .wire { position:absolute; left:50%; top:0; width:2px; height:46px; background:#3b3b55; transform:translateX(-50%); }
-        .lamp { position:absolute; left:0; top:44px; width:200px; height:140px; }
-        .bulb { fill:#2c2c40; transition:fill .25s; }
-        body.lit .bulb { fill:#fff6cf; }
-        /* Yorug'lik "nuri": filtr o'rniga oddiy gradient doira */
-        .glow { position:absolute; left:50%; top:138px; width:170px; height:170px; margin:-85px 0 0 -85px; border-radius:50%; opacity:0; pointer-events:none; transition:opacity .35s;
-                background:radial-gradient(circle, rgba(255,233,168,.6), rgba(255,233,168,0) 66%); }
-        body.lit .glow { opacity:1; animation:flick .8s linear 1; }
-        @keyframes flick { 0% { opacity:.1; } 12% { opacity:1; } 22% { opacity:.2; } 38% { opacity:1; } 48% { opacity:.4; } 62%,100% { opacity:1; } }
-
-        /* IP: yuqori uchi chiroqqa mahkam bog'langan, pastga CHO'ZILADI */
-        .cord { position:absolute; left:134px; top:122px; width:32px; height:104px; background:none; border:0; padding:0; cursor:grab; border-radius:10px;
-                display:flex; flex-direction:column; align-items:center;
-                touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-tap-highlight-color:transparent; }
-        .cord:focus-visible { outline:2px solid var(--acc2); outline-offset:3px; }
-        .cord-line { width:2px; height:64px; background:#7a7a9c; transform-origin:50% 0; transform:scaleY(var(--k,1)); transition:transform .3s cubic-bezier(.3,1.6,.5,1); }
-        .cord-knob { width:16px; height:16px; border-radius:50%; background:var(--glow); box-shadow:0 0 8px rgba(255,233,168,.7); transform:translateY(var(--pull,0px)); transition:transform .3s cubic-bezier(.3,1.6,.5,1); }
-        .cord.drag { cursor:grabbing; }
-        .cord.drag .cord-line, .cord.drag .cord-knob { transition:none; }
-        .cord.pulled .cord-line { animation:tugLine .4s; }
-        .cord.pulled .cord-knob { animation:tugKnob .4s; }
-        @keyframes tugLine { 40% { transform:scaleY(1.4); } }
-        @keyframes tugKnob { 40% { transform:translateY(26px); } }
-
-        /* Yorug'lik konusi: bitta statik SVG, faqat opacity o'zgaradi */
-        .cone { position:absolute; left:50%; top:128px; width:min(94vw,540px); height:360px; transform:translateX(-50%); pointer-events:none; opacity:0; transition:opacity .9s .15s; }
-        body.lit .cone { opacity:1; }
-
-        .hint { color:var(--muted); font-size:14px; text-align:center; margin:2px 0 8px; }
-        body.lit .hint { display:none; }
+        /* ===== MASHINA KIRISH ANIMATSIYASI ===== */
+        .car-stage{position:relative;width:min(100%,620px);height:245px;flex:none;margin:18px auto 8px;overflow:hidden}
+        .road{position:absolute;left:-8%;right:-8%;bottom:24px;height:92px;border-block:2px solid rgba(148,163,184,.2);transform:perspective(260px) rotateX(18deg);background:linear-gradient(#171a2c,#090b16)}
+        .road:after{content:"";position:absolute;left:0;right:0;top:44px;height:4px;background:repeating-linear-gradient(90deg,#ffffffb3 0 38px,transparent 38px 76px);animation:roadMove .34s linear infinite}
+        .car{position:absolute;z-index:2;width:220px;height:116px;left:50%;bottom:46px;transform:translate(-190%,0) scale(.72);animation:carDrive 5s cubic-bezier(.18,.72,.25,1) forwards}
+        .car svg{width:100%;height:100%}
+        .car-shadow{position:absolute;left:18%;right:14%;bottom:31px;height:13px;border-radius:50%;background:#000a;filter:blur(5px);animation:shadowDrive 5s ease-out forwards}
+        .speed-panel{position:absolute;z-index:3;top:12px;right:10px;min-width:116px;padding:12px 15px;border:1px solid #6366f177;border-radius:16px;background:#0c0e1fe8;text-align:center}
+        .speed-value{display:block;color:#fff;font-size:32px;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums}
+        .speed-unit{color:var(--muted);font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+        .drive-caption{position:absolute;left:12px;top:22px;color:#c7c9e8;font-size:13px;letter-spacing:2px}
+        .hint{color:var(--muted);font-size:14px;text-align:center;margin:0 0 8px}
+        body.lit .hint{display:none}
+        @keyframes roadMove{to{background-position:-76px 0}}
+        @keyframes carDrive{0%{transform:translate(-190%,0) scale(.72)}45%{transform:translate(-50%,0) scale(.88)}75%{transform:translate(-50%,0) scale(1)}100%{transform:translate(-50%,0) scale(1.04)}}
+        @keyframes shadowDrive{0%{opacity:0;transform:scale(.5)}45%{opacity:.8;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
+        body.lit .car{animation:none;transform:translate(-50%,0) scale(1.04)}
+        body.lit .road:after{animation-play-state:paused}
+        @media(max-width:520px){.car-stage{height:220px;margin-top:8px}.car{width:190px;height:102px;bottom:43px}.speed-panel{top:8px;right:4px;min-width:98px;padding:9px 11px}.speed-value{font-size:27px}.drive-caption{left:4px;top:15px;font-size:10px;letter-spacing:1px}}
+        @media(min-width:900px){.car-stage{height:275px;margin-top:24px}.car{width:260px;height:138px;bottom:48px}}
+        @media(prefers-reduced-motion:reduce){.car,.car-shadow,.road:after{animation:none!important}.car{transform:translate(-50%,0) scale(1.04)}}
 
         /* ===== KARTA ===== */
         .box { position:relative; z-index:1; width:100%; max-width:380px; background:rgba(18,18,38,.94); border:1px solid rgba(255,255,255,.08); padding:28px 24px; border-radius:24px; box-shadow:0 14px 36px rgba(0,0,0,.5);
@@ -126,26 +111,21 @@
     <div class="flash-layer"></div>
 
     <main class="scene">
-        <div class="lamp-wrap">
-            <svg class="cone" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <defs><linearGradient id="coneGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a8" stop-opacity=".30"/><stop offset=".88" stop-color="#ffe9a8" stop-opacity="0"/></linearGradient></defs>
-                <polygon points="41,0 59,0 100,100 0,100" fill="url(#coneGrad)"/>
-            </svg>
-            <div class="swing">
-                <div class="wire"></div>
-                <svg class="lamp" viewBox="0 0 200 140" aria-hidden="true">
-                    <defs><linearGradient id="shadeGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4b4b73"/><stop offset="1" stop-color="#242440"/></linearGradient></defs>
-                    <path d="M38 78 L70 6 H130 L162 78 Z" fill="url(#shadeGrad)"/>
-                    <rect x="36" y="76" width="128" height="7" rx="3.5" fill="#34345a"/>
-                    <circle class="bulb" cx="100" cy="94" r="12"/>
+        <div class="car-stage" aria-label="Blip Portal mashina kirish animatsiyasi">
+            <div class="drive-caption">BLIP PORTAL · START</div>
+            <div class="speed-panel"><span class="speed-value" id="speedValue">0</span><span class="speed-unit">km/soat</span></div>
+            <div class="road" aria-hidden="true"></div><div class="car-shadow" aria-hidden="true"></div>
+            <div class="car" aria-hidden="true">
+                <svg viewBox="0 0 260 136">
+                    <defs><linearGradient id="carPaint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5b4fc"/><stop offset=".48" stop-color="#6366f1"/><stop offset="1" stop-color="#312e81"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c7d2fe"/><stop offset="1" stop-color="#334155"/></linearGradient></defs>
+                    <path d="M24 91 34 70Q40 64 66 60L91 32Q99 23 119 22H166Q181 23 193 39L216 65 239 72Q249 77 250 91L246 105H15L13 94Q14 90 24 91Z" fill="url(#carPaint)" stroke="#a5b4fc" stroke-width="2"/>
+                    <path d="m83 59 22-25q6-5 17-5h41q12 1 22 14l13 16Z" fill="url(#glass)" stroke="#c7d2fe" stroke-width="2"/><path d="M143 30v30" stroke="#818cf8" stroke-width="2"/>
+                    <path d="m207 75 32 7" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="m16 88 18-2" stroke="#fef3c7" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="65" cy="105" r="17" fill="#090b16" stroke="#94a3b8" stroke-width="5"/><circle cx="65" cy="105" r="6" fill="#c7d2fe"/><circle cx="205" cy="105" r="17" fill="#090b16" stroke="#94a3b8" stroke-width="5"/><circle cx="205" cy="105" r="6" fill="#c7d2fe"/>
                 </svg>
-                <div class="glow"></div>
-                <button class="cord" id="cord" type="button" aria-pressed="false" aria-label="Chiroqni yoqish (torting yoki bosing)">
-                    <span class="cord-line"></span><span class="cord-knob"></span>
-                </button>
             </div>
         </div>
-        <p class="hint" id="hint">💡 Kirish uchun chiroq ipini torting<span class="desk"> (yoki ip ustida Enter bosing)</span></p>
+        <p class="hint" id="hint">Mashina Blip Portal tomon yo‘lga chiqmoqda...</p>
 
         <section class="box" id="box" inert aria-hidden="true">
             <h2 class="gradient-text">Blip Portal</h2>
@@ -188,55 +168,22 @@
             m.className = 'msg ' + type;
         }
 
-        // ===== Chiroq =====
+        // ===== Mashina animatsiyasi =====
         function setLamp(on) {
-            lit = on;
-            document.body.classList.toggle('lit', on);
-            $('box').inert = !on;
-            $('box').setAttribute('aria-hidden', String(!on));
-            $('cord').setAttribute('aria-pressed', String(on));
-            $('cord').setAttribute('aria-label', on ? "Chiroqni o'chirish" : "Chiroqni yoqish (torting yoki bosing)");
+            lit=on;
+            document.body.classList.toggle('lit',on);
+            $('box').inert=!on;
+            $('box').setAttribute('aria-hidden',String(!on));
         }
-        function toggleLamp() {
-            const c = $('cord');
-            c.classList.remove('pulled'); void c.offsetWidth; c.classList.add('pulled');
-            setLamp(!lit);
+        function startCarIntro() {
+            const value=$('speedValue'),start=performance.now(),duration=5000;
+            const tick=now=>{
+                const progress=Math.min(1,(now-start)/duration);
+                value.textContent=String(Math.round(100*(1-Math.pow(1-progress,2.2))));
+                if(progress<1) requestAnimationFrame(tick); else setLamp(true);
+            };
+            requestAnimationFrame(tick);
         }
-
-        // Ip: sudrash (sichqoncha/barmoq) va klaviatura. Yuqori uchi qotib turadi, ip cho'ziladi.
-        (function initCord() {
-            const c = $('cord');
-            const LINE = 64, MAX = 40;
-            let startY = null, pending = 0, raf = 0, scale = 1;
-            const paint = () => {
-                raf = 0;
-                c.style.setProperty('--pull', pending + 'px');
-                c.style.setProperty('--k', String(1 + pending / LINE));
-            };
-            const reset = () => {
-                startY = null; pending = 0;
-                if (raf) { cancelAnimationFrame(raf); raf = 0; }
-                c.classList.remove('drag');
-                c.style.removeProperty('--pull'); c.style.removeProperty('--k');
-            };
-            c.addEventListener('pointerdown', e => {
-                startY = e.clientY; pending = 0;
-                // Kompyuter rejimida chiroq kattalashgan: ekran pikseli -> ichki piksel
-                scale = (c.offsetHeight && c.getBoundingClientRect().height / c.offsetHeight) || 1;
-                c.classList.add('drag');
-                try { c.setPointerCapture(e.pointerId); } catch (_) {}
-            });
-            c.addEventListener('pointermove', e => {
-                if (startY === null) return;
-                pending = Math.max(0, Math.min(MAX, (e.clientY - startY) / scale));
-                if (!raf) raf = requestAnimationFrame(paint);
-            });
-            c.addEventListener('pointerup', () => { if (startY === null) return; reset(); toggleLamp(); });
-            c.addEventListener('pointercancel', reset);
-            c.addEventListener('lostpointercapture', reset);
-            c.addEventListener('contextmenu', e => e.preventDefault());   // uzoq bosishda menyu chiqmasin
-            c.addEventListener('click', e => { if (e.detail === 0) toggleLamp(); });   // klaviatura
-        })();
 
         // ===== Google / GitHub tugmalari =====
         function oauthClick(name) {
@@ -292,6 +239,7 @@
         // ===== Boshlanish =====
         window.addEventListener('DOMContentLoaded', async () => {
             if (REDUCED) setLamp(true);
+            else startCarIntro();
 
             // Server uyg'onish ko'rsatkichi (Render bepul rejasida birinchi so'rov sekin)
             const srv = $('srv');
