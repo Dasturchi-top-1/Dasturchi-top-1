@@ -226,6 +226,8 @@
             driveState.last = now;
             if (driveState.gas && !driveState.brake) driveState.speed = Math.min(160, driveState.speed + 78 * elapsed);
             if (driveState.brake) driveState.speed = Math.max(0, driveState.speed - 155 * elapsed);
+            else if (!driveState.gas) driveState.speed = Math.max(0, driveState.speed - 18 * elapsed);
+            if (driveState.speed < .5) driveState.speed = 0;
 
             $('speedValue').textContent = String(Math.round(driveState.speed));
             $('car').style.setProperty('--steer-x', (driveState.steering * Math.min(27, 8 + driveState.speed * .12)) + 'px');
@@ -234,9 +236,9 @@
             document.body.classList.toggle('braking', driveState.brake);
             document.body.classList.toggle('turn-left', driveState.steering < 0);
             document.body.classList.toggle('turn-right', driveState.steering > 0);
-            document.body.classList.toggle('drive-active', driveState.speed > .5 && (driveState.gas || driveState.brake || driveState.steering !== 0));
+            document.body.classList.toggle('drive-active', driveState.speed > .5);
 
-            if (driveState.gas || driveState.brake || driveState.steering !== 0) {
+            if (driveState.gas || driveState.brake || driveState.steering !== 0 || driveState.speed > .5) {
                 driveState.frame = requestAnimationFrame(updateDrive);
             } else {
                 driveState.frame = 0;
