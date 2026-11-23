@@ -65,7 +65,7 @@
         @keyframes roadMove{to{background-position:-76px 0}}
         @keyframes carDrive{0%{transform:translate(-190%,0) scale(.72)}45%{transform:translate(-50%,0) scale(.88)}75%{transform:translate(-50%,0) scale(1)}100%{transform:translate(-50%,0) scale(1.04)}}
         @keyframes shadowDrive{0%{opacity:0;transform:scale(.5)}45%{opacity:.8;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
-        body.lit .car{animation:none;transform:translate(-50%,0) scale(1.04)}
+        body.lit .car{animation:none;transform:translate(calc(-50% + var(--steer-x)),0) rotate(var(--steer-angle)) scale(1.04)}
         body.lit .road:after{animation-play-state:paused}
         @media(max-width:520px){.car-stage{height:220px;margin-top:8px}.car{width:190px;height:102px;bottom:43px}.speed-panel{top:8px;right:4px;min-width:98px;padding:9px 11px}.speed-value{font-size:27px}.drive-caption{left:4px;top:15px;font-size:10px;letter-spacing:1px}}
         @media(min-width:900px){.car-stage{height:275px;margin-top:24px}.car{width:260px;height:138px;bottom:48px}}
@@ -89,6 +89,23 @@
         .github-btn { background:#24292e; color:#fff; border-color:#444; }
         .ai-link { display:block; text-align:center; margin-top:16px; color:var(--muted); font-size:13px; text-decoration:none; }
         .ai-link:hover { color:var(--acc2); }
+
+        /* ===== MEN HAQIMDA: tizimga kirishdan oldin ko‘rinadi ===== */
+        .about-section{margin:0 0 16px;border:1px solid rgba(165,180,252,.22);border-radius:15px;overflow:hidden;background:rgba(99,102,241,.07)}
+        .about-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:13px;background:transparent;border:0;color:#fff;text-align:left;cursor:pointer}
+        .about-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(99,102,241,.18);font-size:21px}
+        .about-label{display:flex;flex:1;flex-direction:column;gap:3px}
+        .about-label strong{font-size:14px}.about-label small{font-size:11px;color:var(--muted)}
+        .about-arrow{font-size:22px;color:#a5b4fc;transition:transform .2s}
+        .about-toggle[aria-expanded="true"] .about-arrow{transform:rotate(180deg)}
+        .about-details{padding:0 15px 15px;color:#dbe2ff;font-size:13px;line-height:1.6}
+        .about-details h3{font-size:18px;color:#fff;margin:2px 0 7px}
+        .about-details h4{font-size:12px;color:#a5b4fc;margin:13px 0 6px}
+        .about-details p{margin:0 0 7px}
+        .about-details ul{padding-left:18px}
+        .skill-list{display:flex;flex-wrap:wrap;gap:6px}
+        .skill-list span{padding:5px 9px;border:1px solid rgba(165,180,252,.25);border-radius:999px;background:rgba(99,102,241,.12);font-size:11px;color:#e0e7ff}
+        .about-footnote{margin-top:12px!important;color:#94a3b8;font-size:11px}
 
         /* Admin (faqat saytmanzil oxirida #admin bo'lsa ko'rinadi) */
         .admin { margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); }
@@ -167,6 +184,34 @@
         <section class="box" id="box" inert aria-hidden="true">
             <h2 class="gradient-text">Blip Portal</h2>
             <p class="sub">Google yoki GitHub hisobingiz bilan kiring. Ism va parol kerak emas.</p>
+
+            <section class="about-section" aria-labelledby="aboutTitle">
+                <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutDetails">
+                    <span class="about-icon" aria-hidden="true">👨‍💻</span>
+                    <span class="about-label"><strong>Men haqimda</strong><small>Blip va uning dasturlash olami</small></span>
+                    <span class="about-arrow" aria-hidden="true">⌄</span>
+                </button>
+                <div class="about-details" id="aboutDetails" hidden>
+                    <h3 id="aboutTitle">Salom! Men Blip 👋</h3>
+                    <p>Men yosh dasturchiman. Python va web dasturlashni o‘rganaman, yangi g‘oyalarni haqiqiy loyihalarga aylantirishni yoqtiraman.</p>
+                    <h4>Biladigan va o‘rganayotgan texnologiyalar</h4>
+                    <div class="skill-list">
+                        <span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span>
+                        <span>Flask</span><span>Supabase</span><span>GitHub</span><span>Render</span>
+                    </div>
+                    <h4>Vositalarim</h4>
+                    <p>Pydroid 3 · GitHub Codespaces · CapCut</p>
+                    <h4>Loyihalarim</h4>
+                    <ul>
+                        <li>Blip Multiverse — mening raqamli olamim.</li>
+                        <li>Telegram botlar — foydali xizmatlar yaratish.</li>
+                        <li>AI va video tahrirlash loyihalari.</li>
+                    </ul>
+                    <h4>Qiziqishlarim</h4>
+                    <p>Sun’iy intellekt, dasturlash, yangi texnologiyalar va futbol.</p>
+                    <p class="about-footnote">Yosh dasturchi · Tajriba, izlanish va yangi g‘oyalar.</p>
+                </div>
+            </section>
 
             <div class="msg" id="msgBox" role="status" aria-live="polite"></div>
 
@@ -294,6 +339,15 @@
             };
             requestAnimationFrame(tick);
         }
+
+        // ===== Men haqimda paneli =====
+        $('aboutToggle').addEventListener('click', () => {
+            const button = $('aboutToggle');
+            const details = $('aboutDetails');
+            const opening = button.getAttribute('aria-expanded') !== 'true';
+            button.setAttribute('aria-expanded', String(opening));
+            details.hidden = !opening;
+        });
 
         // ===== Google / GitHub tugmalari =====
         function oauthClick(name) {
