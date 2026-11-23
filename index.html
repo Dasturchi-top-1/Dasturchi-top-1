@@ -139,11 +139,38 @@
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation:none !important; transition-duration:.01ms !important; transition-delay:0s !important; }
         }
+
+        /* ===== GTA-inspired page transition (index.html only) ===== */
+        .page-transition{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+            overflow:hidden;background:#080914;opacity:0;visibility:hidden;pointer-events:none;
+            transition:opacity .32s ease,visibility .32s ease}
+        .page-transition::before{content:"";position:absolute;inset:-35%;
+            background:repeating-linear-gradient(135deg,transparent 0 34px,rgba(99,102,241,.12) 35px 37px,transparent 38px 72px);
+            transform:translateX(-8%);animation:transitionRoad .7s linear infinite}
+        .page-transition::after{content:"";position:absolute;left:0;right:0;bottom:18%;
+            height:3px;background:linear-gradient(90deg,transparent,#a5b4fc,#fff,#a855f7,transparent);
+            box-shadow:0 0 22px #818cf8}
+        .page-transition.is-active{opacity:1;visibility:visible;pointer-events:auto}
+        .transition-title{position:relative;z-index:1;text-align:center;padding:24px;
+            font-weight:950;font-style:italic;letter-spacing:.12em;text-transform:uppercase;
+            color:#fff;text-shadow:3px 3px 0 #4338ca,6px 6px 0 #a855f7;
+            transform:translateY(18px) scale(.94);opacity:0;transition:transform .38s ease,opacity .38s ease}
+        .is-active .transition-title{transform:translateY(0) scale(1);opacity:1}
+        .transition-title strong{display:block;font-size:clamp(30px,9vw,64px);line-height:1}
+        .transition-title span{display:block;margin-top:12px;font-size:11px;letter-spacing:.35em;color:#c7d2fe;text-shadow:none}
+        @keyframes transitionRoad{to{transform:translateX(8%)}}
+        @media(prefers-reduced-motion:reduce){
+            .page-transition,.transition-title{transition:none}
+            .page-transition::before{animation:none}
+        }
     </style>
 </head>
 <body>
     <div class="bg"></div>
     <div class="flash-layer"></div>
+    <div class="page-transition" id="pageTransition" aria-hidden="true">
+        <div class="transition-title"><strong>BLIP MULTIVERSE</strong><span>ENTERING A NEW WORLD</span></div>
+    </div>
 
     <main class="scene">
         <div class="car-stage" aria-label="Blip Portal mashina kirish animatsiyasi">
@@ -398,6 +425,26 @@
                 }
             } catch (_) { showMsg("Server bilan aloqa yo'q!"); }
             busy = false; $('adminBtn').disabled = false;
+        });
+
+
+        // ===== GTA-inspired outgoing transition for internal pages =====
+        // External OAuth links and existing login logic are intentionally untouched.
+        const pageTransition = $('pageTransition');
+        document.addEventListener('click', event => {
+            const link = event.target.closest('a[href]');
+            if (!link || event.defaultPrevented || event.button !== 0 ||
+                event.metaKey || event.ctrlKey || event.shiftKey || event.altKey ||
+                link.target === '_blank' || link.hasAttribute('download')) return;
+            let destination;
+            try { destination = new URL(link.href, location.href); } catch (_) { return; }
+            if (destination.origin !== location.origin ||
+                !/\.html$/i.test(destination.pathname) ||
+                destination.href === location.href) return;
+            event.preventDefault();
+            pageTransition.classList.add('is-active');
+            pageTransition.setAttribute('aria-hidden', 'false');
+            window.setTimeout(() => { location.assign(destination.href); }, REDUCED ? 30 : 420);
         });
 
         // ===== Boshlanish =====
