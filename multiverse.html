@@ -82,6 +82,21 @@
         .m-item audio{width:100%;margin-top:8px} .m-artist{font-size:15px;font-weight:800;margin-bottom:4px}
         .m-del{position:absolute;top:12px;right:12px;background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;border-radius:8px;cursor:pointer;font-size:11px}
         .footer{text-align:center;padding:20px;color:var(--muted);font-size:11px;margin-top:20px}
+        /* AI Arena — Multiverse bilan bir xil vizual tizim */
+        .arena-intro{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px}
+        .arena-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+        .arena-model{min-width:0;background:var(--bg);border:1px solid var(--brd);border-radius:12px;padding:14px}
+        .arena-model h3{font-size:15px;margin:0 0 6px;overflow-wrap:anywhere}
+        .arena-meta{font-size:11px;color:#a5b4fc;line-height:1.5;overflow-wrap:anywhere}
+        .arena-answer{font-size:13px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0;max-height:420px;overflow:auto}
+        .arena-votes{display:flex;gap:7px;flex-wrap:wrap}
+        .arena-votes button{flex:1;min-width:90px;border:1px solid var(--brd);border-radius:9px;padding:9px 10px;background:linear-gradient(90deg,var(--acc),var(--acc2));color:#fff;font-size:11px;font-weight:700}
+        .arena-votes button.tie{background:#343957}
+        .arena-votes button:disabled{opacity:.5;cursor:not-allowed}
+        .arena-rank{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;padding:10px 0;border-top:1px solid var(--brd);font-size:11px;align-items:center}
+        .arena-rank-name{overflow-wrap:anywhere}
+        .arena-small{font-size:11px;color:var(--muted)}
+        @media(max-width:600px){.arena-results{grid-template-columns:1fr}.arena-rank{grid-template-columns:minmax(0,1fr) auto auto}.arena-rank .ties{display:none}}
         @media(max-width:600px){h1{font-size:24px}.c{padding:6px}body{padding:8px}}
     </style>
 </head>
@@ -103,6 +118,7 @@
         <div class="tab" id="tab-video" onclick="sw('video',this)">🎬 Video</div>
         <div class="tab" id="tab-music" onclick="sw('music',this)">🎵 Musiqa</div>
         <div class="tab" id="tab-ff" onclick="sw('ff',this)">🔥 Free Fire</div>
+        <div class="tab" id="tab-arena" onclick="sw('arena',this)">⚔️ AI Arena</div>
     </div>
 
     <!-- HOME -->
@@ -115,7 +131,7 @@
         <div class="gc" onclick="sw('debate')"><span class="i">⚔️</span><h3>AI Sud Majlisi</h3><p>Advokat, Prokuror, Hakam.</p></div>
         <div class="gc" onclick="sw('music')"><span class="i">🎵</span><h3>Musiqa yuklash</h3><p>Artist, qo'shiq va YouTube.</p></div>
         <div class="gc" onclick="sw('ff')"><span class="i">🔥</span><h3>Free Fire sozlamalari</h3><p>AI telefon uchun optimal sozlama beradi.</p></div>
-        <div class="gc" onclick="location.href='ai_arena.html'"><span class="i">⚔️</span><h3>Blip AI Arena</h3><p>OpenRouter va Gemini javoblarini solishtiring va ovoz bering.</p></div>
+        <div class="gc" onclick="sw('arena')"><span class="i">⚔️</span><h3>Blip AI Arena</h3><p>OpenRouter va Gemini javoblarini solishtiring va ovoz bering.</p></div>
     </div>
         <!-- QIDIRUV -->
     <div class="tc" id="t-search">
@@ -237,6 +253,23 @@
             </select>
             <button class="btn btn-gold" onclick="ffApply()">🤖 AI orqali sozlamalarni olish</button>
             <div id="ffResult" style="margin-top:14px"></div>
+        </div>
+    </div>
+
+    <!-- AI ARENA -->
+    <div class="tc" id="t-arena">
+        <div class="card">
+            <div class="result-title">⚔️ Blip AI Arena</div>
+            <p class="arena-intro">Bir savol. Ikki AI. Ikki mustaqil javob. Javoblarni o‘qib, qaysi biri foydaliroq ekaniga ovoz bering.</p>
+            <label class="lbl" for="arenaPrompt">Savolingiz</label>
+            <textarea id="arenaPrompt" maxlength="1600" placeholder="Masalan: Python dasturlashni yangi boshlovchi qanday o‘rgansa bo‘ladi?"></textarea>
+            <button class="btn" id="arenaCompareBtn" type="button">⚡ IKKALA AI’NI SOLISHTIRISH</button>
+            <div class="loading" id="arenaStatus" role="status" aria-live="polite"></div>
+        </div>
+        <div class="arena-results" id="arenaResults" aria-live="polite"></div>
+        <div class="card">
+            <div class="result-title">🏆 Arena reytingi</div>
+            <div id="arenaLeaderboard"><p class="arena-small">Reyting yuklanmoqda...</p></div>
         </div>
     </div>
 
@@ -444,6 +477,148 @@ async function ffApply() {
     document.getElementById('ffResult').innerHTML = `<div class="result"><div class="result-title">🤖 AI Tavsiyasi</div><div class="result-text">${escapeHtml(res)}</div></div>`;
 }
 
+// ============= BLIP AI ARENA =============
+let arenaCurrentMatchId = null;
+let arenaHasVoted = false;
+
+function arenaStatus(message) {
+    document.getElementById('arenaStatus').textContent = message || '';
+}
+
+function renderArenaModel(slot, data, matchId) {
+    const card = document.createElement('article');
+    card.className = 'arena-model';
+    const title = document.createElement('h3');
+    title.textContent = data.provider + ' · ' + data.model;
+    const meta = document.createElement('div');
+    meta.className = 'arena-meta';
+    meta.textContent = 'Javob vaqti: ' + data.latency_ms + ' ms';
+    const answer = document.createElement('p');
+    answer.className = 'arena-answer';
+    answer.textContent = data.answer;
+    const votes = document.createElement('div');
+    votes.className = 'arena-votes';
+    const makeButton = (label, value, extra) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = label;
+        if (extra) button.className = extra;
+        button.disabled = !matchId;
+        button.addEventListener('click', () => sendArenaVote(value));
+        return button;
+    };
+    if (slot === 'a') {
+        votes.append(makeButton('🏆 Shu javob yaxshi', 'a'), makeButton('🤝 Teng', 'tie', 'tie'));
+    } else {
+        votes.append(makeButton('🏆 Shu javob yaxshi', 'b'));
+    }
+    card.append(title, meta, answer, votes);
+    return card;
+}
+
+async function compareArena() {
+    const prompt = document.getElementById('arenaPrompt').value.trim();
+    if (prompt.length < 3) {
+        arenaStatus('Iltimos, kamida 3 ta belgidan iborat savol yozing.');
+        return;
+    }
+    const button = document.getElementById('arenaCompareBtn');
+    button.disabled = true;
+    document.getElementById('arenaResults').replaceChildren();
+    arenaCurrentMatchId = null;
+    arenaHasVoted = false;
+    arenaStatus('⏳ Ikkala AI bir vaqtda javob tayyorlamoqda...');
+    try {
+        const response = await fetch(API + '/api/arena/compare', {
+            method: 'POST',
+            headers: authHeaders(),
+            credentials: 'include',
+            body: JSON.stringify({ prompt })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+            const details = data.results
+                ? Object.values(data.results).filter(item => item && !item.success)
+                    .map(item => item.provider + ': ' + item.error).join('\n')
+                : '';
+            throw new Error([data.error || 'AI Arena xatosi', details].filter(Boolean).join('\n'));
+        }
+        arenaCurrentMatchId = data.match_id || null;
+        document.getElementById('arenaResults').append(
+            renderArenaModel('a', data.results.a, arenaCurrentMatchId),
+            renderArenaModel('b', data.results.b, arenaCurrentMatchId)
+        );
+        arenaStatus(data.message || 'Javoblar tayyor. Ikkalasini o‘qib, ovoz bering.');
+        if (!arenaCurrentMatchId) arenaStatus((data.message || '') + '\nOvoz berish hozircha vaqtincha ishlamaydi.');
+        loadArenaLeaderboard();
+    } catch (error) {
+        arenaStatus('❌ ' + error.message);
+    } finally {
+        button.disabled = false;
+    }
+}
+
+async function sendArenaVote(winner) {
+    if (!arenaCurrentMatchId || arenaHasVoted) return;
+    document.querySelectorAll('#arenaResults .arena-votes button').forEach(button => button.disabled = true);
+    try {
+        const response = await fetch(API + '/api/arena/vote', {
+            method: 'POST',
+            headers: authHeaders(),
+            credentials: 'include',
+            body: JSON.stringify({ match_id: arenaCurrentMatchId, winner })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.error || 'Ovoz saqlanmadi');
+        arenaHasVoted = true;
+        arenaStatus(data.message || 'Ovozingiz saqlandi.');
+        loadArenaLeaderboard();
+    } catch (error) {
+        document.querySelectorAll('#arenaResults .arena-votes button').forEach(button => button.disabled = false);
+        arenaStatus('❌ ' + error.message);
+    }
+}
+
+async function loadArenaLeaderboard() {
+    try {
+        const response = await fetch(API + '/api/arena/leaderboard', {
+            headers: authHeaders(),
+            credentials: 'include'
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.error || 'Reyting yuklanmadi');
+        const root = document.getElementById('arenaLeaderboard');
+        root.replaceChildren();
+        if (!data.ranking.length) {
+            const empty = document.createElement('p');
+            empty.className = 'arena-small';
+            empty.textContent = 'Hozircha ovozlar yo‘q. Birinchi bo‘lib ovoz bering!';
+            root.append(empty);
+            return;
+        }
+        data.ranking.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'arena-rank';
+            const name = document.createElement('span');
+            name.className = 'arena-rank-name';
+            name.textContent = (index + 1) + '. ' + item.model_a + ' VS ' + item.model_b;
+            const a = document.createElement('span');
+            a.textContent = 'A: ' + item.a;
+            const b = document.createElement('span');
+            b.textContent = 'B: ' + item.b;
+            const tie = document.createElement('span');
+            tie.className = 'ties';
+            tie.textContent = 'Teng: ' + item.tie;
+            row.append(name, a, b, tie);
+            root.append(row);
+        });
+    } catch (error) {
+        document.getElementById('arenaLeaderboard').textContent = error.message;
+    }
+}
+
+document.getElementById('arenaCompareBtn').addEventListener('click', compareArena);
+
 // ============= TAB ALMASHTIRISH =============
 function sw(id, el) {
     document.querySelectorAll('.tc').forEach(c => c.classList.remove('active'));
@@ -459,6 +634,8 @@ function sw(id, el) {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('ttopic').textContent = TOPICS[Math.floor(Math.random()*TOPICS.length)];
+    loadArenaLeaderboard();
+    if (location.hash === '#arena') sw('arena');
 });
 </script>
 </body>
