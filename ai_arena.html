@@ -8,6 +8,7 @@
 <style>
 :root{color-scheme:dark;--bg:#070817;--panel:#111329;--line:#292d50;--muted:#a2a7c7;--purple:#8b5cf6;--blue:#4f8cff;--green:#34d399}
 *{box-sizing:border-box}
+html{visibility:hidden}
 body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0%,#202052 0,transparent 38%),radial-gradient(circle at 90% 80%,#30164d 0,transparent 36%),var(--bg);color:#f7f7ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:18px}
 main{max-width:980px;margin:auto}
 a{color:#c4b5fd;text-decoration:none}
@@ -86,6 +87,7 @@ function authHeaders(){
    return;
   }
   if(!response.ok) throw new Error("Auth check failed");
+  document.documentElement.style.visibility="visible";
  }catch(_){location.replace("index.html?auth_error=unavailable");}
 })();
 
