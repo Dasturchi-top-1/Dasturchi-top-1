@@ -39,6 +39,7 @@ h3{margin:0 0 12px;font-size:18px}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:14px}
 @media(max-width:680px){body{padding:10px}.results{grid-template-columns:1fr}.panel{padding:14px}.rank-row{grid-template-columns:1fr auto auto}.rank-row .ties{display:none}}
 </style>
+    <link rel="stylesheet" href="./black-ai.css">
 </head>
 <body>
 <main>
@@ -166,5 +167,6 @@ async function loadLeaderboard(){
 $("compareBtn").addEventListener("click",compare);
 loadLeaderboard();
 </script>
+    <script src="./black-ai.js" defer></script>
 </body>
 </html>
