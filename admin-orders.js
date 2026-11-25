@@ -45,7 +45,7 @@
         return;
       }
       box.innerHTML = orders.map(o => `
-        <article class="order-card" style="background:rgba(0,0,0,.18);border:1px solid var(--brd);border-radius:12px;padding:12px;margin:12px 0">
+        <article class="order-card" data-payment-method="${esc(o.payment_method || "manual")}" style="background:rgba(0,0,0,.18);border:1px solid var(--brd);border-radius:12px;padding:12px;margin:12px 0">
           <b>${esc(o.title)}</b>
           <div class="monitor-muted">ID: ${esc(o.id)} · ${esc(o.username || "Foydalanuvchi")} · ${esc(o.created_at)}</div>
           <div style="margin:8px 0"><b>Xizmat:</b> ${esc(serviceNames[o.service_type] || o.service_type)} · <b>Aloqa:</b> ${esc(o.contact || "Ko‘rsatilmagan")}</div>
