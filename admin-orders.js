@@ -61,13 +61,35 @@
           <label>Tayyor fayl havolasi (faqat to‘lovdan keyin mijozga ko‘rinadi)</label>
           <input id="file-${esc(o.id)}" class="order-field" maxlength="1000" value="${esc(o.delivery_url || "")}" placeholder="Tayyor fayl havolasi">
           <button class="btn" type="button" data-save-order="${esc(o.id)}">Saqlash</button>
+          ${o.status === "cancelled" && o.payment_status === "paid" && o.payment_method === "credits" ? '<button class="btn" type="button" data-refund-order="' + esc(o.id) + '">Kreditni qaytarish</button>' : ""}
           <p class="monitor-muted" id="msg-${esc(o.id)}"></p>
         </article>`).join("");
       box.querySelectorAll("[data-save-order]").forEach(btn => {
         btn.addEventListener("click", () => saveOrder(btn.getAttribute("data-save-order")));
       });
+      box.querySelectorAll("[data-refund-order]").forEach(btn => {
+        btn.addEventListener("click", () => refundOrder(btn.getAttribute("data-refund-order"), btn));
+      });
     } catch (err) {
       box.textContent = err.message;
+    }
+  }
+
+  async function refundOrder(id, button) {
+    if (!window.confirm("Bekor qilingan buyurtma uchun sarflangan kreditlar foydalanuvchiga qaytarilsinmi?")) return;
+    button.disabled = true;
+    try {
+      const res = await fetch(API + "/api/admin/orders/refund-credits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + token() },
+        body: JSON.stringify({ order_id: id })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Kredit qaytarilmadi");
+      await loadOrders();
+    } catch (err) {
+      window.alert(err.message);
+      button.disabled = false;
     }
   }
 
