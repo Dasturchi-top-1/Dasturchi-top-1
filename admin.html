@@ -92,6 +92,16 @@
         .btn-red { background: linear-gradient(135deg, var(--acc), #b91c1c); }
         
         .loading { text-align: center; padding: 40px; color: var(--muted); }
+
+        .monitor-card { background:var(--card);border:1px solid var(--brd);border-radius:16px;padding:18px;margin-bottom:20px; }
+        .monitor-title { font-size:16px;font-weight:800;margin-bottom:12px; }
+        .monitor-count { font-size:30px;font-weight:900;color:var(--grn);margin-bottom:12px; }
+        .monitor-item { display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px; }
+        .monitor-item:last-child { border-bottom:0; }
+        .monitor-muted { color:var(--muted);font-size:12px; }
+        .monitor-columns { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+        @media(max-width:560px){.monitor-columns{grid-template-columns:1fr;}}
+
     </style>
     <link rel="stylesheet" href="./black-ai.css">
 </head>
@@ -116,6 +126,23 @@
         <div class="list-card">
             <div class="list-title">📋 Foydalanuvchilar ro'yxati</div>
             <div id="userList"><div class="loading">Yuklanmoqda...</div></div>
+        </div>
+
+
+        <div class="monitor-card">
+            <div class="monitor-title">👁️ BLIP MONITOR · Sayt faolligi</div>
+            <div class="monitor-count"><span id="monitorOnline">—</span> <span class="monitor-muted">onlayn</span></div>
+            <div class="monitor-columns">
+                <div>
+                    <div class="monitor-title">Hozir saytda</div>
+                    <div id="monitorActive" class="monitor-muted">Yuklanmoqda…</div>
+                </div>
+                <div>
+                    <div class="monitor-title">So‘nggi hodisalar</div>
+                    <div id="monitorEvents" class="monitor-muted">Yuklanmoqda…</div>
+                </div>
+            </div>
+            <p class="monitor-muted" style="margin-top:12px;">Faqat rozilik bergan tashrifchilar. Sahifa va funksiya nomlari qayd etiladi; shaxsiy xabarlar kuzatilmaydi. Ma’lumotlar 30 kun saqlanadi.</p>
         </div>
 
         <button class="btn btn-red" onclick="logout()">🚪 Chiqish (Logout)</button>
@@ -199,6 +226,75 @@
             return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
         }
 
+
+        // ============= BLIP MONITOR =============
+        function monitorPageName(page) {
+            const names = {
+                'index.html':'Bosh sahifa', 'multiverse.html':'Multiverse',
+                'admin.html':'Admin', 'ai_arena.html':'AI Arena',
+                'ai_login.html':'AI Login', 'ai_multiverse.html':'AI Multiverse',
+                'council.html':'AI Sud Majlisi', 'dream.html':'Dream Journal',
+                'turing.html':'Turing Test', 'video_studio.html':'Video Studio'
+            };
+            return names[page] || page || 'Noma’lum';
+        }
+
+        function monitorEventName(event) {
+            const names = {
+                'page_view':'Sahifani ochdi',
+                'internal_navigation':'Boshqa bo‘limga o‘tdi',
+                'black_ai_open':'Black AI ni ochdi',
+                'feature_open':'Funksiyani ochdi'
+            };
+            return names[event] || 'Faollik';
+        }
+
+        function monitorTime(value) {
+            if (!value) return '—';
+            const date = new Date(value);
+            return Number.isNaN(date.getTime()) ? '—' : date.toLocaleTimeString('uz-UZ', {hour:'2-digit',minute:'2-digit'});
+        }
+
+        async function loadMonitor() {
+            const onlineEl = document.getElementById('monitorOnline');
+            const activeEl = document.getElementById('monitorActive');
+            const eventsEl = document.getElementById('monitorEvents');
+            try {
+                const res = await fetch(`${API_URL}/api/admin/monitor`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${getToken()}` },
+                    cache: 'no-store'
+                });
+                if (res.status === 401) {
+                    sessionStorage.removeItem('blip_jwt');
+                    sessionStorage.removeItem('blip_role');
+                    window.location.replace('./index.html');
+                    return;
+                }
+                if (!res.ok) throw new Error('Monitor server xatosi: ' + res.status);
+                const data = await res.json();
+                onlineEl.textContent = Number(data.online_count || 0);
+
+                const active = data.active || [];
+                activeEl.innerHTML = active.length ? active.map(item =>
+                    '<div class="monitor-item"><span><b>' + escapeHtml(item.name) + '</b><br><span class="monitor-muted">' +
+                    escapeHtml(monitorPageName(item.page)) + '</span></span><span class="monitor-muted">' +
+                    escapeHtml(monitorTime(item.last_seen_at)) + '</span></div>'
+                ).join('') : '<p class="monitor-muted">Hozircha rozilik bergan faol tashrifchi yo‘q.</p>';
+
+                const events = data.events || [];
+                eventsEl.innerHTML = events.length ? events.slice(0, 12).map(item =>
+                    '<div class="monitor-item"><span><b>' + escapeHtml(item.name) + '</b><br><span class="monitor-muted">' +
+                    escapeHtml(monitorEventName(item.event)) + ' · ' + escapeHtml(monitorPageName(item.page)) +
+                    '</span></span><span class="monitor-muted">' + escapeHtml(monitorTime(item.created_at)) + '</span></div>'
+                ).join('') : '<p class="monitor-muted">Hozircha hodisalar yo‘q.</p>';
+            } catch (e) {
+                onlineEl.textContent = '—';
+                activeEl.textContent = 'Monitor vaqtincha ulanmagan: ' + e.message;
+                eventsEl.textContent = 'Keyinroq qayta urinib ko‘ring.';
+            }
+        }
+
         // ============= LOGOUT =============
         function logout() {
             if (!confirm("Chiqishni tasdiqlaysizmi?")) return;
@@ -210,8 +306,10 @@
         // ============= ISHGA TUSHIRISH =============
         document.addEventListener('DOMContentLoaded', () => {
             loadStats();
-            // Har 60 soniyada yangilash
+            loadMonitor();
+            // Har 30 soniyada statistika yangilanadi
             setInterval(loadStats, 60000);
+            setInterval(loadMonitor, 30000);
         });
     </script>
     <script src="./black-ai.js" defer></script>
