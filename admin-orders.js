@@ -9,6 +9,7 @@
     ["in_progress","Bajarilmoqda"],["completed","Tayyor"],["cancelled","Bekor qilindi"]
   ];
   const payments = [["unpaid","To‘lanmagan"],["awaiting","Tekshirilmoqda"],["paid","To‘langan"]];
+  const serviceNames = {website:"Veb-sayt",android_app:"Android ilova",telegram_bot:"Telegram bot",python_program:"Python dastur",other:"Boshqa loyiha"};
 
   function init() {
     const monitor = document.querySelector(".monitor-card");
@@ -47,7 +48,7 @@
         <article class="order-card" style="background:rgba(0,0,0,.18);border:1px solid var(--brd);border-radius:12px;padding:12px;margin:12px 0">
           <b>${esc(o.title)}</b>
           <div class="monitor-muted">ID: ${esc(o.id)} · ${esc(o.username || "Foydalanuvchi")} · ${esc(o.created_at)}</div>
-          <div style="margin:8px 0"><b>Xizmat:</b> ${esc(o.service_type)} · <b>Aloqa:</b> ${esc(o.contact || "Ko‘rsatilmagan")}</div>
+          <div style="margin:8px 0"><b>Xizmat:</b> ${esc(serviceNames[o.service_type] || o.service_type)} · <b>Aloqa:</b> ${esc(o.contact || "Ko‘rsatilmagan")}</div>
           <p style="white-space:pre-wrap;margin:8px 0">${esc(o.details)}</p>
           <label>Holati</label>
           <select id="os-${esc(o.id)}" class="order-field">${statuses.map(([v,l]) => '<option value="' + v + '"' + (o.status===v?' selected':'') + '>' + l + '</option>').join("")}</select>
