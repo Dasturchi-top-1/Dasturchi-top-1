@@ -6,7 +6,8 @@
 
   var API = "https://saytim-uchun.onrender.com";
   var CONSENT_KEY = "blip_monitor_consent";
-  var page = (location.pathname.split("/").pop() || "index.html").split("?")[0];
+  var page = (location.pathname.split("/").filter(Boolean).pop() || "index.html").split("?")[0];
+  if (!/^[a-z0-9_-]+\.html$/i.test(page)) page = "index.html";
   var timer = null;
 
   var style = document.createElement("style");
