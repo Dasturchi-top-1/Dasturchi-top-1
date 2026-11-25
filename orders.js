@@ -13,7 +13,7 @@
     new: "Yangi", reviewing: "Ko‘rib chiqilmoqda", priced: "Narx belgilandi",
     in_progress: "Bajarilmoqda", completed: "Tayyor", cancelled: "Bekor qilindi"
   };
-  const paymentText = { unpaid: "To‘lov kutilmoqda", awaiting: "To‘lov tekshirilmoqda", paid: "To‘langan" };
+  const paymentText = { unpaid: "To‘lov kutilmoqda", awaiting: "To‘lov tekshirilmoqda", paid: "To‘langan", refunded: "Kredit qaytarilgan" };
 
   function init() {
     const tabs = document.querySelector(".tabs");
