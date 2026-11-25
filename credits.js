@@ -106,11 +106,22 @@
           states[1].textContent.trim() !== "To‘lov kutilmoqda") return;
       const price = Number(priceLine.textContent.replace("Narx:", "").replace("TJS", "").trim());
       if (!Number.isFinite(price) || price <= 0) return;
+      const scaledPrice = price * 10;
+      if (Math.abs(scaledPrice - Math.round(scaledPrice)) > 0.000001) {
+        if (!card.querySelector("[data-credit-price-note]")) {
+          const note = document.createElement("div");
+          note.className = "order-meta";
+          note.setAttribute("data-credit-price-note", "true");
+          note.textContent = "Kredit bilan to‘lash uchun narx 0.10 TJS qadamida bo‘lishi kerak. Admin narxni moslashtirishi mumkin.";
+          card.appendChild(note);
+        }
+        return;
+      }
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn";
       btn.setAttribute("data-pay-order", id);
-      btn.textContent = "To‘lash · " + Math.ceil(price * 10) + " kredit";
+      btn.textContent = "To‘lash · " + Math.round(scaledPrice) + " kredit";
       card.appendChild(btn);
     });
   }
