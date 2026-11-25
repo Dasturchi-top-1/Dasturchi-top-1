@@ -44,6 +44,7 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .cursor { display: inline-block; width: 8px; height: 15px; background: var(--grn); animation: blink 1s infinite; margin-left: 2px; vertical-align: middle; }
     </style>
+    <link rel="stylesheet" href="./black-ai.css">
 </head>
 <body>
     <div class="terminal">
@@ -127,5 +128,6 @@
             } catch (error) { document.getElementById(loadingId).remove(); printToTerminal("Connection lost.", 'system'); }
         }
     </script>
+    <script src="./black-ai.js" defer></script>
 </body>
 </html>
