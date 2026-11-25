@@ -53,7 +53,7 @@
           <label>Holati</label>
           <select id="os-${esc(o.id)}" class="order-field">${statuses.map(([v,l]) => '<option value="' + v + '"' + (o.status===v?' selected':'') + '>' + l + '</option>').join("")}</select>
           <label>Narx (TJS)</label>
-          <input id="op-${esc(o.id)}" class="order-field" type="number" min="0.01" step="0.01" value="${o.price_tjs == null ? "" : esc(o.price_tjs)}" placeholder="Masalan: 250">
+          <input id="op-${esc(o.id)}" class="order-field" type="number" min="0.10" step="0.10" value="${o.price_tjs == null ? "" : esc(o.price_tjs)}" placeholder="Masalan: 250">
           <label>To‘lov holati</label>
           <select id="pay-${esc(o.id)}" class="order-field" ${o.payment_status === "refunded" ? "disabled" : ""}>${(o.payment_status === "refunded" ? [...payments, ["refunded","Kredit qaytarildi"]] : payments).map(([v,l]) => '<option value="' + v + '"' + (o.payment_status===v?' selected':'') + '>' + l + '</option>').join("")}</select>
           <label>Admin izohi (ixtiyoriy)</label>
