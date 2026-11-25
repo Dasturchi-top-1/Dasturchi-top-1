@@ -1,6 +1,7 @@
 (() => {
   const API = "https://saytim-uchun.onrender.com";
   const token = () => sessionStorage.getItem("blip_jwt");
+  let purchaseRequestKey = null;
   const headers = () => {
     const h = { "Content-Type": "application/json" };
     if (token()) h.Authorization = "Bearer " + token();
@@ -31,6 +32,7 @@
       <div id="creditTransactionHistory" class="order-message"></div>`;
     firstCard.before(card);
     document.getElementById("creditPurchaseForm").addEventListener("submit", submitPurchase);
+    document.getElementById("creditAmountTjs").addEventListener("input", () => { purchaseRequestKey = null; });
     document.addEventListener("click", event => {
       const button = event.target.closest("[data-pay-order]");
       if (button) payOrder(button.getAttribute("data-pay-order"), button);
@@ -78,11 +80,12 @@
       }
       const res = await fetch(API + "/api/credits/purchases", {
         method: "POST", headers: headers(), credentials: "include",
-        body: JSON.stringify({ amount_tjs: amount.toFixed(2), idempotency_key: crypto.randomUUID() })
+        body: JSON.stringify({ amount_tjs: amount.toFixed(2), idempotency_key: purchaseRequestKey || (purchaseRequestKey = crypto.randomUUID()) })
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Kredit so‘rovi yuborilmadi");
       amountInput.value = "";
+      purchaseRequestKey = null;
       balance.textContent = "So‘rov yuborildi. To‘lov tasdiqlangach kredit qo‘shiladi.";
       await loadWallet();
     } catch (err) {
