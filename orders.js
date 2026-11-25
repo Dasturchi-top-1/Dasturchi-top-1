@@ -125,7 +125,7 @@
         return;
       }
       box.innerHTML = data.orders.map(order => `
-        <article class="order-card">
+        <article class="order-card" data-order-id="${esc(order.id)}">
           <b>${esc(order.title)}</b>
           <div class="order-meta">ID: ${esc(order.id)}</div>
           <span class="order-status">${esc(statusText[order.status] || order.status)}</span>
