@@ -52,6 +52,21 @@
     toggle.textContent = open ? "Yopish" : "Maxfiylik sozlamalari";
   }
 
+  function visitorKey() {
+    try {
+      var key = sessionStorage.getItem("blip_monitor_session");
+      if (!key || !/^[0-9a-f-]{36}$/i.test(key)) {
+        key = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() :
+          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0;
+            return (c === "x" ? r : (r & 3 | 8)).toString(16);
+          });
+        sessionStorage.setItem("blip_monitor_session", key);
+      }
+      return key;
+    } catch (_) { return null; }
+  }
+
   function authHeaders() {
     var headers = { "Content-Type": "application/json" };
     try {
@@ -67,7 +82,7 @@
       headers: authHeaders(),
       credentials: "include",
       keepalive: true,
-      body: JSON.stringify(Object.assign({ consent: true, page: page }, body || {}))
+      body: JSON.stringify(Object.assign({ consent: true, page: page, visitor_key: visitorKey() }, body || {}))
     }).catch(function () {});
   }
 
