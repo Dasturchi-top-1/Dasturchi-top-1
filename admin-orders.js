@@ -55,7 +55,7 @@
           <label>Narx (TJS)</label>
           <input id="op-${esc(o.id)}" class="order-field" type="number" min="0.01" step="0.01" value="${o.price_tjs == null ? "" : esc(o.price_tjs)}" placeholder="Masalan: 250">
           <label>To‘lov holati</label>
-          <select id="pay-${esc(o.id)}" class="order-field">${payments.map(([v,l]) => '<option value="' + v + '"' + (o.payment_status===v?' selected':'') + '>' + l + '</option>').join("")}</select>
+          <select id="pay-${esc(o.id)}" class="order-field" ${o.payment_status === "refunded" ? "disabled" : ""}>${(o.payment_status === "refunded" ? [...payments, ["refunded","Kredit qaytarildi"]] : payments).map(([v,l]) => '<option value="' + v + '"' + (o.payment_status===v?' selected':'') + '>' + l + '</option>').join("")}</select>
           <label>Admin izohi (ixtiyoriy)</label>
           <input id="note-${esc(o.id)}" class="order-field" maxlength="1000" value="${esc(o.admin_note || "")}" placeholder="Mijozga ko‘rinadigan izoh">
           <label>Tayyor fayl havolasi (faqat to‘lovdan keyin mijozga ko‘rinadi)</label>
@@ -100,10 +100,11 @@
     const payload = {
       id,
       status: document.getElementById("os-" + id).value,
-      payment_status: document.getElementById("pay-" + id).value,
       admin_note: document.getElementById("note-" + id).value.trim(),
       delivery_url: document.getElementById("file-" + id).value.trim()
     };
+    const paymentSelect = document.getElementById("pay-" + id);
+    if (!paymentSelect.disabled) payload.payment_status = paymentSelect.value;
     if (priceRaw !== "") payload.price_tjs = Number(priceRaw);
     try {
       const res = await fetch(API + "/api/admin/orders/update", {
