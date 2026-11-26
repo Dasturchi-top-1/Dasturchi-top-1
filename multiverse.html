@@ -85,6 +85,23 @@
         @media(max-width:600px){h1{font-size:24px}.c{padding:6px}body{padding:8px}}
     </style>
     <link rel="stylesheet" href="./black-ai.css">
+<style>
+.car3d-stage{height:250px;display:grid;place-items:center;overflow:hidden;perspective:850px;background:radial-gradient(ellipse,#20234a,#090a18 68%);border:1px solid var(--brd);border-radius:14px;margin:12px 0}
+.car3d{position:relative;width:280px;height:145px;transform-style:preserve-3d;transform:rotateX(-13deg) rotateY(32deg);transition:transform .2s ease}
+.car3d-body{position:absolute;left:25px;top:62px;width:230px;height:52px;background:linear-gradient(180deg,#8c8dff,#4546a8 65%,#24265d);border:2px solid #b8baff;border-radius:24px 35px 14px 14px;box-shadow:0 12px 18px #0008}
+.car3d-cabin{position:absolute;left:82px;top:28px;width:115px;height:48px;background:linear-gradient(135deg,#a8d9ff99,#252b5d);border:2px solid #a9b8ff;border-radius:38px 42px 8px 8px;transform:translateZ(2px) skewX(-10deg)}
+.car3d-chassis{position:absolute;left:33px;top:104px;width:215px;height:12px;background:#b8bdc9;border-radius:8px;transform:translateZ(-5px)}
+.car3d-engine{position:absolute;left:38px;top:70px;width:48px;height:28px;background:linear-gradient(135deg,#ffbd69,#a94e23);border:2px solid #ffe0a9;border-radius:5px;transform:translateZ(19px)}
+.car3d-gearbox{position:absolute;left:100px;top:88px;width:58px;height:20px;background:linear-gradient(135deg,#a9b8c9,#45556b);border:2px solid #d6e2f1;border-radius:5px;transform:translateZ(9px)}
+.car3d-radiator{position:absolute;left:29px;top:79px;width:9px;height:29px;background:#56d8e8;border:1px solid #c2faff;transform:translateZ(15px)}
+.car3d-wheel{position:absolute;top:104px;width:42px;height:42px;border-radius:50%;background:radial-gradient(circle,#c9d1e3 0 18%,#343b4e 20% 35%,#080b13 38%);border:3px solid #9ca3af;transform:translateZ(22px)}
+.w1{left:48px}.w2{left:188px}.w3{left:48px;transform:translateZ(-20px)}.w4{left:188px;transform:translateZ(-20px)}
+.car3d.exploded .car3d-body{transform:translateY(-45px) translateZ(20px)}.car3d.exploded .car3d-cabin{transform:translateY(-68px) translateZ(28px)}
+.car3d.exploded .car3d-engine{transform:translate(-18px,12px) translateZ(55px)}.car3d.exploded .car3d-gearbox{transform:translate(12px,28px) translateZ(48px)}.car3d.exploded .car3d-radiator{transform:translate(-12px,10px) translateZ(42px)}
+.car-parts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}.car-parts button{border:1px solid var(--brd);border-radius:9px;background:#17182e;color:var(--text);padding:9px 12px;font-size:12px}
+@media(max-width:420px){.car3d-stage{height:220px}.car3d{transform:scale(.85) rotateX(-13deg) rotateY(32deg)}}
+@media(prefers-reduced-motion:reduce){.car3d,.car3d *{transition:none!important}}
+</style>
 </head>
 <body>
 <div class="c">
@@ -104,6 +121,7 @@
         <div class="tab" id="tab-video" onclick="sw('video',this)">🎬 Video</div>
         <div class="tab" id="tab-music" onclick="sw('music',this)">🎵 Musiqa</div>
         <div class="tab" id="tab-ff" onclick="sw('ff',this)">🔥 Free Fire</div>
+        <div class="tab" id="tab-cars" onclick="sw('cars',this)">🚘 Car AI</div>
     </div>
 
     <!-- HOME -->
@@ -117,6 +135,7 @@
         <div class="gc" onclick="sw('music')"><span class="i">🎵</span><h3>Musiqa yuklash</h3><p>Artist, qo'shiq va YouTube.</p></div>
         <div class="gc" onclick="sw('ff')"><span class="i">🔥</span><h3>Free Fire sozlamalari</h3><p>AI telefon uchun optimal sozlama beradi.</p></div>
         <div class="gc" onclick="location.href='ai_arena.html'"><span class="i">⚔️</span><h3>Blip AI Arena</h3><p>OpenRouter va Gemini javoblarini solishtiring va ovoz bering.</p></div>
+        <div class="gc" onclick="sw('cars')"><span class="i">🚘</span><h3>BLIP Car Intelligence</h3><p>Avtomobillarni o‘rganing, 3D sxematik tuzilishini ko‘ring va taqqoslang.</p></div>
     </div>
         <!-- QIDIRUV -->
     <div class="tc" id="t-search">
@@ -241,6 +260,21 @@
         </div>
     </div>
 
+    <!-- BLIP CAR INTELLIGENCE -->
+    <div class="tc" id="t-cars">
+      <div class="card"><div class="result-title">🚘 BLIP CAR INTELLIGENCE</div>
+        <p class="info">Avtomobil nomini kiriting. Mehmonlar uchun 3 ta so‘rov; hisobga kirgan foydalanuvchilar uchun qidiruv limiti yo‘q. Taqqoslash ham bitta so‘rov hisoblanadi.</p>
+        <label class="lbl" for="carName">🚗 Birinchi avtomobil</label><input type="text" id="carName" maxlength="100" placeholder="BMW M5 2024">
+        <label class="lbl" for="carCompare">⚖️ Taqqoslash uchun ikkinchi avtomobil (ixtiyoriy)</label><input type="text" id="carCompare" maxlength="100" placeholder="Mercedes-AMG E 63">
+        <div id="carUsage" class="info">⏳ Imkoniyatlar tekshirilmoqda...</div><button class="btn" id="carSearchButton" onclick="carSearch()">🔍 O‘rganish va taqqoslash</button>
+      </div><div id="carResults"></div>
+      <div class="card"><div class="result-title">🧩 3D avtomobil tuzilishi</div><p class="result-text">Interaktiv umumiy o‘quv sxemasi. Bu tanlangan avtomobilning aniq CAD modeli emas.</p>
+        <div class="car3d-stage"><div class="car3d" id="car3d"><div class="car3d-chassis"></div><div class="car3d-body"></div><div class="car3d-cabin"></div><div class="car3d-engine"></div><div class="car3d-gearbox"></div><div class="car3d-radiator"></div><div class="car3d-wheel w1"></div><div class="car3d-wheel w2"></div><div class="car3d-wheel w3"></div><div class="car3d-wheel w4"></div></div></div>
+        <label class="lbl" for="carRotate">🔄 3D ko‘rinishni aylantirish</label><input type="range" id="carRotate" min="0" max="360" value="32" oninput="rotateCarModel(this.value)" style="width:100%;accent-color:var(--acc)">
+        <button class="btn" id="carExplodeButton" onclick="toggleCarExplode()" style="margin-top:8px">🧩 Qismlarni ajratib ko‘rsatish</button>
+        <div class="car-parts"><button type="button" onclick="showCarPart('engine')">Dvigatel</button><button type="button" onclick="showCarPart('gearbox')">Transmissiya</button><button type="button" onclick="showCarPart('chassis')">Shassi</button><button type="button" onclick="showCarPart('wheel')">G‘ildiraklar</button><button type="button" onclick="showCarPart('radiator')">Radiator</button></div>
+        <div id="carPartInfo" class="info" style="margin-top:12px">Qismni tanlang — vazifasi shu yerda ko‘rsatiladi.</div>
+      </div></div>
     <div class="footer">⚡ <a href="index.html" style="color:var(--acc)">Blip</a> · 2026</div>
 </div>
 
@@ -445,6 +479,13 @@ async function ffApply() {
     document.getElementById('ffResult').innerHTML = `<div class="result"><div class="result-title">🤖 AI Tavsiyasi</div><div class="result-text">${escapeHtml(res)}</div></div>`;
 }
 
+// ============= BLIP CAR INTELLIGENCE =============
+async function loadCarUsage(){const box=document.getElementById("carUsage");try{const r=await fetch(API+"/api/car-intelligence/usage",{headers:authHeaders(),credentials:"include",cache:"no-store"});const d=await r.json();if(!r.ok)throw new Error(d.error||"Limit tekshirilmadi");box.textContent=d.authenticated?"✅ Hisobga kirgansiz — qidiruv limiti yo‘q.":"🎟 Mehmon imkoniyatlari: "+d.remaining+"/3 ta qidiruv qoldi.";}catch(e){box.textContent="⚠️ "+e.message;}}
+async function carSearch(){const car=document.getElementById("carName").value.trim(),compare=document.getElementById("carCompare").value.trim(),out=document.getElementById("carResults"),btn=document.getElementById("carSearchButton");if(car.length<2)return alert("Avtomobil nomini kiriting.");if(compare&&compare.length<2)return alert("Taqqoslash nomini to‘liq kiriting.");btn.disabled=true;out.innerHTML="<div class=\"loading\">🚘 Avtomobil tahlil qilinmoqda...</div>";try{const r=await fetch(API+"/api/car-intelligence/search",{method:"POST",headers:authHeaders(),credentials:"include",body:JSON.stringify({car:car,compare_with:compare})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||"Ma’lumot olinmadi");const x=d.data||{},card=document.createElement("div");card.className="result";function add(tag,cls,txt){const el=document.createElement(tag);if(cls)el.className=cls;el.textContent=txt;card.append(el);return el;}add("div","result-title",x.title||car);add("p","result-text",x.overview||"Ma’lumot topilmadi.");if(x.generation)add("p","info","Avlod / yillar: "+x.generation);if(Array.isArray(x.specs)&&x.specs.length){add("div","result-title","⚙️ Texnik xususiyatlar");x.specs.forEach(s=>add("p","result-text",(s.label||"Xususiyat")+": "+(s.value||"Aniq ma’lumot yo‘q")));}if(x.engine){add("div","result-title","🔧 Dvigatel va transmissiya");add("p","result-text",x.engine);}if(Array.isArray(x.structure)&&x.structure.length){add("div","result-title","🧩 Tuzilishi");x.structure.forEach(p=>add("p","result-text",(p.part||"Qism")+": "+(p.function||"")));}if(x.facts){add("div","result-title","💡 Qiziqarli faktlar");add("p","result-text",x.facts);}if(x.comparison){add("div","result-title","⚖️ Taqqoslash");add("p","result-text",x.comparison);}add("p","info","AI yaratgan ma’lumot. Muhim texnik raqamlarni ishlab chiqaruvchining rasmiy manbasi bilan tekshiring.");out.replaceChildren(card);await loadCarUsage();}catch(e){out.textContent="❌ "+e.message;await loadCarUsage();}finally{btn.disabled=false;}}
+function rotateCarModel(v){const m=document.getElementById("car3d");if(m)m.style.transform="rotateX(-13deg) rotateY("+Number(v)+"deg)";}
+function toggleCarExplode(){const m=document.getElementById("car3d");if(!m)return;m.classList.toggle("exploded");document.getElementById("carExplodeButton").textContent=m.classList.contains("exploded")?"🔩 Qismlarni yig‘ish":"🧩 Qismlarni ajratib ko‘rsatish";}
+function showCarPart(p){const d={engine:"Dvigatel — energiyani mexanik harakatga aylantiradi.",gearbox:"Transmissiya — dvigatel momentini g‘ildiraklarga uzatadi.",chassis:"Shassi — avtomobilning tayanch va yurish qismlarini birlashtiradi.",wheel:"G‘ildiraklar — yo‘l bilan tutashib, harakat va tormoz kuchini uzatadi.",radiator:"Radiator — sovitish suyuqligidan issiqlikni tashqi havoga chiqaradi."};document.getElementById("carPartInfo").textContent=d[p]||"Qism tanlanmadi."; }
+loadCarUsage();
 // ============= TAB ALMASHTIRISH =============
 function sw(id, el) {
     document.querySelectorAll('.tc').forEach(c => c.classList.remove('active'));
