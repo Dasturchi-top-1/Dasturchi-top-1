@@ -13,7 +13,7 @@
     new: "Yangi", reviewing: "Ko‘rib chiqilmoqda", priced: "Narx belgilandi",
     in_progress: "Bajarilmoqda", completed: "Tayyor", cancelled: "Bekor qilindi"
   };
-  const paymentText = { unpaid: "To‘lov kutilmoqda", awaiting: "To‘lov tekshirilmoqda", paid: "To‘langan" };
+  const paymentText = { unpaid: "To‘lov kutilmoqda", awaiting: "To‘lov tekshirilmoqda", paid: "To‘langan", refunded: "Kredit qaytarilgan" };
 
   function init() {
     const tabs = document.querySelector(".tabs");
@@ -125,12 +125,13 @@
         return;
       }
       box.innerHTML = data.orders.map(order => `
-        <article class="order-card">
+        <article class="order-card" data-order-id="${esc(order.id)}">
           <b>${esc(order.title)}</b>
           <div class="order-meta">ID: ${esc(order.id)}</div>
           <span class="order-status">${esc(statusText[order.status] || order.status)}</span>
           <span class="order-status">${esc(paymentText[order.payment_status] || order.payment_status)}</span>
           <div class="order-meta">Narx: ${order.price_tjs == null ? "Hali belgilanmagan" : esc(order.price_tjs) + " TJS"}</div>
+          ${order.payment_method === "credits" && order.credits_charged ? '<div class="order-meta">Sarflangan: ' + esc(order.credits_charged) + ' BLIP Credits</div>' : ""}
           <p>${esc(order.details)}</p>
           ${order.delivery_url && order.payment_status === "paid" ? '<p><a target="_blank" rel="noopener" href="' + esc(order.delivery_url) + '">Tayyor fayllarni olish</a></p>' : ""}
         </article>`).join("");
