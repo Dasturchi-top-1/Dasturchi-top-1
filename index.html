@@ -165,6 +165,25 @@
         }
     </style>
     <link rel="stylesheet" href="./black-ai.css">
+
+<style>
+.ci-panel{width:min(100%,520px);margin:20px auto;padding:16px;text-align:left;border:1px solid #45416f;border-radius:18px;background:linear-gradient(145deg,#101329,#090b18);box-shadow:0 12px 35px #0005}
+.ci-head{display:flex;gap:12px;align-items:center;margin-bottom:14px}.ci-head>span{font-size:30px}.ci-head h3{font-size:17px;color:#c7c9ff}.ci-head p,.ci-3d p{font-size:12px;color:#94a3b8;margin-top:4px}
+.ci-panel label{display:block;font-size:12px;color:#a5b4fc;margin:10px 0 5px}.ci-panel input[type=text]{width:100%;padding:11px;border:1px solid #303452;border-radius:9px;background:#080b18;color:#fff;margin:0 0 8px}
+.ci-usage{font-size:12px;line-height:1.5;color:#cbd5e1;background:#171a31;padding:10px;border-radius:9px;margin:10px 0}
+.ci-button{width:100%;padding:12px;border:0;border-radius:10px;background:linear-gradient(120deg,#6366f1,#a855f7);color:#fff;font-weight:800}.ci-button:disabled{opacity:.55}.ci-secondary{margin-top:10px;background:#34365d}
+.ci-results{margin-top:12px;color:#e2e8f0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}.ci-results h4{color:#a5b4fc;margin:12px 0 5px}
+.ci-3d{margin-top:14px;border-top:1px solid #303452;padding-top:12px;color:#e2e8f0}.ci-3d summary{cursor:pointer;font-weight:700}.ci-stage{height:190px;display:grid;place-items:center;overflow:hidden;perspective:700px;background:radial-gradient(ellipse,#20234a,#090a18 70%);border-radius:12px;margin:10px 0}
+.ci-model{position:relative;width:230px;height:115px;transform-style:preserve-3d;transform:rotateX(-13deg) rotateY(32deg)}.ci-model i{position:absolute;display:block}
+.ci-body{left:18px;top:49px;width:194px;height:43px;background:linear-gradient(#9294ff,#353879);border:2px solid #c1c4ff;border-radius:22px 28px 10px 10px}
+.ci-cabin{left:67px;top:23px;width:96px;height:39px;background:linear-gradient(135deg,#a8d9ff99,#252b5d);border:2px solid #a9b8ff;border-radius:28px 30px 5px 5px;transform:translateZ(3px)}
+.ci-chassis{left:28px;top:88px;width:178px;height:9px;background:#aeb6c7;border-radius:8px;transform:translateZ(-5px)}.ci-engine{left:29px;top:57px;width:38px;height:24px;background:#c87536;border:2px solid #ffe0a9;border-radius:4px;transform:translateZ(16px)}
+.ci-gear{left:85px;top:72px;width:48px;height:17px;background:#64748b;border:2px solid #dbeafe;border-radius:4px;transform:translateZ(8px)}
+.ci-wheel{top:83px;width:35px;height:35px;border-radius:50%;background:radial-gradient(circle,#cbd5e1 0 18%,#30394d 22% 38%,#080b13 42%);border:3px solid #94a3b8;transform:translateZ(20px)}.ci-w1{left:38px}.ci-w2{left:158px}
+.ci-model.ci-exploded .ci-body{transform:translateY(-30px) translateZ(18px)}.ci-model.ci-exploded .ci-cabin{transform:translateY(-48px) translateZ(25px)}.ci-model.ci-exploded .ci-engine{transform:translate(-12px,10px) translateZ(42px)}.ci-model.ci-exploded .ci-gear{transform:translate(12px,20px) translateZ(38px)}
+.ci-parts{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.ci-parts button{border:1px solid #353958;border-radius:8px;background:#171a31;color:#e2e8f0;padding:8px;font-size:11px}
+@media(max-width:520px){.ci-panel{padding:12px}.ci-stage{height:170px}}
+</style>
 </head>
 <body>
     <div class="bg"></div>
@@ -254,6 +273,22 @@
             <p class="note">Faqat ismingiz va emailingiz o'qiladi. Parolingiz bizga ko'rinmaydi.</p>
 
             <a href="ai_login.html" class="ai-link">🤖 Sun'iy Intellekt sifatida kirish</a>
+            <section class="ci-panel" aria-labelledby="ciTitle">
+              <div class="ci-head"><span>🚘</span><div><h3 id="ciTitle">BLIP Car Intelligence</h3><p>Avtomobillarni o‘rganing va taqqoslang</p></div></div>
+              <label for="ciCar">Birinchi avtomobil</label><input id="ciCar" type="text" maxlength="100" placeholder="BMW M5 2024">
+              <label for="ciCompare">Taqqoslash uchun ikkinchi avtomobil (ixtiyoriy)</label><input id="ciCompare" type="text" maxlength="100" placeholder="Mercedes-AMG E 63">
+              <div class="ci-usage" id="ciUsage" aria-live="polite">⏳ 3 ta mehmon qidiruvi tekshirilmoqda...</div>
+              <button class="ci-button" id="ciSearchButton" type="button" onclick="ciSearch()">🔍 O‘rganish va taqqoslash</button>
+              <div id="ciResults" class="ci-results" aria-live="polite"></div>
+              <details class="ci-3d"><summary>🧩 Interaktiv 3D avtomobil tuzilishi</summary>
+                <p>Umumiy o‘quv sxemasi; aniq modelning CAD chizmasi emas.</p>
+                <div class="ci-stage"><div class="ci-model" id="ciModel"><i class="ci-chassis"></i><i class="ci-body"></i><i class="ci-cabin"></i><i class="ci-engine"></i><i class="ci-gear"></i><i class="ci-wheel ci-w1"></i><i class="ci-wheel ci-w2"></i></div></div>
+                <label for="ciRotate">Aylantirish</label><input id="ciRotate" type="range" min="0" max="360" value="32" oninput="ciRotate(this.value)">
+                <button type="button" class="ci-button ci-secondary" onclick="ciExplode()">Qismlarni ajratish / yig‘ish</button>
+                <div class="ci-parts"><button type="button" onclick="ciPart('engine')">Dvigatel</button><button type="button" onclick="ciPart('gear')">Transmissiya</button><button type="button" onclick="ciPart('chassis')">Shassi</button><button type="button" onclick="ciPart('wheel')">G‘ildirak</button></div>
+                <div class="ci-usage" id="ciPartInfo">Qismni tanlang.</div>
+              </details>
+            </section>
 
             <form class="admin" id="adminForm" hidden novalidate>
                 <label class="sr" for="adminUser">Admin ismi</label>
@@ -485,6 +520,16 @@
                 console.log("Sessiya tekshiruvi:", e.message);
             }
         });
+
+        // ===== BLIP CAR INTELLIGENCE (guest access from index.html) =====
+        function ciHeaders(){const h={"Content-Type":"application/json"};const t=sessionStorage.getItem("blip_jwt");if(t)h.Authorization="Bearer "+t;return h;}
+        async function ciLoadUsage(){const box=$("ciUsage");try{const r=await fetch(API_URL+"/api/car-intelligence/usage",{headers:ciHeaders(),credentials:"include",cache:"no-store"});const d=await r.json();if(!r.ok)throw new Error(d.error||"Tekshirib bo‘lmadi");box.textContent=d.authenticated?"✅ Hisobga kirgansiz — qidiruv limiti yo‘q.":"🎟 Mehmon imkoniyatlari: "+d.remaining+"/3 ta qidiruv qoldi.";}catch(e){box.textContent="⚠️ "+e.message;}}
+        async function ciSearch(){const car=$("ciCar").value.trim(),compare=$("ciCompare").value.trim(),out=$("ciResults"),btn=$("ciSearchButton");if(car.length<2)return showMsg("Avtomobil nomini kiriting.");btn.disabled=true;out.textContent="🚘 Avtomobil tahlil qilinmoqda...";try{const r=await fetch(API_URL+"/api/car-intelligence/search",{method:"POST",headers:ciHeaders(),credentials:"include",body:JSON.stringify({car:car,compare_with:compare})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||"Ma’lumot olinmadi");const x=d.data||{};out.replaceChildren();function add(tag,text){const e=document.createElement(tag);e.textContent=text;out.append(e);}add("h3",x.title||car);add("p",x.overview||"Ma’lumot topilmadi.");if(x.generation)add("p","Avlod / yillar: "+x.generation);if(Array.isArray(x.specs)&&x.specs.length){add("h4","⚙️ Texnik xususiyatlar");x.specs.forEach(v=>add("p",(v.label||"Xususiyat")+": "+(v.value||"Tasdiqlanmagan")));}if(x.engine){add("h4","🔧 Dvigatel va transmissiya");add("p",x.engine);}if(Array.isArray(x.structure)&&x.structure.length){add("h4","🧩 Tuzilishi");x.structure.forEach(v=>add("p",(v.part||"Qism")+": "+(v.function||"")));}if(x.facts){add("h4","💡 Faktlar");add("p",x.facts);}if(x.comparison){add("h4","⚖️ Taqqoslash");add("p",x.comparison);}add("p","AI yaratgan ma’lumot. Muhim texnik raqamlarni rasmiy ishlab chiqaruvchi manbasi bilan tekshiring.");await ciLoadUsage();}catch(e){out.textContent="❌ "+e.message;await ciLoadUsage();}finally{btn.disabled=false;}}
+        function ciRotate(v){const m=$("ciModel");if(m)m.style.transform="rotateX(-13deg) rotateY("+Number(v)+"deg)";}
+        function ciExplode(){$("ciModel").classList.toggle("ci-exploded");}
+        function ciPart(p){const m={engine:"Dvigatel energiyani mexanik harakatga aylantiradi.",gear:"Transmissiya momentni g‘ildiraklarga uzatadi.",chassis:"Shassi avtomobilning tayanch va yurish qismlarini birlashtiradi.",wheel:"G‘ildiraklar yo‘l bilan tutashib, harakat va tormoz kuchini uzatadi."};$("ciPartInfo").textContent=m[p]||"Qism tanlanmadi.";}
+        ciLoadUsage();
+
     </script>
     <script src="./black-ai.js" defer></script>
 </body>
