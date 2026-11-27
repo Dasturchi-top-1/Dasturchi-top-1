@@ -167,7 +167,30 @@
             .page-transition,.transition-title{transition:none}
             .page-transition::before{animation:none}
         }
-    </style>
+    
+        /* ===== Samolyot va shisha effekti ===== */
+        .portal-layout{width:min(100%,1240px);display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);align-items:center;gap:clamp(18px,4vw,52px);margin:auto}
+        .portal-main{min-width:0;display:flex;flex-direction:column;align-items:center;width:100%}
+        .portal-main>.box{margin:0 auto}
+        .plane-stage{position:relative;width:min(100%,760px);height:clamp(230px,34vw,390px);margin:18px auto 8px;overflow:hidden;border:1px solid rgba(165,180,252,.14);border-radius:28px;background:radial-gradient(ellipse at 50% 72%,#20285a 0%,#10142d 38%,#070916 76%);box-shadow:inset 0 0 60px #0008,0 18px 45px #0005;perspective:900px}
+        .plane-stage:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(99,102,241,.16));pointer-events:none}
+        .plane-caption{position:absolute;z-index:2;left:18px;top:16px;color:#c7d2fe;font-size:11px;letter-spacing:.2em}
+        .plane-horizon{position:absolute;left:12%;right:12%;bottom:18%;height:1px;background:linear-gradient(90deg,transparent,#818cf8,transparent);box-shadow:0 0 24px #818cf8}
+        .plane{position:absolute;z-index:2;left:50%;top:48%;width:min(72%,520px);transform:translate(-50%,-50%) translateZ(-900px) scale(.055);opacity:0;filter:drop-shadow(0 0 22px #818cf8)}
+        .plane svg{display:block;width:100%;height:auto}
+        .plane-stage.is-flying .plane{animation:planeApproach 3.8s cubic-bezier(.16,.72,.22,1) forwards}
+        @keyframes planeApproach{0%{transform:translate(-50%,-50%) translateZ(-900px) scale(.055);opacity:0}12%{opacity:.9}72%{transform:translate(-50%,-50%) translateZ(0) scale(.8);opacity:1}100%{transform:translate(-50%,-50%) translateZ(650px) scale(2.7);opacity:0}}
+        .plane-impact{position:fixed;inset:0;z-index:30;pointer-events:none;opacity:0;visibility:hidden;background:radial-gradient(circle at 50% 50%,rgba(226,232,255,.23),transparent 55%)}
+        .plane-impact svg{width:100%;height:100%;display:block}
+        .plane-impact.is-cracked{visibility:visible;animation:glassCrack 1.25s ease-out forwards}
+        @keyframes glassCrack{0%{opacity:0;backdrop-filter:blur(0)}18%{opacity:1;backdrop-filter:blur(1px)}100%{opacity:0;backdrop-filter:blur(0)}}
+        .sound-toggle{position:absolute;z-index:4;right:14px;bottom:12px;border:1px solid #818cf877;border-radius:999px;padding:9px 13px;background:#0b1024e8;color:#e0e7ff;font-size:12px;font-weight:700}
+        .sound-toggle:active{transform:scale(.97)}
+        .car-stage[hidden]{display:none!important}
+        .about-edge{width:100%;max-width:420px;margin:0;align-self:center}
+        @media(max-width:899px){.portal-layout{grid-template-columns:1fr;max-width:760px}.about-edge{max-width:760px;margin:22px auto 8px}.plane-stage{margin-top:8px}}
+        @media(prefers-reduced-motion:reduce){.plane-stage.is-flying .plane{animation:none;opacity:0}.plane-impact.is-cracked{animation:none;opacity:0}}
+</style>
     <link rel="stylesheet" href="./black-ai.css">
 
 <style>
@@ -192,45 +215,49 @@
 <body>
     <div class="bg"></div>
     <div class="flash-layer"></div>
+    <div class="plane-impact" id="planeImpact" aria-hidden="true"><svg viewBox="0 0 1000 700" preserveAspectRatio="none"><g fill="none" stroke="#e0f2fe" stroke-width="3"><path d="M500 350 500 0 M500 350 1000 70 M500 350 1000 350 M500 350 900 700 M500 350 500 700 M500 350 90 700 M500 350 0 350 M500 350 80 60 M500 350 430 250 380 220 400 160 M500 350 590 260 650 210 635 150 M500 350 420 430 350 480 330 550 M500 350 580 430 660 470 680 550"/></g></svg></div>
     <div class="page-transition" id="pageTransition" aria-hidden="true">
         <div class="transition-title"><strong>BLIP MULTIVERSE</strong><span>ENTERING A NEW WORLD</span></div>
     </div>
 
     <main class="scene">
-        <div class="car-stage" aria-label="Blip Portal mashina kirish animatsiyasi">
-            <div class="drive-caption">BLIP PORTAL · START</div>
-            <div class="speed-panel"><span class="speed-value" id="speedValue">0</span><span class="speed-unit">km/soat</span></div>
-            <div class="road" id="road" aria-hidden="true"></div><div class="car-shadow" aria-hidden="true"></div>
-            <div class="car" id="car" aria-hidden="true">
-                <svg viewBox="0 0 260 136">
-                    <defs><linearGradient id="carPaint" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a5b4fc"/><stop offset=".48" stop-color="#6366f1"/><stop offset="1" stop-color="#312e81"/></linearGradient><linearGradient id="glass" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c7d2fe"/><stop offset="1" stop-color="#334155"/></linearGradient></defs>
-                    <path d="M24 91 34 70Q40 64 66 60L91 32Q99 23 119 22H166Q181 23 193 39L216 65 239 72Q249 77 250 91L246 105H15L13 94Q14 90 24 91Z" fill="url(#carPaint)" stroke="#a5b4fc" stroke-width="2"/>
-                    <path d="m83 59 22-25q6-5 17-5h41q12 1 22 14l13 16Z" fill="url(#glass)" stroke="#c7d2fe" stroke-width="2"/><path d="M143 30v30" stroke="#818cf8" stroke-width="2"/>
-                    <path d="m207 75 32 7" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path id="brakeLight" d="m16 88 18-2" stroke="#fb7185" stroke-width="5" stroke-linecap="round"/>
-                    <path id="leftSignal" d="m18 78 10-2" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/><path id="rightSignal" d="m231 73 9 3" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
-                    <g aria-hidden="true">
-                        <path d="M157 57q10-14 23-2l8 7h-38z" fill="#172554" stroke="#a5b4fc" stroke-width="1"/>
-                        <path d="M160 47q1-14 12-15 11 1 12 13l-4 4h-17z" fill="#1e293b"/>
-                        <circle cx="171" cy="43" r="8" fill="#d9a783"/>
-                        <path d="M163 41q2-11 11-11 8 1 10 9-8-4-21 2" fill="#20202c"/>
-                        <path d="M163 51 180 58 190 57" fill="none" stroke="#d9a783" stroke-width="4" stroke-linecap="round"/>
-                        <circle cx="190" cy="59" r="6" fill="none" stroke="#0f172a" stroke-width="3"/>
-                    </g>
-                    <circle cx="65" cy="105" r="17" fill="#090b16" stroke="#94a3b8" stroke-width="5"/><circle cx="65" cy="105" r="6" fill="#c7d2fe"/><circle cx="205" cy="105" r="17" fill="#090b16" stroke="#94a3b8" stroke-width="5"/><circle cx="205" cy="105" r="6" fill="#c7d2fe"/>
+      <div class="portal-layout">
+        <div class="portal-main">
+        <section class="plane-stage" id="planeStage" aria-label="Blip Portal samolyot kirish animatsiyasi">
+            <div class="plane-caption">BLIP PORTAL · FLIGHT SEQUENCE</div>
+            <div class="plane-horizon" aria-hidden="true"></div>
+            <div class="plane" id="plane" aria-hidden="true">
+                <svg viewBox="0 0 520 300" role="img" aria-label="Futuristik samolyot">
+                    <defs>
+                        <linearGradient id="planeBody" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fafc"/><stop offset=".48" stop-color="#a5b4fc"/><stop offset="1" stop-color="#4338ca"/></linearGradient>
+                        <linearGradient id="planeWing" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c7d2fe"/><stop offset="1" stop-color="#3730a3"/></linearGradient>
+                    </defs>
+                    <path d="M260 18 282 126 467 218 460 244 280 205 270 278 250 278 240 205 60 244 53 218 238 126Z" fill="url(#planeWing)" stroke="#e0e7ff" stroke-width="5"/>
+                    <path d="M260 8 282 122 270 280 250 280 238 122Z" fill="url(#planeBody)" stroke="#eef2ff" stroke-width="4"/>
+                    <path d="M247 89 260 42 273 89 269 129 251 129Z" fill="#172554" stroke="#c7d2fe" stroke-width="3"/>
+                    <path d="M240 186 188 226 195 243 250 224 270 224 325 243 332 226 280 186Z" fill="#6366f1" stroke="#c7d2fe" stroke-width="4"/>
+                    <path d="M260 10 268 34 252 34Z" fill="#fff"/>
+                    <path d="M245 143 260 151 275 143" fill="none" stroke="#4338ca" stroke-width="5"/>
+                    <circle cx="260" cy="169" r="5" fill="#fff"/>
                 </svg>
             </div>
-            <div class="drive-controls" aria-label="Mashina boshqaruv tugmalari">
-                <div class="control-group" role="group" aria-label="Burilish">
-                    <button class="drive-control turn-control" id="turnLeft" type="button" aria-label="Chapga burish" title="Chapga burish" disabled>◀</button>
-                    <button class="drive-control turn-control" id="turnRight" type="button" aria-label="O‘ngga burish" title="O‘ngga burish" disabled>▶</button>
-                </div>
-                <div class="control-group" role="group" aria-label="Gaz va tormoz">
-                    <button class="drive-control pedal-control brake-control" id="brakeControl" type="button" aria-label="Tormoz" title="Tormozni bosib turing" disabled><span class="pedal-icon">■</span><span>TORMOZ</span></button>
-                    <button class="drive-control pedal-control gas-control" id="gasControl" type="button" aria-label="Gaz" title="Gazni bosib turing" disabled><span class="pedal-icon">▲</span><span>GAZ</span></button>
-                </div>
+            <div class="plane-impact" id="planeImpact" aria-hidden="true">
+                <svg viewBox="0 0 1000 700" preserveAspectRatio="none">
+                    <g fill="none" stroke="#e0f2fe" stroke-width="3" stroke-linecap="round">
+                        <path d="M500 350 500 0 M500 350 1000 70 M500 350 1000 350 M500 350 900 700 M500 350 500 700 M500 350 90 700 M500 350 0 350 M500 350 80 60"/>
+                        <path d="M500 350 430 250 380 220 400 160 M500 350 590 260 650 210 635 150 M500 350 420 430 350 480 330 550 M500 350 580 430 660 470 680 550"/>
+                        <path d="M430 250 360 260 310 220 M590 260 660 250 720 200 M420 430 360 410 300 450 M580 430 650 420 710 470"/>
+                    </g>
+                    <g fill="#c7d2fe" fill-opacity=".18" stroke="#e0e7ff" stroke-width="2">
+                        <path d="M500 350 430 250 500 0Z"/><path d="M500 350 590 260 1000 70Z"/>
+                        <path d="M500 350 580 430 900 700Z"/><path d="M500 350 420 430 90 700Z"/>
+                    </g>
+                </svg>
             </div>
-        </div>
-        <p class="hint" id="hint">Mashina Blip Portal tomon yo‘lga chiqmoqda...</p>
+            <button class="sound-toggle" id="soundToggle" type="button">🔊 Ovoz va qayta parvoz</button>
+        </section>
+        <div class="car-stage" aria-hidden="true" hidden>
+        <p class="hint" id="hint">Samolyot uzoqdan yaqinlashmoqda. Ovoz tugmasi orqali effektni yoqing.</p>
 
         <section class="box" id="box" inert aria-hidden="true">
             <h2 class="gradient-text">Blip Portal</h2>
@@ -276,6 +303,7 @@
                 <button type="submit" id="adminBtn">Admin kirishi</button>
             </form>
         </section>
+        </div>
         <section class="about-section about-edge" aria-labelledby="aboutTitle">
             <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutDetails">
                 <span class="about-icon" aria-hidden="true">👨‍💻</span>
@@ -284,12 +312,14 @@
             </button>
             <div class="about-details" id="aboutDetails" hidden>
                 <h3 id="aboutTitle">Salom! Men Blip 👋</h3>
-                <p>Saytimizga kirganingiz uchun rahmat! Men Blip — Salohiddin, Tojikistondan bo‘lgan yosh dasturchiman. Yangi texnologiyalarni o‘rganaman va g‘oyalarimni haqiqiy loyihalarga aylantirishga harakat qilaman.</p>
+                <p>Saytimizga kirganingiz uchun rahmat! Men Blip — yosh dasturchiman. Yangi texnologiyalarni o‘rganaman va g‘oyalarimni haqiqiy loyihalarga aylantirishga harakat qilaman.</p>
                 <h4>Dasturlash tillari</h4>
                 <div class="skill-list">
                     <span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span>
                 </div>
                 <p class="about-footnote">Python va web dasturlashni amaliy loyihalar orqali o‘rganib, rivojlantiryapman.</p>
+                <h4>AI yordamida ishlash mumkin bo‘lgan boshqa tillar</h4>
+                <div class="skill-list"><span>TypeScript</span><span>Java</span><span>C</span><span>C++</span><span>C#</span><span>PHP</span><span>Go</span><span>Rust</span><span>Kotlin</span><span>Swift</span><span>SQL</span></div>
                 <h4>Men foydalanadigan texnologiyalar</h4>
                 <div class="skill-list">
                     <span>Flask</span><span>Supabase</span><span>GitHub</span><span>Render</span>
@@ -302,10 +332,11 @@
                 </ul>
                 <h4>Saytimizdan foydalanish haqida</h4>
                 <p>Saytimiz yoqsa, undan mas’uliyat bilan foydalaning. Xavfsizlikni buzishga yoki xizmat ishiga xalaqit berishga urinmang. Muammo topsangiz, bizga xabar bering.</p>
-                <p>Saytdagi ayrim sahifa faolligi faqat monitoringga rozilik berilganida statistikada qayd etilishi mumkin. Shaxsiy chat mazmuni, parollar va maxfiy API kalitlari monitoringga yuborilmaydi.</p>
+                <p>Agar kelajakda sahifa faolligi statistikasi yoqilsa, bu haqida oldindan aniq xabar beriladi va faqat kerakli texnik ma’lumotlar qayd etiladi. Shaxsiy chat mazmuni, parollar va maxfiy API kalitlari kuzatilmaydi.</p>
                 <p class="about-footnote">Sayt haqidagi fikr va takliflaringiz biz uchun qadrli. Tashakkur!<br>Hurmat bilan, Blip.</p>
             </div>
         </section>
+      </div>
         <div class="srv" id="srv" role="status" aria-live="polite" hidden></div>
         <noscript><p class="hint">Kirish uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
     </main>
@@ -401,15 +432,49 @@
         bindHoldButton('gasControl', () => { driveState.gas = true; }, () => { driveState.gas = false; });
         bindHoldButton('brakeControl', () => { driveState.brake = true; }, () => { driveState.brake = false; });
 
-        function startCarIntro() {
-            const value=$('speedValue'),start=performance.now(),duration=5000;
-            const tick=now=>{
-                const progress=Math.min(1,(now-start)/duration);
-                value.textContent=String(Math.round(100*(1-Math.pow(1-progress,2.2))));
-                if(progress<1) requestAnimationFrame(tick); else setLamp(true);
-            };
-            requestAnimationFrame(tick);
+        let planeSoundEnabled = false;
+        function playPlaneImpact() {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (!planeSoundEnabled || !AudioCtx) return;
+            try {
+                const ctx = new AudioCtx();
+                const length = Math.floor(ctx.sampleRate * .65);
+                const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / length);
+                const noise = ctx.createBufferSource(); noise.buffer = buffer;
+                const filter = ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 1700;
+                const gain = ctx.createGain(); gain.gain.setValueAtTime(.0001, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(.22, ctx.currentTime + .025);
+                gain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .62);
+                noise.connect(filter); filter.connect(gain); gain.connect(ctx.destination); noise.start();
+                const impact = ctx.createOscillator(), impactGain = ctx.createGain();
+                impact.type = 'sine'; impact.frequency.setValueAtTime(105, ctx.currentTime);
+                impact.frequency.exponentialRampToValueAtTime(38, ctx.currentTime + .42);
+                impactGain.gain.setValueAtTime(.0001, ctx.currentTime);
+                impactGain.gain.exponentialRampToValueAtTime(.28, ctx.currentTime + .02);
+                impactGain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .48);
+                impact.connect(impactGain); impactGain.connect(ctx.destination); impact.start(); impact.stop(ctx.currentTime + .5);
+                noise.onended = () => ctx.close();
+            } catch (_) {}
         }
+        function startPlaneIntro() {
+            const stage = $('planeStage'), impact = $('planeImpact');
+            stage.classList.remove('is-flying'); impact.classList.remove('is-cracked');
+            setLamp(false);
+            void stage.offsetWidth;
+            stage.classList.add('is-flying');
+            window.setTimeout(() => {
+                impact.classList.remove('is-cracked'); void impact.offsetWidth; impact.classList.add('is-cracked');
+                playPlaneImpact();
+            }, 2850);
+            window.setTimeout(() => setLamp(true), REDUCED ? 100 : 3900);
+        }
+        $('soundToggle').addEventListener('click', () => {
+            planeSoundEnabled = true;
+            $('soundToggle').textContent = '🔊 Ovoz yoqildi · qayta parvoz';
+            startPlaneIntro();
+        });
 
         // ===== Men haqimda paneli =====
         $('aboutToggle').addEventListener('click', () => {
@@ -494,7 +559,7 @@
         // ===== Boshlanish =====
         window.addEventListener('DOMContentLoaded', async () => {
             if (REDUCED || lit) setLamp(true);
-            else startCarIntro();
+            else startPlaneIntro();
 
             // Server uyg'onish ko'rsatkichi (Render bepul rejasida birinchi so'rov sekin)
             const srv = $('srv');
