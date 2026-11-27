@@ -665,6 +665,45 @@
         ciLoadUsage();
 
     </script>
+    <script>
+      // Portal startup fallback: keep the login panel reachable if the intro script fails.
+      (() => {
+        const revealPortal = () => {
+          const box = document.getElementById("box");
+          if (!box) return;
+          document.body.classList.add("lit");
+          box.inert = false;
+          box.setAttribute("aria-hidden", "false");
+          document.querySelectorAll(".drive-control").forEach(button => { button.disabled = false; });
+        };
+        const startIntroFallback = () => {
+          const stage = document.getElementById("planeStage");
+          const plane = document.getElementById("plane");
+          if (stage && plane && !document.body.classList.contains("lit")) {
+            stage.classList.add("is-flying");
+            window.setTimeout(revealPortal, 4100);
+          } else {
+            revealPortal();
+          }
+        };
+        const soundButton = document.getElementById("soundToggle");
+        if (soundButton) soundButton.addEventListener("click", () => {
+          const stage = document.getElementById("planeStage");
+          if (stage) {
+            stage.classList.remove("is-flying");
+            void stage.offsetWidth;
+            stage.classList.add("is-flying");
+            window.setTimeout(revealPortal, 4100);
+          } else revealPortal();
+        });
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", startIntroFallback, { once: true });
+        } else {
+          startIntroFallback();
+        }
+        window.setTimeout(revealPortal, 6500);
+      })();
+    </script>
     <script src="./black-ai.js" defer></script>
 </body>
 </html>
