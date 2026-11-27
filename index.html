@@ -29,48 +29,6 @@
 
         .scene { min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; padding:0 16px 36px; }
 
-        /* ===== MASHINA KIRISH ANIMATSIYASI ===== */
-        .car-stage{position:relative;width:min(100%,620px);height:245px;flex:none;margin:18px auto 8px;overflow:hidden}
-        .road{position:absolute;left:-8%;right:-8%;bottom:24px;height:92px;border-block:2px solid rgba(148,163,184,.2);transform:perspective(260px) rotateX(18deg);background:linear-gradient(#171a2c,#090b16)}
-        .road:after{content:"";position:absolute;left:0;right:0;top:44px;height:4px;background:repeating-linear-gradient(90deg,#ffffffb3 0 38px,transparent 38px 76px);animation:roadMove .34s linear infinite}
-        .car{position:absolute;z-index:2;width:220px;height:116px;left:50%;bottom:46px;transform:translate(-190%,0) scale(.72);animation:carDrive 5s cubic-bezier(.18,.72,.25,1) forwards}
-        .car svg{width:100%;height:100%}
-        .car-shadow{position:absolute;left:18%;right:14%;bottom:31px;height:13px;border-radius:50%;background:#000a;filter:blur(5px);animation:shadowDrive 5s ease-out forwards}
-        .speed-panel{position:absolute;z-index:3;top:12px;right:10px;min-width:116px;padding:12px 15px;border:1px solid #6366f177;border-radius:16px;background:#0c0e1fe8;text-align:center}
-        .speed-value{display:block;color:#fff;font-size:32px;line-height:1.1;font-weight:800;font-variant-numeric:tabular-nums}
-        .speed-unit{color:var(--muted);font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
-        .drive-caption{position:absolute;left:12px;top:22px;color:#c7c9e8;font-size:13px;letter-spacing:2px}
-        .hint{color:var(--muted);font-size:14px;text-align:center;margin:0 0 8px}
-        body.lit .hint{display:none}
-
-        /* ===== EKRANDAGI MASHINA BOSHQARUVI ===== */
-        .drive-controls{position:absolute;z-index:5;left:8px;right:8px;bottom:4px;display:flex;align-items:center;justify-content:space-between;gap:8px;pointer-events:none}
-        .control-group{display:flex;align-items:center;gap:6px;pointer-events:auto}
-        .drive-control{display:flex;align-items:center;justify-content:center;gap:2px;min-width:42px;height:42px;padding:0 8px;border:1px solid rgba(199,210,254,.45);border-radius:13px;background:rgba(9,11,25,.94);color:#fff;font-weight:800;font-size:17px;box-shadow:0 4px 12px #0008;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
-        .drive-control:active:not(:disabled){transform:scale(.94);filter:brightness(1.25)}
-        .drive-control:disabled{opacity:.55}
-        .turn-control{width:42px;min-width:42px;padding:0;border-radius:50%;font-size:20px}
-        .pedal-control{min-width:61px;height:42px;flex-direction:column;font-size:11px;letter-spacing:.5px}
-        .pedal-control .pedal-icon{font-size:15px;line-height:15px}
-        .gas-control{border-color:#34d39999;background:rgba(5,52,42,.95)}
-        .brake-control{border-color:#fb718599;background:rgba(67,18,30,.95)}
-        .car{--steer-x:0px;--steer-angle:0deg}
-        body.lit .car{animation:none;transform:translate(calc(-50% + var(--steer-x)),0) rotate(var(--steer-angle)) scale(1.04);transition:transform .16s ease-out}
-        body.lit.drive-active .road:after{animation-play-state:running;animation-duration:var(--road-duration,.34s)}
-        body.braking #brakeLight{stroke:#ff334f;stroke-width:7;filter:drop-shadow(0 0 5px #ff173b)}
-        @keyframes signalBlink{50%{opacity:.18}}
-        body.turn-left #leftSignal,body.turn-right #rightSignal{animation:signalBlink .45s steps(2,end) infinite}
-        @media(max-width:520px){.drive-controls{left:5px;right:5px;bottom:3px}.control-group{gap:5px}.drive-control{min-width:39px;height:39px}.turn-control{width:39px;min-width:39px}.pedal-control{min-width:55px;height:39px;font-size:10px}.pedal-control .pedal-icon{font-size:14px}}
-        @media(prefers-reduced-motion:reduce){.drive-control:active:not(:disabled){transform:none}body.turn-left #leftSignal,body.turn-right #rightSignal{animation:none}}
-        @keyframes roadMove{to{background-position:-76px 0}}
-        @keyframes carDrive{0%{transform:translate(-190%,0) scale(.72)}45%{transform:translate(-50%,0) scale(.88)}75%{transform:translate(-50%,0) scale(1)}100%{transform:translate(-50%,0) scale(1.04)}}
-        @keyframes shadowDrive{0%{opacity:0;transform:scale(.5)}45%{opacity:.8;transform:scale(.9)}100%{opacity:1;transform:scale(1)}}
-        body.lit .car{animation:none;transform:translate(calc(-50% + var(--steer-x)),0) rotate(var(--steer-angle)) scale(1.04)}
-        body.lit .road:after{animation-play-state:paused}
-        @media(max-width:520px){.car-stage{height:220px;margin-top:8px}.car{width:190px;height:102px;bottom:43px}.speed-panel{top:8px;right:4px;min-width:98px;padding:9px 11px}.speed-value{font-size:27px}.drive-caption{left:4px;top:15px;font-size:10px;letter-spacing:1px}}
-        @media(min-width:900px){.car-stage{height:275px;margin-top:24px}.car{width:260px;height:138px;bottom:48px}}
-        @media(prefers-reduced-motion:reduce){.car,.car-shadow,.road:after{animation:none!important}.car{transform:translate(-50%,0) scale(1.04)}}
-
         /* ===== KARTA ===== */
         .box { position:relative; z-index:1; width:100%; max-width:380px; background:rgba(18,18,38,.94); border:1px solid rgba(255,255,255,.08); padding:28px 24px; border-radius:24px; box-shadow:0 14px 36px rgba(0,0,0,.5);
                opacity:0; transform:translateY(22px); pointer-events:none; transition:opacity .6s .3s, transform .6s .3s cubic-bezier(.2,.8,.2,1); }
@@ -195,7 +153,6 @@
         @keyframes glassCrack{0%{opacity:0;backdrop-filter:blur(0)}18%{opacity:1;backdrop-filter:blur(1px)}100%{opacity:0;backdrop-filter:blur(0)}}
         .sound-toggle{position:absolute;z-index:4;right:14px;bottom:12px;border:1px solid #818cf877;border-radius:999px;padding:9px 13px;background:#0b1024e8;color:#e0e7ff;font-size:12px;font-weight:700}
         .sound-toggle:active{transform:scale(.97)}
-        .car-stage[hidden]{display:none!important}
         .about-edge{width:100%;max-width:420px;margin:0;align-self:center}
         @media(max-width:899px){.portal-layout{grid-template-columns:1fr;max-width:760px}.about-edge{max-width:760px;margin:22px auto 8px}.plane-stage{margin-top:8px}}
         @media(prefers-reduced-motion:reduce){.cloud-bank{animation:none}.plane-stage.is-flying .plane{animation-duration:1.2s}.plane-impact.is-cracked{animation-duration:.55s}}
@@ -355,97 +312,95 @@
         <noscript><p class="hint">Kirish uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
     </main>
     <script>
+      // Telegram login is isolated so unrelated page scripts cannot prevent its buttons from working.
+      (() => {
+        const api = "https://saytim-uchun.onrender.com";
+        const start = document.getElementById("telegramLoginStart");
+        const panel = document.getElementById("telegramLoginPanel");
+        const status = document.getElementById("telegramLoginStatus");
+        const botLink = document.getElementById("telegramBotOpen");
+        const codeInput = document.getElementById("telegramLoginCode");
+        const verify = document.getElementById("telegramLoginVerify");
+        if (!start || !panel || !status || !botLink || !codeInput || !verify) {
+          console.error("Telegram login UI element is missing.");
+          return;
+        }
+
+        let challengeId = "";
+        start.addEventListener("click", async () => {
+          start.disabled = true;
+          panel.hidden = false;
+          status.textContent = "Kirish so‘rovi tayyorlanmoqda...";
+          try {
+            const response = await fetch(api + "/api/auth/telegram/start", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              credentials: "include",
+              cache: "no-store",
+              body: JSON.stringify({})
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success || !data.challenge_id || !data.bot_url) {
+              throw new Error(data.error || "Telegram login hozir mavjud emas");
+            }
+            challengeId = data.challenge_id;
+            try { sessionStorage.setItem("blip_telegram_challenge", challengeId); } catch (_) {}
+            botLink.href = data.bot_url;
+            status.textContent = "So‘rov tayyor! Telegram tugmasini bosing, botdan kod oling. Kod 10 daqiqa amal qiladi.";
+          } catch (error) {
+            status.textContent = "Kirishni boshlashda xatolik: " +
+              (error && error.message ? error.message : "Server bilan bog‘lanib bo‘lmadi") +
+              ". Sahifani yangilab qayta urinib ko‘ring.";
+          } finally {
+            start.disabled = false;
+          }
+        });
+
+        verify.addEventListener("click", async () => {
+          const code = codeInput.value.trim();
+          if (!challengeId) {
+            try { challengeId = sessionStorage.getItem("blip_telegram_challenge") || ""; } catch (_) {}
+          }
+          if (!/^\d{6}$/.test(code)) { status.textContent = "6 xonali kodni kiriting."; return; }
+          if (!challengeId) { status.textContent = "Avval Telegram orqali kod oling."; return; }
+          verify.disabled = true;
+          status.textContent = "Kod tekshirilmoqda...";
+          try {
+            const response = await fetch(api + "/api/auth/telegram/verify", {
+              method: "POST",
+              headers: {"Content-Type": "application/json"},
+              credentials: "include",
+              cache: "no-store",
+              body: JSON.stringify({challenge_id: challengeId, code})
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || !data.success || !data.token) {
+              throw new Error(data.error || "Kod tasdiqlanmadi");
+            }
+            sessionStorage.setItem("blip_jwt", data.token);
+            sessionStorage.setItem("blip_role", data.role || "human");
+            sessionStorage.removeItem("blip_telegram_challenge");
+            status.textContent = "Muvaffaqiyatli! Multiverse ochilmoqda...";
+            window.location.assign("multiverse.html");
+          } catch (error) {
+            status.textContent = error && error.message ? error.message : "Kodni tekshirishda xatolik.";
+          } finally {
+            verify.disabled = false;
+          }
+        });
+      })();
+    </script>
+    <script>
         const API_URL = "https://saytim-uchun.onrender.com";
         const $ = id => document.getElementById(id);
         const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         let lit = false, busy = false;
-        const driveState = { speed: 0, steering: 0, gas: false, brake: false, last: 0, frame: 0, ready: false };
 
         function showMsg(text, type = 'err') {
             const m = $('msgBox');
             m.textContent = text;           // faqat textContent: XSS xavfi yo'q
             m.className = 'msg ' + type;
         }
-
-        // ===== Mashina animatsiyasi =====
-        function setLamp(on) {
-            lit=on;
-            document.body.classList.toggle('lit',on);
-            const box = $('box');
-            if (box) { box.inert=!on; box.setAttribute('aria-hidden',String(!on)); }
-            document.querySelectorAll('.drive-control').forEach(button => { button.disabled = !on; });
-            if (on && !driveState.ready) {
-                driveState.ready = true;
-                const speed = $('speedValue');
-                driveState.speed = speed ? (Number(speed.textContent) || 0) : 0;
-            }
-        }
-
-        // Tugma bosib turilganda gaz/tormoz ishlaydi; yo'nalish tugmalari mashinani buradi.
-        function updateDrive(now) {
-            if (!lit) { driveState.frame = 0; return; }
-            const elapsed = Math.min(.05, Math.max(0, (now - driveState.last) / 1000));
-            driveState.last = now;
-            if (driveState.gas && !driveState.brake) driveState.speed = Math.min(160, driveState.speed + 78 * elapsed);
-            if (driveState.brake) driveState.speed = Math.max(0, driveState.speed - 155 * elapsed);
-            else if (!driveState.gas) driveState.speed = Math.max(0, driveState.speed - 18 * elapsed);
-            if (driveState.speed < .5) driveState.speed = 0;
-
-            $('speedValue').textContent = String(Math.round(driveState.speed));
-            $('car').style.setProperty('--steer-x', (driveState.steering * Math.min(27, 8 + driveState.speed * .12)) + 'px');
-            $('car').style.setProperty('--steer-angle', (driveState.steering * -5) + 'deg');
-            $('road').style.setProperty('--road-duration', Math.max(.12, .72 - driveState.speed / 300) + 's');
-            document.body.classList.toggle('braking', driveState.brake);
-            document.body.classList.toggle('turn-left', driveState.steering < 0);
-            document.body.classList.toggle('turn-right', driveState.steering > 0);
-            document.body.classList.toggle('drive-active', driveState.speed > .5);
-
-            if (driveState.gas || driveState.brake || driveState.steering !== 0 || driveState.speed > .5) {
-                driveState.frame = requestAnimationFrame(updateDrive);
-            } else {
-                driveState.frame = 0;
-                document.body.classList.remove('drive-active', 'braking', 'turn-left', 'turn-right');
-            }
-        }
-
-        function wakeDrive() {
-            if (!lit || driveState.frame) return;
-            driveState.last = performance.now();
-            driveState.frame = requestAnimationFrame(updateDrive);
-        }
-
-        function bindHoldButton(id, start, stop) {
-            const button = $(id);
-            const begin = event => {
-                if (!lit || button.disabled) return;
-                if (event && event.pointerId !== undefined) {
-                    event.preventDefault();
-                    try { button.setPointerCapture(event.pointerId); } catch (_) {}
-                }
-                start();
-                wakeDrive();
-            };
-            const end = () => {
-                stop();
-                if (driveState.frame) wakeDrive();
-            };
-            button.addEventListener('pointerdown', begin);
-            ['pointerup', 'pointercancel', 'lostpointercapture', 'blur'].forEach(type => button.addEventListener(type, end));
-            button.addEventListener('keydown', event => {
-                if ((event.key === ' ' || event.key === 'Enter') && !event.repeat) {
-                    event.preventDefault();
-                    begin(event);
-                }
-            });
-            button.addEventListener('keyup', event => {
-                if (event.key === ' ' || event.key === 'Enter') end();
-            });
-        }
-
-        bindHoldButton('turnLeft', () => { driveState.steering = -1; }, () => { if (driveState.steering < 0) driveState.steering = 0; });
-        bindHoldButton('turnRight', () => { driveState.steering = 1; }, () => { if (driveState.steering > 0) driveState.steering = 0; });
-        bindHoldButton('gasControl', () => { driveState.gas = true; }, () => { driveState.gas = false; });
-        bindHoldButton('brakeControl', () => { driveState.brake = true; }, () => { driveState.brake = false; });
 
         let planeSoundEnabled = false;
         let planeAudioContext = null;
@@ -614,61 +569,6 @@
         });
 
 
-        // ===== Telegram Login Panel =====
-        let telegramChallengeId = "";
-        const telegramStartButton = $("telegramLoginStart");
-        const telegramPanel = $("telegramLoginPanel");
-        if (telegramStartButton) telegramStartButton.addEventListener("click", async () => {
-            telegramStartButton.disabled = true;
-            telegramPanel.hidden = false;
-            const status = $("telegramLoginStatus");
-            status.textContent = "Kirish so‘rovi tayyorlanmoqda...";
-            try {
-                const response = await fetch(API_URL + "/api/auth/telegram/start", {
-                    method: "POST", headers: {"Content-Type":"application/json"},
-                    credentials: "include", cache: "no-store", body: JSON.stringify({})
-                });
-                const data = await response.json();
-                if (!response.ok || !data.success) throw new Error(data.error || "Telegram login hozir mavjud emas");
-                telegramChallengeId = data.challenge_id;
-                sessionStorage.setItem("blip_telegram_challenge", telegramChallengeId);
-                $("telegramBotOpen").href = data.bot_url;
-                telegramPanel.hidden = false;
-                status.textContent = "So‘rov tayyor! Quyidagi Telegram tugmasini bosing, botdan kod oling. Kod 10 daqiqa amal qiladi.";
-            } catch (error) {
-                status.textContent = "Kirishni boshlashda xatolik: " + (error && error.message ? error.message : "Server bilan bog‘lanib bo‘lmadi") + ". Sahifani yangilab qayta urinib ko‘ring.";
-            } finally {
-                telegramStartButton.disabled = false;
-            }
-        });
-        const telegramVerifyButton = $("telegramLoginVerify");
-        if (telegramVerifyButton) telegramVerifyButton.addEventListener("click", async () => {
-            const code = $("telegramLoginCode").value.trim();
-            const status = $("telegramLoginStatus");
-            telegramChallengeId = telegramChallengeId || sessionStorage.getItem("blip_telegram_challenge") || "";
-            if (!telegramChallengeId) { status.textContent = "Avval Telegram orqali kod oling."; return; }
-            if (!/^\d{6}$/.test(code)) { status.textContent = "6 xonali kodni kiriting."; return; }
-            telegramVerifyButton.disabled = true;
-            status.textContent = "Kod tekshirilmoqda...";
-            try {
-                const response = await fetch(API_URL + "/api/auth/telegram/verify", {
-                    method: "POST", headers: {"Content-Type":"application/json"},
-                    credentials: "include", cache: "no-store",
-                    body: JSON.stringify({challenge_id: telegramChallengeId, code})
-                });
-                const data = await response.json();
-                if (!response.ok || !data.success) throw new Error(data.error || "Kod tasdiqlanmadi");
-                sessionStorage.setItem("blip_jwt", data.token);
-                sessionStorage.setItem("blip_role", data.role || "human");
-                sessionStorage.removeItem("blip_telegram_challenge");
-                status.textContent = "Muvaffaqiyatli! Multiverse ochilmoqda...";
-                window.location.assign("multiverse.html");
-            } catch (error) {
-                status.textContent = error.message;
-            } finally {
-                telegramVerifyButton.disabled = false;
-            }
-        });
         // ===== BLIP CAR INTELLIGENCE (guest access from index.html) =====
         function ciHeaders(){const h={"Content-Type":"application/json"};const t=sessionStorage.getItem("blip_jwt");if(t)h.Authorization="Bearer "+t;return h;}
         async function ciLoadUsage(){const box=$("ciUsage");try{const r=await fetch(API_URL+"/api/car-intelligence/usage",{headers:ciHeaders(),credentials:"include",cache:"no-store"});const d=await r.json();if(!r.ok)throw new Error(d.error||"Tekshirib bo‘lmadi");box.textContent=d.authenticated?"✅ Hisobga kirgansiz — qidiruv limiti yo‘q.":"🎟 Mehmon imkoniyatlari: "+d.remaining+"/3 ta qidiruv qoldi.";}catch(e){box.textContent="⚠️ "+e.message;}}
@@ -688,7 +588,6 @@
           document.body.classList.add("lit");
           box.inert = false;
           box.setAttribute("aria-hidden", "false");
-          document.querySelectorAll(".drive-control").forEach(button => { button.disabled = false; });
         };
         const startIntroFallback = () => {
           const stage = document.getElementById("planeStage");
