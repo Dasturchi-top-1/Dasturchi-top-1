@@ -91,6 +91,10 @@
         .ai-link:hover { color:var(--acc2); }
 
         /* ===== MEN HAQIMDA: tizimga kirishdan oldin ko‘rinadi ===== */
+        .about-edge{width:min(100%,900px);margin:22px auto 8px;align-self:center;border-color:rgba(165,180,252,.24);background:linear-gradient(120deg,rgba(18,22,48,.96),rgba(13,15,31,.94));box-shadow:0 12px 30px rgba(0,0,0,.24)}
+        .about-edge .about-toggle{padding:15px 18px}
+        .about-edge .about-details{padding:0 20px 20px}
+        @media(min-width:900px){.about-edge{margin-top:28px}.about-edge .about-toggle{padding:17px 22px}}
         .about-section{margin:0 0 16px;border:1px solid rgba(165,180,252,.22);border-radius:15px;overflow:hidden;background:rgba(99,102,241,.07)}
         .about-toggle{width:100%;display:flex;align-items:center;gap:12px;padding:13px;background:transparent;border:0;color:#fff;text-align:left;cursor:pointer}
         .about-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:rgba(99,102,241,.18);font-size:21px}
@@ -232,33 +236,7 @@
             <h2 class="gradient-text">Blip Portal</h2>
             <p class="sub">Google yoki GitHub hisobingiz bilan kiring. Ism va parol kerak emas.</p>
 
-            <section class="about-section" aria-labelledby="aboutTitle">
-                <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutDetails">
-                    <span class="about-icon" aria-hidden="true">👨‍💻</span>
-                    <span class="about-label"><strong>Men haqimda</strong><small>Blip va uning dasturlash olami</small></span>
-                    <span class="about-arrow" aria-hidden="true">⌄</span>
-                </button>
-                <div class="about-details" id="aboutDetails" hidden>
-                    <h3 id="aboutTitle">Salom! Men Blip 👋</h3>
-                    <p>Men yosh dasturchiman. Python va web dasturlashni o‘rganaman, yangi g‘oyalarni haqiqiy loyihalarga aylantirishni yoqtiraman.</p>
-                    <h4>Biladigan va o‘rganayotgan texnologiyalar</h4>
-                    <div class="skill-list">
-                        <span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span>
-                        <span>Flask</span><span>Supabase</span><span>GitHub</span><span>Render</span>
-                    </div>
-                    <h4>Vositalarim</h4>
-                    <p>Pydroid 3 · GitHub Codespaces · CapCut</p>
-                    <h4>Loyihalarim</h4>
-                    <ul>
-                        <li>Blip Multiverse — mening raqamli olamim.</li>
-                        <li>Telegram botlar — foydali xizmatlar yaratish.</li>
-                        <li>AI va video tahrirlash loyihalari.</li>
-                    </ul>
-                    <h4>Qiziqishlarim</h4>
-                    <p>Sun’iy intellekt, dasturlash, yangi texnologiyalar va futbol.</p>
-                    <p class="about-footnote">Yosh dasturchi · Tajriba, izlanish va yangi g‘oyalar.</p>
-                </div>
-            </section>
+
 
             <div class="msg" id="msgBox" role="status" aria-live="polite"></div>
 
@@ -297,6 +275,36 @@
                 <input type="password" id="adminPass" placeholder="Admin paroli" autocomplete="current-password" maxlength="200">
                 <button type="submit" id="adminBtn">Admin kirishi</button>
             </form>
+        </section>
+        <section class="about-section about-edge" aria-labelledby="aboutTitle">
+            <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutDetails">
+                <span class="about-icon" aria-hidden="true">👨‍💻</span>
+                <span class="about-label"><strong>Men haqimda</strong><small>Blip — yosh dasturchi va BLIP Multiverse asoschisi</small></span>
+                <span class="about-arrow" aria-hidden="true">⌄</span>
+            </button>
+            <div class="about-details" id="aboutDetails" hidden>
+                <h3 id="aboutTitle">Salom! Men Blip 👋</h3>
+                <p>Saytimizga kirganingiz uchun rahmat! Men Blip — Salohiddin, Tojikistondan bo‘lgan yosh dasturchiman. Yangi texnologiyalarni o‘rganaman va g‘oyalarimni haqiqiy loyihalarga aylantirishga harakat qilaman.</p>
+                <h4>Dasturlash tillari</h4>
+                <div class="skill-list">
+                    <span>Python</span><span>HTML</span><span>CSS</span><span>JavaScript</span>
+                </div>
+                <p class="about-footnote">Python va web dasturlashni amaliy loyihalar orqali o‘rganib, rivojlantiryapman.</p>
+                <h4>Men foydalanadigan texnologiyalar</h4>
+                <div class="skill-list">
+                    <span>Flask</span><span>Supabase</span><span>GitHub</span><span>Render</span>
+                </div>
+                <h4>Loyihalarim</h4>
+                <ul>
+                    <li>BLIP Multiverse — AI xizmatlari va tajribalar olami.</li>
+                    <li>Black AI — turli vazifalar uchun yagona AI yordamchi.</li>
+                    <li>Blip Group, Blip Ustoz va Blip Videos — rivojlantirish rejasidagi loyihalar.</li>
+                </ul>
+                <h4>Saytimizdan foydalanish haqida</h4>
+                <p>Saytimiz yoqsa, undan mas’uliyat bilan foydalaning. Xavfsizlikni buzishga yoki xizmat ishiga xalaqit berishga urinmang. Muammo topsangiz, bizga xabar bering.</p>
+                <p>Saytdagi ayrim sahifa faolligi faqat monitoringga rozilik berilganida statistikada qayd etilishi mumkin. Shaxsiy chat mazmuni, parollar va maxfiy API kalitlari monitoringga yuborilmaydi.</p>
+                <p class="about-footnote">Sayt haqidagi fikr va takliflaringiz biz uchun qadrli. Tashakkur!<br>Hurmat bilan, Blip.</p>
+            </div>
         </section>
         <div class="srv" id="srv" role="status" aria-live="polite" hidden></div>
         <noscript><p class="hint">Kirish uchun JavaScript yoqilgan bo'lishi kerak.</p></noscript>
