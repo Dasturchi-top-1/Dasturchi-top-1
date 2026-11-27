@@ -241,20 +241,7 @@
                     <circle cx="260" cy="169" r="5" fill="#fff"/>
                 </svg>
             </div>
-            <div class="plane-impact" id="planeImpact" aria-hidden="true">
-                <svg viewBox="0 0 1000 700" preserveAspectRatio="none">
-                    <g fill="none" stroke="#e0f2fe" stroke-width="3" stroke-linecap="round">
-                        <path d="M500 350 500 0 M500 350 1000 70 M500 350 1000 350 M500 350 900 700 M500 350 500 700 M500 350 90 700 M500 350 0 350 M500 350 80 60"/>
-                        <path d="M500 350 430 250 380 220 400 160 M500 350 590 260 650 210 635 150 M500 350 420 430 350 480 330 550 M500 350 580 430 660 470 680 550"/>
-                        <path d="M430 250 360 260 310 220 M590 260 660 250 720 200 M420 430 360 410 300 450 M580 430 650 420 710 470"/>
-                    </g>
-                    <g fill="#c7d2fe" fill-opacity=".18" stroke="#e0e7ff" stroke-width="2">
-                        <path d="M500 350 430 250 500 0Z"/><path d="M500 350 590 260 1000 70Z"/>
-                        <path d="M500 350 580 430 900 700Z"/><path d="M500 350 420 430 90 700Z"/>
-                    </g>
-                </svg>
-            </div>
-            <button class="sound-toggle" id="soundToggle" type="button">🔊 Ovoz va qayta parvoz</button>
+                        <button class="sound-toggle" id="soundToggle" type="button">🔊 Ovoz va qayta parvoz</button>
         </section>
         <div class="car-stage" aria-hidden="true" hidden>
         <p class="hint" id="hint">Samolyot uzoqdan yaqinlashmoqda. Ovoz tugmasi orqali effektni yoqing.</p>
@@ -433,11 +420,11 @@
         bindHoldButton('brakeControl', () => { driveState.brake = true; }, () => { driveState.brake = false; });
 
         let planeSoundEnabled = false;
+        let planeAudioContext = null;
         function playPlaneImpact() {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (!planeSoundEnabled || !AudioCtx) return;
+            const ctx = planeAudioContext;
+            if (!planeSoundEnabled || !ctx || ctx.state !== "running") return;
             try {
-                const ctx = new AudioCtx();
                 const length = Math.floor(ctx.sampleRate * .65);
                 const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
@@ -455,7 +442,7 @@
                 impactGain.gain.exponentialRampToValueAtTime(.28, ctx.currentTime + .02);
                 impactGain.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime + .48);
                 impact.connect(impactGain); impactGain.connect(ctx.destination); impact.start(); impact.stop(ctx.currentTime + .5);
-                noise.onended = () => ctx.close();
+                noise.onended = () => {};
             } catch (_) {}
         }
         function startPlaneIntro() {
@@ -470,9 +457,12 @@
             }, 2850);
             window.setTimeout(() => setLamp(true), REDUCED ? 100 : 3900);
         }
-        $('soundToggle').addEventListener('click', () => {
-            planeSoundEnabled = true;
-            $('soundToggle').textContent = '🔊 Ovoz yoqildi · qayta parvoz';
+        $('soundToggle').addEventListener('click', async () => {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx && !planeAudioContext) planeAudioContext = new AudioCtx();
+            if (planeAudioContext && planeAudioContext.state === "suspended") await planeAudioContext.resume().catch(() => {});
+            planeSoundEnabled = Boolean(planeAudioContext && planeAudioContext.state === "running");
+            $('soundToggle').textContent = planeSoundEnabled ? '🔊 Ovoz yoqildi · qayta parvoz' : '🔇 Ovoz mavjud emas · qayta urinish';
             startPlaneIntro();
         });
 
