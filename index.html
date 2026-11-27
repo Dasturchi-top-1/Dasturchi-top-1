@@ -657,7 +657,7 @@
           const code = codeInput.value.trim();
           challengeId = challengeId || sessionStorage.getItem("blip_telegram_challenge") || "";
           if (!challengeId) { status.textContent = "Avval Telegram orqali kod oling."; return; }
-          if (!/^\\d{6}$/.test(code)) { status.textContent = "6 xonali kodni kiriting."; return; }
+          if (!/^\d{6}$/.test(code)) { status.textContent = "6 xonali kodni kiriting."; return; }
           verifyButton.disabled = true;
           status.textContent = "Kod tekshirilmoqda...";
           try {
